@@ -47,7 +47,7 @@ client.on("message", function (message) {
 
 // ------------------------------------- INICIO CAMPEON LOL -------------------------------------
 
-const LINEAS = ["top", "jungla", "mid", "adc", "supp"];
+const LINEAS = ["top", "jungla", "mid", "adc", "supp","autofill"];
 
 /**
  * 
@@ -66,13 +66,19 @@ var campeon = function (nombre, linea) {
  */
 function elegir_campeon(linea, message) {
     var campeon_linea = [];
-    for (var i = 0; i < campeones.length; i++) {
-        if (campeones[i].linea.includes(linea)) {
-            campeon_linea.push(campeones[i]);
+    if (linea != LINEAS[5]) {
+        for (var i = 0; i < campeones.length; i++) {
+            if (campeones[i].linea.includes(linea)) {
+                campeon_linea.push(campeones[i]);
+            }
         }
+        var random = Math.floor(Math.random() * campeon_linea.length);
+        message.reply("te toca jugar " + campeon_linea[random].nombre + " en " + linea);
+    } else {
+        var champ_random = campeones[Math.floor(Math.random() * campeones.length)];
+        message.reply("te toca jugar " + champ_random.linea[Math.floor(Math.random() * champ_random.linea.length)]);
     }
-    var random = Math.floor(Math.random() * campeon_linea.length);
-    message.reply("te toca jugar " + campeon_linea[random].nombre);
+    
 }
 
 var campeones = [];
