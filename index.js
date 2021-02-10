@@ -73,7 +73,7 @@ function elegir_campeon(linea, message) {
             }
         }
         var random = Math.floor(Math.random() * campeon_linea.length);
-        message.reply("te toca jugar " + campeon_linea[random].nombre + " en " + linea);
+        message.reply("te toca jugar " + campeon_linea[random].nombre);
     } else {
         var champ_random = campeones[Math.floor(Math.random() * campeones.length)];
         message.reply("te toca jugar " + champ_random.nombre +" en " + champ_random.linea[Math.floor(Math.random() * champ_random.linea.length)]);
