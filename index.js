@@ -36,6 +36,10 @@ client.on("message", function (message) {
             message.channel.send(calcular_tramo(args[2]))
         } else if (LINEAS.includes(command)) {
             elegir_campeon(command, message);
+        } else if (command == "dado") {
+            dado(message, args.slice(2, args.length));
+        } else if (command == "moneda") {
+            moneda(message);
         } else {
             insultar(message);
         }
@@ -44,6 +48,58 @@ client.on("message", function (message) {
     }
 
 });
+
+// ------------------------------------- INICIO MONEDA -------------------------------------
+
+/**
+ * Funcion que devuelve cara o cruz
+ * @param {Discord.Message} message
+ */
+function moneda(message) {
+    message.reply(Math.floor(Math.random()*2)==0?"cara":"cruz");
+}
+
+// ------------------------------------- FIN MONEDA -------------------------------------
+
+// ------------------------------------- INICIO DADO -------------------------------------
+
+/**
+ * Funcion que tira un dado en funcion del numero de caras del dado 
+ * @param {Discord.Message} message mensaje original
+ * @param {string[]} info numero de tiradas
+ */
+function dado(message, info) {
+    var numero = info[0];
+    var tiradas = info[1];
+    if (numero == undefined) {
+        numero = 6;
+    }
+    else {
+        if (!isValidNumber(numero)) {
+            insultar(message);
+            return;
+        }
+    }
+    if (tiradas == undefined) {
+        tiradas = 1;
+    }
+    else {
+        if (!isValidNumber(tiradas)) {
+            insultar(message);
+            return;
+        }
+    }
+    var mensaje = "";
+    for (var i = 0; i < tiradas; i++) {
+        if (i != 0) {
+            mensaje += "\n";
+        }
+        mensaje += ":game_die:" + (Math.floor(Math.random() * numero) + 1) +":game_die:";
+    }
+    message.reply(mensaje);
+}
+
+// ------------------------------------- FIN DADO -------------------------------------
 
 // ------------------------------------- INICIO CAMPEON LOL -------------------------------------
 
