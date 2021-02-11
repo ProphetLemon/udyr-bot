@@ -20,7 +20,7 @@ client.on("ready", () => {
 
 
 client.on("message", function (message) {
-    if (message.author.bot || (message.channel.id != "598896817161240663" && message.channel.id !="808421701662146570")) {
+    if (message.author.bot || (message.channel.id != "598896817161240663" && message.channel.id != "808421701662146570")) {
         return;
     }
     if (message.content.trim() == "udyr") {
@@ -28,7 +28,7 @@ client.on("message", function (message) {
         return;
     }
     if (message.content.startsWith(prefix)) {
-       
+
         var args = message.content.slice(prefix.length).split(/ +/);
         var command = args[1].toString();
         command = command.toLowerCase();
@@ -47,7 +47,7 @@ client.on("message", function (message) {
 
 // ------------------------------------- INICIO CAMPEON LOL -------------------------------------
 
-const LINEAS = ["top", "jungla", "mid", "adc", "supp","autofill"];
+const LINEAS = ["top", "jungla", "mid", "adc", "supp", "autofill", "random"];
 
 /**
  * 
@@ -66,7 +66,13 @@ var campeon = function (nombre, linea) {
  */
 function elegir_campeon(linea, message) {
     var campeon_linea = [];
-    if (linea != LINEAS[5]) {
+    if (linea == LINEAS[6]) {
+        var linea_random = Math.floor(Math.random() * 5);
+        message.reply("te toca jugar " + campeones[Math.floor(Math.random() * campeones.length)] + " en " + LINEAS[linea_random]);
+    } else if (linea == LINEAS[5]) {
+        var champ_random = campeones[Math.floor(Math.random() * campeones.length)];
+        message.reply("te toca jugar " + champ_random.nombre + " en " + champ_random.linea[Math.floor(Math.random() * champ_random.linea.length)]);
+    } else {
         for (var i = 0; i < campeones.length; i++) {
             if (campeones[i].linea.includes(linea)) {
                 campeon_linea.push(campeones[i]);
@@ -74,11 +80,9 @@ function elegir_campeon(linea, message) {
         }
         var random = Math.floor(Math.random() * campeon_linea.length);
         message.reply("te toca jugar " + campeon_linea[random].nombre);
-    } else {
-        var champ_random = campeones[Math.floor(Math.random() * campeones.length)];
-        message.reply("te toca jugar " + champ_random.nombre +" en " + champ_random.linea[Math.floor(Math.random() * champ_random.linea.length)]);
     }
-    
+
+
 }
 
 var campeones = [];
