@@ -10,17 +10,16 @@ client.on("ready", () => {
         activity: {
             name: 'el onlyfans de la berri',
             type: "WATCHING"
-            /**,
-            url: 'https://www.twitch.tv/monstercat'**/
         }
     })
     init_campeones();
     console.log("El bot ta ready");
 });
 
+var canales_de_texto = ["598896817161240663","809786674875334677"];
 
 client.on("message", function (message) {
-    if (message.author.bot || (message.channel.id != "598896817161240663" && message.channel.id != "808421701662146570")) {
+    if (message.author.bot || (!canales_de_texto.includes(message.channel.id))) {
         return;
     }
     if (message.content.trim() == "udyr") {
@@ -40,6 +39,8 @@ client.on("message", function (message) {
             dado(message, args.slice(2, args.length));
         } else if (command == "moneda") {
             moneda(message);
+        } else if (command == "estado") {
+            cambiar_estado(message, args.slice(2, args.length));
         } else {
             insultar(message);
         }
@@ -49,6 +50,58 @@ client.on("message", function (message) {
 
 });
 
+// ------------------------------------- INICIO CAMBIO DE ESTADO -------------------------------------
+/**
+ * Funcion para cambiar el estado del bot
+ * @param {Discord.Message} message Mensaje original
+ * @param {string[]} args Argumentos
+ */
+function cambiar_estado(message, args) {
+    var estado_personalizado = message.content.split("\"")[1];
+    switch (args[0]) {
+        case "ocupado":
+            args[0] = "dnd";
+            break;
+        case "invisible":
+            args[0] = "invisible";
+            break;
+        case "ausente":
+            args[0] = "idle";
+            break;
+        case "online":
+            args[0] = "online";
+            break;
+        default:
+            insultar(message);
+            return;
+    }
+    switch (args[1]) {
+        case "viendo":
+            args[1] = "WATCHING";
+            break;
+        case "escuchando":
+            args[1] = "LISTENING";
+            break;
+        case "jugar":
+            args[1] = "PLAYING";
+            break;
+        case "compitiendo":
+            args[1] = "COMPETING";
+            break;
+        default:
+            args[1] = "CUSTOM_STATUS";
+    }
+    client.user.setPresence({
+        status: args[0],
+        activity: {
+            name: estado_personalizado,
+            type: args[1]
+        }
+    })
+}
+
+// ------------------------------------- FIN CAMBIO DE ESTADO -------------------------------------
+
 // ------------------------------------- INICIO MONEDA -------------------------------------
 
 /**
@@ -56,7 +109,7 @@ client.on("message", function (message) {
  * @param {Discord.Message} message
  */
 function moneda(message) {
-    message.reply(Math.floor(Math.random()*2)==0?"cara":"cruz");
+    message.reply(Math.floor(Math.random() * 2) == 0 ? "cara" : "cruz");
 }
 
 // ------------------------------------- FIN MONEDA -------------------------------------
@@ -94,7 +147,7 @@ function dado(message, info) {
         if (i != 0) {
             mensaje += "\n";
         }
-        mensaje += ":game_die:" + (Math.floor(Math.random() * numero) + 1) +":game_die:";
+        mensaje += ":game_die:" + (Math.floor(Math.random() * numero) + 1) + ":game_die:";
     }
     message.reply(mensaje);
 }
