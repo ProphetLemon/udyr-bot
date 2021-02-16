@@ -8,7 +8,7 @@ client.on("ready", () => {
     client.user.setPresence({
         status: "dnd",
         activity: {
-            name: 'el onlyfans de la berri',
+            name: 'al beti',
             type: "WATCHING"
         }
     })
@@ -16,13 +16,13 @@ client.on("ready", () => {
     console.log("El bot ta ready");
 });
 
-var canales_de_texto = ["598896817161240663","809786674875334677"];
+var canales_de_texto = ["598896817161240663", "809786674875334677"];
 
 client.on("message", function (message) {
     if (message.author.bot || (!canales_de_texto.includes(message.channel.id))) {
         return;
     }
-    if (message.content.trim() == "udyr") {
+    if (message.content.trim() == "udyr" || message.content.charAt(4) != ' ') {
         insultar(message);
         return;
     }
@@ -41,6 +41,14 @@ client.on("message", function (message) {
             moneda(message);
         } else if (command == "estado") {
             cambiar_estado(message, args.slice(2, args.length));
+        } else if (command == "puntos") {
+            puntos(message);
+        } else if (command == "apuesta") {
+            crear_apuesta(message);
+        } else if (command == "apostar") {
+            apostar(message);
+        } else if (command == "cerrar") {
+            cerrar_apuesta(message);
         } else {
             insultar(message);
         }
@@ -49,6 +57,225 @@ client.on("message", function (message) {
     }
 
 });
+
+// ------------------------------------- INICIO PUNTOS Y APUESTAS -------------------------------------
+
+
+class persona {
+    /**
+     * Constructor
+     * @param {Date} dia
+     * @param {number} puntos
+     * @param {string} userID
+     */
+    constructor(dia, puntos, userID) {
+        this.dia = dia;
+        this.puntos = puntos;
+        this.userID = userID;
+    }
+}
+
+
+var personas = [];
+
+/**
+ * Funcion para reclamar puntos diarios
+ * @param {Discord.Message} message Mensaje original
+ */
+function puntos(message) {
+    var existe = false;
+    var posicion = 0;
+    for (var i = 0; i < personas.length; i++) {
+        if (personas[i].userID == message.author.id) {
+            existe = true;
+            posicion = i;
+            break;
+        }
+    }
+    if (!existe) {
+        var puntos_random = Math.floor(Math.random() * 30) + 21;
+        personas.push(new persona(new Date(), (1000 + puntos_random), message.author.id));
+        message.reply("\u00A1Has canjeado la recompensa diaria, has ganado " + puntos_random + " udyr coins!\nTienes " + (1000 + puntos_random) + " udyr coins.");
+    }
+    else {
+        var autor = personas[posicion];
+        if (isSameDay(autor.dia, new Date())) {
+            message.reply("tienes " + autor.puntos + " udyr coins");
+        }
+        else {
+            var puntos_random = Math.floor(Math.random() * 31) + 20;
+            autor.puntos += puntos_random;
+            message.reply("\u00A1Has canjeado la recompensa diaria, has ganado " + puntos_random + " udyr coins!\nTienes " + autor.puntos + " udyr coins.");
+            personas[posicion] = autor;
+        }
+    }
+}
+
+class apostador {
+    /**
+     * Bando de apuestas
+     * @param {string} personaID id del apostador
+     * @param {string} bando bando que apuesta
+     * @param {number} puntos puntos que ha apostado
+     */
+    constructor(personaID, puntos, bando) {
+        this.personaID = personaID;
+        this.puntos = puntos;
+        this.bando = bando;
+    }
+}
+
+class apuesta {
+    /**
+     * Apuesta
+     * @param {string} nombre Nombre de la apuesta
+     * @param {string} autor Creador de la apuesta
+     * @param {apostador[]} apostadores que ha apostado
+     */
+    constructor(nombre, autor, apostadores) {
+        this.nombre = nombre;
+        this.autor = autor;
+        this.apostadores = apostadores;
+    }
+}
+
+
+var apuesta_actual = new apuesta(undefined, undefined, undefined);
+var nombre_bandos = [];
+
+/**
+ * Crear apuesta
+ * @param {Discord.Message} message mensaje original
+ */
+function crear_apuesta(message) {
+    if (apuesta_actual.nombre != undefined) {
+        message.channel.send("Ya existe una apuesta activa (" + apuesta_actual.nombre + "), cierrala para poder crear otra");
+        return;
+    }
+    let args = message.content.split("\"");
+    nombre_bandos.push(args[3]);
+    nombre_bandos.push(args[5]);
+    apuesta_actual = new apuesta(args[1], message.author.id, []);
+    message.channel.send("Se ha creado la apuesta \"" + apuesta_actual.nombre + "\"");
+}
+
+/**
+ * Apostar a un bando
+ * @param {Discord.Message} message
+ */
+function apostar(message) {
+    if (apuesta_actual.nombre == undefined) {
+        message.reply("No existe una apuesta activa, maric\u00F3n");
+        return;
+    }
+
+    let nombre = message.author.id;
+    let bando = message.content.split("\"")[1];
+    if (!nombre_bandos.includes(bando)) {
+        insultar(message);
+        return;
+    }
+    let puntos = Number(message.content.split("\"")[2]);
+    if (comprobar_puntos(nombre) == 0) {
+        message.reply("No tienes puntos, canjealos con el comando 'udyr puntos'");
+        return;
+    } else if (comprobar_puntos(nombre) < puntos) {
+        message.reply("Ya te molaria tener esos puntos maric\u00F3n");
+        return;
+    }
+    let existe = false;
+    for (let i = 0; i < apuesta_actual.apostadores.length; i++) {
+        if (apuesta_actual.apostadores[i].personaID == message.author.id) {
+            existe = true;
+            if (apuesta_actual.apostadores[i].bando != bando) {
+                insultar(message);
+                return;
+            } else {
+                apuesta_actual.apostadores[i].puntos += puntos;
+                cambiar_puntos(message.author.id, String("-" + puntos));
+                message.reply("Tu apuesta es ahora de " + apuesta_actual.apostadores[i].puntos + " udyr coins");
+            }
+        }
+    }
+    if (!existe) {
+        cambiar_puntos(nombre, "-" + puntos);
+        apuesta_actual.apostadores.push(new apostador(nombre, puntos, bando));
+        message.reply("Has apostado por " + bando + " con " + puntos + " udyr coins")
+    }
+
+}
+
+/**
+ *  Cerrar apuesta
+ * @param {Discord.Message} message Mensaje original
+ */
+function cerrar_apuesta(message) {
+    if (apuesta_actual.autor != message.author.id) {
+        message.reply("no hiciste tu la apuesta maric\u00F3n");
+        return;
+    }
+    let bando_ganador = message.content.split("\"")[1];
+    let puntos_ganador = 0;
+    let puntos_perdedor = 0;
+    for (let i = 0; i < apuesta_actual.apostadores.length; i++) {
+        if (apuesta_actual.apostadores[i].bando == bando_ganador) {
+            puntos_ganador += apuesta_actual.apostadores[i].puntos;
+        }
+        else {
+            puntos_perdedor += apuesta_actual.apostadores[i].puntos;
+        }
+    }
+    let ROI = (puntos_perdedor / puntos_ganador) + 1;
+    message.channel.send("Se ha cerrado la apuesta \"" + apuesta_actual.nombre + "\"");
+    for (let i = 0; i < apuesta_actual.apostadores.length; i++) {
+        if (apuesta_actual.apostadores[i].bando == bando_ganador) {
+            let puntos = Math.floor(apuesta_actual.apostadores[i].puntos * ROI);
+            cambiar_puntos(apuesta_actual.apostadores[i].personaID, ("+") + (apuesta_actual.apostadores[i].puntos + puntos));
+            message.channel.send(message.guild.members.cache.get(apuesta_actual.apostadores[i].personaID).displayName + " ha ganado " + puntos + " udyr coins (" + comprobar_puntos(apuesta_actual.apostadores[i].personaID) + " en total)");
+        }
+    }
+    apuesta_actual = new apuesta(undefined, undefined, undefined);
+    nombre_bandos = [];
+}
+
+/**
+ * 
+ * @param {string} personaID
+ * @param {string} puntos
+ */
+function cambiar_puntos(personaID, puntos) {
+    let signo = puntos.charAt(0);
+    let numero = Number(puntos.slice(1, puntos.length));
+    if (signo == '+') {
+        for (let i = 0; i < personas.length; i++) {
+            if (personas[i].userID == personaID) {
+                personas[i].puntos += numero;
+            }
+        }
+    } else {
+        for (let i = 0; i < personas.length; i++) {
+            if (personas[i].userID == personaID) {
+                personas[i].puntos -= numero;
+            }
+        }
+    }
+}
+
+/**
+ * 
+ * 
+ * @param {string} personaID
+ */
+function comprobar_puntos(personaID) {
+    for (let i = 0; i < personas.length; i++) {
+        if (personas[i].userID == personaID) {
+            return personas[i].puntos;
+        }
+    }
+    return 0;
+}
+
+// ------------------------------------- FIN PUNTOS Y APUESTAS -------------------------------------
 
 // ------------------------------------- INICIO CAMBIO DE ESTADO -------------------------------------
 /**
@@ -158,14 +385,17 @@ function dado(message, info) {
 
 const LINEAS = ["top", "jungla", "mid", "adc", "supp", "autofill", "random"];
 
-/**
- * 
- * @param {string} nombre Nombre del campeon
- * @param {any} linea linea o lineas del campeon
- */
-var campeon = function (nombre, linea) {
-    this.nombre = nombre;
-    this.linea = linea;
+
+class campeon {
+    /**
+     * Campeon del lol
+     * @param {string} nombre Nombre del campeon
+     * @param {string[]} linea Linea del campeon
+     */
+    constructor(nombre, linea) {
+        this.nombre = nombre;
+        this.linea = linea;
+    }
 }
 
 /**
@@ -430,6 +660,25 @@ function calcular_tramo(dinero) {
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+/**
+ * Compara dos objetos tipo Date para saber si es el mismo día o no
+ * @param {Date} date1 dia 1
+ * @param {Date} date2 dia 2
+ */
+function isSameDay(date1, date2) {
+    var dd1 = String(date1.getDate()).padStart(2, '0');
+    var mm1 = String(date1.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy1 = date1.getFullYear();
+
+    var dd2 = String(date2.getDate()).padStart(2, '0');
+    var mm2 = String(date2.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy2 = date2.getFullYear();
+
+    return (dd1 == dd2 && mm1 == mm2 && yyyy1 == yyyy2);
+
+}
+
 /**
  * Metood que mira si es un numero valido
  * @param {string|number} aux numero a comprobar
