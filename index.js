@@ -22,11 +22,11 @@ client.on("message", function (message) {
     if (message.author.bot || (!canales_de_texto.includes(message.channel.id))) {
         return;
     }
-    if (message.content.trim() == "udyr" || message.content.charAt(4) != ' ') {
+    if (message.content.trim() == "udyr") {
         insultar(message);
         return;
     }
-    if (message.content.startsWith(prefix)) {
+    if (message.content.startsWith(prefix) && message.content.charAt(4) == ' ') {
 
         var args = message.content.slice(prefix.length).split(/ +/);
         var command = args[1].toString();
