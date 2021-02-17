@@ -284,7 +284,7 @@ function cerrar_apuesta(message) {
     for (let i = 0; i < apuesta_actual.apostadores.length; i++) {
         if (apuesta_actual.apostadores[i].bando == bando_ganador) {
             let puntos = Math.floor(apuesta_actual.apostadores[i].puntos * ROI);
-            cambiar_puntos(apuesta_actual.apostadores[i].personaID, ("+") + (apuesta_actual.apostadores[i].puntos + puntos));
+            cambiar_puntos(apuesta_actual.apostadores[i].personaID, ("+") + (puntos));
             message.channel.send(message.guild.members.cache.get(apuesta_actual.apostadores[i].personaID).displayName + " ha ganado " + puntos + " udyr coins (" + comprobar_puntos(apuesta_actual.apostadores[i].personaID) + " en total)");
         }
     }
