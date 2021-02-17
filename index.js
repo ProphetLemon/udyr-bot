@@ -49,6 +49,8 @@ client.on("message", function (message) {
             apostar(message);
         } else if (command == "cerrar") {
             cerrar_apuesta(message);
+        } else if (command == "donar") {
+            donar(message);
         } else {
             insultar(message);
         }
@@ -58,8 +60,60 @@ client.on("message", function (message) {
 
 });
 
-// ------------------------------------- INICIO PUNTOS Y APUESTAS -------------------------------------
+// ------------------------------------- INICIO ALARMA -------------------------------------
 
+/**
+ * 
+ * @param {Discord.Message} message
+ */
+function alarma(message) {
+    let args = message.content.split(/ +/)
+    let dia =  args[2];
+    let hora = args[3];
+    let motivo = args[4];
+    let dtAlarm = new Date();
+    var regex = /[0 - 2]\d\: [0 - 6]\d/g;
+    if (dia != "hoy" && dia != "mañana" && regex.test(dia)) {
+
+    }
+
+}
+
+// ------------------------------------- FIN ALARMA -------------------------------------
+
+// ------------------------------------- FIN ALARMA -------------------------------------
+
+// ------------------------------------- INICIO DONAR UDYR COINS -------------------------------------
+
+/**
+ * @param {Discord.Message} message mensaje
+ */
+function donar(message) {
+    var mencion = message.content.split(/ +/)[2];
+    if (!isMention(mencion)) {
+        insultar(message);
+        return;
+    }
+    if (message.author.id != "202065665597636609") {
+        insultar(message);
+        return;
+    }
+    var puntos = Number(message.content.split(/ +/)[3]);
+    var personaID = mencion.slice(3, mencion.length - 1);
+    for (let i = 0; i < personas.length; i++) {
+        if (personas[i].userID == personaID) {
+            personas[i].puntos += puntos;
+            message.reply("has dado " + puntos + " udyr coins al mendigo de <@!" + personaID+">");
+            return;
+        }
+    }
+    personas.push(new persona(new Date(), (1000 + puntos), personaID));
+    message.reply("has dado " + puntos + " udyr coins al mendigo de <@!" + personaID + ">");
+}
+
+// ------------------------------------- FIN DONAR UDYR COINS -------------------------------------
+
+// ------------------------------------- INICIO PUNTOS Y APUESTAS -------------------------------------
 
 class persona {
     /**
@@ -200,7 +254,7 @@ function apostar(message) {
     if (!existe) {
         cambiar_puntos(nombre, "-" + puntos);
         apuesta_actual.apostadores.push(new apostador(nombre, puntos, bando));
-        message.reply("Has apostado por " + bando + " con " + puntos + " udyr coins")
+        message.reply("Has apostado por '" + bando + "' con " + puntos + " udyr coins")
     }
 
 }
@@ -565,7 +619,7 @@ function init_campeones() {
     new campeon("Veigar", [LINEAS[2], LINEAS[4]]),
     new campeon("Vel'Koz", [LINEAS[2], LINEAS[4]]),
     new campeon("Vi", [LINEAS[1]]),
-    new campeon("Viego", [LINEAS[0], LINEAS[1], LINEAS[2]]),
+    new campeon("Viego", [LINEAS[0], LINEAS[1]]),
     new campeon("Viktor", [LINEAS[2]]),
     new campeon("Vladimir", [LINEAS[0], LINEAS[2]]),
     new campeon("Volibear", [LINEAS[0], LINEAS[1]]),
@@ -700,6 +754,17 @@ function isValidNumber(aux) {
         }
     }
     return isValid;
+}
+
+/**
+ * 
+ * @param {string} mention Posible mencion
+ */
+function isMention(mention) {
+    let inicio = mention.slice(0, 3);
+    let numero = mention.slice(3, mention.length - 1);
+    let fin = mention.slice(mention.length - 1, mention.length);
+    return inicio == "<@!" && isValidNumber(numero) && fin == ">";
 }
 
 //------------------------------------- FIN METODOS UTIL -------------------------------------
