@@ -124,10 +124,10 @@ function ajustar(message) {
  * @param {Discord.Message} message
  */
 function alarma(message) {
-    let args = message.content.split(/ +/)
+    let args = message.content.split(/ +/);
     let dia =  args[2];
     let hora = args[3];
-    let motivo = args[4];
+    let motivo = message.content.split("\"");
     let dtAlarm = new Date();
     var regexDia = /\d{2}\/\d{2}/g;
     var regexHora = /\d{2}\:\d{2}/g;
@@ -226,20 +226,23 @@ function puntos(message) {
             break;
         }
     }
+    let dateNow = new Date();
+    dateNow.setHours(dateNow.getHours() - horasDiferencia);
     if (!existe) {
         var puntos_random = Math.floor(Math.random() * 30) + 21;
-        personas.push(new persona(new Date(), (1000 + puntos_random), message.author.id));
+        personas.push(new persona(dateNow, (1000 + puntos_random), message.author.id));
         message.reply("\u00A1Has canjeado la recompensa diaria, has ganado " + puntos_random + " udyr coins!\nTienes " + (1000 + puntos_random) + " udyr coins.");
     }
     else {
         var autor = personas[posicion];
-        if (isSameDay(autor.dia, new Date())) {
+        if (isSameDay(autor.dia, dateNow)) {
             message.reply("tienes " + autor.puntos + " udyr coins");
         }
         else {
             var puntos_random = Math.floor(Math.random() * 31) + 20;
             autor.puntos += puntos_random;
             message.reply("\u00A1Has canjeado la recompensa diaria, has ganado " + puntos_random + " udyr coins!\nTienes " + autor.puntos + " udyr coins.");
+            autor.dia = dateNow;
             personas[posicion] = autor;
         }
     }
