@@ -203,7 +203,7 @@ class persona {
 }
 
 
-var personas = new Array(persona);
+var personas = [];
 
 /**
  * Funcion para reclamar puntos diarios
