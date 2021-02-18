@@ -80,10 +80,10 @@ function ranking(message) {
     for (let i = 0; i < personas.length; i++) {
         let competidor = personas[i];
         if (i == personas.length - 1) {
-            mensaje += (i + 1) + " - <@!" + competidor.userID + "> con " + competidor.puntos;
+            mensaje += (i + 1) + " - " + message.guild.members.cache.get(competidor.userID).displayName + " con " + competidor.puntos;
         }
         else {
-            mensaje += (i + 1) + " - <@!" + competidor.userID + "> con " + competidor.puntos + "\n";
+            mensaje += (i + 1) + " - " + message.guild.members.cache.get(competidor.userID).displayName + " con " + competidor.puntos + "\n";
         }
     }
     message.channel.send(mensaje);
