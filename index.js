@@ -58,7 +58,7 @@ client.on("message", function (message) {
         } else if (command == "ranking") {
             ranking(message);
         } else {
-            insultar(message);            c
+            insultar(message); 
         }
     } else {
         ruleta(message);
@@ -74,11 +74,11 @@ client.on("message", function (message) {
  */
 function ranking(message) {
     personas.sort(function (a, b) {
-        return a.puntos - b.puntos;
+        return b.puntos-a.puntos;
     });
     for (let i = 0; i < personas.length; i++) {
         let competidor = personas[i];
-        message.channel.send((i + 1) + " - <@ª" + competidor.userID+"> con "+competidor.puntos);
+        message.channel.send((i + 1) + " - <@!" + competidor.userID+"> con "+competidor.puntos);
     }
 }
 
