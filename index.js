@@ -76,9 +76,15 @@ function ranking(message) {
     personas.sort(function (a, b) {
         return b.puntos-a.puntos;
     });
+    var mensaje = "";
     for (let i = 0; i < personas.length; i++) {
         let competidor = personas[i];
-        message.channel.send((i + 1) + " - <@!" + competidor.userID+"> con "+competidor.puntos);
+        if (i == personas.length - 1) {
+            mensaje += (i + 1) + " - <@!" + competidor.userID + "> con " + competidor.puntos;
+        }
+        else {
+            mensaje += (i + 1) + " - <@!" + competidor.userID + "> con " + competidor.puntos + "\n";
+        }
     }
 }
 
