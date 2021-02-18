@@ -86,6 +86,7 @@ function ranking(message) {
             mensaje += (i + 1) + " - <@!" + competidor.userID + "> con " + competidor.puntos + "\n";
         }
     }
+    message.channel.send(mensaje);
 }
 
 
