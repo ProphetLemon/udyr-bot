@@ -127,7 +127,7 @@ function alarma(message) {
     let args = message.content.split(/ +/);
     let dia =  args[2];
     let hora = args[3];
-    let motivo = message.content.split("\"");
+    let motivo = message.content.split("\"")[1];
     let dtAlarm = new Date();
     var regexDia = /\d{2}\/\d{2}/g;
     var regexHora = /\d{2}\:\d{2}/g;
