@@ -51,8 +51,14 @@ client.on("message", function (message) {
             cerrar_apuesta(message);
         } else if (command == "donar") {
             donar(message);
+        } else if (command == "alarma") {
+            alarma(message)
+        } else if (command == "ajustar") {
+            ajustar(message);
+        } else if (command == "ranking") {
+            ranking(message);
         } else {
-            insultar(message);
+            insultar(message);            c
         }
     } else {
         ruleta(message);
@@ -60,10 +66,54 @@ client.on("message", function (message) {
 
 });
 
-// ------------------------------------- INICIO ALARMA -------------------------------------
+// ------------------------------------- INCIO RANKING PUNTOS -------------------------------------
 
 /**
  * 
+ * @param {Discord.Message} message
+ */
+function ranking(message) {
+    personas.sort(function (a, b) {
+        return a.puntos - b.puntos;
+    });
+    for (let i = 0; i < personas.length; i++) {
+        let competidor = personas[i];
+        message.channel.send((i + 1) + " - <@ª" + competidor.userID+"> con "+competidor.puntos);
+    }
+}
+
+
+
+// ------------------------------------- FIN RANKING PUNTOS -------------------------------------
+
+// ------------------------------------- INICIO AJUSTAR HORA -------------------------------------
+
+let horasDiferencia = 0;
+
+/**
+ * 
+ * 
+ * @param {Discord.Message} message
+ */
+function ajustar(message) {
+    let hora = message.content.split(/ +/)[2];
+    if (!isValidNumber(hora)) {
+        insultar(message);
+        return;
+    }
+    let dtServer = new Date();
+    let dtCliente = new Date();
+    dtCliente.setHours(hora);
+    horasDiferencia = dtServer.getHours() - dtCliente.getHours();
+    message.channel.send("La diferencia de horas es de " + horasDiferencia);
+}
+
+// ------------------------------------- FIN    AJUSTAR HORA -------------------------------------
+
+// ------------------------------------- INICIO ALARMA -------------------------------------
+
+/**
+ * Configurando una alarma
  * @param {Discord.Message} message
  */
 function alarma(message) {
@@ -72,20 +122,42 @@ function alarma(message) {
     let hora = args[3];
     let motivo = args[4];
     let dtAlarm = new Date();
-    var regex = /[0 - 2]\d\: [0 - 6]\d/g;
-    if (dia != "hoy" && dia != "mañana" && regex.test(dia)) {
-
+    var regexDia = /\d{2}\/\d{2}/g;
+    var regexHora = /\d{2}\:\d{2}/g;
+    if ((!regexHora.test(hora))||(dia != "hoy" && dia != "mañana" && !regexDia.test(dia))) {
+        insultar(message);
+        return;
     }
-
+    if (regexDia.test(dia)) {
+        let mes = Number(dia.split("/")[1]) + 1;
+        dia = Number(dia.split("/")[0]);
+        dtAlarm.setMonth(mes)
+        dtAlarm.setDate(dia);
+    } else if (dia == "mañana") {
+        dtAlarm.setDate(dtAlarm.getDate()+1);
+    }
+    let horas = Number(hora.split(":")[0]);
+    let minutos = Number(hora.split(":")[1]);
+    dtAlarm.setMinutes(minutos);
+    dtAlarm.setHours(horas);
+    dtAlarm.setSeconds(0);
+    let dtNow = new Date();
+    dtNow.setHours(dtNow.getHours() - horasDiferencia);
+    if (dtAlarm - dtNow <= 0) {
+        insultar(message);
+        return;
+    }
+    let diff = dtAlarm - dtNow;
+    setTimeout(function () { message.reply("Oye, te recuerdo esto : " + motivo); }, diff);
+    message.reply("Se ha creado la alarma correctamente!");
 }
-
-// ------------------------------------- FIN ALARMA -------------------------------------
 
 // ------------------------------------- FIN ALARMA -------------------------------------
 
 // ------------------------------------- INICIO DONAR UDYR COINS -------------------------------------
 
 /**
+ * Regalar udyr coins para cuando ha y un reset
  * @param {Discord.Message} message mensaje
  */
 function donar(message) {
@@ -99,16 +171,17 @@ function donar(message) {
         return;
     }
     var puntos = Number(message.content.split(/ +/)[3]);
-    var personaID = mencion.slice(3, mencion.length - 1);
+    var userID = mencion.slice(3, mencion.length - 1);
     for (let i = 0; i < personas.length; i++) {
-        if (personas[i].userID == personaID) {
+        if (personas[i].userID == userID) {
             personas[i].puntos += puntos;
-            message.reply("has dado " + puntos + " udyr coins al mendigo de <@!" + personaID+">");
+            message.reply("has dado " + puntos + " udyr coins al mendigo de <@!" + userID+">");
             return;
         }
-    }
-    personas.push(new persona(new Date(), (1000 + puntos), personaID));
-    message.reply("has dado " + puntos + " udyr coins al mendigo de <@!" + personaID + ">");
+    }    
+    personas.push(new persona(new Date(), (1000 + puntos), userID));
+    message.reply("has dado " + puntos + " udyr coins al mendigo de <@!" + userID + ">");
+    setTimeout(function(){ message.channel.bulkDelete(2) },2000);
 }
 
 // ------------------------------------- FIN DONAR UDYR COINS -------------------------------------
@@ -117,7 +190,7 @@ function donar(message) {
 
 class persona {
     /**
-     * Constructor
+     * Constructor de clase persona
      * @param {Date} dia
      * @param {number} puntos
      * @param {string} userID
@@ -130,7 +203,7 @@ class persona {
 }
 
 
-var personas = [];
+var personas = new Array(persona);
 
 /**
  * Funcion para reclamar puntos diarios
@@ -168,12 +241,12 @@ function puntos(message) {
 class apostador {
     /**
      * Bando de apuestas
-     * @param {string} personaID id del apostador
+     * @param {string} userID id del apostador
      * @param {string} bando bando que apuesta
      * @param {number} puntos puntos que ha apostado
      */
-    constructor(personaID, puntos, bando) {
-        this.personaID = personaID;
+    constructor(userID, puntos, bando) {
+        this.userID = userID;
         this.puntos = puntos;
         this.bando = bando;
     }
@@ -239,7 +312,7 @@ function apostar(message) {
     }
     let existe = false;
     for (let i = 0; i < apuesta_actual.apostadores.length; i++) {
-        if (apuesta_actual.apostadores[i].personaID == message.author.id) {
+        if (apuesta_actual.apostadores[i].userID == message.author.id) {
             existe = true;
             if (apuesta_actual.apostadores[i].bando != bando) {
                 insultar(message);
@@ -284,8 +357,8 @@ function cerrar_apuesta(message) {
     for (let i = 0; i < apuesta_actual.apostadores.length; i++) {
         if (apuesta_actual.apostadores[i].bando == bando_ganador) {
             let puntos = Math.floor(apuesta_actual.apostadores[i].puntos * ROI);
-            cambiar_puntos(apuesta_actual.apostadores[i].personaID, ("+") + (puntos));
-            message.channel.send(message.guild.members.cache.get(apuesta_actual.apostadores[i].personaID).displayName + " ha ganado " + puntos + " udyr coins (" + comprobar_puntos(apuesta_actual.apostadores[i].personaID) + " en total)");
+            cambiar_puntos(apuesta_actual.apostadores[i].userID, ("+") + (puntos));
+            message.channel.send(message.guild.members.cache.get(apuesta_actual.apostadores[i].userID).displayName + " ha ganado " + puntos + " udyr coins (" + comprobar_puntos(apuesta_actual.apostadores[i].userID) + " en total)");
         }
     }
     apuesta_actual = new apuesta(undefined, undefined, undefined);
@@ -293,22 +366,22 @@ function cerrar_apuesta(message) {
 }
 
 /**
- * 
- * @param {string} personaID
+ * Metodo para sumar o restar puntos
+ * @param {string} userID
  * @param {string} puntos
  */
-function cambiar_puntos(personaID, puntos) {
+function cambiar_puntos(userID, puntos) {
     let signo = puntos.charAt(0);
     let numero = Number(puntos.slice(1, puntos.length));
     if (signo == '+') {
         for (let i = 0; i < personas.length; i++) {
-            if (personas[i].userID == personaID) {
+            if (personas[i].userID == userID) {
                 personas[i].puntos += numero;
             }
         }
     } else {
         for (let i = 0; i < personas.length; i++) {
-            if (personas[i].userID == personaID) {
+            if (personas[i].userID == userID) {
                 personas[i].puntos -= numero;
             }
         }
@@ -316,13 +389,13 @@ function cambiar_puntos(personaID, puntos) {
 }
 
 /**
+ * Funcion que te devuelve los puntos de una persona
  * 
- * 
- * @param {string} personaID
+ * @param {string} userID
  */
-function comprobar_puntos(personaID) {
+function comprobar_puntos(userID) {
     for (let i = 0; i < personas.length; i++) {
-        if (personas[i].userID == personaID) {
+        if (personas[i].userID == userID) {
             return personas[i].puntos;
         }
     }
