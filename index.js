@@ -129,14 +129,14 @@ function alarma(message) {
     let hora = args[3];
     let motivo = message.content.split("\"")[1];
     let dtAlarm = new Date();
-    var regexDia = /\d{2}\/\d{2}/g;
-    var regexHora = /\d{2}\:\d{2}/g;
+    var regexDia = /\d{2}\/\d{2}/;
+    var regexHora = /\d{2}\:\d{2}/;
     if ((!regexHora.test(hora))||(dia != "hoy" && dia != "mañana" && !regexDia.test(dia))) {
         insultar(message);
         return;
     }
     if (regexDia.test(dia)) {
-        let mes = Number(dia.split("/")[1]) + 1;
+        let mes = Number(dia.split("/")[1]) - 1;
         dia = Number(dia.split("/")[0]);
         dtAlarm.setMonth(mes)
         dtAlarm.setDate(dia);
@@ -752,11 +752,11 @@ function insultar(message) {
 
 // ------------------------------------- INICIO IRPF -------------------------------------
 
-var tramo1 = (12_450 * 19) / 100;
-var tramo2 = ((20_200 - 12_450) * 24) / 100;
-var tramo3 = ((35_200 - 20_200) * 30) / 100;
-var tramo4 = ((60_000 - 35_200) * 37) / 100;
-var tramo5 = ((300_000 - 60_000) * 45) / 100;
+var tramo1 = (12450 * 19) / 100;
+var tramo2 = ((20200 - 12450) * 24) / 100;
+var tramo3 = ((35200 - 20200) * 30) / 100;
+var tramo4 = ((60000 - 35200) * 37) / 100;
+var tramo5 = ((300000 - 60000) * 45) / 100;
 
 /**
  * Calcula lo que te quita hacienda
@@ -767,16 +767,16 @@ function calcular_tramo(dinero) {
     var dinero_descontado = 0;
     if (dinero <= 12450) {
         dinero_descontado = (dinero * 19) / 100;
-    } else if (dinero <= 20_200) {
-        dinero_descontado = (((dinero - 12_450) * 24) / 100) + tramo1;
-    } else if (dinero <= 35_200) {
-        dinero_descontado = (((dinero - 20_200) * 30) / 100) + tramo1 + tramo2;
-    } else if (dinero <= 60_000) {
-        dinero_descontado = (((dinero - 35_200) * 37) / 100) + tramo1 + tramo2 + tramo3;
-    } else if (dinero <= 300_000) {
-        dinero_descontado = (((dinero - 60_000) * 45) / 100) + tramo1 + tramo2 + tramo3 + tramo4;
-    } else if (dinero > 300_000) {
-        dinero_descontado = (((dinero - 300_000) * 47) / 100) + tramo1 + tramo2 + tramo3 + tramo4 + tramo5;
+    } else if (dinero <= 20200) {
+        dinero_descontado = (((dinero - 12450) * 24) / 100) + tramo1;
+    } else if (dinero <= 35200) {
+        dinero_descontado = (((dinero - 20200) * 30) / 100) + tramo1 + tramo2;
+    } else if (dinero <= 60000) {
+        dinero_descontado = (((dinero - 35200) * 37) / 100) + tramo1 + tramo2 + tramo3;
+    } else if (dinero <= 300000) {
+        dinero_descontado = (((dinero - 60000) * 45) / 100) + tramo1 + tramo2 + tramo3 + tramo4;
+    } else if (dinero > 300000) {
+        dinero_descontado = (((dinero - 300000) * 47) / 100) + tramo1 + tramo2 + tramo3 + tramo4 + tramo5;
     }
     dinero_final = dinero - dinero_descontado;
     var porcentaje_final = (dinero_final * 100) / dinero
