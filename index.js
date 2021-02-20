@@ -208,7 +208,7 @@ function donar(message) {
     }
     personas.push(new persona(new Date(), (1000 + puntos), userID));
     message.reply("has dado " + puntos + " udyr coins al mendigo de <@!" + userID + ">");
-    var alarma = setTimeout(function () { message.channel.bulkDelete(2) }, 2000);
+    var alarma = setTimeout(function () { message.channel.bulkDelete(2) }, 3500);
     alarmas.push(alarma);
 }
 
