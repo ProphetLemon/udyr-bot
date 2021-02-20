@@ -131,7 +131,7 @@ function alarma(message) {
     let dtAlarm = new Date();
     var regexDia = /\d{2}\/\d{2}/;
     var regexHora = /\d{2}\:\d{2}/;
-    if ((!regexHora.test(hora))||(dia != "hoy" && dia != "mañana" && !regexDia.test(dia))) {
+    if ((!regexHora.test(hora))||(dia != "hoy" && dia != "ma\u00F1ana" && !regexDia.test(dia))) {
         insultar(message);
         return;
     }
@@ -140,7 +140,7 @@ function alarma(message) {
         dia = Number(dia.split("/")[0]);
         dtAlarm.setMonth(mes)
         dtAlarm.setDate(dia);
-    } else if (dia == "mañana") {
+    } else if (dia == "ma\u00F1ana") {
         dtAlarm.setDate(dtAlarm.getDate()+1);
     }
     let horas = Number(hora.split(":")[0]);
@@ -155,7 +155,7 @@ function alarma(message) {
         return;
     }
     let diff = dtAlarm - dtNow;
-    setTimeout(function () { message.reply("Oye, te recuerdo esto : " + motivo); }, diff);
+    setTimeout(function () { message.reply("Oye, te recuerdo esto : \"" + motivo+"\""); }, diff);
     message.reply("Se ha creado la alarma correctamente!");
 }
 
@@ -446,7 +446,7 @@ function cambiar_estado(message, args) {
         case "escuchando":
             args[1] = "LISTENING";
             break;
-        case "jugar":
+        case "jugando":
             args[1] = "PLAYING";
             break;
         case "compitiendo":
