@@ -8,8 +8,8 @@ client.on("ready", () => {
     client.user.setPresence({
         status: "dnd",
         activity: {
-            name: 'al beti',
-            type: "WATCHING"
+            name: 'Asetto Corsa',
+            type: "PLAYING"
         }
     })
     init_campeones();
@@ -57,8 +57,6 @@ client.on("message", function (message) {
             ajustar(message);
         } else if (command == "ranking") {
             ranking(message);
-        } else if (command = "limpiar") {
-            limpiar(message);
         } else {
             insultar(message);
         }
@@ -67,21 +65,6 @@ client.on("message", function (message) {
     }
 
 });
-
-// ------------------------------------- INICIO LIMPIAR -------------------------------------
-
-/**
- * limpiar alarmas
- * @param {Discord.Message} message mensaje original
- */
-function limpiar(message) {
-    for (let i = 0; i < alarmas.length; i++) {
-        clearTimeout(alarmas[i]);        
-    }
-    alarmas.slice(0, alarmas.length);
-}
-
-// ------------------------------------- FIN LIMPIAR -------------------------------------
 
 // ------------------------------------- INCIO RANKING PUNTOS -------------------------------------
 
@@ -105,8 +88,6 @@ function ranking(message) {
     }
     message.channel.send(mensaje);
 }
-
-
 
 // ------------------------------------- FIN RANKING PUNTOS -------------------------------------
 
