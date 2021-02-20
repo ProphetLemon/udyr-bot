@@ -22,11 +22,11 @@ client.on("message", function (message) {
     if (message.author.bot || (!canales_de_texto.includes(message.channel.id))) {
         return;
     }
-    if (message.content.trim() == "udyr") {
+    if (message.content.toLowerCase().trim() == "udyr") {
         insultar(message);
         return;
     }
-    if (message.content.startsWith(prefix) && message.content.charAt(4) == ' ') {
+    if (message.content.toLowerCase().startsWith(prefix) && message.content.charAt(4) == ' ') {
 
         var args = message.content.slice(prefix.length).split(/ +/);
         var command = args[1].toString();
@@ -57,14 +57,34 @@ client.on("message", function (message) {
             ajustar(message);
         } else if (command == "ranking") {
             ranking(message);
+        } else if (command = "limpiar") {
+            limpiar(message);
         } else {
-            insultar(message); 
+            insultar(message);
         }
     } else {
         ruleta(message);
     }
 
 });
+
+// ------------------------------------- INICIO LIMPIAR -------------------------------------
+
+/**
+ * limpiar alarmas
+ * @param {Discord.Message} message mensaje original
+ */
+function limpiar(message) {
+    for (let i = 0; i < alarmas.length; i++) {
+        clearTimeout(alarmas[i]);        
+    }
+    alarmas.slice(0, alarmas.length);
+    message.channel.send("Se han borrado todas las alarmas");
+    var alarma = setTimeout(function () { message.channel.bulkDelete(2) }, 2000);
+    alarmas.push(alarma);
+}
+
+// ------------------------------------- FIN LIMPIAR -------------------------------------
 
 // ------------------------------------- INCIO RANKING PUNTOS -------------------------------------
 
@@ -74,7 +94,7 @@ client.on("message", function (message) {
  */
 function ranking(message) {
     personas.sort(function (a, b) {
-        return b.puntos-a.puntos;
+        return b.puntos - a.puntos;
     });
     var mensaje = "";
     for (let i = 0; i < personas.length; i++) {
@@ -119,19 +139,21 @@ function ajustar(message) {
 
 // ------------------------------------- INICIO ALARMA -------------------------------------
 
+var alarmas = [];
+
 /**
  * Configurando una alarma
  * @param {Discord.Message} message
  */
 function alarma(message) {
     let args = message.content.split(/ +/);
-    let dia =  args[2];
+    let dia = args[2];
     let hora = args[3];
     let motivo = message.content.split("\"")[1];
     let dtAlarm = new Date();
     var regexDia = /\d{2}\/\d{2}/;
     var regexHora = /\d{2}\:\d{2}/;
-    if ((!regexHora.test(hora))||(dia != "hoy" && dia != "ma\u00F1ana" && !regexDia.test(dia))) {
+    if ((!regexHora.test(hora)) || (dia != "hoy" && dia != "ma\u00F1ana" && !regexDia.test(dia))) {
         insultar(message);
         return;
     }
@@ -141,7 +163,7 @@ function alarma(message) {
         dtAlarm.setMonth(mes)
         dtAlarm.setDate(dia);
     } else if (dia == "ma\u00F1ana") {
-        dtAlarm.setDate(dtAlarm.getDate()+1);
+        dtAlarm.setDate(dtAlarm.getDate() + 1);
     }
     let horas = Number(hora.split(":")[0]);
     let minutos = Number(hora.split(":")[1]);
@@ -155,7 +177,8 @@ function alarma(message) {
         return;
     }
     let diff = dtAlarm - dtNow;
-    setTimeout(function () { message.reply("Oye, te recuerdo esto : \"" + motivo+"\""); }, diff);
+    var alarma = setTimeout(function () { message.reply("Oye, te recuerdo esto : \"" + motivo + "\""); }, diff);
+    alarmas.push(alarma);
     message.reply("Se ha creado la alarma correctamente!");
 }
 
@@ -182,13 +205,14 @@ function donar(message) {
     for (let i = 0; i < personas.length; i++) {
         if (personas[i].userID == userID) {
             personas[i].puntos += puntos;
-            message.reply("has dado " + puntos + " udyr coins al mendigo de <@!" + userID+">");
+            message.reply("has dado " + puntos + " udyr coins al mendigo de <@!" + userID + ">");
             return;
         }
-    }    
+    }
     personas.push(new persona(new Date(), (1000 + puntos), userID));
     message.reply("has dado " + puntos + " udyr coins al mendigo de <@!" + userID + ">");
-    setTimeout(function(){ message.channel.bulkDelete(2) },2000);
+    var alarma = setTimeout(function () { message.channel.bulkDelete(2) }, 2000);
+    alarmas.push(alarma);
 }
 
 // ------------------------------------- FIN DONAR UDYR COINS -------------------------------------
