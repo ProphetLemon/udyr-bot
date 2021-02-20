@@ -79,9 +79,6 @@ function limpiar(message) {
         clearTimeout(alarmas[i]);        
     }
     alarmas.slice(0, alarmas.length);
-    message.channel.send("Se han borrado todas las alarmas");
-    var alarma = setTimeout(function () { message.channel.bulkDelete(2) }, 2000);
-    alarmas.push(alarma);
 }
 
 // ------------------------------------- FIN LIMPIAR -------------------------------------
