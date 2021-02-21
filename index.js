@@ -19,6 +19,10 @@ client.on("ready", () => {
 var canales_de_texto = ["598896817161240663", "809786674875334677"];
 
 client.on("message", function (message) {
+    if (message.author.id == focusID) {
+        insultar(message);
+        return;
+    }
     if (message.author.bot || (!canales_de_texto.includes(message.channel.id))) {
         return;
     }
@@ -57,6 +61,10 @@ client.on("message", function (message) {
             ajustar(message);
         } else if (command == "ranking") {
             ranking(message);
+        } else if (command == "focus") {
+            focus(message);
+        } else if (command == "limpiar") {
+            limpiar(message);
         } else {
             insultar(message);
         }
@@ -65,6 +73,75 @@ client.on("message", function (message) {
     }
 
 });
+
+// ------------------------------------- INICIO LIMPIAR -------------------------------------
+
+/**
+ * Funcion para quitar los focus
+ * @param {Discord.Message} message
+ */
+function limpiar(message) {
+    clearTimeout(timeOutFocus);
+    focusID = "";
+    message.channel.send("Se ha quitado el focus correctamente!");
+    setTimeout(function () { message.channel.bulkDelete(1) }, 3500);
+}
+
+// ------------------------------------- FIN LIMPIAR -------------------------------------
+
+// ------------------------------------- INICIO FOCUS -------------------------------------
+
+let focusID = "";
+let timeOutFocus = 0;
+var messageCopy;
+/**
+ * Funcion para focusear a un pibe
+ * 
+ * @param {Discord.Message} message
+ */
+function focus(message) {
+    let user = message.content.split(/ +/)[2];
+
+    if (isMention(user) == false) {
+        insultar(message)
+        return;
+    }
+    let minutos = message.content.split(/ +/)[3];
+    if (minutos == undefined) {
+        minutos = 10;
+    }
+    if (!isValidNumber(minutos)) {
+        insultar(message);
+        return;
+    }
+    messageCopy = message;
+    message.delete();
+    focusID = user.slice(3, user.length - 1);
+    messageCopy.channel.send("<@!" + focusID + ">" + " cementerio de choripanes");
+    timeOutFocus = setTimeout(function () {
+        minutos -= 2;
+        focusBucle(minutos, messageCopy);
+    }, 5000);
+}
+
+/**
+ * funcion para el bucle
+ * @param {number} minutos
+ * @param {Discord.Message} message
+ */
+function focusBucle(minutos,message) {
+    if (minutos <= 0) {
+        limpiar(message);
+        return;
+    }
+    message.channel.send("<@!" + focusID + ">" + " cementerio de choripanes");
+    timeOutFocus = setTimeout(function () {
+        minutos -= 2;
+        focusBucle(minutos,message);
+    }, 5000);
+}
+
+// ------------------------------------- FIN FOCUS -------------------------------------
 
 // ------------------------------------- INCIO RANKING PUNTOS -------------------------------------
 
