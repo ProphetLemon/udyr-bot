@@ -121,7 +121,7 @@ function focus(message) {
     timeOutFocus = setTimeout(function () {
         minutos -= 2;
         focusBucle(minutos, messageCopy);
-    }, 5000);
+    }, 120_000);
 }
 
 /**
@@ -138,7 +138,7 @@ function focusBucle(minutos,message) {
     timeOutFocus = setTimeout(function () {
         minutos -= 2;
         focusBucle(minutos,message);
-    }, 5000);
+    }, 120_000);
 }
 
 // ------------------------------------- FIN FOCUS -------------------------------------
@@ -194,8 +194,6 @@ function ajustar(message) {
 
 // ------------------------------------- INICIO ALARMA -------------------------------------
 
-var alarmas = [];
-
 /**
  * Configurando una alarma
  * @param {Discord.Message} message
@@ -232,8 +230,7 @@ function alarma(message) {
         return;
     }
     let diff = dtAlarm - dtNow;
-    var alarma = setTimeout(function () { message.reply("Oye, te recuerdo esto : \"" + motivo + "\""); }, diff);
-    alarmas.push(alarma);
+    setTimeout(function () { message.reply("Oye, te recuerdo esto : \"" + motivo + "\""); }, diff);
     message.reply("Se ha creado la alarma correctamente!");
 }
 
@@ -266,8 +263,7 @@ function donar(message) {
     }
     personas.push(new persona(new Date(), (1000 + puntos), userID));
     message.reply("has dado " + puntos + " udyr coins al mendigo de <@!" + userID + ">");
-    var alarma = setTimeout(function () { message.channel.bulkDelete(2) }, 3500);
-    alarmas.push(alarma);
+    setTimeout(function () { message.channel.bulkDelete(2); }, 3500);
 }
 
 // ------------------------------------- FIN DONAR UDYR COINS -------------------------------------
