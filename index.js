@@ -204,8 +204,8 @@ function alarma(message) {
     let hora = args[3];
     let motivo = message.content.split("\"")[1];
     let dtAlarm = new Date();
-    var regexDia = /\d{2}\/\d{2}/;
-    var regexHora = /\d{2}\:\d{2}/;
+    var regexDia = /\d{1,2}\/\d{2}/;
+    var regexHora = /\d{1,2}\:\d{2}/;
     if ((!regexHora.test(hora)) || (dia != "hoy" && dia != "ma\u00F1ana" && !regexDia.test(dia))) {
         insultar(message);
         return;
