@@ -81,10 +81,12 @@ client.on("message", function (message) {
  * @param {Discord.Message} message
  */
 function limpiar(message) {
-    clearTimeout(timeOutFocus);
+    for (let i = 0; i < timeOutFocus.length; i++) {
+        clearTimeout(timeOutFocus[i]);
+    }
+    timeOutFocus = [];
     focusID = "";
     message.channel.send("Se ha quitado el focus correctamente!");
-    setTimeout(function () { message.channel.bulkDelete(1) }, 3500);
 }
 
 // ------------------------------------- FIN LIMPIAR -------------------------------------
@@ -92,7 +94,7 @@ function limpiar(message) {
 // ------------------------------------- INICIO FOCUS -------------------------------------
 
 let focusID = "";
-let timeOutFocus = 0;
+let timeOutFocus = [];
 var messageCopy;
 /**
  * Funcion para focusear a un pibe
@@ -100,6 +102,10 @@ var messageCopy;
  * @param {Discord.Message} message
  */
 function focus(message) {
+    if (focusID != "") {
+        message.reply("Ya entoy insultando, dejame tranquilo");
+        return;
+    }
     let user = message.content.split(/ +/)[2];
 
     if (isMention(user) == false) {
@@ -118,10 +124,11 @@ function focus(message) {
     message.delete();
     focusID = user.slice(3, user.length - 1);
     messageCopy.channel.send("<@!" + focusID + ">" + " cementerio de choripanes");
-    timeOutFocus = setTimeout(function () {
+    let aux = setTimeout(function () {
         minutos -= 2;
         focusBucle(minutos, messageCopy);
     }, 120_000);
+    timeOutFocus.push(aux);
 }
 
 /**
@@ -135,10 +142,11 @@ function focusBucle(minutos,message) {
         return;
     }
     message.channel.send("<@!" + focusID + ">" + " cementerio de choripanes");
-    timeOutFocus = setTimeout(function () {
+    let aux  = setTimeout(function () {
         minutos -= 2;
         focusBucle(minutos,message);
     }, 120_000);
+    timeOutFocus.push(aux);
 }
 
 // ------------------------------------- FIN FOCUS -------------------------------------
@@ -262,8 +270,7 @@ function donar(message) {
         }
     }
     personas.push(new persona(new Date(), (1000 + puntos), userID));
-    message.reply("has dado " + puntos + " udyr coins al mendigo de <@!" + userID + ">");
-    setTimeout(function () { message.channel.bulkDelete(2); }, 3500);
+    message.reply("has dado " + puntos + " udyr coins al mendigo de " + message.guild.members.cache.get(userID).displayName);
 }
 
 // ------------------------------------- FIN DONAR UDYR COINS -------------------------------------
