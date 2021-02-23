@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "9.4";
+const version = "9.5";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -272,7 +272,7 @@ function donar(message) {
     for (let i = 0; i < personas.length; i++) {
         if (personas[i].userID == userID) {
             personas[i].puntos += puntos;
-            message.reply("has dado " + puntos + " udyr coins al mendigo de <@!" + userID + ">");
+            message.reply("has dado " + puntos + " udyr coins al mendigo de " + message.guild.members.cache.get(userID).displayName);
             return;
         }
     }
