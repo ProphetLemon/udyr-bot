@@ -3,6 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
+const version = "9.4";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -65,7 +66,9 @@ client.on("message", function (message) {
             focus(message);
         } else if (command == "limpiar") {
             limpiar(message);
-        } else {
+        } else if (command == "version") {
+            message.reply("estoy en la versi\u00F3n " + version);
+        }else {
             insultar(message);
         }
     } else {
@@ -81,12 +84,16 @@ client.on("message", function (message) {
  * @param {Discord.Message} message
  */
 function limpiar(message) {
-    for (let i = 0; i < timeOutFocus.length; i++) {
-        clearTimeout(timeOutFocus[i]);
+    if (timeOutFocus != undefined) {
+        clearTimeout(timeOutFocus);
+        timeOutFocus = undefined;
+        focusID = "";
+        message.channel.send("Se ha quitado el focus correctamente!");
     }
-    timeOutFocus = [];
-    focusID = "";
-    message.channel.send("Se ha quitado el focus correctamente!");
+    else {
+        insultar(message);
+    }
+    
 }
 
 // ------------------------------------- FIN LIMPIAR -------------------------------------
@@ -94,7 +101,7 @@ function limpiar(message) {
 // ------------------------------------- INICIO FOCUS -------------------------------------
 
 let focusID = "";
-let timeOutFocus = [];
+let timeOutFocus = 0;
 var messageCopy;
 /**
  * Funcion para focusear a un pibe
@@ -128,7 +135,7 @@ function focus(message) {
         minutos -= 2;
         focusBucle(minutos, messageCopy);
     }, 120_000);
-    timeOutFocus.push(aux);
+    timeOutFocus = aux;
 }
 
 /**
@@ -146,7 +153,7 @@ function focusBucle(minutos,message) {
         minutos -= 2;
         focusBucle(minutos,message);
     }, 120_000);
-    timeOutFocus.push(aux);
+    timeOutFocus = aux;
 }
 
 // ------------------------------------- FIN FOCUS -------------------------------------
