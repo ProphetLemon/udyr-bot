@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "10.0";
+const version = "10.0 (hotfix)";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -25,9 +25,9 @@ function changelog(message) {
     var mensaje = "Estoy en la versi\u00F3n " + version + "\n";
     mensaje += "\u25CF Se ha a\u00F1adido el comando 'changelog' y el de 'comandos'\n" +
         "\u25CF Se ha puesto de forma predeterminada la diferencia de hora en '-1' para ajustarse a la hora del servidor\n" +
-        "\u25CF En el comando de 'donar' se a\u00F1adido que el mensaje original del usuario se borre" +
-        "\u25CF Ahora si se escribe un mensaje que acabe en 5 o en 'cinco' se te respondera adecuadamente"+
-        "\u25CF Se han bloqueado los comandos 'puntos', 'apuesta', 'apostar', 'cerrar', 'ajustar', 'ranking' y 'donar'" +
+        "\u25CF En el comando de 'donar' se a\u00F1adido que el mensaje original del usuario se borre\n" +
+        "\u25CF Ahora si se escribe un mensaje que acabe en 5 o en 'cinco' se te respondera adecuadamente\n"+
+        "\u25CF Se han bloqueado los comandos 'puntos', 'apuesta', 'apostar', 'cerrar', 'ajustar', 'ranking' y 'donar'\n" +
         "\u25CF Arreglos internos de c\u00F3digo";
     message.channel.send(mensaje);
 }
