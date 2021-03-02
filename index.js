@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "10.3";
+const version = "10.3 (hotfix)";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -22,10 +22,10 @@ client.on("ready", () => {
  * @param {Discord.Message} message
  */
 function changelog(message) {
-    var mensaje = "Estoy en la versi\u00F3n " + version + "\n";
+    var mensaje = "Estoy en la versi\u00F3n " + version + "\n\n";
     mensaje += "Cambios m\u00E1s recientes:\n" +
         "\u25CF Arreglados textos mal escritos.\n\n" +
-        "Cambios con la versi\u00F3n 10:"+
+        "Cambios con la versi\u00F3n 10:\n"+
         "\u25CF Se ha a\u00F1adido el comando 'changelog' y el de 'comandos'.\n" +
         "\u25CF Arreglos de bugs (aprende Rito).\n"+
         "\u25CF Se ha puesto de forma predeterminada la diferencia de hora en '-1' para ajustarse a la hora del servidor.\n" +
