@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "9.5";
+const version = "10.0";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -17,6 +17,21 @@ client.on("ready", () => {
     console.log("El bot ta ready");
 });
 
+/**
+ * Te dice los cambios que ha recibido en este parche
+ * @param {Discord.Message} message
+ */
+function changelog(message) {
+    var mensaje = "Estoy en la versi\u00F3n " + version + "\n";
+    mensaje += "\u25CF Se ha a\u00F1adido el comando 'changelog' y el de 'comandos'\n" +
+        "\u25CF Se ha puesto de forma predeterminada la diferencia de hora en '-1' para ajustarse a la hora del servidor\n" +
+        "\u25CF En el comando de 'donar' se a\u00F1adido que el mensaje original del usuario se borre" +
+        "\u25CF Ahora si se escribe un mensaje que acabe en 5 o en 'cinco' se te respondera adecuadamente"+
+        "\u25CF Se han bloqueado los comandos 'puntos', 'apuesta', 'apostar', 'cerrar', 'ajustar', 'ranking' y 'donar'" +
+        "\u25CF Arreglos internos de c\u00F3digo";
+    message.channel.send(mensaje);
+}
+
 var canales_de_texto = ["598896817161240663", "809786674875334677"];
 
 client.on("message", function (message) {
@@ -27,12 +42,11 @@ client.on("message", function (message) {
     if (message.author.bot || (!canales_de_texto.includes(message.channel.id))) {
         return;
     }
-    if (message.content.toLowerCase().trim() == "udyr") {
+    if (message.content.toLowerCase().trim() == prefix) {
         insultar(message);
         return;
     }
     if (message.content.toLowerCase().startsWith(prefix) && message.content.charAt(4) == ' ') {
-
         var args = message.content.slice(prefix.length).split(/ +/);
         var command = args[1].toString();
         command = command.toLowerCase();
@@ -46,28 +60,42 @@ client.on("message", function (message) {
             moneda(message);
         } else if (command == "estado") {
             cambiar_estado(message, args.slice(2, args.length));
-        } else if (command == "puntos") {
-            puntos(message);
-        } else if (command == "apuesta") {
-            crear_apuesta(message);
-        } else if (command == "apostar") {
-            apostar(message);
-        } else if (command == "cerrar") {
-            cerrar_apuesta(message);
-        } else if (command == "donar") {
-            donar(message);
-        } else if (command == "alarma") {
+        }
+        /** else if (command == "puntos") {
+             puntos(message);
+         } else if (command == "apuesta") {
+             crear_apuesta(message);
+         } else if (command == "apostar") {
+             apostar(message);
+         }
+         else if (command == "cerrar") {
+             cerrar_apuesta(message);
+         }
+         else if (command == "donar") {
+             donar(message);
+         } 
+         */
+        else if (command == "alarma") {
             alarma(message)
-        } else if (command == "ajustar") {
+        }
+
+       /* else if (command == "ajustar") {
             ajustar(message);
-        } else if (command == "ranking") {
+        }
+        
+       else if (command == "ranking") {
             ranking(message);
-        } else if (command == "focus") {
+        }*/
+        else if (command == "focus") {
             focus(message);
         } else if (command == "limpiar") {
             limpiar(message);
         } else if (command == "version") {
             message.reply("estoy en la versi\u00F3n " + version);
+        } else if (command == "changelog") {
+            changelog(message);
+        } else if (command == "comandos") {
+            message.reply("hacienda, top/bot/mid/adc/supp/random/autofill, daod, moneda, estado, alarma, focus, limpiar, changelog, comandos");
         }else {
             insultar(message);
         }
@@ -93,7 +121,7 @@ function limpiar(message) {
     else {
         insultar(message);
     }
-    
+
 }
 
 // ------------------------------------- FIN LIMPIAR -------------------------------------
@@ -143,15 +171,15 @@ function focus(message) {
  * @param {number} minutos
  * @param {Discord.Message} message
  */
-function focusBucle(minutos,message) {
+function focusBucle(minutos, message) {
     if (minutos <= 0) {
         limpiar(message);
         return;
     }
     message.channel.send("<@!" + focusID + ">" + " cementerio de choripanes");
-    let aux  = setTimeout(function () {
+    let aux = setTimeout(function () {
         minutos -= 2;
-        focusBucle(minutos,message);
+        focusBucle(minutos, message);
     }, 120_000);
     timeOutFocus = aux;
 }
@@ -185,7 +213,7 @@ function ranking(message) {
 
 // ------------------------------------- INICIO AJUSTAR HORA -------------------------------------
 
-let horasDiferencia = 0;
+let horasDiferencia = -1;
 
 /**
  * 
@@ -278,6 +306,7 @@ function donar(message) {
     }
     personas.push(new persona(new Date(), (1000 + puntos), userID));
     message.reply("has dado " + puntos + " udyr coins al mendigo de " + message.guild.members.cache.get(userID).displayName);
+    message.delete();
 }
 
 // ------------------------------------- FIN DONAR UDYR COINS -------------------------------------
@@ -822,6 +851,10 @@ function init_campeones() {
  * @param {Discord.Message} message mensaje original
  */
 function ruleta(message) {
+    if (message.content.charAt(message.length - 1) == '5' || message.content.slice(message.content.length - 6, message.content.length) == "cinco") {
+        message.reply("por el culo te la hinco, maric\u00F3n");
+        return;
+    }
     var ruleta = Math.floor(Math.random() * 10);
     console.log(ruleta);
     if (ruleta == 5) { //por el culo te la hinco jaja
