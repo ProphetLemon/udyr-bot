@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "10.1 (hotfix)";
+const version = "10.2";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -138,7 +138,7 @@ var messageCopy;
  */
 function focus(message) {
     if (focusID != "") {
-        message.reply("Ya entoy insultando, dejame tranquilo");
+        message.reply("ya estoy insultando, d\u00E9jame tranquilo");
         return;
     }
     let user = message.content.split(/ +/)[2];
