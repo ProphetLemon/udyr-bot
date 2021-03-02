@@ -95,7 +95,7 @@ client.on("message", function (message) {
         } else if (command == "changelog") {
             changelog(message);
         } else if (command == "comandos") {
-            message.reply("hacienda, top/bot/mid/adc/supp/random/autofill, daod, moneda, estado, alarma, focus, limpiar, changelog, comandos");
+            message.reply("hacienda, top/bot/mid/adc/supp/random/autofill, dado, moneda, estado, alarma, focus, limpiar, changelog, comandos");
         }else {
             insultar(message);
         }
