@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "10.0 (hotfix)";
+const version = "10.1";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -24,6 +24,7 @@ client.on("ready", () => {
 function changelog(message) {
     var mensaje = "Estoy en la versi\u00F3n " + version + "\n";
     mensaje += "\u25CF Se ha a\u00F1adido el comando 'changelog' y el de 'comandos'\n" +
+        "\u25CF Arreglos de bugs (aprende Rito)\n"+
         "\u25CF Se ha puesto de forma predeterminada la diferencia de hora en '-1' para ajustarse a la hora del servidor\n" +
         "\u25CF En el comando de 'donar' se a\u00F1adido que el mensaje original del usuario se borre\n" +
         "\u25CF Ahora si se escribe un mensaje que acabe en 5 o en 'cinco' se te respondera adecuadamente\n"+
@@ -851,7 +852,7 @@ function init_campeones() {
  * @param {Discord.Message} message mensaje original
  */
 function ruleta(message) {
-    if (message.content.charAt(message.length - 1) == '5' || message.content.slice(message.content.length - 6, message.content.length) == "cinco") {
+    if (message.content.charAt(message.content.length - 1) == '5' || message.content.slice(message.content.length - 5, message.content.length).trim() == "cinco") {
         message.reply("por el culo te la hinco, maric\u00F3n");
         return;
     }
