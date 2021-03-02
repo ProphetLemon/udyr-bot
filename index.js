@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "10.3 (hotfix)";
+const version = "10.4";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -24,7 +24,8 @@ client.on("ready", () => {
 function changelog(message) {
     var mensaje = "Estoy en la versi\u00F3n " + version + "\n\n";
     mensaje += "Cambios m\u00E1s recientes:\n" +
-        "\u25CF Arreglados textos mal escritos.\n\n" +
+        "\u25CF Cuando no escribes bien los par\u00E1metros para el comando 'estado', se te avisar\u00E1 de forma adecuada.\n"+
+        "\u25CF Cuando se usa el comando 'estado' se borra el mensaje original.\n\n" +
         "Cambios con la versi\u00F3n 10:\n"+
         "\u25CF Se ha a\u00F1adido el comando 'changelog' y el de 'comandos'.\n" +
         "\u25CF Arreglos de bugs (aprende Rito).\n"+
@@ -542,6 +543,10 @@ function comprobar_puntos(userID) {
  * @param {string[]} args Argumentos
  */
 function cambiar_estado(message, args) {
+    if (message.content.split("\"").length != 3) {
+        insultar(message);
+        return;
+    }
     var estado_personalizado = message.content.split("\"")[1];
     switch (args[0]) {
         case "ocupado":
@@ -574,7 +579,8 @@ function cambiar_estado(message, args) {
             args[1] = "COMPETING";
             break;
         default:
-            args[1] = "CUSTOM_STATUS";
+            insultar(message);
+            return;
     }
     client.user.setPresence({
         status: args[0],
@@ -582,7 +588,8 @@ function cambiar_estado(message, args) {
             name: estado_personalizado,
             type: args[1]
         }
-    })
+    });
+    message.delete();
 }
 
 // ------------------------------------- FIN CAMBIO DE ESTADO -------------------------------------
