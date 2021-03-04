@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "10.4";
+const version = "10.5";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -24,14 +24,14 @@ client.on("ready", () => {
 function changelog(message) {
     var mensaje = "Estoy en la versi\u00F3n " + version + "\n\n";
     mensaje += "Cambios m\u00E1s recientes:\n" +
-        "\u25CF Cuando no escribes bien los par\u00E1metros para el comando 'estado', se te avisar\u00E1 de forma adecuada.\n"+
-        "\u25CF Cuando se usa el comando 'estado' se borra el mensaje original.\n\n" +
-        "Cambios con la versi\u00F3n 10:\n"+
+        "\u25CF Reestructuraci\u00F3n del c\u00F3digo.\n" +
+        "\u25CF Se ha a\u00F1adido el comando 'version' cuando se usa el comando 'comandos'.\n\n" +
+        "Cambios con la versi\u00F3n 10:\n" +
         "\u25CF Se ha a\u00F1adido el comando 'changelog' y el de 'comandos'.\n" +
-        "\u25CF Arreglos de bugs (aprende Rito).\n"+
+        "\u25CF Arreglos de bugs (aprende Rito).\n" +
         "\u25CF Se ha puesto de forma predeterminada la diferencia de hora en '-1' para ajustarse a la hora del servidor.\n" +
         "\u25CF En el comando de 'donar' se ha a\u00F1adido que el mensaje original del usuario se borre.\n" +
-        "\u25CF Ahora si se escribe un mensaje que acabe en 5 o en 'cinco' se te responder\u00E1 adecuadamente.\n"+
+        "\u25CF Ahora si se escribe un mensaje que acabe en 5 o en 'cinco' se te responder\u00E1 adecuadamente.\n" +
         "\u25CF Se han bloqueado los comandos 'puntos', 'apuesta', 'apostar', 'cerrar', 'ajustar', 'ranking' y 'donar'.\n" +
         "\u25CF Arreglos internos de c\u00F3digo.";
     message.channel.send(mensaje);
@@ -65,6 +65,18 @@ client.on("message", function (message) {
             moneda(message);
         } else if (command == "estado") {
             cambiar_estado(message, args.slice(2, args.length));
+        } else if (command == "alarma") {
+            alarma(message)
+        } else if (command == "focus") {
+            focus(message);
+        } else if (command == "limpiar") {
+            limpiar(message);
+        } else if (command == "version") {
+            message.reply("estoy en la versi\u00F3n " + version);
+        } else if (command == "changelog") {
+            changelog(message);
+        } else if (command == "comandos") {
+            message.reply("hacienda, top/bot/mid/adc/supp/random/autofill, dado, moneda, estado, alarma, focus, limpiar, version, changelog, comandos");
         }
         /** else if (command == "puntos") {
              puntos(message);
@@ -78,29 +90,15 @@ client.on("message", function (message) {
          }
          else if (command == "donar") {
              donar(message);
-         } 
-         */
-        else if (command == "alarma") {
-            alarma(message)
-        }
-       /* else if (command == "ajustar") {
+         }
+         else if (command == "ajustar") {
             ajustar(message);
         }
-        
+       
        else if (command == "ranking") {
             ranking(message);
         }*/
-        else if (command == "focus") {
-            focus(message);
-        } else if (command == "limpiar") {
-            limpiar(message);
-        } else if (command == "version") {
-            message.reply("estoy en la versi\u00F3n " + version);
-        } else if (command == "changelog") {
-            changelog(message);
-        } else if (command == "comandos") {
-            message.reply("hacienda, top/bot/mid/adc/supp/random/autofill, dado, moneda, estado, alarma, focus, limpiar, changelog, comandos");
-        }else {
+        else {
             insultar(message);
         }
     } else {
