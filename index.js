@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "10.5";
+const version = "10.6";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -24,8 +24,7 @@ client.on("ready", () => {
 function changelog(message) {
     var mensaje = "Estoy en la versi\u00F3n " + version + "\n\n";
     mensaje += "Cambios m\u00E1s recientes:\n" +
-        "\u25CF Reestructuraci\u00F3n del c\u00F3digo.\n" +
-        "\u25CF Se ha a\u00F1adido el comando 'version' cuando se usa el comando 'comandos'.\n\n" +
+        "\u25CF A la hora de configurar una alarma, se borra el mensaje original, y tambi\u00E9n se borra el de confimarci\u00F3n despues de un tiempo.\n\n" +
         "Cambios con la versi\u00F3n 10:\n" +
         "\u25CF Se ha a\u00F1adido el comando 'changelog' y el de 'comandos'.\n" +
         "\u25CF Arreglos de bugs (aprende Rito).\n" +
@@ -277,6 +276,8 @@ function alarma(message) {
     let diff = dtAlarm - dtNow;
     setTimeout(function () { message.reply("Oye, te recuerdo esto : \"" + motivo + "\""); }, diff);
     message.reply("Se ha creado la alarma correctamente!");
+    message.delete();
+    setTimeout(function () { message.channel.bulkDelete(1)},3000)
 }
 
 // ------------------------------------- FIN ALARMA -------------------------------------
