@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "10.6";
+const version = "10.7";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -24,9 +24,9 @@ client.on("ready", () => {
 function changelog(message) {
     var mensaje = "Estoy en la versi\u00F3n " + version + "\n\n";
     mensaje += "Cambios m\u00E1s recientes:\n" +
-        "\u25CF A la hora de configurar una alarma, se borra el mensaje original, y tambi\u00E9n se borra el de confimarci\u00F3n despues de un tiempo.\n\n" +
+        "\u25CF Se ha a\u00F1adido el comando 'lol', que te explica todos los comandos relacionados que hay sobre el lol.\n\n" +
         "Cambios con la versi\u00F3n 10:\n" +
-        "\u25CF Se ha a\u00F1adido el comando 'changelog' y el de 'comandos'.\n" +
+        "\u25CF Se ha a\u00F1adido el comando 'changelog', 'lol' y el de 'comandos'.\n" +
         "\u25CF Arreglos de bugs (aprende Rito).\n" +
         "\u25CF Se ha puesto de forma predeterminada la diferencia de hora en '-1' para ajustarse a la hora del servidor.\n" +
         "\u25CF En el comando de 'donar' se ha a\u00F1adido que el mensaje original del usuario se borre.\n" +
@@ -75,7 +75,11 @@ client.on("message", function (message) {
         } else if (command == "changelog") {
             changelog(message);
         } else if (command == "comandos") {
-            message.reply("hacienda, top/bot/mid/adc/supp/random/autofill, dado, moneda, estado, alarma, focus, limpiar, version, changelog, comandos");
+            message.reply("hacienda, top/bot/mid/adc/supp/random/autofill, dado, moneda, estado, alarma, focus, limpiar, version, changelog, comandos, lol");
+        } else if (command == "lol") {
+            message.reply("Si escribes udyr despues de una l\u00EDnea del lol (udyr top/bot/mid/adc/supp), se te dir\u00E1 un champ que juegue en esa l\u00EDnea \n\n" +
+                "Si escribes 'udyr autofill', se te dir\u00E1 una l\u00EDnea y un champ aleatorio propio de esa l\u00EDnea\n\n" +
+                "Si escribes 'udyr random' se te dir\u00E1 un champ aleatorio en una l\u00EDnea aleatoria");
         }
         /** else if (command == "puntos") {
              puntos(message);
@@ -654,7 +658,7 @@ class campeon {
     /**
      * Campeon del lol
      * @param {string} nombre Nombre del campeon
-     * @param {string[]} linea Linea del campeon
+     * @param {string[]} linea Línea del campeon
      */
     constructor(nombre, linea) {
         this.nombre = nombre;
