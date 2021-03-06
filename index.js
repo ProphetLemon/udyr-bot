@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "10.7";
+const version = "10.7.1";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -24,7 +24,9 @@ client.on("ready", () => {
 function changelog(message) {
     var mensaje = "Estoy en la versi\u00F3n " + version + "\n\n";
     mensaje += "Cambios m\u00E1s recientes:\n" +
-        "\u25CF Se ha a\u00F1adido el comando 'lol', que te explica todos los comandos relacionados que hay sobre el lol.\n\n" +
+        "\u25CF Se han arreglado textos mal escritos.\n" +
+        "\u25CF Se ha a\u00F1adido el comando 'lol', que te explica todos los comandos relacionados que hay sobre el lol.\n" +
+        "\u25CF Ahora cuando se usa el comando 'lol' el bot manda el mensaje sin mencionarte.\n\n" +
         "Cambios con la versi\u00F3n 10:\n" +
         "\u25CF Se ha a\u00F1adido el comando 'changelog', 'lol' y el de 'comandos'.\n" +
         "\u25CF Arreglos de bugs (aprende Rito).\n" +
@@ -77,9 +79,9 @@ client.on("message", function (message) {
         } else if (command == "comandos") {
             message.reply("hacienda, top/bot/mid/adc/supp/random/autofill, dado, moneda, estado, alarma, focus, limpiar, version, changelog, comandos, lol");
         } else if (command == "lol") {
-            message.reply("Si escribes udyr despues de una l\u00EDnea del lol (udyr top/bot/mid/adc/supp), se te dir\u00E1 un champ que juegue en esa l\u00EDnea \n\n" +
-                "Si escribes 'udyr autofill', se te dir\u00E1 una l\u00EDnea y un champ aleatorio propio de esa l\u00EDnea\n\n" +
-                "Si escribes 'udyr random' se te dir\u00E1 un champ aleatorio en una l\u00EDnea aleatoria");
+            message.channel.send("Si escribes udyr despues de una l\u00EDnea del lol (udyr top/bot/mid/adc/supp), se te dir\u00E1 un champ que juegue en esa l\u00EDnea.\n\n" +
+                "Si escribes 'udyr autofill', se te dir\u00E1 una l\u00EDnea y un champ aleatorio propio de esa l\u00EDnea.\n\n" +
+                "Si escribes 'udyr random' se te dir\u00E1 un champ aleatorio en una l\u00EDnea aleatoria.");
         }
         /** else if (command == "puntos") {
              puntos(message);
