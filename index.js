@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "10.7.1";
+const version = "11.0";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -24,17 +24,9 @@ client.on("ready", () => {
 function changelog(message) {
     var mensaje = "Estoy en la versi\u00F3n " + version + "\n\n";
     mensaje += "Cambios m\u00E1s recientes:\n" +
-        "\u25CF Se han arreglado textos mal escritos.\n" +
-        "\u25CF Se ha a\u00F1adido el comando 'lol', que te explica todos los comandos relacionados que hay sobre el lol.\n" +
-        "\u25CF Ahora cuando se usa el comando 'lol' el bot manda el mensaje sin mencionarte.\n\n" +
-        "Cambios con la versi\u00F3n 10:\n" +
-        "\u25CF Se ha a\u00F1adido el comando 'changelog', 'lol' y el de 'comandos'.\n" +
-        "\u25CF Arreglos de bugs (aprende Rito).\n" +
-        "\u25CF Se ha puesto de forma predeterminada la diferencia de hora en '-1' para ajustarse a la hora del servidor.\n" +
-        "\u25CF En el comando de 'donar' se ha a\u00F1adido que el mensaje original del usuario se borre.\n" +
-        "\u25CF Ahora si se escribe un mensaje que acabe en 5 o en 'cinco' se te responder\u00E1 adecuadamente.\n" +
-        "\u25CF Se han bloqueado los comandos 'puntos', 'apuesta', 'apostar', 'cerrar', 'ajustar', 'ranking' y 'donar'.\n" +
-        "\u25CF Arreglos internos de c\u00F3digo.";
+        "\u25CF Arreglos de bugs.\n\n" +
+        "Cambios con la versi\u00F3n 11:\n" +
+        "\u25CF Se ha a\u00F1adido el comando 'pelea'\n"
     message.channel.send(mensaje);
 }
 
@@ -82,6 +74,8 @@ client.on("message", function (message) {
             message.channel.send("Si escribes udyr despues de una l\u00EDnea del lol (udyr top/bot/mid/adc/supp), se te dir\u00E1 un champ que juegue en esa l\u00EDnea.\n\n" +
                 "Si escribes 'udyr autofill', se te dir\u00E1 una l\u00EDnea y un champ aleatorio propio de esa l\u00EDnea.\n\n" +
                 "Si escribes 'udyr random' se te dir\u00E1 un champ aleatorio en una l\u00EDnea aleatoria.");
+        } else if (command == "pelea") {
+            pelea(message);
         }
         /** else if (command == "puntos") {
              puntos(message);
@@ -111,6 +105,117 @@ client.on("message", function (message) {
     }
 
 });
+
+// ------------------------------------- INICIO PELEA -------------------------------------
+
+class gladiador {
+    /**
+     * 
+     * @param {string} nombre
+     * @param {number} vida
+     */
+    constructor(nombre, vida) {
+        this.nombre = nombre;
+        this.vida = vida;
+    }
+}
+
+/**
+ * Función que es para darse de hostias con los colegas
+ * @param {Discord.Message} message mensaje original
+ */
+function pelea(message) {
+    if (logCombate.length > 0) {
+        return;
+    }
+    var personaje1 = message.guild.members.cache.get(message.author.id).displayName;
+    var idpj2 = message.content.split(" ")[2];
+    if (isMention(idpj2)) {
+        idpj2 = returnIdFromMention(idpj2);
+    } else {
+        message.reply("eres tan maricón que te heriste a ti mismo");
+        return;
+    }
+    var personaje2 = message.guild.members.cache.get(idpj2).displayName;
+    var gladiador1 = new gladiador(personaje1, 100);
+    var gladiador2 = new gladiador(personaje2, 100);
+    message.channel.send("Comienza el combate entre " + gladiador1.nombre + " y " + gladiador2.nombre + "!");
+    var comienzo = Math.floor(Math.random() * 2);
+    if (comienzo == 0) {
+        combate(gladiador1, gladiador2, message);
+    } else {
+        combate(gladiador2, gladiador1, message);
+    }
+    var perdedor = "<@!";
+    if (gladiador1.vida > 0) {
+        logCombate.push("El ganador del combate es " + gladiador1.nombre + "!");
+        perdedor += idpj2 + ">";
+    } else {
+        logCombate.push("El ganador del combate es " + gladiador2.nombre + "!");
+        perdedor += message.author.id + ">";
+    }
+    logCombate.push(perdedor + ", maric\u00F3n");
+    leerRondasPelea(message);
+}
+
+/**
+ * 
+ * @param {Discord.Message} message
+ */
+function leerRondasPelea(message) {
+    if (turno == logCombate.length - 2) {
+        var final = logCombate[logCombate.length - 2] + "\n" + logCombate[logCombate.length - 1];
+        message.channel.send(final);
+        logCombate = [];
+        turno = 0;
+        return;
+    }
+    setTimeout(function () {
+        message.channel.send("Turno "+(turno+1)+":\n"+logCombate[turno++]+"\n\n");
+        leerRondasPelea(message);
+    }, 6000);
+}
+
+var baseDmg = 30;
+var criticalDmg = baseDmg * 3;
+var parryDmg = baseDmg / 2;
+var logCombate = [];
+var turno = 0;
+
+/**
+ * Funcion donde discurre todo el combate
+ * @param {gladiador} gladiador1
+ * @param {gladiador} gladiador2
+ * @param {Discord.Message} message
+ */
+function combate(gladiador1, gladiador2, message) {
+    var logCombateText = "";
+    var critico = Math.floor(Math.random() * 5) + 1;
+    var esquive = Math.floor(Math.random() * 5) + 1;
+    var parry = Math.floor(Math.random() * 5) + 1;
+    if (esquive == 5) {
+        logCombateText += ":shield:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra esquivar el ataque.:shield:\n";
+    } else if (parry == 5) {
+        logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry y le hace " + parryDmg + " puntos de da\u00F1o.:ninja_tone1:\n";
+        gladiador1.vida -= parryDmg;
+    } else if (critico == 5) {
+        logCombateText += ":boom:"+gladiador1.nombre + " golpea y le causa un da\u00F1o tremendo a " + gladiador2.nombre + " infligiendole " + criticalDmg + " puntos de da\u00F1o.:boom:\n";
+        gladiador2.vida -= criticalDmg;
+    }
+    else {
+        logCombateText += ":crossed_swords:" + gladiador1.nombre + " golpea a " + gladiador2.nombre + " infligiendole " + baseDmg + " puntos de da\u00F1o.:crossed_swords:\n";
+        gladiador2.vida -= baseDmg;
+    }
+    gladiador1.vida = gladiador1.vida < 0 ? 0 : gladiador1.vida;
+    gladiador2.vida = gladiador2.vida < 0 ? 0 : gladiador2.vida;
+    logCombateText += gladiador1.nombre + ": " + gladiador1.vida + " puntos de vida restantes\n" + gladiador2.nombre + ": " + gladiador2.vida + " puntos de vida restantes.";
+    logCombate.push(logCombateText);
+    if (gladiador1.vida > 0 && gladiador2.vida > 0) {
+        combate(gladiador2, gladiador1, logCombate);
+    }
+}
+
+// ------------------------------------- FIN PELEA -------------------------------------
 
 // ------------------------------------- INICIO LIMPIAR -------------------------------------
 
@@ -283,7 +388,7 @@ function alarma(message) {
     setTimeout(function () { message.reply("Oye, te recuerdo esto : \"" + motivo + "\""); }, diff);
     message.reply("Se ha creado la alarma correctamente!");
     message.delete();
-    setTimeout(function () { message.channel.bulkDelete(1)},3000)
+    setTimeout(function () { message.channel.bulkDelete(1) }, 3000)
 }
 
 // ------------------------------------- FIN ALARMA -------------------------------------
@@ -977,7 +1082,7 @@ function isValidNumber(aux) {
 }
 
 /**
- * 
+ * Funcion que devuelve un flag de si es una mencion o no el string que le mandaste
  * @param {string} mention Posible mencion
  */
 function isMention(mention) {
@@ -985,6 +1090,17 @@ function isMention(mention) {
     let numero = mention.slice(3, mention.length - 1);
     let fin = mention.slice(mention.length - 1, mention.length);
     return inicio == "<@!" && isValidNumber(numero) && fin == ">";
+}
+
+/**
+ * Funcion que devuelve el id de una mencion
+ * @param {string} mention
+ */
+function returnIdFromMention(mention) {
+    let inicio = mention.slice(0, 3);
+    let numero = mention.slice(3, mention.length - 1);
+    let fin = mention.slice(mention.length - 1, mention.length);
+    return numero;
 }
 
 //------------------------------------- FIN METODOS UTIL -------------------------------------
