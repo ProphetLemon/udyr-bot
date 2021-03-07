@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "11.0";
+const version = "11.1";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -24,7 +24,7 @@ client.on("ready", () => {
 function changelog(message) {
     var mensaje = "Estoy en la versi\u00F3n " + version + "\n\n";
     mensaje += "Cambios m\u00E1s recientes:\n" +
-        "\u25CF Arreglos de bugs.\n\n" +
+        "\u25CF Se han a\u00F1adido emojis de copas cuando se revela quien es el ganador.\n\n" +
         "Cambios con la versi\u00F3n 11:\n" +
         "\u25CF Se ha a\u00F1adido el comando 'pelea'\n"
     message.channel.send(mensaje);
@@ -148,10 +148,10 @@ function pelea(message) {
     }
     var perdedor = "<@!";
     if (gladiador1.vida > 0) {
-        logCombate.push("El ganador del combate es " + gladiador1.nombre + "!");
+        logCombate.push(":trophy:El ganador del combate es " + gladiador1.nombre + "!:trophy:");
         perdedor += idpj2 + ">";
     } else {
-        logCombate.push("El ganador del combate es " + gladiador2.nombre + "!");
+        logCombate.push(":trophy:El ganador del combate es " + gladiador2.nombre + "!:trophy:");
         perdedor += message.author.id + ">";
     }
     logCombate.push(perdedor + ", maric\u00F3n");
