@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "11.1.1";
+const version = "11.1.2";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -25,6 +25,7 @@ function changelog(message) {
     var mensaje = "Estoy en la versi\u00F3n " + version + "\n\n";
     mensaje += "Cambios m\u00E1s recientes:\n" +
         "\u25CF Se ha a\u00F1adido el comando 'pelea' en la lista de comandos que aparece al ejecutar 'comandos'.\n" +
+        "\u25CF Ahora cuando se usa 'pelea', la primera linea de combate se muestra instantaneamente.\n" +
         "\u25CF Se han a\u00F1adido emojis de copas cuando se revela quien es el ganador.\n\n" +
         "Cambios con la versi\u00F3n 11:\n" +
         "\u25CF Se ha a\u00F1adido el comando 'pelea' en la lista de comandos que aparece al ejecutar 'comandos'.\n" +
@@ -157,6 +158,7 @@ function pelea(message) {
         perdedor += message.author.id + ">";
     }
     logCombate.push(perdedor + ", maric\u00F3n");
+    message.channel.send(logCombate[turno++]);
     leerRondasPelea(message);
 }
 
