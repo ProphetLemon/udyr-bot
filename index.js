@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "11.2";
+const version = "11.2.1";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -24,6 +24,7 @@ client.on("ready", () => {
 function changelog(message) {
     var mensaje = "Estoy en la versi\u00F3n " + version + "\n\n";
     mensaje += "Cambios m\u00E1s recientes:\n" +
+        "\u25CF Se han arreglado textos.\n" +
         "\u25CF Ahora el ratio de insulto es 1 de cada 20 en vez de 1 de cada 10.\n" +
         "\u25CF Ahora se muestra correctamente 'Turno 1' cuando se usa el comando 'pelea'.\n" +
         "\u25CF Se ha a\u00F1adido el comando 'pelea' en la lista de comandos que aparece al ejecutar 'comandos'.\n" +
@@ -138,7 +139,7 @@ function pelea(message) {
     if (idpj2 != undefined && isMention(idpj2)) {
         idpj2 = returnIdFromMention(idpj2);
     } else {
-        message.reply("eres tan maricón que te heriste a ti mismo");
+        message.reply("eres tan maric\u00F3n que te heriste a ti mismo");
         return;
     }
     var personaje2 = message.guild.members.cache.get(idpj2).displayName;
