@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "11.1.3";
+const version = "11.1.4";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -134,7 +134,7 @@ function pelea(message) {
     }
     var personaje1 = message.guild.members.cache.get(message.author.id).displayName;
     var idpj2 = message.content.split(" ")[2];
-    if (isMention(idpj2)) {
+    if (idpj2 != undefined && isMention(idpj2)) {
         idpj2 = returnIdFromMention(idpj2);
     } else {
         message.reply("eres tan maricón que te heriste a ti mismo");
@@ -176,7 +176,7 @@ function leerRondasPelea(message) {
         return;
     }
     setTimeout(function () {
-        message.channel.send("Turno " + (turno + 1) + ":\n" + logCombate[turno++] + "\n\n");
+        message.channel.send("Turno " + turno + ":\n" + logCombate[turno++] + "\n\n");
         leerRondasPelea(message);
     }, 6000);
 }
