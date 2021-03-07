@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "11.1.4";
+const version = "11.1.5";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -159,7 +159,7 @@ function pelea(message) {
         perdedor += message.author.id + ">";
     }
     logCombate.push(perdedor + ", maric\u00F3n");
-    message.channel.send(logCombate[turno++]);
+    message.channel.send(logCombate[0] + "\n" + logCombate[1]);
     leerRondasPelea(message);
 }
 
@@ -172,7 +172,7 @@ function leerRondasPelea(message) {
         var final = logCombate[logCombate.length - 2] + "\n" + logCombate[logCombate.length - 1];
         message.channel.send(final);
         logCombate = [];
-        turno = 0;
+        turno = 2;
         return;
     }
     setTimeout(function () {
@@ -185,7 +185,7 @@ var baseDmg = 30;
 var criticalDmg = baseDmg * 3;
 var parryDmg = baseDmg / 2;
 var logCombate = [];
-var turno = 0;
+var turno = 2;
 
 /**
  * Funcion donde discurre todo el combate
