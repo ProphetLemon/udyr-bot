@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "11.1.5";
+const version = "11.1.6";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -159,7 +159,7 @@ function pelea(message) {
         perdedor += message.author.id + ">";
     }
     logCombate.push(perdedor + ", maric\u00F3n");
-    message.channel.send(logCombate[0] + "\n" + logCombate[1]);
+    message.channel.send(logCombate[0] + "\nTurno 1:\n" + logCombate[1]);
     leerRondasPelea(message);
 }
 
