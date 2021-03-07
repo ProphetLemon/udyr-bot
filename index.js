@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "11.1";
+const version = "11.1.1";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -24,8 +24,10 @@ client.on("ready", () => {
 function changelog(message) {
     var mensaje = "Estoy en la versi\u00F3n " + version + "\n\n";
     mensaje += "Cambios m\u00E1s recientes:\n" +
+        "\u25CF Se ha a\u00F1adido el comando 'pelea' en la lista de comandos que aparece al ejecutar 'comandos'.\n" +
         "\u25CF Se han a\u00F1adido emojis de copas cuando se revela quien es el ganador.\n\n" +
         "Cambios con la versi\u00F3n 11:\n" +
+        "\u25CF Se ha a\u00F1adido el comando 'pelea' en la lista de comandos que aparece al ejecutar 'comandos'.\n" +
         "\u25CF Se ha a\u00F1adido el comando 'pelea'\n"
     message.channel.send(mensaje);
 }
@@ -69,7 +71,7 @@ client.on("message", function (message) {
         } else if (command == "changelog") {
             changelog(message);
         } else if (command == "comandos") {
-            message.reply("hacienda, top/bot/mid/adc/supp/random/autofill, dado, moneda, estado, alarma, focus, limpiar, version, changelog, comandos, lol");
+            message.reply("hacienda, top/bot/mid/adc/supp/random/autofill, dado, moneda, estado, alarma, focus, limpiar, version, changelog, comandos, lol,pelea");
         } else if (command == "lol") {
             message.channel.send("Si escribes udyr despues de una l\u00EDnea del lol (udyr top/bot/mid/adc/supp), se te dir\u00E1 un champ que juegue en esa l\u00EDnea.\n\n" +
                 "Si escribes 'udyr autofill', se te dir\u00E1 una l\u00EDnea y un champ aleatorio propio de esa l\u00EDnea.\n\n" +
