@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "11.1.2";
+const version = "11.1.3";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -24,6 +24,7 @@ client.on("ready", () => {
 function changelog(message) {
     var mensaje = "Estoy en la versi\u00F3n " + version + "\n\n";
     mensaje += "Cambios m\u00E1s recientes:\n" +
+        "\u25CF Ahora se muestra correctamente 'Turno 1' cuando se usa el comando 'pelea'.\n" +
         "\u25CF Se ha a\u00F1adido el comando 'pelea' en la lista de comandos que aparece al ejecutar 'comandos'.\n" +
         "\u25CF Ahora cuando se usa 'pelea', la primera linea de combate se muestra instantaneamente.\n" +
         "\u25CF Se han a\u00F1adido emojis de copas cuando se revela quien es el ganador.\n\n" +
@@ -142,7 +143,7 @@ function pelea(message) {
     var personaje2 = message.guild.members.cache.get(idpj2).displayName;
     var gladiador1 = new gladiador(personaje1, 100);
     var gladiador2 = new gladiador(personaje2, 100);
-    message.channel.send("Comienza el combate entre " + gladiador1.nombre + " y " + gladiador2.nombre + "!");
+    logCombate.push("Comienza el combate entre " + gladiador1.nombre + " y " + gladiador2.nombre + "!");
     var comienzo = Math.floor(Math.random() * 2);
     if (comienzo == 0) {
         combate(gladiador1, gladiador2, message);
@@ -175,7 +176,7 @@ function leerRondasPelea(message) {
         return;
     }
     setTimeout(function () {
-        message.channel.send("Turno "+(turno+1)+":\n"+logCombate[turno++]+"\n\n");
+        message.channel.send("Turno " + (turno + 1) + ":\n" + logCombate[turno++] + "\n\n");
         leerRondasPelea(message);
     }, 6000);
 }
@@ -203,7 +204,7 @@ function combate(gladiador1, gladiador2, message) {
         logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry y le hace " + parryDmg + " puntos de da\u00F1o.:ninja_tone1:\n";
         gladiador1.vida -= parryDmg;
     } else if (critico == 5) {
-        logCombateText += ":boom:"+gladiador1.nombre + " golpea y le causa un da\u00F1o tremendo a " + gladiador2.nombre + " infligiendole " + criticalDmg + " puntos de da\u00F1o.:boom:\n";
+        logCombateText += ":boom:" + gladiador1.nombre + " golpea y le causa un da\u00F1o tremendo a " + gladiador2.nombre + " infligiendole " + criticalDmg + " puntos de da\u00F1o.:boom:\n";
         gladiador2.vida -= criticalDmg;
     }
     else {
