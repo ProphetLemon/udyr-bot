@@ -3,7 +3,7 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "11.2.2";
+const version = "12.0";
 
 client.on("ready", () => {
     client.user.setPresence({
@@ -24,14 +24,12 @@ client.on("ready", () => {
 function changelog(message) {
     var mensaje = "Estoy en la versi\u00F3n " + version + "\n\n";
     mensaje += "Cambios m\u00E1s recientes:\n" +
-        "\u25CF Se han arreglado textos.\n" +
-        "\u25CF Se ha mejorado el comando 'pelea'.\n" +
-        "\u25CF Ahora el ratio de insulto es 1 de cada 20 en vez de 1 de cada 10.\n" +
-        "\u25CF Ahora se muestra correctamente 'Turno 1' cuando se usa el comando 'pelea'.\n" +
-        "\u25CF Se ha a\u00F1adido el comando 'pelea' en la lista de comandos que aparece al ejecutar 'comandos'.\n" +
-        "\u25CF Ahora cuando se usa 'pelea', la primera linea de combate se muestra instantaneamente.\n" +
-        "\u25CF Se han a\u00F1adido emojis de copas cuando se revela quien es el ganador.\n\n" +
+        "\u25CF Se ha a\u00F1adido el comando 'retar'.\n" +
+        "\u25CF Se ha cambiado el antiguo metedo de 'pelea' al de 'retar.\n" +
+        "\u25CF El comando 'pelea' ahora es para escribir entre comillas y por separado el nombre de dos personas o personajes para que se peguen.\n|n" +
         "Cambios con la versi\u00F3n 11:\n" +
+        "\u25CF Se ha a\u00F1adido el comando 'retar' en la lista de comandos que aparece al ejecutar 'comandos'.\n" +
+        "\u25CF Se ha a\u00F1adido el comando 'retar'\n"+
         "\u25CF Se ha a\u00F1adido el comando 'pelea' en la lista de comandos que aparece al ejecutar 'comandos'.\n" +
         "\u25CF Se ha a\u00F1adido el comando 'pelea'\n"
     message.channel.send(mensaje);
@@ -76,12 +74,14 @@ client.on("message", function (message) {
         } else if (command == "changelog") {
             changelog(message);
         } else if (command == "comandos") {
-            message.reply("hacienda, top/bot/mid/adc/supp/random/autofill, dado, moneda, estado, alarma, focus, limpiar, version, changelog, comandos, lol,pelea");
+            message.reply("hacienda, top/bot/mid/adc/supp/random/autofill, dado, moneda, estado, alarma, focus, limpiar, version, changelog, comandos, lol,pelea,retar");
         } else if (command == "lol") {
             message.channel.send("Si escribes udyr despues de una l\u00EDnea del lol (udyr top/bot/mid/adc/supp), se te dir\u00E1 un champ que juegue en esa l\u00EDnea.\n\n" +
                 "Si escribes 'udyr autofill', se te dir\u00E1 una l\u00EDnea y un champ aleatorio propio de esa l\u00EDnea.\n\n" +
                 "Si escribes 'udyr random' se te dir\u00E1 un champ aleatorio en una l\u00EDnea aleatoria.");
-        } else if (command == "pelea") {
+        } else if (command == "retar") {
+            retar(message);
+        } else if (command = "pelea") {
             pelea(message);
         }
         /** else if (command == "puntos") {
@@ -129,10 +129,27 @@ class gladiador {
 }
 
 /**
+ * 
+ * @param {Discord.Message} message
+ */
+function pelea(message) {
+    var args = message.content.split("\"");
+    var nombre1 = args[1];
+    var nombre2 = args[3];
+    if (nombre1 == undefined || nombre2 == undefined) {
+        insultar(message);
+        return;
+    }
+    var gladiador1 = new gladiador(nombre1, 100);
+    var gladiador2 = new gladiador(nombre2, 100);
+    coliseo(gladiador1, gladiador2, message);
+}
+
+/**
  * Función que es para darse de hostias con los colegas
  * @param {Discord.Message} message mensaje original
  */
-function pelea(message) {
+function retar(message) {
     if (logCombate.length > 0) {
         return;
     }
@@ -147,6 +164,16 @@ function pelea(message) {
     var personaje2 = message.guild.members.cache.get(idpj2).displayName;
     var gladiador1 = new gladiador(personaje1, 100);
     var gladiador2 = new gladiador(personaje2, 100);
+    coliseo(gladiador1, gladiador2, message);
+}
+
+/**
+ * 
+ * @param {gladiador} gladiador1
+ * @param {gladiador} gladiador2
+ * @param {Discord.Message} message
+ */
+function coliseo(gladiador1, gladiador2, message) {
     logCombate.push("Comienza el combate entre " + gladiador1.nombre + " y " + gladiador2.nombre + "!");
     var comienzo = Math.floor(Math.random() * 2);
     if (comienzo == 0) {
@@ -154,13 +181,13 @@ function pelea(message) {
     } else {
         combate(gladiador2, gladiador1);
     }
-    var perdedor = "<@!";
+    var perdedor = "";
     if (gladiador1.vida > 0) {
         logCombate.push(":trophy:El ganador del combate es " + gladiador1.nombre + "!:trophy:");
-        perdedor += idpj2 + ">";
+        perdedor = gladiador2.nombre;
     } else {
         logCombate.push(":trophy:El ganador del combate es " + gladiador2.nombre + "!:trophy:");
-        perdedor += message.author.id + ">";
+        perdedor = gladiador1.nombre;
     }
     logCombate.push(perdedor + ", maric\u00F3n");
     message.channel.send(logCombate[0] + "\nTurno 1:\n" + logCombate[1]);
@@ -202,12 +229,13 @@ function combate(gladiador1, gladiador2) {
     var logCombateText = "";
     var critico = Math.floor(Math.random() * 10) + 1;
     var esquive = Math.floor(Math.random() * 5) + 1;
-    var parry = Math.floor(Math.random() * 5) + 5;
+    var parry = Math.floor(Math.random() * 5) + 1;
     if (parry == 5 && !gladiador2.stun) {
         var stun = Math.floor(Math.random() * 2);
         if (stun == 1) {
             logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry y le stunea durante 1 turno.:ninja_tone1:\n";
             logCombateText += gladiador2.nombre + ": <:sonrisa:801799866212417606>\n";
+            logCombateText += gladiador1.nombre + ": <:6061_unsettledtom:602529346711846933>\n";
             logCombateText += ":crossed_swords:" + gladiador2.nombre + " golpea a " + gladiador1.nombre + " infligiendole " + baseDmg + " puntos de da\u00F1o.:crossed_swords:\n";
             gladiador1.vida -= baseDmg;
         }
@@ -219,6 +247,7 @@ function combate(gladiador1, gladiador2) {
         logCombateText += ":shield:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra esquivar el ataque.:shield:\n";
     } else if (critico == 5) {
         logCombateText += ":boom:" + gladiador1.nombre + " golpea y le causa un da\u00F1o tremendo a " + gladiador2.nombre + " infligiendole " + criticalDmg + " puntos de da\u00F1o.:boom:\n";
+        logCombateText += gladiador1.nombre + ": <:maestria7:761734001190109194>\n";
         gladiador2.vida -= criticalDmg;
     }
     else {
