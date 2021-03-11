@@ -240,8 +240,9 @@ function combate(gladiador1, gladiador2) {
             }
             logCombateText += gladiador2.nombre + ": <:sonrisa:801799866212417606>\n";
             logCombateText += gladiador1.nombre + ": <:6061_unsettledtom:602529346711846933>\n";
-            logCombateText += ":crossed_swords:" + gladiador2.nombre + " golpea a " + gladiador1.nombre + " infligiendole " + baseDmg + " puntos de da\u00F1o.:crossed_swords:\n";
-            gladiador1.vida -= baseDmg;
+            let hostia = Math.floor(Math.random()*20)+20;
+            logCombateText += ":crossed_swords:" + gladiador2.nombre + " golpea a " + gladiador1.nombre + " infligiendole " + hostia + " puntos de da\u00F1o.:crossed_swords:\n";
+            gladiador1.vida -= hostia;
         }
         else {
             if (critico == 1) {
@@ -267,8 +268,9 @@ function combate(gladiador1, gladiador2) {
         gladiador2.vida -= criticalDmg;
     }
     else {
-        logCombateText += ":crossed_swords:" + gladiador1.nombre + " golpea a " + gladiador2.nombre + " infligiendole " + baseDmg + " puntos de da\u00F1o.:crossed_swords:\n";
-        gladiador2.vida -= baseDmg;
+        let hostia = Math.floor(Math.random() * 20) + 20;
+        logCombateText += ":crossed_swords:" + gladiador2.nombre + " golpea a " + gladiador1.nombre + " infligiendole " + hostia + " puntos de da\u00F1o.:crossed_swords:\n";
+        gladiador1.vida -= hostia;
     }
     gladiador1.vida = gladiador1.vida < 0 ? 0 : gladiador1.vida;
     gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
