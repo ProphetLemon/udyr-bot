@@ -249,7 +249,6 @@ function combate(gladiador1, gladiador2) {
             } else {
                 logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry y le hace " + parryDmg + " puntos de da\u00F1o.:ninja_tone1:\n";
             }
-
             gladiador1.vida -= parryDmg;
         }
     } else if (esquive == 1) {
@@ -258,8 +257,10 @@ function combate(gladiador1, gladiador2) {
         } else {
             logCombateText += ":shield:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra esquivar el ataque.:shield:\n";
         }
-        logCombateText += ":heart:" + gladiador2.nombre + " se toma una poti a su salud y recupera " + baseDmg + " puntos de salud.:heart:\n";
-        gladiador2.vida += baseDmg;
+        if (gladiador2.vida < 100) {
+            logCombateText += ":heart:" + gladiador2.nombre + " se toma una poti a su salud y recupera " + baseDmg + " puntos de salud.:heart:\n";
+            gladiador2.vida += baseDmg;
+        }
     } else if (critico == 1) {
         logCombateText += ":boom:" + gladiador1.nombre + " golpea y le causa un da\u00F1o tremendo a " + gladiador2.nombre + " infligiendole " + criticalDmg + " puntos de da\u00F1o.:boom:\n";
         logCombateText += gladiador1.nombre + ": <:maestria7:761734001190109194>\n";
@@ -1153,17 +1154,17 @@ function isValidNumber(aux) {
 function isMention(mention) {
     let inicio = mention.slice(0, 3);
     let numero = 0;
-    let fin=""
+    let fin = ""
     if (inicio == " <@!") {
         numero = mention.slice(3, mention.length - 1);
         fin = mention.slice(mention.length - 1, mention.length);
     } else {
         inicio = mention.slice(0, 2);
         numero = mention.slice(2, mention.length - 1);
-        fin= mention.slice(mention.length - 1, mention.length);
+        fin = mention.slice(mention.length - 1, mention.length);
     }
-   
-    return (inicio == "<@!" || inicio=="<@") && isValidNumber(numero) && fin == ">";
+
+    return (inicio == "<@!" || inicio == "<@") && isValidNumber(numero) && fin == ">";
 }
 
 /**
@@ -1172,12 +1173,12 @@ function isMention(mention) {
  */
 function returnIdFromMention(mention) {
     let inicio = mention.slice(0, 3);
-    let numero=0
+    let numero = 0
     if (inicio == " <@!") {
         numero = mention.slice(3, mention.length - 1);
     } else {
         numero = mention.slice(2, mention.length - 1);
-    }    
+    }
     return numero;
 }
 
