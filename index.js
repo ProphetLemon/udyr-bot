@@ -1155,7 +1155,7 @@ function isMention(mention) {
     let inicio = mention.slice(0, 3);
     let numero = 0;
     let fin = ""
-    if (inicio == " <@!") {
+    if (inicio == "<@!") {
         numero = mention.slice(3, mention.length - 1);
         fin = mention.slice(mention.length - 1, mention.length);
     } else {
@@ -1174,7 +1174,7 @@ function isMention(mention) {
 function returnIdFromMention(mention) {
     let inicio = mention.slice(0, 3);
     let numero = 0
-    if (inicio == " <@!") {
+    if (inicio == "<@!") {
         numero = mention.slice(3, mention.length - 1);
     } else {
         numero = mention.slice(2, mention.length - 1);
