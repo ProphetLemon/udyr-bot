@@ -171,7 +171,7 @@ function retar(message) {
     }
     var personaje2 = "";
     if (isMention(idpj2)) {
-        personaje2 = message.guild.members.cache.get().displayName;
+        personaje2 = message.guild.members.cache.get(returnIdFromMention(idpj2)).displayName;
     } else if (isRol(idpj2)) {
         personaje2 = message.guild.roles.cache.get(returnIdFromMention(idpj2)).name;
     } else {
