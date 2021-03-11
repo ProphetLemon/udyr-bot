@@ -143,7 +143,7 @@ function pelea(message) {
     if (isMention(nombre1)) {
         nombre1 = message.guild.members.cache.get(returnIdFromMention(nombre1)).displayName;
     } else if (isRol(nombre1)) {
-        nombre1 = message.guild.roles.cache.get(returnIdFromMention(nombre1)).nam;
+        nombre1 = message.guild.roles.cache.get(returnIdFromMention(nombre1)).name;
     }
     if (isMention(nombre2)) {
         nombre2 = message.guild.members.cache.get(returnIdFromMention(nombre2)).displayName;
