@@ -42,6 +42,7 @@ client.on("message", function (message) {
         insultar(message);
         return;
     }
+
     if (message.author.bot || (!canales_de_texto.includes(message.channel.id))) {
         return;
     }
@@ -139,6 +140,16 @@ function pelea(message) {
         insultar(message);
         return;
     }
+    if (isMention(nombre1)) {
+        nombre1 = message.guild.members.cache.get(returnIdFromMention(nombre1)).displayName;
+    } else if (isRol(nombre1)) {
+        nombre1 = message.guild.roles.cache.get(returnIdFromMention(nombre1)).nam;
+    }
+    if (isMention(nombre2)) {
+        nombre2 = message.guild.members.cache.get(returnIdFromMention(nombre2)).displayName;
+    } else if (isRol(nombre2)) {
+        nombre2 = message.guild.roles.cache.get(returnIdFromMention(nombre2)).name;
+    }
     var gladiador1 = new gladiador(nombre1, 100);
     var gladiador2 = new gladiador(nombre2, 100);
     coliseo(gladiador1, gladiador2, message);
@@ -154,13 +165,19 @@ function retar(message) {
     }
     var personaje1 = message.guild.members.cache.get(message.author.id).displayName;
     var idpj2 = message.content.split(" ")[2];
-    if (idpj2 != undefined && isMention(idpj2)) {
-        idpj2 = returnIdFromMention(idpj2);
-    } else {
+    if (idpj2 == undefined) {
         message.reply("eres tan maric\u00F3n que te heriste a ti mismo");
         return;
     }
-    var personaje2 = message.guild.members.cache.get(idpj2).displayName;
+    var personaje2 = "";
+    if (isMention(idpj2)) {
+        personaje2 = message.guild.members.cache.get().displayName;
+    } else if (isRol(idpj2)) {
+        personaje2 = message.guild.roles.cache.get(returnIdFromMention(idpj2)).name;
+    } else {
+        insultar(message);
+        return;
+    }
     var gladiador1 = new gladiador(personaje1, 100);
     var gladiador2 = new gladiador(personaje2, 100);
     coliseo(gladiador1, gladiador2, message);
@@ -240,7 +257,7 @@ function combate(gladiador1, gladiador2) {
             }
             logCombateText += gladiador2.nombre + ": <:sonrisa:801799866212417606>\n";
             logCombateText += gladiador1.nombre + ": <:6061_unsettledtom:602529346711846933>\n";
-            let hostia = Math.floor(Math.random()*21)+20;
+            let hostia = Math.floor(Math.random() * 21) + 20;
             logCombateText += ":crossed_swords:" + gladiador2.nombre + " golpea a " + gladiador1.nombre + " infligiendole " + hostia + " puntos de da\u00F1o.:crossed_swords:\n";
             gladiador1.vida -= hostia;
         }
@@ -1156,17 +1173,26 @@ function isValidNumber(aux) {
 function isMention(mention) {
     let inicio = mention.slice(0, 3);
     let numero = 0;
-    let fin = ""
+    let fin = mention.slice(mention.length - 1, mention.length);
     if (inicio == "<@!") {
         numero = mention.slice(3, mention.length - 1);
         fin = mention.slice(mention.length - 1, mention.length);
-    } else {
+    } else if ("<@") {
         inicio = mention.slice(0, 2);
         numero = mention.slice(2, mention.length - 1);
-        fin = mention.slice(mention.length - 1, mention.length);
     }
-
     return (inicio == "<@!" || inicio == "<@") && isValidNumber(numero) && fin == ">";
+}
+
+/**
+ * Funcion que devuelve un flag de si es una mencion o no el string que le mandaste
+ * @param {string} mention Posible mencion
+ */
+function isRol(mention) {
+    let inicio = mention.slice(0, 3);
+    let numero = mention.slice(3, mention.length - 1);
+    let fin = mention.slice(mention.length - 1, mention.length);
+    return inicio == "<@&" && isValidNumber(numero) && fin == ">";
 }
 
 /**
@@ -1176,7 +1202,7 @@ function isMention(mention) {
 function returnIdFromMention(mention) {
     let inicio = mention.slice(0, 3);
     let numero = 0
-    if (inicio == "<@!") {
+    if (inicio == "<@!" || inicio == "<@&") {
         numero = mention.slice(3, mention.length - 1);
     } else {
         numero = mention.slice(2, mention.length - 1);
