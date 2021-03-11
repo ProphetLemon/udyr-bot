@@ -258,8 +258,8 @@ function combate(gladiador1, gladiador2) {
             logCombateText += ":shield:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra esquivar el ataque.:shield:\n";
         }
         if (gladiador2.vida < 100) {
-            logCombateText += ":heart:" + gladiador2.nombre + " se toma una poti a su salud y recupera " + baseDmg + " puntos de salud.:heart:\n";
-            gladiador2.vida += baseDmg;
+            logCombateText += ":heart:" + gladiador2.nombre + " se toma una poti a su salud y recupera " + Math.floor((100 - gladiador2.vida) * 50 / 100) + " puntos de salud.:heart:\n";
+            gladiador2.vida += Math.floor((100 - gladiador2.vida) * 50 / 100);
         }
     } else if (critico == 1) {
         logCombateText += ":boom:" + gladiador1.nombre + " golpea y le causa un da\u00F1o tremendo a " + gladiador2.nombre + " infligiendole " + criticalDmg + " puntos de da\u00F1o.:boom:\n";
