@@ -29,7 +29,7 @@ function changelog(message) {
         "\u25CF El comando 'pelea' ahora es para escribir entre comillas y por separado el nombre de dos personas o personajes para que se peguen.\n|n" +
         "Cambios con la versi\u00F3n 11:\n" +
         "\u25CF Se ha a\u00F1adido el comando 'retar' en la lista de comandos que aparece al ejecutar 'comandos'.\n" +
-        "\u25CF Se ha a\u00F1adido el comando 'retar'\n"+
+        "\u25CF Se ha a\u00F1adido el comando 'retar'\n" +
         "\u25CF Se ha a\u00F1adido el comando 'pelea' en la lista de comandos que aparece al ejecutar 'comandos'.\n" +
         "\u25CF Se ha a\u00F1adido el comando 'pelea'\n"
     message.channel.send(mensaje);
@@ -120,7 +120,6 @@ class gladiador {
      * 
      * @param {string} nombre
      * @param {number} vida
-     * @param {boolean} stun
      */
     constructor(nombre, vida) {
         this.nombre = nombre;
@@ -227,25 +226,41 @@ var turno = 2;
  */
 function combate(gladiador1, gladiador2) {
     var logCombateText = "";
-    var critico = Math.floor(Math.random() * 10) + 1;
-    var esquive = Math.floor(Math.random() * 5) + 1;
-    var parry = Math.floor(Math.random() * 5) + 1;
-    if (parry == 5 && !gladiador2.stun) {
+    var critico = Math.floor(Math.random() * 8) + 1;
+    var esquive = Math.floor(Math.random() * 6) + 1;
+    var parry = Math.floor(Math.random() * 4) + 1;
+    if (parry == 1) {
         var stun = Math.floor(Math.random() * 2);
         if (stun == 1) {
-            logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry y le stunea durante 1 turno.:ninja_tone1:\n";
+            if (critico == 1) {
+                logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry al ataque critico y le stunea durante 1 turno.:ninja_tone1:\n";
+            }
+            else {
+                logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry y le stunea durante 1 turno.:ninja_tone1:\n";
+            }
             logCombateText += gladiador2.nombre + ": <:sonrisa:801799866212417606>\n";
             logCombateText += gladiador1.nombre + ": <:6061_unsettledtom:602529346711846933>\n";
             logCombateText += ":crossed_swords:" + gladiador2.nombre + " golpea a " + gladiador1.nombre + " infligiendole " + baseDmg + " puntos de da\u00F1o.:crossed_swords:\n";
             gladiador1.vida -= baseDmg;
         }
         else {
-            logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry y le hace " + parryDmg + " puntos de da\u00F1o.:ninja_tone1:\n";
+            if (critico == 1) {
+                logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry al ataque critico y le hace " + parryDmg + " puntos de da\u00F1o.:ninja_tone1:\n";
+            } else {
+                logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry y le hace " + parryDmg + " puntos de da\u00F1o.:ninja_tone1:\n";
+            }
+
             gladiador1.vida -= parryDmg;
         }
-    } else if (esquive == 5 && !gladiador2.stun) {
-        logCombateText += ":shield:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra esquivar el ataque.:shield:\n";
-    } else if (critico == 5) {
+    } else if (esquive == 1) {
+        if (critico == 1) {
+            logCombateText += ":shield:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra esquivar el ataque critico.:shield:\n";
+        } else {
+            logCombateText += ":shield:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra esquivar el ataque.:shield:\n";
+        }
+        logCombateText += ":heart:" + gladiador2.nombre + " se toma una poti a su salud y recupera " + baseDmg + " puntos de salud.:heart:\n";
+        gladiador2.vida += baseDmg;
+    } else if (critico == 1) {
         logCombateText += ":boom:" + gladiador1.nombre + " golpea y le causa un da\u00F1o tremendo a " + gladiador2.nombre + " infligiendole " + criticalDmg + " puntos de da\u00F1o.:boom:\n";
         logCombateText += gladiador1.nombre + ": <:maestria7:761734001190109194>\n";
         gladiador2.vida -= criticalDmg;
@@ -255,7 +270,9 @@ function combate(gladiador1, gladiador2) {
         gladiador2.vida -= baseDmg;
     }
     gladiador1.vida = gladiador1.vida < 0 ? 0 : gladiador1.vida;
+    gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
     gladiador2.vida = gladiador2.vida < 0 ? 0 : gladiador2.vida;
+    gladiador2.vida = gladiador2.vida > 100 ? 100 : gladiador2.vida;
     logCombateText += gladiador1.nombre + ": " + gladiador1.vida + " puntos de vida restantes\n" + gladiador2.nombre + ": " + gladiador2.vida + " puntos de vida restantes.";
     logCombate.push(logCombateText);
     if (gladiador1.vida > 0 && gladiador2.vida > 0) {
