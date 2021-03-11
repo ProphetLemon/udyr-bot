@@ -1152,9 +1152,16 @@ function isValidNumber(aux) {
  */
 function isMention(mention) {
     let inicio = mention.slice(0, 3);
-    let numero = mention.slice(3, mention.length - 1);
-    let fin = mention.slice(mention.length - 1, mention.length);
-    return inicio == "<@!" && isValidNumber(numero) && fin == ">";
+    if (inicio == " <@!") {
+        let numero = mention.slice(3, mention.length - 1);
+        let fin = mention.slice(mention.length - 1, mention.length);
+    } else {
+        inicio = mention.slice(0, 2);
+        let numero = mention.slice(2, mention.length - 1);
+        let fin = mention.slice(mention.length - 1, mention.length);
+    }
+   
+    return (inicio == "<@!" || inicio=="<@") && isValidNumber(numero) && fin == ">";
 }
 
 /**
@@ -1163,8 +1170,12 @@ function isMention(mention) {
  */
 function returnIdFromMention(mention) {
     let inicio = mention.slice(0, 3);
-    let numero = mention.slice(3, mention.length - 1);
-    let fin = mention.slice(mention.length - 1, mention.length);
+    let numero=0
+    if (inicio == " <@!") {
+        numero = mention.slice(3, mention.length - 1);
+    } else {
+        numero = mention.slice(2, mention.length - 1);
+    }    
     return numero;
 }
 
