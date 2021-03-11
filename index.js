@@ -227,7 +227,7 @@ var turno = 2;
 function combate(gladiador1, gladiador2) {
     var logCombateText = "";
     var critico = Math.floor(Math.random() * 8) + 1;
-    var esquive = Math.floor(Math.random() * 6) + 1;
+    var esquive = Math.floor(Math.random() * 4) + 1;
     var parry = Math.floor(Math.random() * 4) + 1;
     if (parry == 1) {
         var stun = Math.floor(Math.random() * 2);
