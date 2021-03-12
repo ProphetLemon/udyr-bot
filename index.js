@@ -157,7 +157,7 @@ function pelea(message) {
     var nombre1 = args[1];
     var nombre2 = args[3];
     if (nombre1 == undefined || nombre2 == undefined) {
-        insultar(message);
+        message.reply("eres tan maric\u00F3n que te heriste a ti mismo");
         return;
     }
     if (isMention(nombre1)) {
@@ -195,7 +195,7 @@ function retar(message) {
     } else if (isRol(idpj2)) {
         personaje2 = message.guild.roles.cache.get(returnIdFromMention(idpj2)).name;
     } else {
-        insultar(message);
+        message.reply("eres tan maric\u00F3n que te heriste a ti mismo");
         return;
     }
     var gladiador1 = new gladiador(personaje1, 100);
@@ -219,10 +219,10 @@ function coliseo(gladiador1, gladiador2, message) {
     }
     var perdedor = "";
     if (gladiador1.vida > 0) {
-        logCombate.push(":trophy:El ganador del combate es " + gladiador1.nombre + "!:trophy:");
+        logCombate.push(":trophy:\u00A1El ganador del combate es " + gladiador1.nombre + "!:trophy:");
         perdedor = gladiador2.nombre;
     } else {
-        logCombate.push(":trophy:El ganador del combate es " + gladiador2.nombre + "!:trophy:");
+        logCombate.push(":trophy:\u00A1El ganador del combate es " + gladiador2.nombre + "!:trophy:");
         perdedor = gladiador1.nombre;
     }
     logCombate.push(perdedor + ", maric\u00F3n");
@@ -270,7 +270,7 @@ function combate(gladiador1, gladiador2) {
         var stun = Math.floor(Math.random() * 2);
         if (stun == 1) {
             if (critico == 1) {
-                logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry al ataque **critico** y le stunea durante 1 turno.:ninja_tone1:\n";
+                logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry al ataque **cr\u00EDtico** y le stunea durante 1 turno.:ninja_tone1:\n";
             }
             else {
                 logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry y le stunea durante 1 turno.:ninja_tone1:\n";
@@ -283,7 +283,7 @@ function combate(gladiador1, gladiador2) {
         }
         else {
             if (critico == 1) {
-                logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry al ataque **critico** y le hace " + parryDmg + " puntos de da\u00F1o.:ninja_tone1:\n";
+                logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry al ataque **cr\u00EDtico** y le hace " + parryDmg + " puntos de da\u00F1o.:ninja_tone1:\n";
             } else {
                 logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry y le hace " + parryDmg + " puntos de da\u00F1o.:ninja_tone1:\n";
             }
@@ -291,7 +291,7 @@ function combate(gladiador1, gladiador2) {
         }
     } else if (esquive == 1) {
         if (critico == 1) {
-            logCombateText += ":shield:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra esquivar el ataque **critico**.:shield:\n";
+            logCombateText += ":shield:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra esquivar el ataque **cr\u00EDtico**.:shield:\n";
         } else {
             logCombateText += ":shield:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra esquivar el ataque.:shield:\n";
         }
