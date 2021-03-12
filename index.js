@@ -82,8 +82,10 @@ client.on("message", function (message) {
                 "Si escribes 'udyr random' se te dir\u00E1 un champ aleatorio en una l\u00EDnea aleatoria.");
         } else if (command == "retar") {
             retar(message);
-        } else if (command = "pelea") {
+        } else if (command == "pelea") {
             pelea(message);
+        } else if (command == "coliseo") {
+            pelea_aleatoria(message);
         }
         /** else if (command == "puntos") {
              puntos(message);
@@ -113,6 +115,24 @@ client.on("message", function (message) {
     }
 
 });
+
+// ------------------------------------- INICIO PELEA ALEATORIA -------------------------------------
+
+/**
+ * 
+ * @param {Discord.Message} message
+ */
+async function pelea_aleatoria(message) {
+    let guildMembers = await message.guild.members.fetch();
+    let id1 = guildMembers.array()[Math.floor(Math.random() * guildMembers.array().length)].id;
+    let id2 = guildMembers.array()[Math.floor(Math.random() * guildMembers.array().length)].id;
+    message.channel.send("<@!" + id1 + "> vs <@!" + id2 + ">");
+    var gladiador1 = new gladiador(guildMembers.get(id1).displayName, 100);
+    var gladiador2 = new gladiador(guildMembers.get(id2).displayName, 100);
+    coliseo(gladiador1, gladiador2, message);
+}
+
+// ------------------------------------- FIN PELEA ALEATORIA -------------------------------------
 
 // ------------------------------------- INICIO PELEA -------------------------------------
 
