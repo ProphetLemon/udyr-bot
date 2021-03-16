@@ -240,7 +240,8 @@ function coliseo(gladiador1, gladiador2, message) {
         var dateNow = new Date();
         dateNow.setHours(dateNow.getHours() - horasDiferencia);
         if (dateNow < adminActual.dateLimite) {
-            message.reply("no se puede retar al admin aun, podras retar al admin cuando sean las " + adminActual.dateLimite.getHours() + "/" + adminActual.dateLimite.getMinutes());
+            message.reply("no se puede retar al admin aun, podras retar al admin cuando sean las " + adminActual.dateLimite.getHours() + ":" + adminActual.dateLimite.getMinutes());
+            return;
         }
     }
     logCombate.push("Comienza el combate entre " + gladiador1.nombre + " y " + gladiador2.nombre + "!");
@@ -293,21 +294,30 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 udyr.roles.add(role);
                 message.channel.send("<:1990_praisethesun:602528888400379935><@!" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
                 var dateNow = new Date();
-                dateNow.setHours(dateNow.getHours() - horasDiferencia+1);
+                dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
                 adminActual = new admin(udyr.displayName, dateNow);
             }
         } else if (sucedioEventoAmor) {
             var maricon1 = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == gladiador1.nombre));
             var maricon2 = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == gladiador2.nombre));
             var udyr = await message.guild.members.fetch().then(guild => guild.find(member => member.id == "766271573271248926"));
+            var soledad = await message.guild.members.fetch().then(guild => guild.find(member => member.id == "285480424904327179"));
             var roleAdmin = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "El Admin"));
             var roleMaricones = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "Maricones"));
             if (maricon1.roles.cache.get(roleAdmin.id) || maricon2.roles.cache.get(roleAdmin.id)) {
-                udyr.roles.add(roleAdmin);
-                message.channel.send("<:1990_praisethesun:602528888400379935><@!" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
-                var dateNow = new Date();
-                dateNow.setHours(dateNow.getHours() - horasDiferencia+1);
-                adminActual = new admin(udyr.displayName, dateNow);
+                if (maricon1.displayName != udyr.displayName && maricon2.displayName != udyr.displayName) {
+                    udyr.roles.add(roleAdmin);
+                    message.channel.send("<:1990_praisethesun:602528888400379935><@!" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
+                    var dateNow = new Date();
+                    dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
+                    adminActual = new admin(udyr.displayName, dateNow);
+                } else {
+                    soledad.roles.add(roleAdmin);
+                    message.channel.send("<:1990_praisethesun:602528888400379935><@!" + soledad.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
+                    var dateNow = new Date();
+                    dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
+                    adminActual = new admin(soledad.displayName, dateNow);
+                }
             }
             maricon1.roles.remove(roleAdmin.id);
             maricon2.roles.remove(roleAdmin.id);
@@ -327,7 +337,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 miembroGanador.roles.add(role);
                 message.channel.send("<:1990_praisethesun:602528888400379935><@!" + miembroGanador.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
                 var dateNow = new Date();
-                dateNow.setHours(dateNow.getHours() - horasDiferencia+1);
+                dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
                 adminActual = new admin(miembroGanador.displayName, dateNow);
             }
         }
