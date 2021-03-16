@@ -36,26 +36,26 @@ function changelog(message) {
 }
 
 var canales_de_texto = ["598896817161240663", "809786674875334677"];
-
 client.on("message", function (message) {
-    if (message.author.id == focusID) {
+    const { author, content, channel } = message;
+    if (author.id == focusID) {
         insultar(message);
         return;
     }
 
-    if (message.author.bot || (!canales_de_texto.includes(message.channel.id))) {
+    if (author.bot || (!canales_de_texto.includes(channel.id))) {
         return;
     }
-    if (message.content.toLowerCase().trim() == prefix) {
+    if (content.toLowerCase().trim() == prefix) {
         insultar(message);
         return;
     }
-    if (message.content.toLowerCase().startsWith(prefix) && message.content.charAt(4) == ' ') {
-        var args = message.content.slice(prefix.length).split(/ +/);
+    if (content.toLowerCase().startsWith(prefix) && content.charAt(4) == ' ') {
+        var args = content.slice(prefix.length).split(/ +/);
         var command = args[1].toString();
         command = command.toLowerCase();
         if (command == "hacienda" && isValidNumber(args[2])) {
-            message.channel.send(calcular_tramo(args[2]))
+            channel.send(calcular_tramo(args[2]))
         } else if (LINEAS.includes(command)) {
             elegir_campeon(command, message);
         } else if (command == "dado") {
@@ -77,7 +77,7 @@ client.on("message", function (message) {
         } else if (command == "comandos") {
             message.reply("hacienda, top/bot/mid/adc/supp/random/autofill, dado, moneda, estado, alarma, focus, limpiar, version, changelog, comandos, lol,pelea,retar");
         } else if (command == "lol") {
-            message.channel.send("Si escribes udyr despues de una l\u00EDnea del lol (udyr top/bot/mid/adc/supp), se te dir\u00E1 un champ que juegue en esa l\u00EDnea.\n\n" +
+            channel.send("Si escribes udyr despues de una l\u00EDnea del lol (udyr top/bot/mid/adc/supp), se te dir\u00E1 un champ que juegue en esa l\u00EDnea.\n\n" +
                 "Si escribes 'udyr autofill', se te dir\u00E1 una l\u00EDnea y un champ aleatorio propio de esa l\u00EDnea.\n\n" +
                 "Si escribes 'udyr random' se te dir\u00E1 un champ aleatorio en una l\u00EDnea aleatoria.");
         } else if (command == "retar") {
@@ -115,7 +115,6 @@ client.on("message", function (message) {
     }
 
 });
-
 // ------------------------------------- INICIO PELEA ALEATORIA -------------------------------------
 
 /**
@@ -173,6 +172,17 @@ function pelea(message) {
     var gladiador1 = new gladiador(nombre1, 100);
     var gladiador2 = new gladiador(nombre2, 100);
     coliseo(gladiador1, gladiador2, message);
+    var ganador = gladiador1.vida > 0 ? gladiador1 : gladiador2;
+    coronarCampeon(ganador, message);
+}
+
+/**
+ * 
+ * @param {gladiador} ganador
+ * @param {Discord.Message} message
+ */
+async function coronarCampeon(ganador, message) {
+
 }
 
 /**
@@ -201,8 +211,11 @@ function retar(message) {
     var gladiador1 = new gladiador(personaje1, 100);
     var gladiador2 = new gladiador(personaje2, 100);
     coliseo(gladiador1, gladiador2, message);
+    var ganador = gladiador1.vida > 0 ? gladiador1 : gladiador2;
+    coronarCampeon(ganador, message);
 }
-
+var ganador;
+var perdedor;
 /**
  * 
  * @param {gladiador} gladiador1
@@ -211,114 +224,206 @@ function retar(message) {
  */
 function coliseo(gladiador1, gladiador2, message) {
     logCombate.push("Comienza el combate entre " + gladiador1.nombre + " y " + gladiador2.nombre + "!");
+    messageCopy = message;
     var comienzo = Math.floor(Math.random() * 2);
     if (comienzo == 0) {
-        combate(gladiador1, gladiador2);
+        combate(gladiador1, gladiador2, messageCopy);
     } else {
-        combate(gladiador2, gladiador1);
+        combate(gladiador2, gladiador1, messageCopy);
     }
-    var perdedor = "";
-    if (gladiador1.vida > 0) {
+    if (gladiador1.vida == 0 && gladiador2.vida == 0) {
+        logCombate.push(gladiador1.nombre + " y " + gladiador2.nombre + ", sois maricones");
+    }else if (gladiador1.vida > 0) {
+        ganador = gladiador1;
         logCombate.push(":trophy:\u00A1El ganador del combate es " + gladiador1.nombre + "!:trophy:");
-        perdedor = gladiador2.nombre;
+        perdedor = gladiador2;
+        logCombate.push(perdedor.nombre + ", maric\u00F3n");
     } else {
+        ganador = gladiador2;
         logCombate.push(":trophy:\u00A1El ganador del combate es " + gladiador2.nombre + "!:trophy:");
-        perdedor = gladiador1.nombre;
-    }
-    logCombate.push(perdedor + ", maric\u00F3n");
-    message.channel.send(logCombate[0] + "\nTurno 1:\n" + logCombate[1]);
-    leerRondasPelea(message);
+        perdedor = gladiador1;
+        logCombate.push(perdedor.nombre + ", maric\u00F3n");
+    }    
+    messageCopy.channel.send(logCombate[0] + "\nTurno 1:\n" + logCombate[1]);
+    leerRondasPelea(gladiador1, gladiador2, messageCopy);
 }
+
+var sucedioEvento = false;
+var sucedioEventoAmor = false;
 
 /**
  * 
  * @param {Discord.Message} message
  */
-function leerRondasPelea(message) {
+async function leerRondasPelea(gladiador1, gladiador2,message) {
     if (turno == logCombate.length - 2) {
         var final = logCombate[logCombate.length - 2] + "\n" + logCombate[logCombate.length - 1];
         message.channel.send(final);
         logCombate = [];
         turno = 2;
+        if (sucedioEvento == false) {
+            let miembroGanador = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == ganador.nombre));
+            let miembroPerdedor = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == perdedor.nombre));
+            var role = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "El Admin"));
+            if (miembroPerdedor.roles.cache.get(role.id)) {
+                miembroPerdedor.roles.remove(role.id);
+                miembroGanador.roles.add(role);
+                message.channel.send("<:1990_praisethesun:602528888400379935><@!" + miembroGanador.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
+            }
+        }
+        if (sucedioEventoAmor) {
+            var maricon1 = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == gladiador1.nombre));
+            var maricon2 = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == gladiador2.nombre));
+            var roleAdmin = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "El Admin"));
+            var roleMaricones = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "Maricones"));
+            maricon1.roles.remove(roleAdmin.id);
+            maricon2.roles.remove(roleAdmin.id);
+            maricon1.roles.add(roleMaricones);
+            maricon2.roles.add(roleMaricones);
+            setTimeout(function () {
+                maricon1.roles.remove(roleMaricones.id);
+                maricon2.roles.remove(roleMaricones.id);
+            },10800000);
+
+        }
+        sucedioEventoAmor = false;
+        sucedioEvento = false;
         return;
+    } else {
+        setTimeout(function () {
+            message.channel.send("Turno " + turno + ":\n" + logCombate[turno++] + "\n\n");
+            leerRondasPelea(gladiador1, gladiador2,message);
+        }, 6000);
     }
-    setTimeout(function () {
-        message.channel.send("Turno " + turno + ":\n" + logCombate[turno++] + "\n\n");
-        leerRondasPelea(message);
-    }, 6000);
+   
 }
 
 var baseDmg = 30;
-var criticalDmg = baseDmg * 3;
 var parryDmg = baseDmg / 2;
 
 
 var logCombate = [];
 var turno = 2;
 
+
+/**
+ * "se ha dado cuenta de que esta en un mundo virtual y se desconecta.""
+ * Aparece <@!766271573271248926> y gankea";
+ * */
+var eventosRandom = ["MATRIX", "UDYR", "AMOR"];
+
+/**
+ * @param {gladiador} gladiador1
+ * @param {gladiador} gladiador2
+ * @param {string} logCombateText
+ * @param {Discord.Message} message
+ */
+async function eventoRandom(gladiador1, gladiador2, logCombateText, message) {
+
+
+}
 /**
  * Funcion donde discurre todo el combate
  * @param {gladiador} gladiador1
  * @param {gladiador} gladiador2
+ * @param {Discord.Message} message
  */
-function combate(gladiador1, gladiador2) {
+function combate(gladiador1, gladiador2, message) {
     var logCombateText = "";
-    var critico = Math.floor(Math.random() * 8) + 1;
+    var critico = Math.floor(Math.random() * 7) + 1;
     var esquive = Math.floor(Math.random() * 4) + 1;
     var parry = Math.floor(Math.random() * 4) + 1;
-    if (parry == 1) {
-        var stun = Math.floor(Math.random() * 2);
-        if (stun == 1) {
-            if (critico == 1) {
-                logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry al ataque **cr\u00EDtico** y le stunea durante 1 turno.:ninja_tone1:\n";
+    var eventoImprobable = Math.floor(Math.random() * 15);
+    if (eventoImprobable != 1) {
+        if (parry == 1) {
+            var stun = Math.floor(Math.random() * 5);
+            if (stun <= 1) {
+                if (critico == 1) {
+                    logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry al ataque **cr\u00EDtico** y le stunea durante 1 turno.:ninja_tone1:\n";
+                }
+                else {
+                    logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry y le stunea durante 1 turno.:ninja_tone1:\n";
+                }
+                logCombateText += gladiador2.nombre + ": <:sonrisa:801799866212417606>\n";
+                logCombateText += gladiador1.nombre + ": <:6061_unsettledtom:602529346711846933>\n";
+                let hostia = Math.floor(Math.random() * 21) + 20;
+                logCombateText += ":crossed_swords:" + gladiador2.nombre + " golpea a " + gladiador1.nombre + " infligiendole " + hostia + " puntos de da\u00F1o.:crossed_swords:\n";
+                gladiador1.vida -= hostia;
             }
             else {
-                logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry y le stunea durante 1 turno.:ninja_tone1:\n";
+                if (critico == 1) {
+                    logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry al ataque **cr\u00EDtico** y le hace " + parryDmg + " puntos de da\u00F1o.:ninja_tone1:\n";
+                } else {
+                    logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry y le hace " + parryDmg + " puntos de da\u00F1o.:ninja_tone1:\n";
+                }
+                gladiador1.vida -= parryDmg;
             }
-            logCombateText += gladiador2.nombre + ": <:sonrisa:801799866212417606>\n";
-            logCombateText += gladiador1.nombre + ": <:6061_unsettledtom:602529346711846933>\n";
-            let hostia = Math.floor(Math.random() * 21) + 20;
-            logCombateText += ":crossed_swords:" + gladiador2.nombre + " golpea a " + gladiador1.nombre + " infligiendole " + hostia + " puntos de da\u00F1o.:crossed_swords:\n";
-            gladiador1.vida -= hostia;
+        } else if (esquive == 1) {
+            if (critico == 1) {
+                logCombateText += ":shield:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra esquivar el ataque **cr\u00EDtico**.:shield:\n";
+            } else {
+                logCombateText += ":shield:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra esquivar el ataque.:shield:\n";
+            }
+            if (gladiador2.vida < 100) {
+                logCombateText += ":heart:" + gladiador2.nombre + " se toma una poti a su salud y recupera " + Math.floor((100 - gladiador2.vida) * 50 / 100) + " puntos de salud.:heart:\n";
+                gladiador2.vida += Math.floor((100 - gladiador2.vida) * 50 / 100);
+            }
+        } else if (critico == 1) {
+            var hostiaCritico = Math.floor(Math.random() * 21) + 60;
+            logCombateText += ":boom:" + gladiador1.nombre + " golpea y le causa un da\u00F1o tremendo a " + gladiador2.nombre + " infligiendole " + hostiaCritico + " puntos de da\u00F1o.:boom:\n";
+            logCombateText += gladiador1.nombre + ": <:maestria7:761734001190109194>\n";
+            gladiador2.vida -= hostiaCritico;
         }
         else {
-            if (critico == 1) {
-                logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry al ataque **cr\u00EDtico** y le hace " + parryDmg + " puntos de da\u00F1o.:ninja_tone1:\n";
-            } else {
-                logCombateText += ":ninja_tone1:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra hacerle parry y le hace " + parryDmg + " puntos de da\u00F1o.:ninja_tone1:\n";
-            }
-            gladiador1.vida -= parryDmg;
+            let hostia = Math.floor(Math.random() * 21) + 20;
+            logCombateText += ":crossed_swords:" + gladiador1.nombre + " golpea a " + gladiador2.nombre + " infligiendole " + hostia + " puntos de da\u00F1o.:crossed_swords:\n";
+            gladiador2.vida -= hostia;
         }
-    } else if (esquive == 1) {
-        if (critico == 1) {
-            logCombateText += ":shield:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra esquivar el ataque **cr\u00EDtico**.:shield:\n";
-        } else {
-            logCombateText += ":shield:" + gladiador1.nombre + " intenta golpear pero " + gladiador2.nombre + " logra esquivar el ataque.:shield:\n";
+        gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
+        gladiador2.vida = gladiador2.vida > 100 ? 100 : gladiador2.vida;
+        logCombateText += gladiador1.nombre + ": " + gladiador1.vida + " puntos de vida restantes\n" + gladiador2.nombre + ": " + gladiador2.vida + " puntos de vida restantes.";
+        logCombate.push(logCombateText);
+    } else {
+        let evento = eventosRandom[Math.floor(Math.random() * eventosRandom.length)];
+        sucedioEvento = true;
+        switch (evento) {
+            case eventosRandom[0]:
+                logCombateText += ":metal::pensive:" + gladiador1.nombre + " se da cuenta de que vive en un mundo virtual, ante tal hecho decide que lo mejor es suicidarse.:metal::pensive:\n";
+                gladiador1.vida -= gladiador1.vida;
+                gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
+                gladiador2.vida = gladiador2.vida > 100 ? 100 : gladiador2.vida;
+                logCombateText += gladiador1.nombre + ": " + gladiador1.vida + " puntos de vida restantes\n" + gladiador2.nombre + ": " + gladiador2.vida + " puntos de vida restantes.";
+                logCombate.push(logCombateText);
+                break;
+            case eventosRandom[1]:
+                logCombateText += ":bear:Aparece <@!766271573271248926> y gankea por sorpresa a " + gladiador1.nombre + " y a " + gladiador2.nombre + ".:bear:\n";
+                gladiador1.vida = 0;
+                gladiador2.vida = 0;                
+                gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
+                gladiador2.vida = gladiador2.vida > 100 ? 100 : gladiador2.vida;
+                logCombateText += gladiador1.nombre + ": " + gladiador1.vida + " puntos de vida restantes\n" + gladiador2.nombre + ": " + gladiador2.vida + " puntos de vida restantes.";
+                logCombate.push(logCombateText);
+                logCombate.push(":trophy:\u00A1El ganador del combate es <@!766271573271248926>!:trophy:");
+                break;
+            case eventosRandom[2]:
+                logCombateText += ":smiling_face_with_3_hearts:De tanto darse de hostias se dan cuenta de que estan hechos el uno para el otro y abandonan el combate.:smiling_face_with_3_hearts:\n";                
+                gladiador1.vida = 0;
+                gladiador2.vida = 0;                   
+                gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
+                gladiador2.vida = gladiador2.vida > 100 ? 100 : gladiador2.vida;
+                logCombateText += gladiador1.nombre + ": " + gladiador1.vida + " puntos de vida restantes\n" + gladiador2.nombre + ": " + gladiador2.vida + " puntos de vida restantes.";
+                logCombate.push(logCombateText);
+                sucedioEventoAmor = true;
+                logCombate.push(":trophy:\u00A1El ganador del combate es el amor!:trophy:");
+                break;
         }
-        if (gladiador2.vida < 100) {
-            logCombateText += ":heart:" + gladiador2.nombre + " se toma una poti a su salud y recupera " + Math.floor((100 - gladiador2.vida) * 50 / 100) + " puntos de salud.:heart:\n";
-            gladiador2.vida += Math.floor((100 - gladiador2.vida) * 50 / 100);
-        }
-    } else if (critico == 1) {
-        logCombateText += ":boom:" + gladiador1.nombre + " golpea y le causa un da\u00F1o tremendo a " + gladiador2.nombre + " infligiendole " + criticalDmg + " puntos de da\u00F1o.:boom:\n";
-        logCombateText += gladiador1.nombre + ": <:maestria7:761734001190109194>\n";
-        gladiador2.vida -= criticalDmg;
     }
-    else {
-        let hostia = Math.floor(Math.random() * 21) + 20;
-        logCombateText += ":crossed_swords:" + gladiador1.nombre + " golpea a " + gladiador2.nombre + " infligiendole " + hostia + " puntos de da\u00F1o.:crossed_swords:\n";
-        gladiador2.vida -= hostia;
-    }
-    gladiador1.vida = gladiador1.vida < 0 ? 0 : gladiador1.vida;
-    gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
-    gladiador2.vida = gladiador2.vida < 0 ? 0 : gladiador2.vida;
-    gladiador2.vida = gladiador2.vida > 100 ? 100 : gladiador2.vida;
-    logCombateText += gladiador1.nombre + ": " + gladiador1.vida + " puntos de vida restantes\n" + gladiador2.nombre + ": " + gladiador2.vida + " puntos de vida restantes.";
-    logCombate.push(logCombateText);
     if (gladiador1.vida > 0 && gladiador2.vida > 0) {
-        combate(gladiador2, gladiador1, logCombate);
+        combate(gladiador2, gladiador1, message);
     }
 }
+
+
 
 // ------------------------------------- FIN PELEA -------------------------------------
 
