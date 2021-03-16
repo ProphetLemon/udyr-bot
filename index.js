@@ -274,10 +274,12 @@ async function leerRondasPelea(gladiador1, gladiador2,message) {
         if (sucedioEventoAmor) {
             var maricon1 = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == gladiador1.nombre));
             var maricon2 = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == gladiador2.nombre));
+            var udyr = await message.guild.members.fetch().then(guild => guild.find(member => member.id == "766271573271248926"));
             var roleAdmin = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "El Admin"));
             var roleMaricones = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "Maricones"));
             maricon1.roles.remove(roleAdmin.id);
             maricon2.roles.remove(roleAdmin.id);
+            udyr.roles.add(roleAdmin);
             maricon1.roles.add(roleMaricones);
             maricon2.roles.add(roleMaricones);
             setTimeout(function () {
@@ -333,7 +335,7 @@ function combate(gladiador1, gladiador2, message) {
     var critico = Math.floor(Math.random() * 7) + 1;
     var esquive = Math.floor(Math.random() * 4) + 1;
     var parry = Math.floor(Math.random() * 4) + 1;
-    var eventoImprobable = Math.floor(Math.random() * 15);
+    var eventoImprobable = Math.floor(Math.random() * 30);
     if (eventoImprobable != 1) {
         if (parry == 1) {
             var stun = Math.floor(Math.random() * 5);
