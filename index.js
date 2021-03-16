@@ -248,7 +248,7 @@ function coliseo(gladiador1, gladiador2, message) {
     leerRondasPelea(gladiador1, gladiador2, messageCopy);
 }
 
-var sucedioEvento = false;
+var sucedioEventoSuicidio = false;
 var sucedioEventoAmor = false;
 
 /**
@@ -261,7 +261,7 @@ async function leerRondasPelea(gladiador1, gladiador2,message) {
         message.channel.send(final);
         logCombate = [];
         turno = 2;
-        if (sucedioEvento == false) {
+        if (sucedioEventoSuicidio) {
             let miembroGanador = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == ganador.nombre));
             let miembroPerdedor = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == perdedor.nombre));
             var role = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "El Admin"));
@@ -277,9 +277,11 @@ async function leerRondasPelea(gladiador1, gladiador2,message) {
             var udyr = await message.guild.members.fetch().then(guild => guild.find(member => member.id == "766271573271248926"));
             var roleAdmin = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "El Admin"));
             var roleMaricones = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "Maricones"));
+            if (maricon1.roles.cache.get(roleAdmin.id) || maricon2.roles.cache.get(roleAdmin.id)) {
+                udyr.roles.add(roleAdmin);
+            } 
             maricon1.roles.remove(roleAdmin.id);
-            maricon2.roles.remove(roleAdmin.id);
-            udyr.roles.add(roleAdmin);
+            maricon2.roles.remove(roleAdmin.id);                      
             maricon1.roles.add(roleMaricones);
             maricon2.roles.add(roleMaricones);
             setTimeout(function () {
@@ -289,7 +291,7 @@ async function leerRondasPelea(gladiador1, gladiador2,message) {
 
         }
         sucedioEventoAmor = false;
-        sucedioEvento = false;
+        sucedioEventoSuicidio = false;
         return;
     } else {
         setTimeout(function () {
@@ -302,8 +304,6 @@ async function leerRondasPelea(gladiador1, gladiador2,message) {
 
 var baseDmg = 30;
 var parryDmg = baseDmg / 2;
-
-
 var logCombate = [];
 var turno = 2;
 
@@ -335,7 +335,7 @@ function combate(gladiador1, gladiador2, message) {
     var critico = Math.floor(Math.random() * 7) + 1;
     var esquive = Math.floor(Math.random() * 4) + 1;
     var parry = Math.floor(Math.random() * 4) + 1;
-    var eventoImprobable = Math.floor(Math.random() * 30);
+    var eventoImprobable = Math.floor(Math.random() * 50);
     if (eventoImprobable != 1) {
         if (parry == 1) {
             var stun = Math.floor(Math.random() * 5);
@@ -387,9 +387,10 @@ function combate(gladiador1, gladiador2, message) {
         logCombate.push(logCombateText);
     } else {
         let evento = eventosRandom[Math.floor(Math.random() * eventosRandom.length)];
-        sucedioEvento = true;
+        
         switch (evento) {
             case eventosRandom[0]:
+                sucedioEventoSuicidio = true;
                 logCombateText += ":metal::pensive:" + gladiador1.nombre + " se da cuenta de que vive en un mundo virtual, ante tal hecho decide que lo mejor es suicidarse.:metal::pensive:\n";
                 gladiador1.vida -= gladiador1.vida;
                 gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
