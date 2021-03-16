@@ -233,6 +233,7 @@ function coliseo(gladiador1, gladiador2, message) {
     }
     if (gladiador1.vida == 0 && gladiador2.vida == 0) {
         logCombate.push(gladiador1.nombre + " y " + gladiador2.nombre + ", sois maricones");
+        perdedor = [gladiador1, gladiador2];
     }else if (gladiador1.vida > 0) {
         ganador = gladiador1;
         logCombate.push(":trophy:\u00A1El ganador del combate es " + gladiador1.nombre + "!:trophy:");
@@ -263,10 +264,12 @@ async function leerRondasPelea(gladiador1, gladiador2,message) {
         turno = 2;
         if (sucedioEventoUdyr) {
             var udyr = await message.guild.members.fetch().then(guild => guild.find(member => member.id == "766271573271248926"));
-            let miembroPerdedor = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == perdedor.nombre));
+            let miembroPerdedor1 = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == perdedor[0].nombre));
+            let miembroPerdedor2 = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == perdedor[1].nombre));
             var role = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "El Admin"));
-            if (miembroPerdedor.roles.cache.get(role.id)) {
-                miembroPerdedor.roles.remove(role.id);
+            if (miembroPerdedor1.roles.cache.get(role.id) || miembroPerdedor2.roles.cache.get(role.id)) {
+                miembroPerdedor1.roles.remove(role.id);
+                miembroPerdedor2.roles.remove(role.id);
                 udyr.roles.add(role);
                 message.channel.send("<:1990_praisethesun:602528888400379935><@!" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
             }
