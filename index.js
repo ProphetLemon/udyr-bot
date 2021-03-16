@@ -216,6 +216,19 @@ function retar(message) {
 }
 var ganador;
 var perdedor;
+
+class admin {
+    /**
+     * 
+     * @param {string} nombre
+     * @param {Date} dateLimite
+     */
+    constructor(nombre, dateLimite) {
+        this.nombre = nombre;
+        this.dateLimite = dateLimite;
+    }
+}
+var adminActual = new admin(undefined, undefined);
 /**
  * 
  * @param {gladiador} gladiador1
@@ -223,6 +236,13 @@ var perdedor;
  * @param {Discord.Message} message
  */
 function coliseo(gladiador1, gladiador2, message) {
+    if (gladiador1.nombre == adminActual.nombre || gladiador2.nombre == adminActual.nombre) {
+        var dateNow = new Date();
+        dateNow.setHours(dateNow.getHours() - horasDiferencia);
+        if (dateNow < adminActual.dateLimite) {
+            message.reply("no se puede retar al admin aun, podras retar al admin cuando sean las " + adminActual.dateLimite.getHours() + "/" + adminActual.dateLimite.getMinutes());
+        }
+    }
     logCombate.push("Comienza el combate entre " + gladiador1.nombre + " y " + gladiador2.nombre + "!");
     messageCopy = message;
     var comienzo = Math.floor(Math.random() * 2);
@@ -234,7 +254,7 @@ function coliseo(gladiador1, gladiador2, message) {
     if (gladiador1.vida == 0 && gladiador2.vida == 0) {
         logCombate.push(gladiador1.nombre + " y " + gladiador2.nombre + ", sois maricones");
         perdedor = [gladiador1, gladiador2];
-    }else if (gladiador1.vida > 0) {
+    } else if (gladiador1.vida > 0) {
         ganador = gladiador1;
         logCombate.push(":trophy:\u00A1El ganador del combate es " + gladiador1.nombre + "!:trophy:");
         perdedor = gladiador2;
@@ -244,7 +264,7 @@ function coliseo(gladiador1, gladiador2, message) {
         logCombate.push(":trophy:\u00A1El ganador del combate es " + gladiador2.nombre + "!:trophy:");
         perdedor = gladiador1;
         logCombate.push(perdedor.nombre + ", maric\u00F3n");
-    }    
+    }
     messageCopy.channel.send(logCombate[0] + "\nTurno 1:\n" + logCombate[1]);
     leerRondasPelea(gladiador1, gladiador2, messageCopy);
 }
@@ -256,7 +276,7 @@ var sucedioEventoUdyr = false;
  * 
  * @param {Discord.Message} message
  */
-async function leerRondasPelea(gladiador1, gladiador2,message) {
+async function leerRondasPelea(gladiador1, gladiador2, message) {
     if (turno == logCombate.length - 2) {
         var final = logCombate[logCombate.length - 2] + "\n" + logCombate[logCombate.length - 1];
         message.channel.send(final);
@@ -272,6 +292,9 @@ async function leerRondasPelea(gladiador1, gladiador2,message) {
                 miembroPerdedor2.roles.remove(role.id);
                 udyr.roles.add(role);
                 message.channel.send("<:1990_praisethesun:602528888400379935><@!" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
+                var dateNow = new Date();
+                dateNow.setHours(dateNow.getHours() - horasDiferencia);
+                adminActual = new admin(udyr.displayName, dateNow);
             }
         } else if (sucedioEventoAmor) {
             var maricon1 = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == gladiador1.nombre));
@@ -281,6 +304,10 @@ async function leerRondasPelea(gladiador1, gladiador2,message) {
             var roleMaricones = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "Maricones"));
             if (maricon1.roles.cache.get(roleAdmin.id) || maricon2.roles.cache.get(roleAdmin.id)) {
                 udyr.roles.add(roleAdmin);
+                message.channel.send("<:1990_praisethesun:602528888400379935><@!" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
+                var dateNow = new Date();
+                dateNow.setHours(dateNow.getHours() - horasDiferencia);
+                adminActual = new admin(udyr.displayName, dateNow);
             }
             maricon1.roles.remove(roleAdmin.id);
             maricon2.roles.remove(roleAdmin.id);
@@ -299,18 +326,23 @@ async function leerRondasPelea(gladiador1, gladiador2,message) {
                 miembroPerdedor.roles.remove(role.id);
                 miembroGanador.roles.add(role);
                 message.channel.send("<:1990_praisethesun:602528888400379935><@!" + miembroGanador.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
+                var dateNow = new Date();
+                dateNow.setHours(dateNow.getHours() - horasDiferencia);
+                adminActual = new admin(miembroGanador.displayName, dateNow);
             }
         }
-        sucedioEventoAmor = false;     
+        sucedioEventoAmor = false;
         sucedioEventoUdyr = false;
+        perdedor = "";
+        ganador = "";
         return;
     } else {
         setTimeout(function () {
             message.channel.send("Turno " + turno + ":\n" + logCombate[turno++] + "\n\n");
-            leerRondasPelea(gladiador1, gladiador2,message);
+            leerRondasPelea(gladiador1, gladiador2, message);
         }, 6000);
     }
-   
+
 }
 
 var baseDmg = 30;
@@ -398,7 +430,7 @@ function combate(gladiador1, gladiador2, message) {
         logCombate.push(logCombateText);
     } else {
         let evento = eventosRandom[Math.floor(Math.random() * eventosRandom.length)];
-        
+
         switch (evento) {
             case eventosRandom[0]:
                 logCombateText += ":metal::pensive:" + gladiador1.nombre + " se da cuenta de que vive en un mundo virtual, ante tal hecho decide que lo mejor es suicidarse.:metal::pensive:\n";
@@ -412,7 +444,7 @@ function combate(gladiador1, gladiador2, message) {
                 sucedioEventoUdyr = true;
                 logCombateText += ":bear:Aparece <@!766271573271248926> y gankea por sorpresa a " + gladiador1.nombre + " y a " + gladiador2.nombre + ".:bear:\n";
                 gladiador1.vida = 0;
-                gladiador2.vida = 0;                
+                gladiador2.vida = 0;
                 gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
                 gladiador2.vida = gladiador2.vida > 100 ? 100 : gladiador2.vida;
                 logCombateText += gladiador1.nombre + ": " + gladiador1.vida + " puntos de vida restantes\n" + gladiador2.nombre + ": " + gladiador2.vida + " puntos de vida restantes.";
@@ -420,9 +452,9 @@ function combate(gladiador1, gladiador2, message) {
                 logCombate.push(":trophy:\u00A1El ganador del combate es <@!766271573271248926>!:trophy:");
                 break;
             case eventosRandom[2]:
-                logCombateText += ":smiling_face_with_3_hearts:De tanto darse de hostias se dan cuenta de que estan hechos el uno para el otro y abandonan el combate.:smiling_face_with_3_hearts:\n";                
+                logCombateText += ":smiling_face_with_3_hearts:De tanto darse de hostias se dan cuenta de que estan hechos el uno para el otro y abandonan el combate.:smiling_face_with_3_hearts:\n";
                 gladiador1.vida = 0;
-                gladiador2.vida = 0;                   
+                gladiador2.vida = 0;
                 gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
                 gladiador2.vida = gladiador2.vida > 100 ? 100 : gladiador2.vida;
                 logCombateText += gladiador1.nombre + ": " + gladiador1.vida + " puntos de vida restantes\n" + gladiador2.nombre + ": " + gladiador2.vida + " puntos de vida restantes.";
