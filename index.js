@@ -248,8 +248,8 @@ function coliseo(gladiador1, gladiador2, message) {
     leerRondasPelea(gladiador1, gladiador2, messageCopy);
 }
 
-var sucedioEventoSuicidio = false;
 var sucedioEventoAmor = false;
+var sucedioEventoUdyr = false;
 
 /**
  * 
@@ -261,7 +261,34 @@ async function leerRondasPelea(gladiador1, gladiador2,message) {
         message.channel.send(final);
         logCombate = [];
         turno = 2;
-        if (sucedioEventoSuicidio) {
+        if (sucedioEventoUdyr) {
+            var udyr = await message.guild.members.fetch().then(guild => guild.find(member => member.id == "766271573271248926"));
+            let miembroPerdedor = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == perdedor.nombre));
+            var role = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "El Admin"));
+            if (miembroPerdedor.roles.cache.get(role.id)) {
+                miembroPerdedor.roles.remove(role.id);
+                udyr.roles.add(role);
+                message.channel.send("<:1990_praisethesun:602528888400379935><@!" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
+            }
+        } else if (sucedioEventoAmor) {
+            var maricon1 = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == gladiador1.nombre));
+            var maricon2 = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == gladiador2.nombre));
+            var udyr = await message.guild.members.fetch().then(guild => guild.find(member => member.id == "766271573271248926"));
+            var roleAdmin = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "El Admin"));
+            var roleMaricones = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "Maricones"));
+            if (maricon1.roles.cache.get(roleAdmin.id) || maricon2.roles.cache.get(roleAdmin.id)) {
+                udyr.roles.add(roleAdmin);
+            }
+            maricon1.roles.remove(roleAdmin.id);
+            maricon2.roles.remove(roleAdmin.id);
+            maricon1.roles.add(roleMaricones);
+            maricon2.roles.add(roleMaricones);
+            setTimeout(function () {
+                maricon1.roles.remove(roleMaricones.id);
+                maricon2.roles.remove(roleMaricones.id);
+            }, 10800000);
+
+        } else {
             let miembroGanador = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == ganador.nombre));
             let miembroPerdedor = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == perdedor.nombre));
             var role = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "El Admin"));
@@ -271,27 +298,8 @@ async function leerRondasPelea(gladiador1, gladiador2,message) {
                 message.channel.send("<:1990_praisethesun:602528888400379935><@!" + miembroGanador.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
             }
         }
-        if (sucedioEventoAmor) {
-            var maricon1 = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == gladiador1.nombre));
-            var maricon2 = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == gladiador2.nombre));
-            var udyr = await message.guild.members.fetch().then(guild => guild.find(member => member.id == "766271573271248926"));
-            var roleAdmin = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "El Admin"));
-            var roleMaricones = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "Maricones"));
-            if (maricon1.roles.cache.get(roleAdmin.id) || maricon2.roles.cache.get(roleAdmin.id)) {
-                udyr.roles.add(roleAdmin);
-            } 
-            maricon1.roles.remove(roleAdmin.id);
-            maricon2.roles.remove(roleAdmin.id);                      
-            maricon1.roles.add(roleMaricones);
-            maricon2.roles.add(roleMaricones);
-            setTimeout(function () {
-                maricon1.roles.remove(roleMaricones.id);
-                maricon2.roles.remove(roleMaricones.id);
-            },10800000);
-
-        }
-        sucedioEventoAmor = false;
-        sucedioEventoSuicidio = false;
+        sucedioEventoAmor = false;     
+        sucedioEventoUdyr = false;
         return;
     } else {
         setTimeout(function () {
@@ -390,7 +398,6 @@ function combate(gladiador1, gladiador2, message) {
         
         switch (evento) {
             case eventosRandom[0]:
-                sucedioEventoSuicidio = true;
                 logCombateText += ":metal::pensive:" + gladiador1.nombre + " se da cuenta de que vive en un mundo virtual, ante tal hecho decide que lo mejor es suicidarse.:metal::pensive:\n";
                 gladiador1.vida -= gladiador1.vida;
                 gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
@@ -399,6 +406,7 @@ function combate(gladiador1, gladiador2, message) {
                 logCombate.push(logCombateText);
                 break;
             case eventosRandom[1]:
+                sucedioEventoUdyr = true;
                 logCombateText += ":bear:Aparece <@!766271573271248926> y gankea por sorpresa a " + gladiador1.nombre + " y a " + gladiador2.nombre + ".:bear:\n";
                 gladiador1.vida = 0;
                 gladiador2.vida = 0;                
