@@ -236,6 +236,10 @@ var adminActual = new admin(undefined, undefined);
  * @param {Discord.Message} message
  */
 function coliseo(gladiador1, gladiador2, message) {
+    if (gladiador1.nombre == gladiador2.nombre) {
+        message.reply("no te puedes retar a ti mismo");
+        return;
+    }
     if (gladiador1.nombre == adminActual.nombre || gladiador2.nombre == adminActual.nombre) {
         var dateNow = new Date();
         dateNow.setHours(dateNow.getHours() - horasDiferencia);
