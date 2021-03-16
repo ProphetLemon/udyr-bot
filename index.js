@@ -293,7 +293,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 udyr.roles.add(role);
                 message.channel.send("<:1990_praisethesun:602528888400379935><@!" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
                 var dateNow = new Date();
-                dateNow.setHours(dateNow.getHours() - horasDiferencia);
+                dateNow.setHours(dateNow.getHours() - horasDiferencia+1);
                 adminActual = new admin(udyr.displayName, dateNow);
             }
         } else if (sucedioEventoAmor) {
@@ -306,7 +306,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 udyr.roles.add(roleAdmin);
                 message.channel.send("<:1990_praisethesun:602528888400379935><@!" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
                 var dateNow = new Date();
-                dateNow.setHours(dateNow.getHours() - horasDiferencia);
+                dateNow.setHours(dateNow.getHours() - horasDiferencia+1);
                 adminActual = new admin(udyr.displayName, dateNow);
             }
             maricon1.roles.remove(roleAdmin.id);
@@ -327,7 +327,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 miembroGanador.roles.add(role);
                 message.channel.send("<:1990_praisethesun:602528888400379935><@!" + miembroGanador.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
                 var dateNow = new Date();
-                dateNow.setHours(dateNow.getHours() - horasDiferencia);
+                dateNow.setHours(dateNow.getHours() - horasDiferencia+1);
                 adminActual = new admin(miembroGanador.displayName, dateNow);
             }
         }
