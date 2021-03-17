@@ -357,6 +357,9 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
                 adminActual = new admin(miembroGanador.displayName, dateNow);
             } else if (miembroGanador.roles.cache.get(role.id)) {
+                var dateVieja = new Date();
+                dateVieja.setDate(dateVieja.getDate()-3);
+                adminActual = new admin(miembroGanador.displayName, dateVieja);
                 var dateNow = new Date();
                 dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
                 message.channel.send(miembroPerdedor.displayName + " no puede volver a enfrentarse a " + miembroGanador.displayName + " hasta dentro de 1 hora (" + dateNow.getHours() + ":" + dateNow.getMinutes() + ").");
