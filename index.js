@@ -236,7 +236,7 @@ var adminActual = new admin(undefined, undefined);
  * @param {Discord.Message} message
  */
 function coliseo(gladiador1, gladiador2, message) {
-    if (banquillo.includes(gladiador1.nombre) || banquillo.includes(gladiador2.nombre)) {
+    if ((banquillo.includes(gladiador1.nombre) || banquillo.includes(gladiador2.nombre)) && (adminActual.nombre == gladiador1.nombre || adminActual.nombre == gladiador2.nombre) {
         message.channel.send(banquillo.includes(gladiador1.nombre) ? (gladiador1.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun") : (gladiador2.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun"));
         return;
     }
@@ -325,6 +325,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                     dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
                     adminActual = new admin(udyr.displayName, dateNow);
                 } else {
+                    soledad.roles.add(roleAdmin);
                     var dateNow = new Date();
                     dateNow.setHours(dateNow.getHours() - horasDiferencia + 3);
                     message.channel.send("<:1990_praisethesun:602528888400379935><@!" + soledad.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>\n" +
@@ -338,18 +339,9 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
             maricon2.roles.remove(roleAdmin.id);
             maricon1.roles.add(roleMaricones);
             maricon2.roles.add(roleMaricones);
-            banquillo.push(maricon1.displayName);
-            banquillo.push(maricon2.displayName);
             setTimeout(function () {
                 maricon1.roles.remove(roleMaricones.id);
                 maricon2.roles.remove(roleMaricones.id);
-                for (let i = 0; i < banquillo.length; i++) {
-                    if (banquillo[i] == maricon1.displayName) {
-                        banquillo.splice(i, 1);
-                    } else if (banquillo[i] == maricon2.displayName) {
-                        banquillo.splice(i, 1);
-                    }
-                }
             }, 10800000);
 
         } else {
@@ -424,7 +416,7 @@ async function eventoRandom(gladiador1, gladiador2, logCombateText, message) {
 function combate(gladiador1, gladiador2, message) {
     var logCombateText = "";
     var critico = Math.floor(Math.random() * 7) + 1;
-    var esquive = Math.floor(Math.random() * 4) + 1;
+    var esquive = Math.floor(Math.random() * 7) + 1;
     var parry = Math.floor(Math.random() * 4) + 1;
     var eventoImprobable = Math.floor(Math.random() * 50);
     if (eventoImprobable != 1) {
