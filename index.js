@@ -240,7 +240,7 @@ var adminActual = new admin(undefined, undefined);
  * @param {Discord.Message} message
  */
 function coliseo(gladiador1, gladiador2, message) {
-    if ((banquillo.includes(gladiador1.nombre) || banquillo.includes(gladiador2.nombre)) & !jugarseElTitulo) {
+    if ((banquillo.includes(gladiador1.nombre) || banquillo.includes(gladiador2.nombre)) && (gladiador1.nombre == adminActual.nombre || gladiador2.nombre == adminActual.nombre) && !jugarseElTitulo) {
         message.channel.send(banquillo.includes(gladiador1.nombre) ? (gladiador1.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun") : (gladiador2.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun"));
         return;
     }
