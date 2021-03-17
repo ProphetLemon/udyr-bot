@@ -241,7 +241,7 @@ function coliseo(gladiador1, gladiador2, message) {
         return;
     }
     if (gladiador1.nombre == gladiador2.nombre) {
-        message.reply("no te puedes retar a ti mismo");
+        message.reply("no te puedes retar a ti mismo, maric\u00F3n");
         return;
     }
     if (gladiador1.nombre == adminActual.nombre || gladiador2.nombre == adminActual.nombre) {
