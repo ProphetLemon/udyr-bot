@@ -240,7 +240,7 @@ var adminActual = new admin(undefined, undefined);
  * @param {Discord.Message} message
  */
 function coliseo(gladiador1, gladiador2, message) {
-    if ((banquillo.includes(gladiador1.nombre) || banquillo.includes(gladiador2.nombre)) && ((adminActual.nombre == gladiador1.nombre || adminActual.nombre == gladiador2.nombre) && !jugarseElTitulo)) {
+    if ((banquillo.includes(gladiador1.nombre) || banquillo.includes(gladiador2.nombre)) & !jugarseElTitulo) {
         message.channel.send(banquillo.includes(gladiador1.nombre) ? (gladiador1.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun") : (gladiador2.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun"));
         return;
     }
@@ -248,7 +248,7 @@ function coliseo(gladiador1, gladiador2, message) {
         message.reply("no te puedes retar a ti mismo, maric\u00F3n");
         return;
     }
-    if (gladiador1.nombre == adminActual.nombre || gladiador2.nombre == adminActual.nombre) {
+    if ((gladiador1.nombre == adminActual.nombre || gladiador2.nombre == adminActual.nombre) && !jugarseElTitulo) {
         var dateNow = new Date();
         dateNow.setHours(dateNow.getHours() - horasDiferencia);
         if (dateNow < adminActual.dateLimite) {
