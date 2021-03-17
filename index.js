@@ -208,6 +208,9 @@ function retar(message) {
         message.reply("eres tan maric\u00F3n que te heriste a ti mismo");
         return;
     }
+    if (personaje1 == adminActual.nombre) {
+        jugarseElTitulo = true;
+    }
     var gladiador1 = new gladiador(personaje1, 100);
     var gladiador2 = new gladiador(personaje2, 100);
     coliseo(gladiador1, gladiador2, message);
@@ -216,6 +219,7 @@ function retar(message) {
 }
 var ganador;
 var perdedor;
+var jugarseElTitulo = false;
 
 class admin {
     /**
@@ -236,7 +240,7 @@ var adminActual = new admin(undefined, undefined);
  * @param {Discord.Message} message
  */
 function coliseo(gladiador1, gladiador2, message) {
-    if ((banquillo.includes(gladiador1.nombre) || banquillo.includes(gladiador2.nombre)) && (adminActual.nombre == gladiador1.nombre || adminActual.nombre == gladiador2.nombre)) {
+    if ((banquillo.includes(gladiador1.nombre) || banquillo.includes(gladiador2.nombre)) && ((adminActual.nombre == gladiador1.nombre || adminActual.nombre == gladiador2.nombre) && !jugarseElTitulo)) {
         message.channel.send(banquillo.includes(gladiador1.nombre) ? (gladiador1.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun") : (gladiador2.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun"));
         return;
     }
@@ -292,6 +296,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
         var final = logCombate[logCombate.length - 2] + "\n" + logCombate[logCombate.length - 1];
         message.channel.send(final);
         logCombate = [];
+        jugarseElTitulo = false;
         turno = 2;
         if (sucedioEventoUdyr) {
             var udyr = await message.guild.members.fetch().then(guild => guild.find(member => member.id == "766271573271248926"));
@@ -358,7 +363,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 adminActual = new admin(miembroGanador.displayName, dateNow);
             } else if (miembroGanador.roles.cache.get(role.id)) {
                 var dateVieja = new Date();
-                dateVieja.setDate(dateVieja.getDate()-3);
+                dateVieja.setDate(dateVieja.getDate() - 3);
                 adminActual = new admin(miembroGanador.displayName, dateVieja);
                 var dateNow = new Date();
                 dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
