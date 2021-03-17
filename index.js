@@ -236,7 +236,7 @@ var adminActual = new admin(undefined, undefined);
  * @param {Discord.Message} message
  */
 function coliseo(gladiador1, gladiador2, message) {
-    if ((banquillo.includes(gladiador1.nombre) || banquillo.includes(gladiador2.nombre)) && (adminActual.nombre == gladiador1.nombre || adminActual.nombre == gladiador2.nombre) {
+    if ((banquillo.includes(gladiador1.nombre) || banquillo.includes(gladiador2.nombre)) && (adminActual.nombre == gladiador1.nombre || adminActual.nombre == gladiador2.nombre)) {
         message.channel.send(banquillo.includes(gladiador1.nombre) ? (gladiador1.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun") : (gladiador2.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun"));
         return;
     }
@@ -329,7 +329,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                     var dateNow = new Date();
                     dateNow.setHours(dateNow.getHours() - horasDiferencia + 3);
                     message.channel.send("<:1990_praisethesun:602528888400379935><@!" + soledad.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>\n" +
-                        gladiador1.nombre + " y " + gladiador2.nombre + " no pueden volver a pelear hasta dentro de 3 horas por maricones. (" + dateNow.getHours() + ":" + dateNow.getMinutes()+").");
+                        gladiador1.nombre + " y " + gladiador2.nombre + " no pueden volver a pelear hasta dentro de 3 horas por maricones. (" + dateNow.getHours() + ":" + dateNow.getMinutes() + ").");
                     dateNow = new Date();
                     dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
                     adminActual = new admin(soledad.displayName, dateNow);
