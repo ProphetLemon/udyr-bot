@@ -358,7 +358,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 miembroGanador.roles.add(role);
                 banquillo = [];
                 message.channel.send("<:1990_praisethesun:602528888400379935><@!" + miembroGanador.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
-                if (miembroPerdedor.id = "766271573271248926") {
+                if (miembroPerdedor.id == "766271573271248926") {
                     message.channel.send("", { files: ["./images/udyr-no-admin.jpg"] });
                 } else {
                     var enlaces = ["https://media.discordapp.net/attachments/809786674875334677/821885009891033158/5f30a0cbb3b05.png", "https://media.discordapp.net/attachments/809786674875334677/821875129846988840/5ed93aed4ff85.png",
