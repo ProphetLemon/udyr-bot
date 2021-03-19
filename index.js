@@ -252,7 +252,7 @@ function coliseo(gladiador1, gladiador2, message) {
         var dateNow = new Date();
         dateNow.setHours(dateNow.getHours() - horasDiferencia);
         if (dateNow < adminActual.dateLimite) {
-            message.reply("no se puede retar al admin aun, podras retar al admin cuando sean las " + adminActual.dateLimite.getHours() + ":" + String(adminActual.dateLimite.getMinutes()).length == 1 ? "0" + String(adminActual.dateLimite.getMinutes()) : String(adminActual.dateLimite.getMinutes()));
+            message.reply("no se puede retar al admin aun, podras retar al admin cuando sean las " + adminActual.dateLimite.getHours() + ":" + cambiarMinutos(adminActual.dateLimite));
             return;
         }
     }
@@ -376,7 +376,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 var dateNow = new Date();
                 dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
                 dateNow.setSeconds(0);
-                message.channel.send(miembroPerdedor.displayName + " no puede volver a enfrentarse a " + miembroGanador.displayName + " hasta dentro de 1 hora (" + dateNow.getHours() + ":" + String(dateNow.getMinutes()).length == 1 ? "0" + String(dateNow.getMinutes()) : String(dateNow.getMinutes()) + ").");
+                message.channel.send(miembroPerdedor.displayName + " no puede volver a enfrentarse a " + miembroGanador.displayName + " hasta dentro de 1 hora (" + dateNow.getHours() + ":" + cambiarMinutos(dateNow) + ").");
                 banquillo.push(miembroPerdedor.displayName);
                 setTimeout(function () {
                     for (let i = 0; i < banquillo.length; i++) {
@@ -406,6 +406,19 @@ var baseDmg = 30;
 var parryDmg = baseDmg / 2;
 var logCombate = [];
 var turno = 2;
+
+/**
+ * 
+ * @param {Date} date
+ */
+function cambiarMinutos(date) {
+    var minutos = String(date.getMinutes());
+    if (minutos.length == 1) {
+        return "0" + minutos;
+    } else {
+        return minutos;
+    }
+}
 
 
 /**
