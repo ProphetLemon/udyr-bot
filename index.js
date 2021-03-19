@@ -252,7 +252,7 @@ function coliseo(gladiador1, gladiador2, message) {
         var dateNow = new Date();
         dateNow.setHours(dateNow.getHours() - horasDiferencia);
         if (dateNow < adminActual.dateLimite) {
-            message.reply("no se puede retar al admin aun, podras retar al admin cuando sean las " + adminActual.dateLimite.getHours() + ":" + adminActual.dateLimite.getMinutes());
+            message.reply("no se puede retar al admin aun, podras retar al admin cuando sean las " + adminActual.dateLimite.getHours() + ":" + String(adminActual.dateLimite.getMinutes()).length == 1 ? "0" + String(adminActual.dateLimite.getMinutes()) : String(adminActual.dateLimite.getMinutes()));
             return;
         }
     }
@@ -311,6 +311,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 message.channel.send("", { files: ["./images/udyr-admin.jpg"] });
                 var dateNow = new Date();
                 dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
+                dateNow.setSeconds(0);
                 adminActual = new admin(udyr.displayName, dateNow);
             }
         } else if (sucedioEventoAmor) {
@@ -323,20 +324,18 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
             if (maricon1.roles.cache.get(roleAdmin.id) || maricon2.roles.cache.get(roleAdmin.id)) {
                 if (maricon1.displayName != udyr.displayName && maricon2.displayName != udyr.displayName) {
                     udyr.roles.add(roleAdmin);
-                    var dateNow = new Date();
-                    dateNow.setHours(dateNow.getHours() - horasDiferencia + 3);
                     message.channel.send("<:1990_praisethesun:602528888400379935><@!" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
                     message.channel.send("", { files: ["./images/udyr-admin.jpg"] });
-                    dateNow = new Date();
+                    var dateNow = new Date();
                     dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
+                    dateNow.setSeconds(0);
                     adminActual = new admin(udyr.displayName, dateNow);
                 } else {
                     soledad.roles.add(roleAdmin);
-                    var dateNow = new Date();
-                    dateNow.setHours(dateNow.getHours() - horasDiferencia + 3);
                     message.channel.send("<:1990_praisethesun:602528888400379935><@!" + soledad.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>.");
                     dateNow = new Date();
                     dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
+                    dateNow.setSeconds(0);
                     adminActual = new admin(soledad.displayName, dateNow);
                 }
             }
@@ -368,6 +367,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 }
                 var dateNow = new Date();
                 dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
+                dateNow.setSeconds(0);
                 adminActual = new admin(miembroGanador.displayName, dateNow);
             } else if (miembroGanador.roles.cache.get(role.id)) {
                 var dateVieja = new Date();
@@ -375,7 +375,8 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 adminActual = new admin(miembroGanador.displayName, dateVieja);
                 var dateNow = new Date();
                 dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
-                message.channel.send(miembroPerdedor.displayName + " no puede volver a enfrentarse a " + miembroGanador.displayName + " hasta dentro de 1 hora (" + dateNow.getHours() + ":" + dateNow.getMinutes() + ").");
+                dateNow.setSeconds(0);
+                message.channel.send(miembroPerdedor.displayName + " no puede volver a enfrentarse a " + miembroGanador.displayName + " hasta dentro de 1 hora (" + dateNow.getHours() + ":" + String(dateNow.getMinutes()).length == 1 ? "0" + String(dateNow.getMinutes()) : String(dateNow.getMinutes()) + ").");
                 banquillo.push(miembroPerdedor.displayName);
                 setTimeout(function () {
                     for (let i = 0; i < banquillo.length; i++) {
@@ -434,8 +435,8 @@ function combate(gladiador1, gladiador2, message) {
     var critico = Math.floor(Math.random() * 7) + 1;
     var esquive = Math.floor(Math.random() * 7) + 1;
     var parry = Math.floor(Math.random() * 4) + 1;
-    var eventoImprobable = Math.floor(Math.random() * 50);
-    if (eventoImprobable != 1) {
+    var eventoImprobable = Math.floor(Math.random() * 100);
+    if (eventoImprobable != 23) {
         if (parry == 1) {
             var stun = Math.floor(Math.random() * 5);
             if (stun <= 1) {
