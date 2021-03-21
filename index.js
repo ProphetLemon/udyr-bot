@@ -75,7 +75,7 @@ client.on("message", function (message) {
         } else if (command == "changelog") {
             changelog(message);
         } else if (command == "comandos") {
-            message.reply("hacienda, top/bot/mid/adc/supp/random/autofill, dado, moneda, estado, alarma, focus, limpiar, version, changelog, comandos, lol,pelea,retar");
+            comandos(message);
         } else if (command == "lol") {
             channel.send("Si escribes udyr despues de una l\u00EDnea del lol (udyr top/bot/mid/adc/supp), se te dir\u00E1 un champ que juegue en esa l\u00EDnea.\n\n" +
                 "Si escribes 'udyr autofill', se te dir\u00E1 una l\u00EDnea y un champ aleatorio propio de esa l\u00EDnea.\n\n" +
@@ -115,6 +115,35 @@ client.on("message", function (message) {
     }
 
 });
+
+function comandos (message){
+    const newEmbed = new Discord.MessageEmbed()
+        .setColor("#B17428")
+        .setTitle("Comandos")
+        .setDescription('Comandos del server')
+        .addFields(
+            {name: 'udyr hacienda _numero_', value: 'Te calcula lo que te quita hacienda en funcion del numero que le pases'},
+            {name: 'udyr top/jung/mid/adc/supp', value: 'Te dice un champ correspondiente a esa linea'},
+            {name: 'udyr autofill', value: 'Te dice un champ aleatorio en una linea que le corresponda'},
+            {name: 'udyr random', value: 'Te dice un champ aleatorio en una linea aleatoria'},
+            {name: 'udyr dado _numero-de-caras_ _numero-de-tiradas_', value: 'Tira tantos dados como quieras, y esos dados pueden tener a su vez el numero de caras que quieras'},
+            {name: 'udyr moneda', value: 'Te dice cara o cruz'},
+            {name: 'udyr estado (_online/ausente/ocupado_) (_viendo/jugando/compitiendo/escuchando_) (_"estado-personalizado-que-escribas"_)', value: 'Personalizas el estado del bot'},
+            {name: 'udyr alarma (_hoy_/_ma\u00F1ana_/_dia-personalizado_) (_hora-personalizada_)', value: 'Crea una alarma (por motivos ajenos al bot se recomienda poner alarmas que se ejecuten el mismo dia)'},
+            {name: 'udyr focus', value: 'Hace focus a alguien y el bot no para de insultarle cuando habla'},
+            {name: 'udyr limpiar', value: 'Quita el focus'},
+            {name: 'udyr version', value: 'Te dice la version del bot'},
+            {name: 'udyr changelog', value: 'Te dice los cambios recientes del bot'},
+            {name: 'udyr comandos', value: 'Te manda un mensaje con todos los comandos'},
+            {name: 'udyr pelea _"persona-1"_ _"persona-2"_', value: 'Simula una pelea entre dos personas'},
+            {name: 'udyr retar _persona_', value: 'Retas a una persona'},
+            {name: 'udyr coliseo', value: 'Simula una pelea entre dos personas del server'}
+        )
+        .setImage('https://i.kym-cdn.com/entries/icons/facebook/000/034/006/uga.jpg')
+        .setFooter('Ser malos! Buenas noches colegas\nPerro Xanchez - 19/11/10');
+        message.channel.send(newEmbed);
+}
+
 // ------------------------------------- INICIO PELEA ALEATORIA -------------------------------------
 
 /**
