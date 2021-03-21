@@ -453,7 +453,7 @@ async function eventoRandom(gladiador1, gladiador2, logCombateText, message) {
     if (eventoImprobable != 23) {
         if(martilloAdmin == 1){
                 let hostia = Math.floor((90*gladiador2.vida/100));
-                logCombateText+=`<:martilloadmin:823257114239303691>${gladiador1.nombre} saca el 'Martillo de Admin' y le hace ${hostia} puntos de da\u00F1o.<:martilloadmin:823257114239303691>`;
+                logCombateText+=`<:martilloadmin:823257114239303691>${gladiador1.nombre} saca el 'Martillo de Admin' y le hace ${hostia} puntos de da\u00F1o.<:martilloadmin:823257114239303691>\n`;
                 gladiador2.vida-=hostia;
         } else if (parry == 1) {
             var stun = Math.floor(Math.random() * 5);
