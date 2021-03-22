@@ -488,7 +488,7 @@ async function eventoRandom(gladiador1, gladiador2, logCombateText, message) {
             var stun = Math.floor(Math.random() * 5);
             if (stun <= 1) {
                 if (critico == 1) {
-                    logCombateText += `🐱‍👤 ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry al ataque **cr\u00EDtico** y le stunea durante 1 turno.🐱‍👤\n"`;
+                    logCombateText += `🐱‍👤 ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry al ataque **cr\u00EDtico** y le stunea durante 1 turno.🐱‍👤\n`;
                 }
                 else {
                     logCombateText += `🐱‍👤 ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry y le stunea durante 1 turno.🐱‍👤\n`;
