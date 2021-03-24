@@ -195,7 +195,7 @@ function combate(gladiador1, gladiador2, message) {
             if (critico == 1) {
                 logCombateText += `🛡️ ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra esquivar el ataque **cr\u00EDtico**.🛡️\n`;
             } else {
-                logCombateText += `🛡️ ${gladiador1.nombre} intenta golpear pero  ${gladiador2.nombre} logra esquivar el ataque.🛡️\n`;
+                logCombateText += `🛡️ ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra esquivar el ataque.🛡️\n`;
             }
             if (gladiador2.vida < 100) {
                 logCombateText += `❤️ ${gladiador2.nombre} se toma una poti a su salud y recupera  ${Math.floor((100 - gladiador2.vida) * 50 / 100)} puntos de salud.❤️\n`;
@@ -296,7 +296,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 if (maricon1.displayName != udyr.displayName && maricon2.displayName != udyr.displayName) {
                     udyr.roles.add(roleAdmin);
                     message.channel.send("<:1990_praisethesun:602528888400379935><@!" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
-                    message.channel.send("", { files: ["../images/udyr-admin.jpg"] });
+                    message.channel.send("", { files: ["./images/udyr-admin.jpg"] });
                     var dateNow = new Date();
                     dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
                     dateNow.setSeconds(0);
@@ -329,9 +329,9 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 banquillo = [];
                 message.channel.send("<:1990_praisethesun:602528888400379935><@!" + miembroGanador.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
                 if (miembroPerdedor.id == "766271573271248926") {
-                    message.channel.send("", { files: ["../images/udyr-no-admin.jpg"] });
+                    message.channel.send("", { files: ["./images/udyr-no-admin.jpg"] });
                 } else {
-                    let link ='../images/admin/'
+                    let link ='./images/admin/'
                     var enlaces = fs.readdirSync(link);
                     message.channel.send("", { files: [`${link}${enlaces[Math.floor(Math.random()*enlaces.length)]}`] });
                 }
