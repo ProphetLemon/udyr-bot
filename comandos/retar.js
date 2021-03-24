@@ -56,12 +56,14 @@ module.exports = {
             if (metodosUtiles.isMention(nombre1)) {
                 nombre1 = message.guild.members.cache.get(metodosUtiles.returnIdFromMention(nombre1)).displayName;
             } else if (metodosUtiles.isRol(nombre1)) {
-                nombre1 = message.guild.roles.cache.get(metodosUtiles.returnIdFromMention(nombre1)).name;
+                metodosUtiles.insultar(message);
+                return;
             }
             if (metodosUtiles.isMention(nombre2)) {
                 nombre2 = message.guild.members.cache.get(metodosUtiles.returnIdFromMention(nombre2)).displayName;
             } else if (metodosUtiles.isRol(nombre2)) {
-                nombre2 = message.guild.roles.cache.get(metodosUtiles.returnIdFromMention(nombre2)).name;
+                metodosUtiles.insultar(message);
+                return;
             }
             gladiador1 = new gladiador(nombre1, 100);
             gladiador2 = new gladiador(nombre2, 100);
@@ -76,7 +78,8 @@ module.exports = {
             if (metodosUtiles.isMention(idpj2)) {
                 personaje2 = message.guild.members.cache.get(metodosUtiles.returnIdFromMention(idpj2)).displayName;
             } else if (metodosUtiles.isRol(idpj2)) {
-                personaje2 = message.guild.roles.cache.get(metodosUtiles.returnIdFromMention(idpj2)).name;
+                metodosUtiles.insultar(message);
+                return;
             } else {
                 message.reply("eres tan maric\u00F3n que te heriste a ti mismo");
                 return;
