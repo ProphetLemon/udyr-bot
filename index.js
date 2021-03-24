@@ -4,8 +4,6 @@ const client = new Discord.Client();
 const prefix = "udyr";
 client.login(config.BOT_TOKEN);
 const version = "12.0";
-
-
 const fs = require('fs');
 
 client.commands = new Discord.Collection();
