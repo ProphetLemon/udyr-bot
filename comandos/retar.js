@@ -1,3 +1,4 @@
+const fs = require('fs');
 class gladiador {
     /**
      * 
@@ -295,7 +296,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 if (maricon1.displayName != udyr.displayName && maricon2.displayName != udyr.displayName) {
                     udyr.roles.add(roleAdmin);
                     message.channel.send("<:1990_praisethesun:602528888400379935><@!" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
-                    message.channel.send("", { files: ["./images/udyr-admin.jpg"] });
+                    message.channel.send("", { files: ["../images/udyr-admin.jpg"] });
                     var dateNow = new Date();
                     dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
                     dateNow.setSeconds(0);
@@ -328,12 +329,10 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 banquillo = [];
                 message.channel.send("<:1990_praisethesun:602528888400379935><@!" + miembroGanador.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
                 if (miembroPerdedor.id == "766271573271248926") {
-                    message.channel.send("", { files: ["./images/udyr-no-admin.jpg"] });
+                    message.channel.send("", { files: ["../images/udyr-no-admin.jpg"] });
                 } else {
-                    var enlaces = ["https://media.discordapp.net/attachments/809786674875334677/821885009891033158/5f30a0cbb3b05.png", "https://media.discordapp.net/attachments/809786674875334677/821875129846988840/5ed93aed4ff85.png",
-                        "https://media.discordapp.net/attachments/809786674875334677/821874302722244629/5fcfa3b829017.png", "https://media.discordapp.net/attachments/809786674875334677/821742891826413598/3rfhqznut7051.png",
-                        "https://media.discordapp.net/attachments/809786674875334677/821713557758541844/unnamed.jpg"];
-                    message.channel.send(enlaces[Math.floor(Math.random() * enlaces.length)]);
+                    var enlaces = fs.readdirSync('../images/');
+                    message.channel.send("", { files: [`../images/${enlaces[Math.floor(Math.random()*enlaces.length)]}`] });
                 }
                 var dateNow = new Date();
                 dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
