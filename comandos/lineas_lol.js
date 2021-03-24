@@ -15,6 +15,7 @@ module.exports = {
     aliases: LINEAS,
     description: 'Funcion para crear apuestas o apostar en ellas',
     execute(client, message, args, cmd) {
+        var linea = cmd;
         var campeon_linea = [];
         if (linea == LINEAS[6]) {
             var linea_random = Math.floor(Math.random() * 5);
