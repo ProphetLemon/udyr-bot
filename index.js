@@ -1,9 +1,7 @@
 const Discord = require("discord.js");
 const config = require("./config.json");
 const client = new Discord.Client();
-const prefix = "udyr";
 client.login(config.BOT_TOKEN);
-const version = "12.0";
 
 const fs = require('fs');
 
