@@ -331,7 +331,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 if (miembroPerdedor.id == "766271573271248926") {
                     message.channel.send("", { files: ["../images/udyr-no-admin.jpg"] });
                 } else {
-                    var enlaces = fs.readdirSync('../images/');
+                    var enlaces = fs.readdirSync('../images/admin');
                     message.channel.send("", { files: [`../images/${enlaces[Math.floor(Math.random()*enlaces.length)]}`] });
                 }
                 var dateNow = new Date();
