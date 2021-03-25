@@ -25,6 +25,10 @@ function ruleta(message) {
         message.reply("por el culo te la hinco, maric\u00F3n");
         return;
     }
+    if (message.content.trim().toLowerCase()=="vikingos"){
+        message.channel.send("LA👊PUTA👊MEJOR👊SERIE👊");
+        return;
+    }
     var ruleta = Math.floor(Math.random() * 20);
     console.log(ruleta);
     if (ruleta == 5) { //por el culo te la hinco jaja
