@@ -1,16 +1,3 @@
-class persona {
-    /**
-     * Constructor de clase persona
-     * @param {Date} dia
-     * @param {number} puntos
-     * @param {string} userID
-     */
-    constructor(dia, puntos, userID) {
-        this.dia = dia;
-        this.puntos = puntos;
-        this.userID = userID;
-    }
-}
 global.personas = [];
 module.exports = {
     name: 'ranking',
