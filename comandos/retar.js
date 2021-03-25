@@ -195,7 +195,7 @@ function combate(gladiador1, gladiador2, message) {
                 logCombateText += `🛡️ ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra esquivar el ataque.🛡️\n`;
             }
             if (gladiador2.vida < 100) {
-                logCombateText += `❤️ ${gladiador2.nombre} se toma una poti a su salud y recupera  ${Math.floor((100 - gladiador2.vida) * 50 / 100)} puntos de salud.❤️\n`;
+                logCombateText += `❤️ ${gladiador2.nombre} se toma una poti a su salud y recupera ${Math.floor((100 - gladiador2.vida) * 50 / 100)} puntos de salud.❤️\n`;
                 gladiador2.vida += Math.floor((100 - gladiador2.vida) * 50 / 100);
             }
         } else if (critico == 1) {
@@ -227,7 +227,7 @@ function combate(gladiador1, gladiador2, message) {
                 break;
             case eventosRandom[1]:
                 sucedioEventoUdyr = true;
-                logCombateText += `🐻Aparece <@!766271573271248926> y gankea por sorpresa a ${gladiador1.nombre} y a ${gladiador2.nombre}.🐻\n"`;
+                logCombateText += `🐻Aparece <@!766271573271248926> y gankea por sorpresa a ${gladiador1.nombre} y a ${gladiador2.nombre}.🐻\n`;
                 gladiador1.vida = 0;
                 gladiador2.vida = 0;
                 gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
