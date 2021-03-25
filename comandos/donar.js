@@ -9,7 +9,7 @@ module.exports = {
             return;
         }
         if (message.author.id != "202065665597636609") {
-            metodosUtilesinsultar(message);
+            metodosUtiles.insultar(message);
             return;
         }
         var puntos = Number(message.content.split(/ +/)[3]);
