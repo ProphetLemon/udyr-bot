@@ -26,7 +26,7 @@ function ruleta(message) {
         return;
     }
     if (message.content.trim().toLowerCase()=="vikingos"){
-        message.channel.send("LA👊PUTA👊MEJOR👊SERIE👊");
+        message.channel.send("LA👊PUTA👊MEJOR👊SERIE👊", { files: ["./images/vikingos.gif"] });
         return;
     }
     var ruleta = Math.floor(Math.random() * 20);
