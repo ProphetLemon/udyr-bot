@@ -12,7 +12,7 @@ class persona {
     }
 }
 module.exports = {
-    name: 'puntos',
+  //  name: 'puntos',
     aliases: [],
     description: 'Funcion para saber los puntos que tienes o canjear los mierdas diarias',
     execute(client, message, args, cmd) {

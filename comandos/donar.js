@@ -1,5 +1,5 @@
 module.exports = {
-    name: 'donar',
+   // name: 'donar',
     aliases: [],
     description: 'Funcion para donar a alguien puntos',
     execute(client, message, args, cmd) {

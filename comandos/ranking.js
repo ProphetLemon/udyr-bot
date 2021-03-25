@@ -1,6 +1,6 @@
 global.personas = [];
 module.exports = {
-    name: 'ranking',
+  //  name: 'ranking',
     description: 'Funcion ver el raking de puntos',
     execute(client, message, args, cmd) {
         personas.sort(function (a, b) {

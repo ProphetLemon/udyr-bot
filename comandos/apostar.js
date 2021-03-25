@@ -30,7 +30,7 @@ class apuesta {
 var apuesta_actual = new apuesta(undefined, undefined, undefined);
 var nombre_bandos = [];
 module.exports = {
-    name: 'apostar',
+    //name: 'apostar',
     aliases: ['apuesta','cerrar'],
     description: 'Funcion para crear apuestas o apostar en ellas',
     execute(client, message, args, cmd) {
