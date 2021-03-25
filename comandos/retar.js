@@ -1,3 +1,4 @@
+const { Message } = require('discord.js');
 const fs = require('fs');
 class gladiador {
     /**
@@ -37,8 +38,8 @@ var eventosRandom = ["MATRIX", "UDYR", "AMOR"];
 module.exports = {
     name: 'retar',
     aliases: ['pelea', 'coliseo'],
-    description: 'Funcion para retar a alguien',
-    execute(client, message, args, cmd) {
+    description: 'Funcion para retar a alguien',    
+    async execute(client, message, args, cmd) {
         if (logCombate.length > 0) {
             return;
         }
@@ -92,20 +93,16 @@ module.exports = {
             gladiador2 = new gladiador(personaje2, 100);
         }
         else if (cmd == 'coliseo') {
-            let guildMembers = getGuildMembers();
+            let guildMembers = await message.guild.members.fetch();
             let id1 = guildMembers.array()[Math.floor(Math.random() * guildMembers.array().length)].id;
             let id2 = guildMembers.array()[Math.floor(Math.random() * guildMembers.array().length)].id;
             message.channel.send("<@!" + id1 + "> vs <@!" + id2 + ">");
-            gladiador1 = new gladiador(guildMembers.get(id1).displayName, 100);
-            gladiador2 = new gladiador(guildMembers.get(id2).displayName, 100);
+            var gladiador1 = new gladiador(guildMembers.get(id1).displayName, 100);
+            var gladiador2 = new gladiador(guildMembers.get(id2).displayName, 100);
 
         }
         coliseo(gladiador1, gladiador2, message);
     }
-}
-
-async function getGuildMembers() {
-    return await message.guild.members.fetch();
 }
 
 function coliseo(gladiador1, gladiador2, message) {
@@ -260,20 +257,22 @@ function combate(gladiador1, gladiador2, message) {
 /**
  * @param {gladiador} gladiador1
  * @param {gladiador} gladiador2
- * @param {Discord.Message} message
+ * @param {Message} message
  */
-async function leerRondasPelea(gladiador1, gladiador2, message) {
+ async function leerRondasPelea(gladiador1, gladiador2, message) {
     if (turno == logCombate.length - 2) {
         var final = logCombate[logCombate.length - 2] + "\n" + logCombate[logCombate.length - 1];
         message.channel.send(final);
         logCombate = [];
         jugarseElTitulo = false;
+        var guildMembers = await message.guild.members.fetch();
+        var guildRoles = await message.guild.roles.fetch();
         turno = 2;
         if (sucedioEventoUdyr) {
-            var udyr = await message.guild.members.fetch().then(guild => guild.find(member => member.id == "766271573271248926"));
-            let miembroPerdedor1 = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == perdedor[0].nombre));
-            let miembroPerdedor2 = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == perdedor[1].nombre));
-            var role = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "El Admin"));
+            var udyr = guildMembers.find(member => member.id == "766271573271248926");
+            let miembroPerdedor1 = guildMembers.find(member => member.displayName == perdedor[0].nombre);
+            let miembroPerdedor2 = guildMembers.find(member => member.displayName == perdedor[1].nombre);
+            var role = guildRoles.cache.find(role => role.name == "El Admin");
             if (miembroPerdedor1.roles.cache.get(role.id) || miembroPerdedor2.roles.cache.get(role.id)) {
                 miembroPerdedor1.roles.remove(role.id);
                 miembroPerdedor2.roles.remove(role.id);
@@ -286,12 +285,12 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 adminActual = new admin(udyr.displayName, dateNow);
             }
         } else if (sucedioEventoAmor) {
-            var maricon1 = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == gladiador1.nombre));
-            var maricon2 = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == gladiador2.nombre));
-            var udyr = await message.guild.members.fetch().then(guild => guild.find(member => member.id == "766271573271248926"));
-            var soledad = await message.guild.members.fetch().then(guild => guild.find(member => member.id == "285480424904327179"));
-            var roleAdmin = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "El Admin"));
-            var roleMaricones = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "Maricones"));
+            var maricon1 = guildMembers.find(member => member.displayName == gladiador1.nombre);
+            var maricon2 = guildMembers.find(member => member.displayName == gladiador2.nombre);
+            var udyr = guildMembers.find(member => member.id == "766271573271248926");
+            var soledad = guildMembers.find(member => member.id == "285480424904327179");
+            var roleAdmin = guildRoles.cache.find(role => role.name == "El Admin");
+            var roleMaricones = guildRoles.cache.find(role => role.name == "Maricones");
             if (maricon1.roles.cache.get(roleAdmin.id) || maricon2.roles.cache.get(roleAdmin.id)) {
                 if (maricon1.displayName != udyr.displayName && maricon2.displayName != udyr.displayName) {
                     udyr.roles.add(roleAdmin);
@@ -320,9 +319,9 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
             }, 10800000);
 
         } else {
-            let miembroGanador = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == ganador.nombre));
-            let miembroPerdedor = await message.guild.members.fetch().then(guild => guild.find(member => member.displayName == perdedor.nombre));
-            var role = await message.guild.roles.fetch().then(roleM => roleM.cache.find(role => role.name == "El Admin"));
+            let miembroGanador = guildMembers.find(member => member.displayName == ganador.nombre);
+            let miembroPerdedor = guildMembers.find(member => member.displayName == perdedor.nombre);
+            var role = guildRoles.cache.find(role => role.name == "El Admin");
             if (miembroPerdedor.roles.cache.get(role.id)) {
                 miembroPerdedor.roles.remove(role.id);
                 miembroGanador.roles.add(role);
