@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
-const config = require("./config.json");
 const client = new Discord.Client();
-client.login(config.BOT_TOKEN);
+require('dotenv').config();
+
 
 const fs = require('fs');
 
@@ -17,7 +17,7 @@ for (const file of commandFiles) {
     const command = require(`./comandos/${file}`);
     client.commands.set(command.name,command);
 }
-
+client.login(process.env.DISCORD_TOKEN);
 global.horasDiferencia = -1;
 
 global.metodosUtiles ={

@@ -1,5 +1,5 @@
 const { Client, Message, Discord } = require("discord.js");
-
+require('dotenv').config();
 /**
  * 
  * @param {Discord} Discord
@@ -7,7 +7,7 @@ const { Client, Message, Discord } = require("discord.js");
  * @param {Message} message
  */
 module.exports = (Discord, client, message) => {
-    const prefix = 'udyr ';
+    const prefix = process.env.PREFIX+" ";
     var canales_de_texto = ["598896817161240663", "809786674875334677"];
     if (message.author.bot || !canales_de_texto.includes(message.channel.id)) return;
     const args = message.content.slice(prefix.length).split(/ +/);
