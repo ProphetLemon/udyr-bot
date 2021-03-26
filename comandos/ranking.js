@@ -4,7 +4,6 @@ module.exports = {
    name: 'ranking',
     description: 'Funcion ver el raking de puntos',
   async  execute(message,args,cmd,client,Discord,profileData) {
-       var personas = [];
          var personas = await profileModel.find();
          personas.sort(function (a, b) {
             return b.udyrcoins - a.udyrcoins;

@@ -1,5 +1,6 @@
 const { Message } = require('discord.js');
 const fs = require('fs');
+const adminModel = require("../models/adminSchema");
 class gladiador {
     /**
      * 
@@ -105,7 +106,16 @@ module.exports = {
     }
 }
 
-function coliseo(gladiador1, gladiador2, message) {
+
+
+async function coliseo(gladiador1, gladiador2, message) {
+    if (adminActual.nombre == undefined) {
+        var adminBBDD = await adminModel.find();
+        var adminModelo = adminBBDD[0];
+        var memberManager = await message.guild.members.fetch();
+        var memberAdmin = memberManager.find(member => member.id == adminModelo.userID);
+        adminActual = new admin(memberAdmin.displayName, adminModelo.endDate);
+    }
     if ((banquillo.includes(gladiador1.nombre) || banquillo.includes(gladiador2.nombre)) && (gladiador1.nombre == adminActual.nombre || gladiador2.nombre == adminActual.nombre) && !jugarseElTitulo) {
         message.channel.send(banquillo.includes(gladiador1.nombre) ? (gladiador1.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun") : (gladiador2.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun"));
         return;
@@ -283,6 +293,17 @@ function combate(gladiador1, gladiador2, message) {
                 dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
                 dateNow.setSeconds(0);
                 adminActual = new admin(udyr.displayName, dateNow);
+                var oldAdmin = await adminModel.find();
+                var oldAdminModel =  oldAdmin[0];
+                var crear = await adminModel.create({
+                    userID:udyr.id,
+                    endDate:dateNow
+                });
+                crear.save();
+                 var prueba = await adminModel.findOneAndRemove({
+                    userID:oldAdminModel.userID
+                })
+                prueba.save();
             }
         } else if (sucedioEventoAmor) {
             var maricon1 = guildMembers.find(member => member.displayName == gladiador1.nombre);
@@ -300,6 +321,17 @@ function combate(gladiador1, gladiador2, message) {
                     dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
                     dateNow.setSeconds(0);
                     adminActual = new admin(udyr.displayName, dateNow);
+                    var oldAdmin = await adminModel.find();
+                    var oldAdminModel = oldAdmin[0];
+                    var crear = await adminModel.create({
+                        userID: udyr.id,
+                        endDate: dateNow
+                    });
+                    crear.save();
+                    var prueba = await adminModel.findOneAndRemove({
+                        userID: oldAdminModel.userID
+                    })
+                    prueba.save();
                 } else {
                     soledad.roles.add(roleAdmin);
                     message.channel.send("<:1990_praisethesun:602528888400379935><@!" + soledad.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>.");
@@ -307,6 +339,17 @@ function combate(gladiador1, gladiador2, message) {
                     dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
                     dateNow.setSeconds(0);
                     adminActual = new admin(soledad.displayName, dateNow);
+                    var oldAdmin = await adminModel.find();
+                var oldAdminModel =  oldAdmin[0];
+                var crear = await adminModel.create({
+                    userID:soledad.id,
+                    endDate:dateNow
+                });
+                crear.save();
+                 var prueba = await adminModel.findOneAndRemove({
+                    userID:oldAdminModel.userID
+                })
+                prueba.save();
                 }
             }
             maricon1.roles.remove(roleAdmin.id);
@@ -338,10 +381,18 @@ function combate(gladiador1, gladiador2, message) {
                 dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
                 dateNow.setSeconds(0);
                 adminActual = new admin(miembroGanador.displayName, dateNow);
+                var oldAdmin = await adminModel.find();
+                var oldAdminModel =  oldAdmin[0];
+                var crear = await adminModel.create({
+                    userID:miembroGanador.id,
+                    endDate:dateNow
+                });
+                crear.save();
+                 var prueba = await adminModel.findOneAndRemove({
+                    userID:oldAdminModel.userID
+                })
+                prueba.save();
             } else if (miembroGanador.roles.cache.get(role.id)) {
-                var dateVieja = new Date();
-                dateVieja.setDate(dateVieja.getDate() - 3);
-                adminActual = new admin(miembroGanador.displayName, dateVieja);
                 var dateNow = new Date();
                 dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
                 dateNow.setSeconds(0);

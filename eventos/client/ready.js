@@ -6,7 +6,5 @@ module.exports = (Discord, client) => {
             type: "LISTENING"
         }
     })
-    //init_campeones();
     console.log("El bot ta ready");
-
 }
