@@ -13,7 +13,10 @@ module.exports = async (Discord, client, message) => {
     const prefix = process.env.PREFIX + " ";
     var canales_de_texto = ["598896817161240663", "809786674875334677","824587579944468530"];
     if (message.author.bot || !canales_de_texto.includes(message.channel.id)) return;
-
+    if (message.author.id==focusID) {
+        message.member.send("Callate maric\u00F3n");
+        message.delete();
+    } 
     let profileData;
     try {
         profileData = await profileModel.findOne({userID:message.author.id});
@@ -37,7 +40,9 @@ module.exports = async (Discord, client, message) => {
     const command = client.commands.get(cmd) || client.commands.find(a => a.aliases && a.aliases.includes(cmd));
     if (command) {
         command.execute(message,args,cmd,client,Discord,profileData);
-    } else {
+    } else if (message.content.startsWith(prefix)){
+        metodosUtiles.insultar(message);
+    }else{
         ruleta(message);
     }
 }
