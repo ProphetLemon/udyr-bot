@@ -13,7 +13,7 @@ module.exports = {
             .setDescription(`**${profileData.udyrcoins}** <:udyrcoin:825031865395445760>`)
             message.channel.send(newEmbed); 
         }   else{
-            const randomNumber = Math.floor(Math.random() * 500) + 1;
+            const randomNumber = Math.floor(Math.random() * 31) + 20;
             await profileModel.findOneAndUpdate(
                 {
                     userID: message.author.id
