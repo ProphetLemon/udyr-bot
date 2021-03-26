@@ -118,7 +118,7 @@ function coliseo(gladiador1, gladiador2, message) {
         var dateNow = new Date();
         dateNow.setHours(dateNow.getHours() - horasDiferencia);
         if (dateNow < adminActual.dateLimite) {
-            message.reply("no se puede retar al admin aun, podras retar al admin cuando sean las " + adminActual.dateLimite.getHours() + ":" + metodosUtiles.metodosUtiles.cambiarMinutos(adminActual.dateLimite));
+            message.reply("no se puede retar al admin aun, podras retar al admin cuando sean las " + adminActual.dateLimite.getHours() + ":" + metodosUtiles.cambiarMinutos(adminActual.dateLimite));
             return;
         }
     }
