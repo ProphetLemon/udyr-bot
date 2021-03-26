@@ -14,7 +14,6 @@ module.exports = {
             message.channel.send(newEmbed); 
         }   else{
             const randomNumber = Math.floor(Math.random() * 31) + 20;
-            try{
                 await profileModel.findOneAndUpdate(
                     {
                         userID: message.author.id
@@ -27,13 +26,7 @@ module.exports = {
                             dailyGift:hoy
                         }
                     }
-                );
-            }catch (err){
-            console.log(err);
-            message.channel.send("Ha ocurrido un error, seguramente sea porque es la primera vez que interactuas con el servidor desde que se creo la base de datos.\n"+
-            "En ese caso vuelve a usar el comando 'udyr puntos' otra vez y ya deberia funcionar.");
-            }
-            
+                );                        
             const targetData = await profileModel.findOne({userID: message.author.id});
             message.channel.send(`${message.member.displayName} ha canjeado la recompensa diaria y consigui\u00F3 ${randomNumber} udyr coins`);
             const newEmbed = new Discord.MessageEmbed()
