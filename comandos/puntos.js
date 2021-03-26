@@ -5,7 +5,7 @@ module.exports = {
     description: 'Funcion para saber los puntos que tienes',
     async execute(message, args, cmd, client, Discord, profileData) {    
         let hoy = new Date();
-        hoy.setHours(hoy.getHours()+horasDiferencia);
+        hoy.setHours(hoy.getHours()-horasDiferencia);
         if (profileData.dailyGift.getDate()==hoy.getDate()){
             const newEmbed = new Discord.MessageEmbed()
             .setColor("#B17428")
