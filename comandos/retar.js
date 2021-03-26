@@ -382,14 +382,14 @@ function combate(gladiador1, gladiador2, message) {
                 dateNow.setSeconds(0);
                 adminActual = new admin(miembroGanador.displayName, dateNow);
                 var oldAdmin = await adminModel.find();
-                var oldAdminModel =  oldAdmin[0];
+                var oldAdminModelID =  oldAdmin[0].userID;
                 var crear = await adminModel.create({
                     userID:miembroGanador.id,
                     endDate:dateNow
                 });
                 crear.save();
                  var prueba = await adminModel.findOneAndRemove({
-                    userID:oldAdminModel.userID
+                    userID:oldAdminModelID
                 })
                 prueba.save();
             } else if (miembroGanador.roles.cache.get(role.id)) {
