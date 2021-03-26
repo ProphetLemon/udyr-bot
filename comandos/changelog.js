@@ -1,7 +1,7 @@
 module.exports = {
     name:'changelog',
     description:'Descripcion de los cambios con el ultimo parche',
-    execute(client,message, args,cmd) {
+    execute(message,args,cmd,client,Discord,profileData) {
         var mensaje = "Estoy en la versi\u00F3n " + version + "\n\n";
         mensaje += "Cambios m\u00E1s recientes:\n" +
             "\u25CF Se ha a\u00F1adido el comando 'retar'.\n" +

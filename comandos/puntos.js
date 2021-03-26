@@ -1,49 +1,40 @@
-class persona {
-    /**
-     * Constructor de clase persona
-     * @param {Date} dia
-     * @param {number} puntos
-     * @param {string} userID
-     */
-    constructor(dia, puntos, userID) {
-        this.dia = dia;
-        this.puntos = puntos;
-        this.userID = userID;
-    }
-}
+const profileModel = require('../models/profileSchema');
 module.exports = {
-  //  name: 'puntos',
+    name: 'puntos',
     aliases: [],
-    description: 'Funcion para saber los puntos que tienes o canjear los mierdas diarias',
-    execute(client, message, args, cmd) {
-        var existe = false;
-        var posicion = 0;
-        for (var i = 0; i < personas.length; i++) {
-            if (personas[i].userID == message.author.id) {
-                existe = true;
-                posicion = i;
-                break;
-            }
+    description: 'Funcion para saber los puntos que tienes',
+    async execute(message, args, cmd, client, Discord, profileData) {    
+        let hoy = new Date();
+        hoy.setHours(hoy.getHours()+horasDiferencia);
+        if (profileData.dailyGift.getDate()==hoy.getDate()){
+            const newEmbed = new Discord.MessageEmbed()
+            .setColor("#B17428")
+            .setAuthor(`Udyr coins de ${message.member.displayName}`,message.author.avatarURL())
+            .setDescription(`**${profileData.udyrcoins}** <:udyrcoin:825031865395445760>`)
+            message.channel.send(newEmbed); 
+        }   else{
+            const randomNumber = Math.floor(Math.random() * 500) + 1;
+            await profileModel.findOneAndUpdate(
+                {
+                    userID: message.author.id
+                },
+                {
+                    $inc: {
+                        udyrcoins: randomNumber
+                    },
+                    $set:{
+                        dailyGift:hoy
+                    }
+                }
+            );
+            const targetData = await profileModel.findOne({userID: message.author.id});
+            message.channel.send(`${message.member.displayName} ha canjeado la recompensa diaria y consigui\u00F3 ${randomNumber} udyr coins`);
+            const newEmbed = new Discord.MessageEmbed()
+            .setColor("#B17428")
+            .setAuthor(`Udyr coins de ${message.member.displayName}`,message.author.avatarURL())
+            .setDescription(`**${targetData.udyrcoins}** <:udyrcoin:825031865395445760>`)
+            message.channel.send(newEmbed); 
         }
-        let dateNow = new Date();
-        dateNow.setHours(dateNow.getHours() - horasDiferencia);
-        if (!existe) {
-            var puntos_random = Math.floor(Math.random() * 30) + 21;
-            personas.push(new persona(dateNow, (1000 + puntos_random), message.author.id));
-            message.reply("\u00A1Has canjeado la recompensa diaria, has ganado " + puntos_random + " udyr coins!\nTienes " + (1000 + puntos_random) + " udyr coins.");
-        }
-        else {
-            var autor = personas[posicion];
-            if (metodosUtiles.isSameDay(autor.dia, dateNow)) {
-                message.reply("tienes " + autor.puntos + " udyr coins");
-            }
-            else {
-                var puntos_random = Math.floor(Math.random() * 31) + 20;
-                autor.puntos += puntos_random;
-                message.reply("\u00A1Has canjeado la recompensa diaria, has ganado " + puntos_random + " udyr coins!\nTienes " + autor.puntos + " udyr coins.");
-                autor.dia = dateNow;
-                personas[posicion] = autor;
-            }
-        }
+        
     }
 }

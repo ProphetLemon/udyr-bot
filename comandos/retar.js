@@ -39,7 +39,7 @@ module.exports = {
     name: 'retar',
     aliases: ['pelea', 'coliseo'],
     description: 'Funcion para retar a alguien',    
-    async execute(client, message, args, cmd) {
+    async execute(message,args,cmd,client,Discord,profileData) {
         if (logCombate.length > 0) {
             return;
         }

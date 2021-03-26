@@ -2,7 +2,7 @@ module.exports = {
     name: 'alarma',
     aliases: [],
     description: 'Funcion para crear apuestas o apostar en ellas',
-    execute(client, message, args, cmd) {
+    execute(message,args,cmd,client,Discord,profileData) {
         let dia = args[2];
         let hora = args[3];
         let motivo = message.content.split("\"")[1];

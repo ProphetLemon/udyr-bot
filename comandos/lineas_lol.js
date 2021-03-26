@@ -14,7 +14,7 @@ module.exports = {
     name: 'top',
     aliases: LINEAS,
     description: 'Funcion para crear apuestas o apostar en ellas',
-    execute(client, message, args, cmd) {
+    execute(message,args,cmd,client,Discord,profileData) {
         var linea = cmd;
         var campeon_linea = [];
         if (linea == LINEAS[6]) {

@@ -1,3 +1,4 @@
+const profileModel = require('../models/profileSchema');
 class apostador {
     /**
      * Bando de apuestas
@@ -30,11 +31,11 @@ class apuesta {
 var apuesta_actual = new apuesta(undefined, undefined, undefined);
 var nombre_bandos = [];
 module.exports = {
-    //name: 'apostar',
-    aliases: ['apuesta','cerrar'],
+    name: 'apostar',
+    aliases: ['apuesta', 'cerrar'],
     description: 'Funcion para crear apuestas o apostar en ellas',
-    execute(client, message, args, cmd) {
-        if (cmd =="apuesta"){
+    async execute(message, args, cmd, client, Discord, profileData) {
+        if (cmd == "apuesta") {
             if (apuesta_actual.nombre != undefined) {
                 message.channel.send("Ya existe una apuesta activa (" + apuesta_actual.nombre + "), cierrala para poder crear otra");
                 return;
@@ -44,23 +45,21 @@ module.exports = {
             nombre_bandos.push(args[5]);
             apuesta_actual = new apuesta(args[1], message.author.id, []);
             message.channel.send("Se ha creado la apuesta \"" + apuesta_actual.nombre + "\"");
-        }else if (cmd =="apostar"){
+        } else if (cmd == "apostar") {
             if (apuesta_actual.nombre == undefined) {
                 message.reply("No existe una apuesta activa, maric\u00F3n");
                 return;
             }
-        
+
             let nombre = message.author.id;
             let bando = message.content.split("\"")[1];
-            if (!nombre_bandos.includes(bando)) {
-                metodosUtiles.insultar(message);
-                return;
-            }
+            if (!nombre_bandos.includes(bando)) return metodosUtiles.insultar(message);;
+
             let puntos = Number(message.content.split("\"")[2]);
-            if (comprobar_puntos(nombre) == 0) {
+            if (profileData.udyrcoins == 0) {
                 message.reply("No tienes puntos, canjealos con el comando 'udyr puntos'");
                 return;
-            } else if (comprobar_puntos(nombre) < puntos) {
+            } else if (profileData.udyrcoins < puntos) {
                 message.reply("Ya te molaria tener esos puntos maric\u00F3n");
                 return;
             }
@@ -83,8 +82,8 @@ module.exports = {
                 apuesta_actual.apostadores.push(new apostador(nombre, puntos, bando));
                 message.reply("Has apostado por '" + bando + "' con " + puntos + " udyr coins")
             }
-        
-        }else if (cmd ="cerrar"){
+
+        } else if (cmd = "cerrar") {
             if (apuesta_actual.autor != message.author.id) {
                 message.reply("no hiciste tu la apuesta maric\u00F3n");
                 return;
@@ -106,7 +105,8 @@ module.exports = {
                 if (apuesta_actual.apostadores[i].bando == bando_ganador) {
                     let puntos = Math.floor(apuesta_actual.apostadores[i].puntos * ROI);
                     cambiar_puntos(apuesta_actual.apostadores[i].userID, ("+") + (puntos));
-                    message.channel.send(message.guild.members.cache.get(apuesta_actual.apostadores[i].userID).displayName + " ha ganado " + puntos + " udyr coins (" + comprobar_puntos(apuesta_actual.apostadores[i].userID) + " en total)");
+                    const targetData = await profileModel.findOne({ userID: apuesta_actual.apostadores[i].userID });
+                    message.channel.send(message.guild.members.cache.get(apuesta_actual.apostadores[i].userID).displayName + " ha ganado " + puntos + " udyr coins (" + targetData.udyrcoins + " en total)");
                 }
             }
             apuesta_actual = new apuesta(undefined, undefined, undefined);
@@ -115,29 +115,26 @@ module.exports = {
     }
 }
 
-function cambiar_puntos(userID, puntos) {
+async function cambiar_puntos(userID, puntos) {
     let signo = puntos.charAt(0);
     let numero = Number(puntos.slice(1, puntos.length));
     if (signo == '+') {
-        for (let i = 0; i < personas.length; i++) {
-            if (personas[i].userID == userID) {
-                personas[i].puntos += numero;
-            }
-        }
+        await profileModel.findOneAndUpdate({
+            userID: userID
+        },
+            {
+                $inc: {
+                    udyrcoins: numero
+                }
+            })
     } else {
-        for (let i = 0; i < personas.length; i++) {
-            if (personas[i].userID == userID) {
-                personas[i].puntos -= numero;
-            }
-        }
+        await profileModel.findOneAndUpdate({
+            userID: userID
+        },
+            {
+                $inc: {
+                    udyrcoins: -numero
+                }
+            })
     }
-}
-
-function comprobar_puntos(userID) {
-    for (let i = 0; i < personas.length; i++) {
-        if (personas[i].userID == userID) {
-            return personas[i].puntos;
-        }
-    }
-    return 0;
 }

@@ -1,21 +1,43 @@
 const { Client, Message, Discord } = require("discord.js");
 require('dotenv').config();
+const profileModel = require('../../models/profileSchema');
+
+
 /**
  * 
  * @param {Discord} Discord
  * @param {Client} client
  * @param {Message} message
  */
-module.exports = (Discord, client, message) => {
-    const prefix = process.env.PREFIX+" ";
-    var canales_de_texto = ["598896817161240663", "809786674875334677"];
+module.exports = async (Discord, client, message) => {
+    const prefix = process.env.PREFIX + " ";
+    var canales_de_texto = ["598896817161240663", "809786674875334677","824587579944468530"];
     if (message.author.bot || !canales_de_texto.includes(message.channel.id)) return;
+
+    let profileData;
+    try {
+        profileData = await profileModel.findOne({userID:message.author.id});
+        if (!profileData){
+            var ayer = new Date();
+            ayer.setDate(ayer.getDate()-1);
+            let profile = await profileModel.create({
+                userID: message.author.id,
+                serverID: message.guild.id,
+                udyrcoins: 1000,
+                dailyGift:ayer
+            });
+            profile.save();
+        }
+    } catch (err) {
+        console.log(err);
+    }
+
     const args = message.content.slice(prefix.length).split(/ +/);
     const cmd = args.shift().toLowerCase();
     const command = client.commands.get(cmd) || client.commands.find(a => a.aliases && a.aliases.includes(cmd));
-    if (command){
-        command.execute(client, message, args,cmd, Discord);
-    } else{
+    if (command) {
+        command.execute(message,args,cmd,client,Discord,profileData);
+    } else {
         ruleta(message);
     }
 }
@@ -25,7 +47,7 @@ function ruleta(message) {
         message.reply("por el culo te la hinco, maric\u00F3n");
         return;
     }
-    if (message.content.trim().toLowerCase()=="vikingos"){
+    if (message.content.trim().toLowerCase() == "vikingos") {
         message.channel.send("LA👊PUTA👊MEJOR👊SERIE👊", { files: ["./images/vikingos.gif"] });
         return;
     }

@@ -7,7 +7,8 @@ module.exports = {
     name: 'hacienda',
     aliases: [],
     description: 'Funcion para calcular lo que te roba hacienda',
-    execute(client, message, args, cmd) {
+    execute(message,args,cmd,client,Discord,profileData) {
+        var dinero = args[0];
         var dinero_final = 0;
         var dinero_descontado = 0;
         if (dinero <= 12450) {
@@ -28,6 +29,6 @@ module.exports = {
         dinero = metodosUtiles.numberWithCommas((parseFloat(dinero).toFixed(2)));
         dinero_final = metodosUtiles.numberWithCommas((parseFloat(dinero_final).toFixed(2)));
         dinero_descontado = metodosUtiles.numberWithCommas((parseFloat(dinero_descontado).toFixed(2)));
-        return "Dinero original: " + dinero + "\nDinero descontado: " + dinero_descontado + " (" + parseFloat(100 - porcentaje_final).toFixed(2) + "%)\nDinero final: " + dinero_final + " (" + parseFloat(porcentaje_final).toFixed(2) + "%)"
+        return message.channel.send("Dinero original: " + dinero + "\nDinero descontado: " + dinero_descontado + " (" + parseFloat(100 - porcentaje_final).toFixed(2) + "%)\nDinero final: " + dinero_final + " (" + parseFloat(porcentaje_final).toFixed(2) + "%)")
     }
 }

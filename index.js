@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 require('dotenv').config();
-
+const mongoose = require("mongoose");
 
 const fs = require('fs');
 
@@ -17,6 +17,16 @@ for (const file of commandFiles) {
     const command = require(`./comandos/${file}`);
     client.commands.set(command.name,command);
 }
+
+mongoose.connect(process.env.MONGODB_SRV,{
+    useNewUrlParser:true,
+    useUnifiedTopology:true,
+    useFindAndModify:true
+}).then(()=>{
+    console.log("Conectado a la base de datos");
+}).catch((err)=>{
+    console.log(err);
+});
 client.login(process.env.DISCORD_TOKEN);
 global.horasDiferencia = -1;
 

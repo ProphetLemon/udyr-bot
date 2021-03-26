@@ -1,7 +1,7 @@
 module.exports = {
     name: 'limpiar',
     description: 'Limpia el focus a alguien',
-    execute(client, message, args, cmd) {
+    execute(message,args,cmd,client,Discord,profileData) {
         if (timeOutFocus != undefined) {
             clearTimeout(timeOutFocus);
             timeOutFocus = undefined;

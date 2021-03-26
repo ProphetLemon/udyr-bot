@@ -2,7 +2,7 @@ module.exports = {
     name: 'estado',
     aliases: [],
     description: 'Funcion para cambiar el estado del bot',
-    execute(client, message, args, cmd) {
+    execute(message,args,cmd,client,Discord,profileData) {
         if (message.content.split("\"").length != 3) {
             metodosUtiles.insultar(message);
             return;

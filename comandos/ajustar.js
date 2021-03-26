@@ -2,7 +2,7 @@ module.exports = {
     name: 'ajustar',
     aliases: [],
     description: 'Funcion para ajustar las horas en el server',
-    execute(client, message, args, cmd) {
+    execute(message,args,cmd,client,Discord,profileData) {
     let hora = message.content.split(/ +/)[2];
     if (!metodosUtiles.isValidNumber(hora)) {
         metodosUtiles.insultar(message);

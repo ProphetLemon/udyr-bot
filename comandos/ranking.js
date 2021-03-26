@@ -2,7 +2,7 @@ global.personas = [];
 module.exports = {
   //  name: 'ranking',
     description: 'Funcion ver el raking de puntos',
-    execute(client, message, args, cmd) {
+    execute(message,args,cmd,client,Discord,profileData) {
         personas.sort(function (a, b) {
             return b.puntos - a.puntos;
         });

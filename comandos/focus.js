@@ -4,7 +4,7 @@ var messageCopy;
 module.exports = {
     name: 'focus',
     description: 'Funcion para retar a alguien',
-    execute(client, message, args, cmd) {
+    execute(message,args,cmd,client,Discord,profileData) {
         if (focusID != "") {
             message.reply("ya estoy insultando, d\u00E9jame tranquilo");
             return;

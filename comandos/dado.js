@@ -2,9 +2,9 @@ module.exports = {
     name: 'dado',
     aliases: [],
     description: 'Funcion que tira uno o varios dados de 6 o varias caras',
-    execute(client, message, args, cmd) {
-        var numero = info[0];
-        var tiradas = info[1];
+    execute(message,args,cmd,client,Discord,profileData) {
+        var numero = args[0];
+        var tiradas = args[1];
         if (numero == undefined) {
             numero = 6;
         }

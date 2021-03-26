@@ -11,7 +11,7 @@ module.exports = {
      * @param {Message} message
      * @param {string[]} args
      */
-    execute(client, message, args,cmd,Discord) {       
+    execute(message,args,cmd,client,Discord,profileData) {       
         const newEmbed = new Discord.MessageEmbed()
         .setColor("#B17428")
         .setTitle("Comandos")
