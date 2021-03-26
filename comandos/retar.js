@@ -107,7 +107,6 @@ module.exports = {
 }
 
 
-
 async function coliseo(gladiador1, gladiador2, message) {
     if (adminActual.nombre == undefined) {
         var adminBBDD = await adminModel.find();
