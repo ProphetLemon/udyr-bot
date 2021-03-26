@@ -169,13 +169,8 @@ function combate(gladiador1, gladiador2, message) {
     var esquive = Math.floor(Math.random() * 7) + 1;
     var parry = Math.floor(Math.random() * 4) + 1;
     var eventoImprobable = Math.floor(Math.random() * 100);
-    var martilloAdmin = gladiador1.nombre == adminActual.nombre ? Math.floor(Math.random() * 10) : undefined;
     if (eventoImprobable != 23) {
-        if (martilloAdmin == 1) {
-            let hostia = Math.floor((90 * gladiador2.vida / 100));
-            logCombateText += `<:martilloadmin:823257114239303691>${gladiador1.nombre} saca el 'Martillo de Admin' y le hace ${hostia} puntos de da\u00F1o.<:martilloadmin:823257114239303691>`;
-            gladiador2.vida -= hostia;
-        } else if (parry == 1) {
+       if (parry == 1) {
             var stun = Math.floor(Math.random() * 5);
             if (stun <= 1) {
                 if (critico == 1) {
