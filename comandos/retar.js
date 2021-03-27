@@ -385,7 +385,6 @@ function combate(gladiador1, gladiador2, message) {
                  var prueba = await adminModel.findOneAndRemove({
                     userID:oldAdminModelID
                 })
-                prueba.save();
             } else if (miembroGanador.roles.cache.get(role.id)) {
                 var dateNow = new Date();
                 dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
