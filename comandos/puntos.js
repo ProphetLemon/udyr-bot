@@ -6,19 +6,22 @@ module.exports = {
     async execute(message, args, cmd, client, Discord, profileData) {    
         let hoy = new Date();
         hoy.setHours(hoy.getHours()-horasDiferencia);
-        if (profileData.dailyGift.getDate()==hoy.getDate()){
+        if (profileData.dailyGift.getDate() == hoy.getDate()) {
             const newEmbed = new Discord.MessageEmbed()
-            .setColor("#B17428")
-            .setAuthor(`Udyr coins de ${message.member.displayName}`,message.author.avatarURL())
-            .setDescription(`**${profileData.udyrcoins}** <:udyrcoin:825031865395445760>`)
-            message.channel.send(newEmbed); 
-        }   else{
+                .setColor("#B17428")
+                .setAuthor(`Udyr coins de ${message.member.displayName}`, message.author.avatarURL())
+                .setDescription(`**${profileData.udyrcoins}** <:udyrcoin:825031865395445760>`)
+            message.channel.send(newEmbed).then(msg => {
+                msg.delete({ timeout: 3000 });
+                message.delete({ timeout: 3000 });
+            });
+        } else {
             const randomNumber = Math.floor(Math.random() * 31) + 20;
-                await profileModel.findOneAndUpdate(
-                    {
-                        userID: message.author.id
-                    },
-                    {
+            await profileModel.findOneAndUpdate(
+                {
+                    userID: message.author.id
+                },
+                {
                         $inc: {
                             udyrcoins: randomNumber
                         },
@@ -32,8 +35,9 @@ module.exports = {
             const newEmbed = new Discord.MessageEmbed()
             .setColor("#B17428")
             .setAuthor(`Udyr coins de ${message.member.displayName}`,message.author.avatarURL())
-            .setDescription(`**${targetData.udyrcoins}** <:udyrcoin:825031865395445760>`)
-            message.channel.send(newEmbed); 
+            .setDescription(`**${targetData.udyrcoins}** <:udyrcoin:825031865395445760>`)           
+            message.channel.send(newEmbed).then(msg =>{msg.delete({timeout:3000})}); 
+            message.delete();
         }
         
     }

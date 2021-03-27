@@ -31,7 +31,7 @@ module.exports = {
                 { name: 'udyr focus', value: 'Hace focus a alguien y el bot no para de insultarle cuando habla' },
                 { name: `udyr puntos`, value: `Canjea los puntos diarios y/o muestra los puntos que tienes` },
                 { name: `udyr regalar _persona_ _cantidad_`, value: `Regalas puntos tuyos a otra personas` },
-                { name: 'udyr limpiar', value: 'Quita el focus' },
+                { name: 'udyr limpiar _numero-de-mensajes_', value: 'Quita el focus o si metes un numero borrar esa cantidad de mensajes en el canal' },
                 { name: 'udyr comandos', value: 'Te manda un mensaje con todos los comandos' },
                 { name: 'udyr pelea _"persona-1"_ _"persona-2"_', value: 'Simula una pelea entre dos personas' },
                 { name: 'udyr retar _persona_', value: 'Retas a una persona' },
