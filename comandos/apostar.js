@@ -106,7 +106,7 @@ module.exports = {
                     let puntos = Math.floor(apuesta_actual.apostadores[i].puntos * ROI);
                     metodosUtiles.cambiar_puntos(apuesta_actual.apostadores[i].userID, ("+") + (puntos));
                     const targetData = await profileModel.findOne({ userID: apuesta_actual.apostadores[i].userID });
-                    message.channel.send(message.guild.members.cache.get(apuesta_actual.apostadores[i].userID).displayName + " ha ganado " + puntos + " udyr coins (" + targetData.udyrcoins + " en total)");
+                    message.channel.send(message.guild.members.cache.get(apuesta_actual.apostadores[i].userID).displayName + " ha ganado " + puntos + " <:udyrcoin:825031865395445760> (" + targetData.udyrcoins + " en total)");
                 }
             }
             apuesta_actual = new apuesta(undefined, undefined, undefined);
