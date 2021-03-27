@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 require('dotenv').config();
 const mongoose = require("mongoose");
-
+const profileModel = require('./models/profileSchema');
 const fs = require('fs');
 
 client.commands = new Discord.Collection();
@@ -110,5 +110,28 @@ global.metodosUtiles ={
 
     insultar : function (message) {
         message.reply("maric\u00F3n");
-    }   
+    } ,  
+    cambiar_puntos: async function (userID, puntos) {
+        let signo = puntos.charAt(0);
+        let numero = Number(puntos.slice(1, puntos.length));
+        if (signo == '+') {
+            await profileModel.findOneAndUpdate({
+                userID: userID
+            },
+                {
+                    $inc: {
+                        udyrcoins: numero
+                    }
+                })
+        } else {
+            await profileModel.findOneAndUpdate({
+                userID: userID
+            },
+                {
+                    $inc: {
+                        udyrcoins: -numero
+                    }
+                })
+        }
+    }
 }

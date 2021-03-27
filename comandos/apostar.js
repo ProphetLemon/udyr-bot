@@ -72,15 +72,15 @@ module.exports = {
                         return;
                     } else {
                         apuesta_actual.apostadores[i].puntos += puntos;
-                        cambiar_puntos(message.author.id, String("-" + puntos));
-                        message.reply("Tu apuesta es ahora de " + apuesta_actual.apostadores[i].puntos + " udyr coins");
+                        metodosUtiles.cambiar_puntos(message.author.id, String("-" + puntos));
+                        message.reply("Tu apuesta es ahora de " + apuesta_actual.apostadores[i].puntos + " <:udyrcoin:825031865395445760>");
                     }
                 }
             }
             if (!existe) {
-                cambiar_puntos(nombre, "-" + puntos);
+                metodosUtiles.cambiar_puntos(nombre, "-" + puntos);
                 apuesta_actual.apostadores.push(new apostador(nombre, puntos, bando));
-                message.reply("Has apostado por '" + bando + "' con " + puntos + " udyr coins")
+                message.reply("Has apostado por '" + bando + "' con " + puntos + " <:udyrcoin:825031865395445760>")
             }
 
         } else if (cmd = "cerrar") {
@@ -104,7 +104,7 @@ module.exports = {
             for (let i = 0; i < apuesta_actual.apostadores.length; i++) {
                 if (apuesta_actual.apostadores[i].bando == bando_ganador) {
                     let puntos = Math.floor(apuesta_actual.apostadores[i].puntos * ROI);
-                    cambiar_puntos(apuesta_actual.apostadores[i].userID, ("+") + (puntos));
+                    metodosUtiles.cambiar_puntos(apuesta_actual.apostadores[i].userID, ("+") + (puntos));
                     const targetData = await profileModel.findOne({ userID: apuesta_actual.apostadores[i].userID });
                     message.channel.send(message.guild.members.cache.get(apuesta_actual.apostadores[i].userID).displayName + " ha ganado " + puntos + " udyr coins (" + targetData.udyrcoins + " en total)");
                 }
@@ -115,26 +115,3 @@ module.exports = {
     }
 }
 
-async function cambiar_puntos(userID, puntos) {
-    let signo = puntos.charAt(0);
-    let numero = Number(puntos.slice(1, puntos.length));
-    if (signo == '+') {
-        await profileModel.findOneAndUpdate({
-            userID: userID
-        },
-            {
-                $inc: {
-                    udyrcoins: numero
-                }
-            })
-    } else {
-        await profileModel.findOneAndUpdate({
-            userID: userID
-        },
-            {
-                $inc: {
-                    udyrcoins: -numero
-                }
-            })
-    }
-}

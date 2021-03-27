@@ -1,6 +1,7 @@
 const { Message } = require('discord.js');
 const fs = require('fs');
 const adminModel = require("../models/adminSchema");
+const profileModel = require('../models/profileSchema');
 class gladiador {
     /**
      * 
@@ -36,6 +37,7 @@ var parryDmg = baseDmg / 2;
 var logCombate = [];
 var turno = 2;
 var eventosRandom = ["MATRIX", "UDYR", "AMOR"];
+var puntos_peaje = 100;
 module.exports = {
     name: 'retar',
     aliases: ['pelea', 'coliseo'],
@@ -43,6 +45,13 @@ module.exports = {
     async execute(message, args, cmd, client, Discord, profileData) {
         if (logCombate.length > 0) {
             return;
+        }
+        if (adminActual.nombre == undefined) {
+            var adminBBDD = await adminModel.find();
+            var adminModelo = adminBBDD[0];
+            var memberManager = await message.guild.members.fetch();
+            var memberAdmin = memberManager.find(member => member.id == adminModelo.userID);
+            adminActual = new admin(memberAdmin.displayName, adminModelo.endDate);
         }
         var personaje2 = "";
         var personaje1 = "";
@@ -70,13 +79,13 @@ module.exports = {
             }
             gladiador1 = new gladiador(nombre1, 100);
             gladiador2 = new gladiador(nombre2, 100);
-        } else if (cmd == 'retar') {
+        } else if (cmd == 'retar') {            
             personaje1 = message.guild.members.cache.get(message.author.id).displayName;
-            var idpj2 = message.content.split(" ")[2];
+            var idpj2 = args[0];            
             if (idpj2 == undefined) {
                 message.reply("eres tan maric\u00F3n que te heriste a ti mismo");
                 return;
-            }
+            }           
             personaje2 = "";
             if (metodosUtiles.isMention(idpj2)) {
                 personaje2 = message.guild.members.cache.get(metodosUtiles.returnIdFromMention(idpj2)).displayName;
@@ -86,9 +95,12 @@ module.exports = {
             } else {
                 message.reply("eres tan maric\u00F3n que te heriste a ti mismo");
                 return;
-            }
+            }            
             if (personaje1 == adminActual.nombre) {
                 jugarseElTitulo = true;
+            }else if (personaje2 == adminActual.nombre){
+                if (profileData.udyrcoins<puntos_peaje)return message.reply("no tienes puntos ni para comprar pan gilipollas");
+                message.channel.send(`${message.member.displayName} se esta jugando ${puntos_peaje} <:udyrcoin:825031865395445760>!`);
             }
             gladiador1 = new gladiador(personaje1, 100);
             gladiador2 = new gladiador(personaje2, 100);
@@ -107,14 +119,7 @@ module.exports = {
 }
 
 
-async function coliseo(gladiador1, gladiador2, message) {
-    if (adminActual.nombre == undefined) {
-        var adminBBDD = await adminModel.find();
-        var adminModelo = adminBBDD[0];
-        var memberManager = await message.guild.members.fetch();
-        var memberAdmin = memberManager.find(member => member.id == adminModelo.userID);
-        adminActual = new admin(memberAdmin.displayName, adminModelo.endDate);
-    }
+async function coliseo(gladiador1, gladiador2, message) {    
     if ((banquillo.includes(gladiador1.nombre) || banquillo.includes(gladiador2.nombre)) && (gladiador1.nombre == adminActual.nombre || gladiador2.nombre == adminActual.nombre) && !jugarseElTitulo) {
         message.channel.send(banquillo.includes(gladiador1.nombre) ? (gladiador1.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun") : (gladiador2.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun"));
         return;
@@ -164,9 +169,9 @@ async function coliseo(gladiador1, gladiador2, message) {
  */
 function combate(gladiador1, gladiador2, message) {
     var logCombateText = "";
-    var critico = Math.floor(Math.random() * 7) + 1;
-    var esquive = Math.floor(Math.random() * 7) + 1;
-    var parry = Math.floor(Math.random() * 4) + 1;
+    var critico = gladiador1.nombre==adminActual.nombre ? Math.floor(Math.random() * 5) + 1 : Math.floor(Math.random() * 7) + 1;
+    var esquive = gladiador1.nombre==adminActual.nombre ? Math.floor(Math.random() * 5) + 1 : Math.floor(Math.random() * 7) + 1;
+    var parry = gladiador1.nombre==adminActual.nombre ? Math.floor(Math.random() * 2) + 1 : Math.floor(Math.random() * 4) + 1;
     var eventoImprobable = Math.floor(Math.random() * 100);
     if (eventoImprobable != 23) {
         if (parry == 1) {
@@ -325,7 +330,6 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                     var prueba = await adminModel.findOneAndRemove({
                         userID: oldAdminModel.userID
                     })
-                    prueba.save();
                 } else {
                     soledad.roles.add(roleAdmin);
                     message.channel.send("<:1990_praisethesun:602528888400379935><@!" + soledad.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>.");
@@ -343,7 +347,6 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                     var prueba = await adminModel.findOneAndRemove({
                         userID: oldAdminModel.userID
                     })
-                    prueba.save();
                 }
             }
             maricon1.roles.remove(roleAdmin.id);
@@ -399,6 +402,9 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                         }
                     }
                 }, 3600000);
+                metodosUtiles.cambiarPuntos(miembroPerdedor.id,`-${puntos_peaje}`);
+                metodosUtiles.cambiarPuntos(miembroGanador.id,`+${puntos_peaje}`);
+                message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);
             }
         }
         sucedioEventoAmor = false;
