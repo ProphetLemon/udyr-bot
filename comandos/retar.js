@@ -102,7 +102,7 @@ module.exports = {
                 hay_apuesta = false;
             } else if (personaje2 == adminActual.nombre && !message.guild.members.cache.get(metodosUtiles.returnIdFromMention(idpj2)).roles.cache.get("598901700761354270")) {
                 if (profileData.udyrcoins < puntos_peaje) return message.reply("no tienes puntos ni para comprar pan gilipollas");
-                message.channel.send(`${message.member.displayName} se esta jugando ${puntos_peaje} <:udyrcoin:825031865395445760>!`);
+                message.channel.send(`${message.member.displayName} se esta jugando ${puntos_peaje} <:udyrcoin:825031865395445760>!`).then(msg => {msg.delete({timeout:3000})});
                 hay_apuesta = true;
             }
             gladiador1 = new gladiador(personaje1, 100);
