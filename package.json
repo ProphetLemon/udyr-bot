@@ -11,6 +11,7 @@
   "dependencies": {
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
-    "mongoose": "^5.12.2"
+    "mongoose": "^5.12.2",
+    "reconlx": "^1.2.41"
   }
 }
