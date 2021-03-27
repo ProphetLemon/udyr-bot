@@ -406,8 +406,8 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                     }
                 }, 3600000);
                 if (hay_apuesta){
-                    metodosUtiles.cambiarPuntos(miembroPerdedor.id,`-${puntos_peaje}`);
-                    metodosUtiles.cambiarPuntos(miembroGanador.id,`+${puntos_peaje}`);
+                    metodosUtiles.cambiar_puntos(miembroPerdedor.id,`-${puntos_peaje}`);
+                    metodosUtiles.cambiar_puntos(miembroGanador.id,`+${puntos_peaje}`);
                 }               
                 message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);
             }
