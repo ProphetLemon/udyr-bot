@@ -28,6 +28,8 @@ module.exports = {
             }
         }
         newEmbed.setDescription(mensaje)
-        message.channel.send(newEmbed);
+        message.channel.send(newEmbed).then(msg => {
+            message.delete();
+        });
     }
 }
