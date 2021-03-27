@@ -38,6 +38,7 @@ var logCombate = [];
 var turno = 2;
 var eventosRandom = ["MATRIX", "UDYR", "AMOR"];
 var puntos_peaje = 100;
+var hay_apuesta = false;
 module.exports = {
     name: 'retar',
     aliases: ['pelea', 'coliseo'],
@@ -98,9 +99,11 @@ module.exports = {
             }            
             if (personaje1 == adminActual.nombre) {
                 jugarseElTitulo = true;
+                hay_apuesta=false;
             }else if (personaje2 == adminActual.nombre){
                 if (profileData.udyrcoins<puntos_peaje)return message.reply("no tienes puntos ni para comprar pan gilipollas");
                 message.channel.send(`${message.member.displayName} se esta jugando ${puntos_peaje} <:udyrcoin:825031865395445760>!`);
+                hay_apuesta=true;
             }
             gladiador1 = new gladiador(personaje1, 100);
             gladiador2 = new gladiador(personaje2, 100);
@@ -402,13 +405,16 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                         }
                     }
                 }, 3600000);
-                metodosUtiles.cambiarPuntos(miembroPerdedor.id,`-${puntos_peaje}`);
-                metodosUtiles.cambiarPuntos(miembroGanador.id,`+${puntos_peaje}`);
+                if (hay_apuesta){
+                    metodosUtiles.cambiarPuntos(miembroPerdedor.id,`-${puntos_peaje}`);
+                    metodosUtiles.cambiarPuntos(miembroGanador.id,`+${puntos_peaje}`);
+                }               
                 message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);
             }
         }
         sucedioEventoAmor = false;
         sucedioEventoUdyr = false;
+        hay_apuesta=false;
         perdedor = "";
         ganador = "";
         return;
