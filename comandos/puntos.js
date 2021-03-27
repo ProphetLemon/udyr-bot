@@ -13,7 +13,7 @@ module.exports = {
                 .setDescription(`**${profileData.udyrcoins}** <:udyrcoin:825031865395445760>`)
             message.channel.send(newEmbed).then(msg => {
                 msg.delete({ timeout: 3000 });
-                message.delete({ timeout: 3000 });
+                message.delete();
             });
         } else {
             const randomNumber = Math.floor(Math.random() * 31) + 20;
@@ -40,7 +40,7 @@ module.exports = {
                 .setDescription(`**${targetData.udyrcoins}** <:udyrcoin:825031865395445760>`)
             message.channel.send(newEmbed).then(msg => {
                 msg.delete({ timeout: 3000 });
-                message.delete({ timeout: 3000 });
+                message.delete();
             });
         }
 

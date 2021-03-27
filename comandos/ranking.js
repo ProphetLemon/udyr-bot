@@ -22,7 +22,7 @@ module.exports = {
             }else if (i==0){
                 mensaje += `🥇 ${guildMembers.find(member=>competidor.userID == member.id).displayName} - ${competidor.udyrcoins} <:udyrcoin:825031865395445760>\n`;
             }else if (i == personas.length - 1) {
-                mensaje += `${i + 1}.- ${guildMembers.find(member=>competidor.userID == member.id).displayName} - ${competidor.udyrcoins} <:udyrcoin:825031865395445760>`;
+                mensaje += `💩 ${guildMembers.find(member=>competidor.userID == member.id).displayName} - ${competidor.udyrcoins} <:udyrcoin:825031865395445760>`;
             }else {
                 mensaje += `${i + 1}.- ${guildMembers.find(member=>competidor.userID == member.id).displayName} - ${competidor.udyrcoins} <:udyrcoin:825031865395445760>\n`;
             }
