@@ -171,7 +171,7 @@ function combate(gladiador1, gladiador2, message) {
     var logCombateText = "";
     var critico = gladiador1.nombre==adminActual.nombre ? Math.floor(Math.random() * 5) + 1 : Math.floor(Math.random() * 7) + 1;
     var esquive = gladiador1.nombre==adminActual.nombre ? Math.floor(Math.random() * 5) + 1 : Math.floor(Math.random() * 7) + 1;
-    var parry = gladiador1.nombre==adminActual.nombre ? Math.floor(Math.random() * 2) + 1 : Math.floor(Math.random() * 4) + 1;
+    var parry = gladiador1.nombre==adminActual.nombre ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 4) + 1;
     var eventoImprobable = Math.floor(Math.random() * 100);
     if (eventoImprobable != 23) {
         if (parry == 1) {
