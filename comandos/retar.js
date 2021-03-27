@@ -393,7 +393,8 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 })
                 if (hay_apuesta) {
                     metodosUtiles.cambiar_puntos(miembroPerdedor.id, `-${puntos_peaje}`);
-                    metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);
+                    metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);                    
+                    message.channel.send(`${miembroGanador.displayName} ha ganado ${puntos_peaje} <:udyrcoin:825031865395445760>`);
                     message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);
                 }
             } else if (miembroGanador.roles.cache.get(role.id)) {
@@ -413,6 +414,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 if (hay_apuesta) {
                     metodosUtiles.cambiar_puntos(miembroPerdedor.id, `-${puntos_peaje}`);
                     metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);
+                    message.channel.send(`${miembroGanador.displayName} ha ganado ${puntos_peaje} <:udyrcoin:825031865395445760>`);
                     message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);
                 }
             }
