@@ -10,5 +10,6 @@ module.exports = {
             player_two:member,
             message:message
         })
+        message.delete();
     }
 }
