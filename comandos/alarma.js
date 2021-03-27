@@ -34,8 +34,9 @@ module.exports = {
         }
         let diff = dtAlarm - dtNow;
         setTimeout(function () { message.reply("Oye, te recuerdo esto : \"" + motivo + "\""); }, diff);
-        message.reply("Se ha creado la alarma correctamente!");
-        message.delete();
-        setTimeout(function () { message.channel.bulkDelete(1) }, 3000)
+        message.reply("Se ha creado la alarma correctamente!").then(msg=>{
+            msg.delete({timeout:3000});
+            message.delete();
+        });
     }
 }
