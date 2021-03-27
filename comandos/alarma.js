@@ -3,8 +3,8 @@ module.exports = {
     aliases: [],
     description: 'Funcion para crear apuestas o apostar en ellas',
     execute(message,args,cmd,client,Discord,profileData) {
-        let dia = args[2];
-        let hora = args[3];
+        let dia = args[0];
+        let hora = args[1];
         let motivo = message.content.split("\"")[1];
         let dtAlarm = new Date();
         var regexDia = /\d{1,2}\/\d{2}/;
