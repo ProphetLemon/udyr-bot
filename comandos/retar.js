@@ -102,7 +102,7 @@ module.exports = {
                 hay_apuesta = false;
             } else if (personaje2 == adminActual.nombre && !message.guild.members.cache.get(metodosUtiles.returnIdFromMention(idpj2)).roles.cache.get("598901700761354270")) {
                 if (profileData.udyrcoins < puntos_peaje) return message.reply("no tienes puntos ni para comprar pan gilipollas");
-                message.channel.send(`${message.member.displayName} se esta jugando ${puntos_peaje} <:udyrcoin:825031865395445760>!`).then(msg => {msg.delete({timeout:3000})});
+                message.channel.send(`${message.member.displayName} se esta jugando ${puntos_peaje} <:udyrcoin:825031865395445760>!`).then(msg => { msg.delete({ timeout: 3000 }) });
                 hay_apuesta = true;
             }
             gladiador1 = new gladiador(personaje1, 100);
@@ -177,7 +177,7 @@ function combate(gladiador1, gladiador2, message) {
     var parry = gladiador1.nombre == adminActual.nombre ? Math.floor(Math.random() * 10) + 1 : Math.floor(Math.random() * 4) + 1;
     var eventoImprobable = Math.floor(Math.random() * 100);
     if (eventoImprobable != 23) {
-        if (gladiador1.nombre == adminActual.nombre ? parry == 1 : parry<=3) {
+        if (gladiador1.nombre == adminActual.nombre ? parry <= 3 : parry == 1) {
             var stun = Math.floor(Math.random() * 5);
             if (stun <= 1) {
                 if (critico == 1) {
