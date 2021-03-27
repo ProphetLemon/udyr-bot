@@ -42,7 +42,7 @@ module.exports = {
             })
             var guildMembers = await message.guild.members.fetch();
             let member = guildMembers.find(member => member.id == target.id);
-            return message.channel.send(`${message.author.username} ha regalado ${amount} udyr coins a ${member.displayName}.`);
+            return message.channel.send(`${message.author.username} ha regalado ${amount} <:udyrcoin:825031865395445760> a ${member.displayName}.`);
         }catch(err){
             console.log(err);
         }
