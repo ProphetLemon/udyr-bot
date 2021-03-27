@@ -1,5 +1,5 @@
 global.focusID = "";
-global.timeOutFocus = 0;
+global.timeOutFocus = undefined;
 var messageCopy;
 module.exports = {
     name: 'focus',

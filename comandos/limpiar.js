@@ -16,7 +16,7 @@ module.exports = {
                 clearTimeout(timeOutFocus);
                 timeOutFocus = undefined;
                 focusID = "";
-                message.channel.send("Se ha quitado el focus correctamente!");
+                message.channel.send("Se ha quitado el focus correctamente!").then(msg => { msg.delete({ timeout: 2000 }) });
             }
             else {
                 metodosUtiles.insultar(message);
