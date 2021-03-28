@@ -172,12 +172,12 @@ async function coliseo(gladiador1, gladiador2, message) {
  */
 function combate(gladiador1, gladiador2, message) {
     var logCombateText = "";
-    var critico = gladiador1.nombre == adminActual.nombre ? Math.floor(Math.random() * 14) + 1 : Math.floor(Math.random() * 7) + 1;
-    var esquive = gladiador1.nombre == adminActual.nombre ? Math.floor(Math.random() * 14) + 1 : Math.floor(Math.random() * 7) + 1;
-    var parry = gladiador1.nombre == adminActual.nombre ? Math.floor(Math.random() * 8) + 1 : Math.floor(Math.random() * 4) + 1;
+    var critico = gladiador1.nombre == adminActual.nombre ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 7) + 1;
+    var esquive = gladiador1.nombre == adminActual.nombre ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 7) + 1;
+    var parry = gladiador1.nombre == adminActual.nombre ? Math.floor(Math.random() * 2) + 1 : Math.floor(Math.random() * 4) + 1;
     var eventoImprobable = Math.floor(Math.random() * 100);
     if (eventoImprobable != 23) {
-        if (gladiador1.nombre == adminActual.nombre ? parry<=3 : parry == 1) {
+        if (parry == 1) {
             var stun = Math.floor(Math.random() * 5);
             if (stun <= 1) {
                 if (critico == 1) {
@@ -200,7 +200,7 @@ function combate(gladiador1, gladiador2, message) {
                 }
                 gladiador1.vida -= parryDmg;
             }
-        } else if (gladiador1.nombre == adminActual.nombre ? esquive<=3 :esquive == 1) {
+        } else if (esquive == 1) {
             if (critico == 1) {
                 logCombateText += `🛡️ ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra esquivar el ataque **cr\u00EDtico**.🛡️\n`;
             } else {
@@ -210,7 +210,7 @@ function combate(gladiador1, gladiador2, message) {
                 logCombateText += `❤️ ${gladiador2.nombre} se toma una poti a su salud y recupera ${Math.floor((100 - gladiador2.vida) * 50 / 100)} puntos de salud.❤️\n`;
                 gladiador2.vida += Math.floor((100 - gladiador2.vida) * 50 / 100);
             }
-        } else if (gladiador1.nombre == adminActual.nombre ? critico<=3 : critico == 1) {
+        } else if (critico == 1) {
             var hostiaCritico = Math.floor(Math.random() * 21) + 60;
             logCombateText += `💥 ${gladiador1.nombre} golpea y le causa un da\u00F1o tremendo a ${gladiador2.nombre} infligiendole ${hostiaCritico} puntos de da\u00F1o.💥\n`;
             logCombateText += gladiador1.nombre + ": <:maestria7:761734001190109194>\n";
@@ -395,7 +395,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 })
                 if (hay_apuesta) {
                     metodosUtiles.cambiar_puntos(miembroPerdedor.id, `-${puntos_peaje}`);
-                    metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);                    
+                    metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);
                     message.channel.send(`${miembroGanador.displayName} ha ganado ${puntos_peaje} <:udyrcoin:825031865395445760>`);
                     message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);
                 }
