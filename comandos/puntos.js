@@ -20,8 +20,8 @@ module.exports = {
             }
             const newEmbed = new Discord.MessageEmbed()
                 .setColor("#B17428")
-                .setAuthor(`Udyr coins de ${message.member.displayName}`, message.author.avatarURL())
-                .setDescription(`**${profileData.udyrcoins}** <:udyrcoin:825031865395445760>\n**Ranking: ${posicion}**`)
+                .setAuthor(`Perfil de ${message.member.displayName}`, message.author.avatarURL())
+                .setDescription(`**Udyr coins: ${profileData.udyrcoins}** <:udyrcoin:825031865395445760>\n**Ranking: ${posicion}**`)
             message.channel.send(newEmbed).then(msg => {
                 msg.delete({ timeout: 10000 });
                 message.delete();
@@ -59,8 +59,8 @@ module.exports = {
             }
             const newEmbed = new Discord.MessageEmbed()
                 .setColor("#B17428")
-                .setAuthor(`Udyr coins de ${message.member.displayName}`, message.author.avatarURL())
-                .setDescription(`**${targetData.udyrcoins}** <:udyrcoin:825031865395445760>\n**Ranking: ${posicion}**`)
+                .setAuthor(`Perfil de ${message.member.displayName}`, message.author.avatarURL())
+                .setDescription(`**Udyr coins: ${targetData.udyrcoins}** <:udyrcoin:825031865395445760>\n**Ranking: ${posicion}**`)
             message.channel.send(newEmbed).then(msg => {
                 msg.delete({ timeout: 10000 });
                 message.delete();
