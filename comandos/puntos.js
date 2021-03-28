@@ -7,10 +7,21 @@ module.exports = {
         let hoy = new Date();
         hoy.setHours(hoy.getHours() - horasDiferencia);
         if (profileData.dailyGift.getDate() == hoy.getDate()) {
+            var personas = await profileModel.find();
+            personas.sort(function (a, b) {
+                return b.udyrcoins - a.udyrcoins;
+            });
+            var posicion = 0;
+            for (let i = 0; i < personas.length; i++) {
+                if (personas[i].userID == profileData.userID) {
+                    posicion = i + 1;
+                    break;
+                }
+            }
             const newEmbed = new Discord.MessageEmbed()
                 .setColor("#B17428")
                 .setAuthor(`Udyr coins de ${message.member.displayName}`, message.author.avatarURL())
-                .setDescription(`**${profileData.udyrcoins}** <:udyrcoin:825031865395445760>`)
+                .setDescription(`**${profileData.udyrcoins}** <:udyrcoin:825031865395445760>\n**Ranking: ${posicion}**`)
             message.channel.send(newEmbed).then(msg => {
                 msg.delete({ timeout: 10000 });
                 message.delete();
@@ -19,7 +30,7 @@ module.exports = {
             const randomNumber = Math.floor(Math.random() * 31) + 20;
             await profileModel.findOneAndUpdate(
                 {
-                    userID: message.author.id
+                    userID: profileData.userID
                 },
                 {
                     $inc: {
@@ -30,14 +41,26 @@ module.exports = {
                     }
                 }
             );
-            const targetData = await profileModel.findOne({ userID: message.author.id });
+            var targetData;
             message.channel.send(`${message.member.displayName} ha canjeado la recompensa diaria y consigui\u00F3 ${randomNumber} <:udyrcoin:825031865395445760>`).then(msg => {
                 msg.delete({ timeout: 10000 });
             });
+            var personas = await profileModel.find();
+            personas.sort(function (a, b) {
+                return b.udyrcoins - a.udyrcoins;
+            });
+            var posicion = 0;
+            for (let i = 0; i < personas.length; i++) {
+                if (personas[i].userID == profileData.userID) {
+                    targetData = personas[i];
+                    posicion = i + 1;
+                    break;
+                }
+            }
             const newEmbed = new Discord.MessageEmbed()
                 .setColor("#B17428")
                 .setAuthor(`Udyr coins de ${message.member.displayName}`, message.author.avatarURL())
-                .setDescription(`**${targetData.udyrcoins}** <:udyrcoin:825031865395445760>`)
+                .setDescription(`**${targetData.udyrcoins}** <:udyrcoin:825031865395445760>\n**Ranking: ${posicion}**`)
             message.channel.send(newEmbed).then(msg => {
                 msg.delete({ timeout: 10000 });
                 message.delete();
