@@ -281,6 +281,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
         var guildRoles = await message.guild.roles.fetch();
         turno = 2;
         if (sucedioEventoUdyr) {
+            banquillo = [];
             var udyr = guildMembers.find(member => member.id == "766271573271248926");
             let miembroPerdedor1 = guildMembers.find(member => member.displayName == perdedor[0].nombre);
             let miembroPerdedor2 = guildMembers.find(member => member.displayName == perdedor[1].nombre);
@@ -308,6 +309,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 prueba.save();
             }
         } else if (sucedioEventoAmor) {
+            banquillo = [];
             var maricon1 = guildMembers.find(member => member.displayName == gladiador1.nombre);
             var maricon2 = guildMembers.find(member => member.displayName == gladiador2.nombre);
             var udyr = guildMembers.find(member => member.id == "766271573271248926");
