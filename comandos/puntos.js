@@ -18,7 +18,24 @@ module.exports = {
                     break;
                 }
             }
-            var emoji = returnEmoji(posicion);
+            var emoji;
+            switch (posicion) {
+                case 1:
+                    emoji = "🥇";
+                    break;
+                case 2:
+                    emoji = "🥈";
+                    break;
+                case 3:
+                    emoji = "🥉";
+                    break;
+                case personas.length:
+                    emoji = "💩";
+                    break;
+                default:
+                    emoji = "";
+                    break;
+            }
             const newEmbed = new Discord.MessageEmbed()
                 .setColor("#B17428")
                 .setAuthor(`Perfil de ${message.member.displayName}`, message.author.avatarURL())
@@ -58,7 +75,24 @@ module.exports = {
                     break;
                 }
             }
-            var emoji = returnEmoji(posicion);
+            var emoji;
+            switch (posicion) {
+                case 1:
+                    emoji = "🥇";
+                    break;
+                case 2:
+                    emoji = "🥈";
+                    break;
+                case 3:
+                    emoji = "🥉";
+                    break;
+                case personas.length:
+                    emoji = "💩";
+                    break;
+                default:
+                    emoji = "";
+                    break;
+            }
             const newEmbed = new Discord.MessageEmbed()
                 .setColor("#B17428")
                 .setAuthor(`Perfil de ${message.member.displayName}`, message.author.avatarURL())
@@ -69,19 +103,5 @@ module.exports = {
             });
         }
 
-    }
-}
-function returnEmoji(posicion) {
-    switch (posicion) {
-        case 1:
-            return "🥇";
-        case 2:
-            return "🥈";
-        case 3:
-            return "🥉";
-        case personas.length:
-            return "💩";
-        default:
-            return "";
     }
 }
