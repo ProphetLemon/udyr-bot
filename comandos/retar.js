@@ -210,7 +210,7 @@ function combate(gladiador1, gladiador2, message) {
                 logCombateText += `❤️ ${gladiador2.nombre} se toma una poti a su salud y recupera ${Math.floor((100 - gladiador2.vida) * 50 / 100)} puntos de salud.❤️\n`;
                 gladiador2.vida += Math.floor((100 - gladiador2.vida) * 50 / 100);
             }
-        } else if (gladiador1.nombre == adminActual.nombre ? critico == 1 : critico <= 3) {
+        } else if (gladiador1.nombre == adminActual.nombre ? critico <= 3 : critico == 1 ) {
             var hostiaCritico = Math.floor(Math.random() * 21) + 60;
             logCombateText += `💥 ${gladiador1.nombre} golpea y le causa un da\u00F1o tremendo a ${gladiador2.nombre} infligiendole ${hostiaCritico} puntos de da\u00F1o.💥\n`;
             logCombateText += gladiador1.nombre + ": <:maestria7:761734001190109194>\n";
