@@ -7,10 +7,8 @@ module.exports = {
         if (!message.member.roles.cache.get("598897304812126208")) return message.reply("para usar este comando debes ser admin, maric\u00F3n");
         var targetData = message.mentions.users.first();
         if (!targetData) return message.reply("mucho admin pero no sabes ni mencionar a alguien, maric\u00F3n");
-        var existe = await profileModel.findOne({
-            userID: targetData.id
-        });
-        if (!existe) return message.reply("mucho admin pero no sabes ni quien esta usando el bot, maric\u00F3n");
+        var existe = await profileModel.findOne({ userID: targetData.id });
+        if (!existe) return message.reply("como esperas que borre a alguien que ni siquiera habla en el server, maric\u00F3n");
         await profileModel.findOneAndRemove({
             userID: targetData.id
         });
