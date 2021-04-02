@@ -5,7 +5,7 @@ module.exports = {
     description: 'Funcion para regalar dinero a alguien',
     async execute(message, args, cmd, client, Discord, profileData) {
         if (args.length != 2) return metodosUtiles.insultar(message);
-        const amount = args[1];
+        const amount = args[0];
         const target = message.mentions.users.first();
         if (!target) return message.reply("ni mencionar usuarios sabes maric\u00F3n");
         if (amount % 1 != 0 || amount <= 0) return message.reply("buen intento maric\u00F3n");
