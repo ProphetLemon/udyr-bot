@@ -1,7 +1,7 @@
 const profileModel = require('../models/profileSchema');
 module.exports = {
     name: 'regalar',
-    aliases: [],
+    aliases: ['donar'],
     description: 'Funcion para regalar dinero a alguien',
     async execute(message, args, cmd, client, Discord, profileData) {
         if (args.length != 2) return metodosUtiles.insultar(message);
