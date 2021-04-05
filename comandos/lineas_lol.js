@@ -31,15 +31,15 @@ module.exports = {
         if (linea == LINEAS[7]) {
             if (message.mentions.users.size != 4) return message.channel.send("Tienes que mencionar a 4 personas").then(msg => msg.delete({ timeout: 3000 }));
             var guildMembers = await message.guild.members.fetch();
-            var aux = message.mentions.users;
+            var aux = message.mentions.users.array();
             var parguelas = [];
-            parguelas.push(message.author);
+            aux.push(message.author);
             var mensaje = "";
-            while (aux.size > 0) {
-                let random = Math.floor(Math.random() * aux.size);
-                let pibe = aux.array()[random];
+            while (aux.length > 0) {
+                let random = Math.floor(Math.random() * aux.length);
+                let pibe = aux[random];
                 parguelas.push(pibe);
-                aux.delete(pibe.id)
+                aux.splice(random,1);
             }
             for (let i = 0; i < parguelas.length; i++) {
                 linea = LINEAS[4-(4-i)];
