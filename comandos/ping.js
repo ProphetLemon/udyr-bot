@@ -8,7 +8,7 @@ module.exports = {
      * @param {Message} message
      * @param {string[]} args
      */
-    execute(client, message, args,cmd) {       
+    execute(message, args, cmd, client, Discord, profileData) {       
         message.channel.send(`🏓 Hay una latencia de ${Date.now()-message.createdTimestamp} ms`);
     }
 }
