@@ -8,3 +8,5 @@
 !/.gitignore
 /.vs/slnx.sqlite
 /.vs/Udyr BOT/v16/.suo
+eventos/guild/message.js
+/eventos/guild/message.js

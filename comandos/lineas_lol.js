@@ -29,10 +29,13 @@ module.exports = {
         var linea = cmd;
         var campeon_linea = [];
         if (linea == LINEAS[7]) {
-            var aux = message.mentions.users.array();
+            var aux = message.mentions.users.array();           
+            if(!aux.find(parguela => parguela.id==message.author.id)){
+                aux.push(message.author);
+            };
+            if (aux.length>5)return message.reply("solo se pueden equipos de 5 maric\u00F3n");
             var lineas = LINEAS.slice(0, 5);
-            var parguelas = [];
-            aux.push(message.author);
+            var parguelas = [];           
             var log_mensaje = [];
             while (aux.length > 0) {
                 let random = Math.floor(Math.random() * aux.length);
