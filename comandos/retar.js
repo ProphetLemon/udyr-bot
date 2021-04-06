@@ -210,7 +210,7 @@ function combate(gladiador1, gladiador2, message) {
                 logCombateText += `❤️ ${gladiador2.nombre} se toma una poti a su salud y recupera ${Math.floor((100 - gladiador2.vida) * 50 / 100)} puntos de salud.❤️\n`;
                 gladiador2.vida += Math.floor((100 - gladiador2.vida) * 50 / 100);
             }
-        } else if (gladiador1.nombre == adminActual.nombre ? critico <= 23 : critico == 1 ) {
+        } else if (gladiador1.nombre == adminActual.nombre ? critico <= 23 : critico == 1) {
             var hostiaCritico = Math.floor(Math.random() * 21) + 60;
             logCombateText += `💥 ${gladiador1.nombre} golpea y le causa un da\u00F1o tremendo a ${gladiador2.nombre} infligiendole ${hostiaCritico} puntos de da\u00F1o.💥\n`;
             logCombateText += gladiador1.nombre + ": <:maestria7:761734001190109194>\n";
@@ -280,7 +280,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
         var guildMembers = await message.guild.members.fetch();
         var guildRoles = await message.guild.roles.fetch();
         turno = 2;
-        if (sucedioEventoUdyr) {
+        if (sucedioEventoUdyr == true) {
             banquillo = [];
             var udyr = guildMembers.find(member => member.id == "766271573271248926");
             let miembroPerdedor1 = guildMembers.find(member => member.displayName == perdedor[0].nombre);
@@ -308,7 +308,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 })
                 prueba.save();
             }
-        } else if (sucedioEventoAmor) {
+        } else if (sucedioEventoAmor == true) {
             banquillo = [];
             var maricon1 = guildMembers.find(member => member.displayName == gladiador1.nombre);
             var maricon2 = guildMembers.find(member => member.displayName == gladiador2.nombre);
@@ -393,7 +393,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 var prueba = await adminModel.findOneAndRemove({
                     userID: oldAdminModelID
                 })
-                if (hay_apuesta) {
+                if (hay_apuesta == true) {
                     metodosUtiles.cambiar_puntos(miembroPerdedor.id, `-${puntos_peaje}`);
                     metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);
                     message.channel.send(`${miembroGanador.displayName} ha ganado ${puntos_peaje} <:udyrcoin:825031865395445760>`);
@@ -413,7 +413,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                         }
                     }
                 }, 3600000);
-                if (hay_apuesta) {
+                if (hay_apuesta == true) {
                     metodosUtiles.cambiar_puntos(miembroPerdedor.id, `-${puntos_peaje}`);
                     metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);
                     message.channel.send(`${miembroGanador.displayName} ha ganado ${puntos_peaje} <:udyrcoin:825031865395445760>`);
