@@ -25,33 +25,41 @@ module.exports = {
      * @param {*} Discord 
      * @param {*} profileData 
      */
-    async execute(message, args, cmd, client, Discord, profileData) {
+    execute(message, args, cmd, client, Discord, profileData) {
         var linea = cmd;
         var campeon_linea = [];
         if (linea == LINEAS[7]) {
-            if (message.mentions.users.size != 4) return message.channel.send("Tienes que mencionar a 4 personas").then(msg => msg.delete({ timeout: 3000 }));
-            var guildMembers = await message.guild.members.fetch();
             var aux = message.mentions.users.array();
+            var lineas = LINEAS.slice(0, 5);
             var parguelas = [];
             aux.push(message.author);
-            var mensaje = "";
+            var log_mensaje = [];
             while (aux.length > 0) {
                 let random = Math.floor(Math.random() * aux.length);
                 let pibe = aux[random];
                 parguelas.push(pibe);
-                aux.splice(random,1);
+                aux.splice(random, 1);
             }
             for (let i = 0; i < parguelas.length; i++) {
-                linea = LINEAS[4-(4-i)];
+                let random = Math.floor(Math.random() * lineas.length);
+                linea = lineas[random];
+                lineas.splice(random, 1);
                 for (let j = 0; j < campeones.length; j++) {
                     if (campeones[j].linea.includes(linea)) {
                         campeon_linea.push(campeones[j]);
                     }
                 }
-                var random = Math.floor(Math.random() * campeon_linea.length);
-                mensaje += `<@!${parguelas[i].id}> te toca jugar ${campeon_linea[random].nombre} en ${linea}\n`;
-                campeon_linea=[];
+                random = Math.floor(Math.random() * campeon_linea.length);
+                log_mensaje.push(`<@!${parguelas[i].id}> te toca jugar ${campeon_linea[random].nombre} en ${linea}`);
+                campeon_linea = [];
             }
+            log_mensaje.sort(function (a, b) {
+               let lineaA= a.split("en ")[a.split("en ").length-1];
+               let lineaB= b.split("en ")[b.split("en ").length-1];
+               return LINEAS.indexOf(lineaA) - LINEAS.indexOf(lineaB);
+            });
+            var mensaje="";
+           log_mensaje.forEach(log => mensaje+=log+"\n");
             message.channel.send(mensaje);
         } else if (linea == LINEAS[6]) {
             var linea_random = Math.floor(Math.random() * 5);
