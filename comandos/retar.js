@@ -117,12 +117,12 @@ module.exports = {
             var gladiador2 = new gladiador(guildMembers.get(id2).displayName, 100);
 
         }
-        coliseo(gladiador1, gladiador2, message);
+        coliseo(gladiador1, gladiador2, message, client);
     }
 }
 
 
-async function coliseo(gladiador1, gladiador2, message) {
+async function coliseo(gladiador1, gladiador2, message, client) {
     if ((banquillo.includes(gladiador1.nombre) || banquillo.includes(gladiador2.nombre)) && (gladiador1.nombre == adminActual.nombre || gladiador2.nombre == adminActual.nombre) && !jugarseElTitulo) {
         message.channel.send(banquillo.includes(gladiador1.nombre) ? (gladiador1.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun") : (gladiador2.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun"));
         return;
@@ -162,7 +162,7 @@ async function coliseo(gladiador1, gladiador2, message) {
         logCombate.push(perdedor.nombre + ", maric\u00F3n");
     }
     messageCopy.channel.send(logCombate[0] + "\nTurno 1:\n" + logCombate[1]);
-    leerRondasPelea(gladiador1, gladiador2, messageCopy);
+    leerRondasPelea(gladiador1, gladiador2, messageCopy, client);
 }
 /**
  * Funcion donde discurre todo el combate
@@ -271,7 +271,7 @@ function combate(gladiador1, gladiador2, message) {
  * @param {gladiador} gladiador2
  * @param {Message} message
  */
-async function leerRondasPelea(gladiador1, gladiador2, message) {
+async function leerRondasPelea(gladiador1, gladiador2, message, client) {
     if (turno == logCombate.length - 2) {
         var final = logCombate[logCombate.length - 2] + "\n" + logCombate[logCombate.length - 1];
         message.channel.send(final);
@@ -395,9 +395,10 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                 })
                 if (hay_apuesta == true) {
                     metodosUtiles.cambiar_puntos(miembroPerdedor.id, `-${puntos_peaje}`);
-                    metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);
+                    metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);                    
                     message.channel.send(`${miembroGanador.displayName} ha ganado ${puntos_peaje} <:udyrcoin:825031865395445760>`);
-                    message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);                  
+                    message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);
+                    client.commands.get("retar").execute(message);
                 }
             } else if (miembroGanador.roles.cache.get(role.id)) {
                 var dateNow = new Date();
@@ -417,7 +418,8 @@ async function leerRondasPelea(gladiador1, gladiador2, message) {
                     metodosUtiles.cambiar_puntos(miembroPerdedor.id, `-${puntos_peaje}`);
                     metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);
                     message.channel.send(`${miembroGanador.displayName} ha ganado ${puntos_peaje} <:udyrcoin:825031865395445760>`);
-                    message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);                   
+                    message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);
+                    client.commands.get("retar").execute(message);
                 }
             }
         }
