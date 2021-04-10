@@ -179,6 +179,7 @@ async function coliseo(gladiador1, gladiador2, message, client, Discord) {
         logCombate.push(perdedor.nombre + ", maric\u00F3n");
     }
     messageCopy.channel.send(logCombate[0] + "\nTurno 1:\n" + logCombate[1]);
+    console.log("INICIO LEERRONDASPELEA");
     leerRondasPelea(gladiador1, gladiador2, messageCopy, client, Discord);
     console.log("FIN COLISEO");
 }
@@ -289,8 +290,7 @@ function combate(gladiador1, gladiador2, message) {
  * @param {gladiador} gladiador2
  * @param {Message} message
  */
-async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord) {
-    console.log("INICIO LEERRONDASPELEA");
+async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord) {   
     if (turno == logCombate.length - 2) {
         var final = logCombate[logCombate.length - 2] + "\n" + logCombate[logCombate.length - 1];
         message.channel.send(final);
