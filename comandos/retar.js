@@ -419,7 +419,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client) {
                     metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);
                     message.channel.send(`${miembroGanador.displayName} ha ganado ${puntos_peaje} <:udyrcoin:825031865395445760>`);
                     message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);
-                    client.commands.get("retar").execute(message);
+                    client.commands.get("ranking").execute(message);
                 }
             }
         }
