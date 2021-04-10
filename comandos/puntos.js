@@ -4,6 +4,7 @@ module.exports = {
     aliases: [],
     description: 'Funcion para saber los puntos que tienes',
     async execute(message, args, cmd, client, Discord, profileData) {
+        console.log("INICIO PUNTOS");
         let hoy = new Date();
         hoy.setHours(hoy.getHours() - horasDiferencia);
         if (profileData.dailyGift.getDate() == hoy.getDate()) {
@@ -102,6 +103,6 @@ module.exports = {
                 message.delete();
             });
         }
-
+        console.log("FIN PUNTOS");
     }
 }

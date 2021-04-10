@@ -3,8 +3,10 @@ module.exports = {
     aliases: [],
     description: 'Funcion para cambiar el estado del bot',
     execute(message,args,cmd,client,Discord,profileData) {
+        console.log("INICIO ESTADO");
         if (message.content.split("\"").length != 3) {
             metodosUtiles.insultar(message);
+            console.log("FIN ESTADO");
             return;
         }
         var estado_personalizado = message.content.split("\"")[1];
@@ -21,8 +23,9 @@ module.exports = {
             case "online":
                 args[0] = "online";
                 break;
-            default:
+            default:                
                 insultar(message);
+                console.log("FIN ESTADO");
                 return;
         }
         switch (args[1]) {
@@ -40,6 +43,7 @@ module.exports = {
                 break;
             default:
                 insultar(message);
+                console.log("FIN ESTADO");
                 return;
         }
         client.user.setPresence({
@@ -50,5 +54,6 @@ module.exports = {
             }
         });
         message.delete();
+        console.log("FIN ESTADO");
     }
 }

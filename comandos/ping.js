@@ -8,8 +8,10 @@ module.exports = {
      * @param {Message} message
      * @param {string[]} args
      */
-    execute(message, args, cmd, client, Discord, profileData) {       
+    execute(message, args, cmd, client, Discord, profileData) {  
+        console.log("INICIO PING");     
         message.channel.send(`🏓 Hay una latencia de ${Date.now()-message.createdTimestamp} ms`);
+        console.log("FIN MONEDA");
     }
 }
 

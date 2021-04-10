@@ -35,9 +35,11 @@ module.exports = {
     aliases: ['apuesta', 'cerrar'],
     description: 'Funcion para crear apuestas o apostar en ellas',
     async execute(message, args, cmd, client, Discord, profileData) {
+        console.log("INICIO APOSTAR");
         if (cmd == "apuesta") {
             if (apuesta_actual.nombre != undefined) {
                 message.channel.send("Ya existe una apuesta activa (" + apuesta_actual.nombre + "), cierrala para poder crear otra");
+                console.log("FIN APOSTAR");
                 return;
             }
             let args = message.content.split("\"");
@@ -48,6 +50,7 @@ module.exports = {
         } else if (cmd == "apostar") {
             if (apuesta_actual.nombre == undefined) {
                 message.reply("No existe una apuesta activa, maric\u00F3n");
+                console.log("FIN APOSTAR");
                 return;
             }
 
@@ -58,9 +61,11 @@ module.exports = {
             let puntos = Number(message.content.split("\"")[2]);
             if (profileData.udyrcoins == 0) {
                 message.reply("No tienes puntos, canjealos con el comando 'udyr puntos'");
+                console.log("FIN APOSTAR");
                 return;
             } else if (profileData.udyrcoins < puntos) {
                 message.reply("Ya te molaria tener esos puntos maric\u00F3n");
+                console.log("FIN APOSTAR");
                 return;
             }
             let existe = false;
@@ -69,6 +74,7 @@ module.exports = {
                     existe = true;
                     if (apuesta_actual.apostadores[i].bando != bando) {
                         metodosUtiles.insultar(message);
+                        console.log("FIN APOSTAR");
                         return;
                     } else {
                         apuesta_actual.apostadores[i].puntos += puntos;
@@ -86,6 +92,7 @@ module.exports = {
         } else if (cmd = "cerrar") {
             if (apuesta_actual.autor != message.author.id) {
                 message.reply("no hiciste tu la apuesta maric\u00F3n");
+                console.log("FIN APOSTAR");
                 return;
             }
             let bando_ganador = message.content.split("\"")[1];
@@ -112,6 +119,7 @@ module.exports = {
             apuesta_actual = new apuesta(undefined, undefined, undefined);
             nombre_bandos = [];
         }
+        console.log("FIN APOSTAR");
     }
 }
 

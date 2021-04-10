@@ -44,6 +44,7 @@ module.exports = {
     aliases: ['pelea', 'coliseo'],
     description: 'Funcion para retar a alguien',
     async execute(message, args, cmd, client, Discord, profileData) {
+        console.log(`INICIO ${cmd.toUpperCase()}`)
         if (logCombate.length > 0) {
             return;
         }
@@ -64,18 +65,21 @@ module.exports = {
             var nombre2 = args[3];
             if (nombre1 == undefined || nombre2 == undefined) {
                 message.reply("eres tan maric\u00F3n que te heriste a ti mismo");
+                console.log(`FIN ${cmd.toUpperCase()}`)
                 return;
             }
             if (metodosUtiles.isMention(nombre1)) {
                 nombre1 = message.guild.members.cache.get(metodosUtiles.returnIdFromMention(nombre1)).displayName;
             } else if (metodosUtiles.isRol(nombre1)) {
                 metodosUtiles.insultar(message);
+                console.log(`FIN ${cmd.toUpperCase()}`)
                 return;
             }
             if (metodosUtiles.isMention(nombre2)) {
                 nombre2 = message.guild.members.cache.get(metodosUtiles.returnIdFromMention(nombre2)).displayName;
             } else if (metodosUtiles.isRol(nombre2)) {
                 metodosUtiles.insultar(message);
+                console.log(`FIN ${cmd.toUpperCase()}`)
                 return;
             }
             gladiador1 = new gladiador(nombre1, 100);
@@ -85,6 +89,7 @@ module.exports = {
             var idpj2 = args[0];
             if (idpj2 == undefined) {
                 message.reply("eres tan maric\u00F3n que te heriste a ti mismo");
+                console.log(`FIN ${cmd.toUpperCase()}`)
                 return;
             }
             personaje2 = "";
@@ -92,16 +97,21 @@ module.exports = {
                 personaje2 = message.guild.members.cache.get(metodosUtiles.returnIdFromMention(idpj2)).displayName;
             } else if (metodosUtiles.isRol(idpj2)) {
                 metodosUtiles.insultar(message);
+                console.log(`FIN ${cmd.toUpperCase()}`)
                 return;
             } else {
                 message.reply("eres tan maric\u00F3n que te heriste a ti mismo");
+                console.log(`FIN ${cmd.toUpperCase()}`)
                 return;
             }
             if (personaje1 == adminActual.nombre) {
                 jugarseElTitulo = true;
                 hay_apuesta = false;
             } else if (personaje2 == adminActual.nombre && !message.guild.members.cache.get(metodosUtiles.returnIdFromMention(idpj2)).roles.cache.get("598901700761354270")) {
-                if (profileData.udyrcoins < puntos_peaje) return message.reply("no tienes puntos ni para comprar pan gilipollas");
+                if (profileData.udyrcoins < puntos_peaje) {
+                    console.log(`FIN ${cmd.toUpperCase()}`)
+                    return message.reply("no tienes puntos ni para comprar pan gilipollas")
+                };
                 message.channel.send(`${message.member.displayName} se esta jugando ${puntos_peaje} <:udyrcoin:825031865395445760>!`).then(msg => { msg.delete({ timeout: 3000 }) });
                 hay_apuesta = true;
             }
@@ -117,18 +127,22 @@ module.exports = {
             var gladiador2 = new gladiador(guildMembers.get(id2).displayName, 100);
 
         }
-        coliseo(gladiador1, gladiador2, message, client);
+        coliseo(gladiador1, gladiador2, message, client, Discord);
+        console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }
 
 
-async function coliseo(gladiador1, gladiador2, message, client) {
+async function coliseo(gladiador1, gladiador2, message, client, Discord) {
+    console.log("INICIO COLISEO");
     if ((banquillo.includes(gladiador1.nombre) || banquillo.includes(gladiador2.nombre)) && (gladiador1.nombre == adminActual.nombre || gladiador2.nombre == adminActual.nombre) && !jugarseElTitulo) {
         message.channel.send(banquillo.includes(gladiador1.nombre) ? (gladiador1.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun") : (gladiador2.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun"));
+        console.log("FIN COLISEO");
         return;
     }
     if (gladiador1.nombre == gladiador2.nombre) {
         message.reply("no te puedes retar a ti mismo, maric\u00F3n");
+        console.log("FIN COLISEO");
         return;
     }
     if ((gladiador1.nombre == adminActual.nombre || gladiador2.nombre == adminActual.nombre) && !jugarseElTitulo) {
@@ -136,17 +150,20 @@ async function coliseo(gladiador1, gladiador2, message, client) {
         dateNow.setHours(dateNow.getHours() - horasDiferencia);
         if (dateNow < adminActual.dateLimite) {
             message.reply("no se puede retar al admin aun, podras retar al admin cuando sean las " + adminActual.dateLimite.getHours() + ":" + metodosUtiles.cambiarMinutos(adminActual.dateLimite));
+            console.log("FIN COLISEO");
             return;
         }
     }
     logCombate.push("Comienza el combate entre " + gladiador1.nombre + " y " + gladiador2.nombre + "!");
     messageCopy = message;
     var comienzo = Math.floor(Math.random() * 2);
+    console.log("INICIO COMBATE");
     if (comienzo == 0) {
         combate(gladiador1, gladiador2, messageCopy);
     } else {
         combate(gladiador2, gladiador1, messageCopy);
     }
+    console.log("FIN COMBATE");
     if (gladiador1.vida == 0 && gladiador2.vida == 0) {
         logCombate.push(gladiador1.nombre + " y " + gladiador2.nombre + ", sois maricones");
         perdedor = [gladiador1, gladiador2];
@@ -162,7 +179,8 @@ async function coliseo(gladiador1, gladiador2, message, client) {
         logCombate.push(perdedor.nombre + ", maric\u00F3n");
     }
     messageCopy.channel.send(logCombate[0] + "\nTurno 1:\n" + logCombate[1]);
-    leerRondasPelea(gladiador1, gladiador2, messageCopy, client);
+    leerRondasPelea(gladiador1, gladiador2, messageCopy, client, Discord);
+    console.log("FIN COLISEO");
 }
 /**
  * Funcion donde discurre todo el combate
@@ -271,7 +289,8 @@ function combate(gladiador1, gladiador2, message) {
  * @param {gladiador} gladiador2
  * @param {Message} message
  */
-async function leerRondasPelea(gladiador1, gladiador2, message, client) {
+async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord) {
+    console.log("INICIO LEERRONDASPELEA");
     if (turno == logCombate.length - 2) {
         var final = logCombate[logCombate.length - 2] + "\n" + logCombate[logCombate.length - 1];
         message.channel.send(final);
@@ -395,10 +414,10 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client) {
                 })
                 if (hay_apuesta == true) {
                     metodosUtiles.cambiar_puntos(miembroPerdedor.id, `-${puntos_peaje}`);
-                    metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);                    
+                    metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);
                     message.channel.send(`${miembroGanador.displayName} ha ganado ${puntos_peaje} <:udyrcoin:825031865395445760>`);
                     message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);
-                    client.commands.get("retar").execute(message);
+                    client.commands.get("ranking").execute(message, undefined, 'ranking', client, Discord);
                 }
             } else if (miembroGanador.roles.cache.get(role.id)) {
                 var dateNow = new Date();
@@ -419,7 +438,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client) {
                     metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);
                     message.channel.send(`${miembroGanador.displayName} ha ganado ${puntos_peaje} <:udyrcoin:825031865395445760>`);
                     message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);
-                    client.commands.get("ranking").execute(message);
+                    client.commands.get("ranking").execute(message, undefined, 'ranking', client, Discord);
                 }
             }
         }
@@ -428,11 +447,12 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client) {
         hay_apuesta = false;
         perdedor = "";
         ganador = "";
+        console.log("FIN LEERRONDASPELEA");
         return;
     } else {
         setTimeout(function () {
             message.channel.send("Turno " + turno + ":\n" + logCombate[turno++] + "\n\n");
-            leerRondasPelea(gladiador1, gladiador2, message, client);
+            leerRondasPelea(gladiador1, gladiador2, message, client, Discord);
         }, 6000);
     }
 

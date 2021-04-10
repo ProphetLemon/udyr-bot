@@ -26,16 +26,20 @@ module.exports = {
      * @param {*} profileData 
      */
     execute(message, args, cmd, client, Discord, profileData) {
+        console.log("INICIO LINEAS_LOL");
         var linea = cmd;
         var campeon_linea = [];
         if (linea == LINEAS[7]) {
-            var aux = message.mentions.users.array();           
-            if(!aux.find(parguela => parguela.id==message.author.id)){
+            var aux = message.mentions.users.array();
+            if (!aux.find(parguela => parguela.id == message.author.id)) {
                 aux.push(message.author);
             };
-            if (aux.length>5)return message.reply("solo se pueden equipos de 5 maric\u00F3n");
+            if (aux.length > 5) {
+                console.log("FIN LINEAS_LOL");
+                return message.reply("solo se pueden equipos de 5 maric\u00F3n")
+            };
             var lineas = LINEAS.slice(0, 5);
-            var parguelas = [];           
+            var parguelas = [];
             var log_mensaje = [];
             while (aux.length > 0) {
                 let random = Math.floor(Math.random() * aux.length);
@@ -57,12 +61,12 @@ module.exports = {
                 campeon_linea = [];
             }
             log_mensaje.sort(function (a, b) {
-               let lineaA= a.split("en ")[a.split("en ").length-1];
-               let lineaB= b.split("en ")[b.split("en ").length-1];
-               return LINEAS.indexOf(lineaA) - LINEAS.indexOf(lineaB);
+                let lineaA = a.split("en ")[a.split("en ").length - 1];
+                let lineaB = b.split("en ")[b.split("en ").length - 1];
+                return LINEAS.indexOf(lineaA) - LINEAS.indexOf(lineaB);
             });
-            var mensaje="";
-           log_mensaje.forEach(log => mensaje+=log+"\n");
+            var mensaje = "";
+            log_mensaje.forEach(log => mensaje += log + "\n");
             message.channel.send(mensaje);
         } else if (linea == LINEAS[6]) {
             var linea_random = Math.floor(Math.random() * 5);
@@ -79,7 +83,7 @@ module.exports = {
             var random = Math.floor(Math.random() * campeon_linea.length);
             message.reply("te toca jugar " + campeon_linea[random].nombre);
         }
-
+        console.log("FIN LINEAS_LOL");
     }
 }
 

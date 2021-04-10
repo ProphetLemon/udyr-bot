@@ -5,6 +5,7 @@ module.exports = {
     aliases: ['rank'],
     description: 'Funcion ver el raking de puntos',
     async execute(message, args, cmd, client, Discord, profileData) {
+        console.log("INICIO RANKING");
         var personas = await profileModel.find();
         personas.sort(function (a, b) {
             return b.udyrcoins - a.udyrcoins;
@@ -34,5 +35,6 @@ module.exports = {
         message.channel.send(newEmbed).then(msg => {
             message.delete();
         });
+        console.log("FIN RANKING");
     }
 }

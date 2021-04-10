@@ -2,9 +2,13 @@ module.exports = {
     name: 'limpiar',
     description: 'Limpia el focus a alguien',
     execute(message, args, cmd, client, Discord, profileData) {
+        console.log("INICIO LIMPIAR");
         let numeroMensajes = args[0];
         if (numeroMensajes) {
-            if (numeroMensajes % 1 != 0 || numeroMensajes <= 0) return metodosUtiles.insultar(message);
+            if (numeroMensajes % 1 != 0 || numeroMensajes <= 0) {
+                console.log("FIN HACIENDA");
+                return metodosUtiles.insultar(message)
+            };
             message.channel.bulkDelete(Number(numeroMensajes) + 1);
             setTimeout(function () {
                 message.channel.send(`Se han eliminado ${numeroMensajes} mensajes`).then(msg => {
@@ -22,6 +26,6 @@ module.exports = {
                 metodosUtiles.insultar(message);
             }
         }
-
+        console.log("FIN LIMPIAR");
     }
 }
