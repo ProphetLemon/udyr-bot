@@ -432,7 +432,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client) {
     } else {
         setTimeout(function () {
             message.channel.send("Turno " + turno + ":\n" + logCombate[turno++] + "\n\n");
-            leerRondasPelea(gladiador1, gladiador2, message);
+            leerRondasPelea(gladiador1, gladiador2, message, client);
         }, 6000);
     }
 
