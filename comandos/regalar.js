@@ -1,3 +1,4 @@
+const { Message } = require('discord.js');
 const profileModel = require('../models/profileSchema');
 module.exports = {
     name: 'regalar',
@@ -14,6 +15,10 @@ module.exports = {
             console.log("FIN REGALAR");
             return message.reply("ni mencionar usuarios sabes maric\u00F3n")
         };
+        if (target.id == message.author.id){
+            console.log("FIN REGALAR");
+            return metodosUtiles.insultar(message);
+        }
         if (amount % 1 != 0 || amount <= 0) {
             console.log("FIN REGALAR");
             return message.reply("buen intento maric\u00F3n")
