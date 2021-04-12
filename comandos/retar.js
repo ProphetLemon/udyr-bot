@@ -213,9 +213,9 @@ function combate(gladiador1, gladiador2, message) {
             }
             else {
                 if (critico == 1) {
-                    logCombateText += `🐱‍👤 ${gladiador1.nombre} intenta golpear pero  ${gladiador2.nombre} logra hacerle parry al ataque **cr\u00EDtico** y le hace  ${parryDmg}  puntos de da\u00F1o.🐱‍👤\n`;
+                    logCombateText += `🐱‍👤 ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry al ataque **cr\u00EDtico** y le hace  ${parryDmg}  puntos de da\u00F1o.🐱‍👤\n`;
                 } else {
-                    logCombateText += `🐱‍👤 ${gladiador1.nombre}  intenta golpear pero  ${gladiador2.nombre} logra hacerle parry y le hace ${parryDmg} puntos de da\u00F1o.🐱‍👤\n`;
+                    logCombateText += `🐱‍👤 ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry y le hace ${parryDmg} puntos de da\u00F1o.🐱‍👤\n`;
                 }
                 gladiador1.vida -= parryDmg;
             }
@@ -290,7 +290,7 @@ function combate(gladiador1, gladiador2, message) {
  * @param {gladiador} gladiador2
  * @param {Message} message
  */
-async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord) {   
+async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord) {
     if (turno == logCombate.length - 2) {
         var final = logCombate[logCombate.length - 2] + "\n" + logCombate[logCombate.length - 1];
         message.channel.send(final);
