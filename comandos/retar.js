@@ -417,7 +417,9 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                     metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);
                     message.channel.send(`${miembroGanador.displayName} ha ganado ${puntos_peaje} <:udyrcoin:825031865395445760>`);
                     message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);
-                    client.commands.get("ranking").execute(message, undefined, 'ranking', client, Discord);
+                    setTimeout(function () {
+                        client.commands.get("ranking").execute(message, undefined, 'ranking', client, Discord);
+                    }, 5000);
                 }
             } else if (miembroGanador.roles.cache.get(role.id)) {
                 var dateNow = new Date();
@@ -438,7 +440,9 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                     metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);
                     message.channel.send(`${miembroGanador.displayName} ha ganado ${puntos_peaje} <:udyrcoin:825031865395445760>`);
                     message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);
-                    client.commands.get("ranking").execute(message, undefined, 'ranking', client, Discord);
+                    setTimeout(function () {
+                        client.commands.get("ranking").execute(message, undefined, 'ranking', client, Discord);
+                    }, 5000);
                 }
             }
         }
