@@ -46,7 +46,7 @@ module.exports = {
                 message.delete();
             });
         } else {
-            const randomNumber = Math.floor(Math.random() * 31) + 20;
+            const randomNumber = Math.floor(Math.random() * 51) + 50;
             await profileModel.findOneAndUpdate(
                 {
                     userID: profileData.userID
