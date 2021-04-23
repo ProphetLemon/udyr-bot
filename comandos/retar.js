@@ -419,7 +419,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                     message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);
                     setTimeout(function () {
                         client.commands.get("ranking").execute(message, undefined, 'ranking', client, Discord);
-                    }, 5000);
+                    }, 2000);
                 }
             } else if (miembroGanador.roles.cache.get(role.id)) {
                 var dateNow = new Date();
@@ -442,7 +442,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                     message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);
                     setTimeout(function () {
                         client.commands.get("ranking").execute(message, undefined, 'ranking', client, Discord);
-                    }, 5000);
+                    }, 2000);
                 }
             }
         }
