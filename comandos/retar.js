@@ -200,38 +200,38 @@ function combate(gladiador1, gladiador2, message) {
             var stun = Math.floor(Math.random() * 5);
             if (stun <= 1) {
                 if (critico == 1) {
-                    logCombateText += `🐱‍👤 ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry al ataque **cr\u00EDtico** y le stunea durante 1 turno.🐱‍👤\n`;
+                    logCombateText += `🐱‍👤 ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry al ataque **cr\u00EDtico** y le stunea durante 1 turno. 🐱‍👤\n`;
                 }
                 else {
-                    logCombateText += `🐱‍👤 ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry y le stunea durante 1 turno.🐱‍👤\n`;
+                    logCombateText += `🐱‍👤 ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry y le stunea durante 1 turno. 🐱‍👤\n`;
                 }
                 logCombateText += gladiador2.nombre + ": <:sonrisa:801799866212417606>\n";
                 logCombateText += gladiador1.nombre + ": <:6061_unsettledtom:602529346711846933>\n";
                 let hostia = Math.floor(Math.random() * 21) + 20;
-                logCombateText += `⚔️ ${gladiador2.nombre} golpea a ${gladiador1.nombre} infligiendole ${hostia} puntos de da\u00F1o.⚔️\n`;
+                logCombateText += `⚔️ ${gladiador2.nombre} golpea a ${gladiador1.nombre} infligiendole ${hostia} puntos de da\u00F1o. ⚔️\n`;
                 gladiador1.vida -= hostia;
             }
             else {
                 if (critico == 1) {
-                    logCombateText += `🐱‍👤 ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry al ataque **cr\u00EDtico** y le hace  ${parryDmg}  puntos de da\u00F1o.🐱‍👤\n`;
+                    logCombateText += `🐱‍👤 ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry al ataque **cr\u00EDtico** y le hace  ${parryDmg}  puntos de da\u00F1o. 🐱‍👤\n`;
                 } else {
-                    logCombateText += `🐱‍👤 ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry y le hace ${parryDmg} puntos de da\u00F1o.🐱‍👤\n`;
+                    logCombateText += `🐱‍👤 ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry y le hace ${parryDmg} puntos de da\u00F1o. 🐱‍👤\n`;
                 }
                 gladiador1.vida -= parryDmg;
             }
         } else if (gladiador1.nombre == adminActual.nombre ? esquive == 1 : esquive <= 23) {
             if (critico == 1) {
-                logCombateText += `🛡️ ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra esquivar el ataque **cr\u00EDtico**.🛡️\n`;
+                logCombateText += `🛡️ ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra esquivar el ataque **cr\u00EDtico**. 🛡️\n`;
             } else {
-                logCombateText += `🛡️ ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra esquivar el ataque.🛡️\n`;
+                logCombateText += `🛡️ ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra esquivar el ataque. 🛡️\n`;
             }
             if (gladiador2.vida < 100) {
-                logCombateText += `❤️ ${gladiador2.nombre} se toma una poti a su salud y recupera ${Math.floor((100 - gladiador2.vida) * 50 / 100)} puntos de salud.❤️\n`;
+                logCombateText += `❤️ ${gladiador2.nombre} se toma una poti a su salud y recupera ${Math.floor((100 - gladiador2.vida) * 50 / 100)} puntos de salud. ❤️\n`;
                 gladiador2.vida += Math.floor((100 - gladiador2.vida) * 50 / 100);
             }
         } else if (gladiador1.nombre == adminActual.nombre ? critico <= 23 : critico == 1) {
             var hostiaCritico = Math.floor(Math.random() * 21) + 60;
-            logCombateText += `💥 ${gladiador1.nombre} golpea y le causa un da\u00F1o tremendo a ${gladiador2.nombre} infligiendole ${hostiaCritico} puntos de da\u00F1o.💥\n`;
+            logCombateText += `💥 ${gladiador1.nombre} golpea y le causa un da\u00F1o tremendo a ${gladiador2.nombre} infligiendole ${hostiaCritico} puntos de da\u00F1o. 💥\n`;
             logCombateText += gladiador1.nombre + ": <:maestria7:761734001190109194>\n";
             gladiador2.vida -= hostiaCritico;
         }
@@ -249,7 +249,7 @@ function combate(gladiador1, gladiador2, message) {
 
         switch (evento) {
             case eventosRandom[0]:
-                logCombateText += `🤘😔 ${gladiador1.nombre} se da cuenta de que vive en un mundo virtual, ante tal hecho decide que lo mejor es suicidarse.🤘😔\n`;
+                logCombateText += `🤘😔 ${gladiador1.nombre} se da cuenta de que vive en un mundo virtual, ante tal hecho decide que lo mejor es suicidarse. 🤘😔\n`;
                 gladiador1.vida -= gladiador1.vida;
                 gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
                 gladiador2.vida = gladiador2.vida > 100 ? 100 : gladiador2.vida;
@@ -258,17 +258,17 @@ function combate(gladiador1, gladiador2, message) {
                 break;
             case eventosRandom[1]:
                 sucedioEventoUdyr = true;
-                logCombateText += `🐻Aparece <@!766271573271248926> y gankea por sorpresa a ${gladiador1.nombre} y a ${gladiador2.nombre}.🐻\n`;
+                logCombateText += `🐻 Aparece <@!766271573271248926> y gankea por sorpresa a ${gladiador1.nombre} y a ${gladiador2.nombre}. 🐻\n`;
                 gladiador1.vida = 0;
                 gladiador2.vida = 0;
                 gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
                 gladiador2.vida = gladiador2.vida > 100 ? 100 : gladiador2.vida;
                 logCombateText += `${gladiador1.nombre}: ${gladiador1.vida} puntos de vida restantes\n${gladiador2.nombre}: ${gladiador2.vida} puntos de vida restantes.`;
                 logCombate.push(logCombateText);
-                logCombate.push("🏆\u00A1El ganador del combate es <@!766271573271248926>!🏆");
+                logCombate.push("🏆 \u00A1El ganador del combate es <@!766271573271248926>! 🏆");
                 break;
             case eventosRandom[2]:
-                logCombateText += "🥰De tanto darse de hostias se dan cuenta de que estan hechos el uno para el otro y abandonan el combate.🥰\n";
+                logCombateText += "🥰 De tanto darse de hostias se dan cuenta de que estan hechos el uno para el otro y abandonan el combate. 🥰\n";
                 gladiador1.vida = 0;
                 gladiador2.vida = 0;
                 gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
@@ -276,7 +276,7 @@ function combate(gladiador1, gladiador2, message) {
                 logCombateText += `${gladiador1.nombre}: ${gladiador1.vida} puntos de vida restantes\n ${gladiador2.nombre}: ${gladiador2.vida} puntos de vida restantes.`;
                 logCombate.push(logCombateText);
                 sucedioEventoAmor = true;
-                logCombate.push("🏆\u00A1El ganador del combate es el amor!🏆");
+                logCombate.push("🏆 \u00A1El ganador del combate es el amor! 🏆");
                 break;
         }
     }
