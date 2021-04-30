@@ -24,7 +24,8 @@ module.exports = {
             var member = guildMembers.find(member => competidor.userID == member.id);
             if (member.roles.cache.get(rolAdmin.id)) {
                 mensaje += `<:1990_praisethesun:602528888400379935> `
-            } else if (i == 2) {
+            }
+            if (i == 2) {
                 mensaje += `🥉 `;
             } else if (i == 1) {
                 mensaje += `🥈 `;
