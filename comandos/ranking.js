@@ -12,7 +12,7 @@ module.exports = {
         });
         var guildMembers = await message.guild.members.fetch();
         var guildRoles = await message.guild.roles.fetch();
-        var rolAdmin = guildRoles.cache.find(role => role.name == "El Admin");
+        var rolAdmin = guildRoles.cache.find(role => role.id == "821374417660542976");
         var mensaje = "";
         const newEmbed = new Discord.MessageEmbed()
             .setColor("#B17428")

@@ -304,7 +304,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
             var udyr = guildMembers.find(member => member.id == "766271573271248926");
             let miembroPerdedor1 = guildMembers.find(member => member.displayName == perdedor[0].nombre);
             let miembroPerdedor2 = guildMembers.find(member => member.displayName == perdedor[1].nombre);
-            var role = guildRoles.cache.find(role => role.name == "El Admin");
+            var role = guildRoles.cache.find(role => role.id == "821374417660542976");
             if (miembroPerdedor1.roles.cache.get(role.id) || miembroPerdedor2.roles.cache.get(role.id)) {
                 miembroPerdedor1.roles.remove(role.id);
                 miembroPerdedor2.roles.remove(role.id);
@@ -333,8 +333,8 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
             var maricon2 = guildMembers.find(member => member.displayName == gladiador2.nombre);
             var udyr = guildMembers.find(member => member.id == "766271573271248926");
             var soledad = guildMembers.find(member => member.id == "285480424904327179");
-            var roleAdmin = guildRoles.cache.find(role => role.name == "El Admin");
-            var roleMaricones = guildRoles.cache.find(role => role.name == "Maricones");
+            var roleAdmin = guildRoles.cache.find(role => role.id == "821374417660542976");
+            var roleMaricones = guildRoles.cache.find(role => role.id == "821415220483326012");
             if (maricon1.roles.cache.get(roleAdmin.id) || maricon2.roles.cache.get(roleAdmin.id)) {
                 if (maricon1.displayName != udyr.displayName && maricon2.displayName != udyr.displayName) {
                     udyr.roles.add(roleAdmin);
@@ -385,7 +385,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
         } else {
             let miembroGanador = guildMembers.find(member => member.displayName == ganador.nombre);
             let miembroPerdedor = guildMembers.find(member => member.displayName == perdedor.nombre);
-            var role = guildRoles.cache.find(role => role.name == "El Admin");
+            var role = guildRoles.cache.find(role => role.id == "821374417660542976");
             if (miembroPerdedor.roles.cache.get(role.id)) {
                 miembroPerdedor.roles.remove(role.id);
                 miembroGanador.roles.add(role);
