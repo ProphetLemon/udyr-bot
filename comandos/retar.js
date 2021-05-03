@@ -422,10 +422,13 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                     }, 2000);
                 }
             } else if (miembroGanador.roles.cache.get(role.id)) {
-                var dateNow = new Date();
-                dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
+                var dateLater = new Date();
+                dateLater.setHours(dateLater.getHours() - horasDiferencia + 1);
+                dateLater.setSeconds(0);
+                let dateNow = new Date();
+                dateNow.setHours(dateNow.getHours() - horasDiferencia);
                 dateNow.setSeconds(0);
-                message.channel.send(miembroPerdedor.displayName + " no puede volver a enfrentarse a " + miembroGanador.displayName + " hasta dentro de 1 hora (" + dateNow.getHours() + ":" + metodosUtiles.cambiarMinutos(dateNow) + ").");
+                message.channel.send(miembroPerdedor.displayName + " no puede volver a enfrentarse a " + miembroGanador.displayName + " hasta dentro de 1 hora (" + dateLater.getHours() + ":" + metodosUtiles.cambiarMinutos(dateLater) + ").");
                 banquillo.push(miembroPerdedor.displayName);
                 setTimeout(function () {
                     for (let i = 0; i < banquillo.length; i++) {
@@ -434,7 +437,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                             break;
                         }
                     }
-                }, 3600000);
+                }, dateLater - dateNow);
                 if (hay_apuesta == true) {
                     metodosUtiles.cambiar_puntos(miembroPerdedor.id, `-${puntos_peaje}`);
                     metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);
