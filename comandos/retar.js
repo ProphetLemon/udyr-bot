@@ -213,7 +213,7 @@ function combate(gladiador1, gladiador2, message) {
             }
             else {
                 if (critico == 1) {
-                    logCombateText += `🐱‍👤 ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry al ataque **cr\u00EDtico** y le hace  ${parryDmg}  puntos de da\u00F1o. 🐱‍👤\n`;
+                    logCombateText += `🐱‍👤 ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry al ataque **cr\u00EDtico** y le hace ${parryDmg} puntos de da\u00F1o. 🐱‍👤\n`;
                 } else {
                     logCombateText += `🐱‍👤 ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry y le hace ${parryDmg} puntos de da\u00F1o. 🐱‍👤\n`;
                 }
