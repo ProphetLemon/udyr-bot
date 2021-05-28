@@ -37,8 +37,8 @@ module.exports = async (Discord, client, message) => {
 
     const args = message.content.slice(prefix.length).split(/ +/);
     const cmd = args.shift().toLowerCase();
-    const command = client.commands.get(cmd) || client.commands.find(a => a.aliases && a.aliases.includes(cmd));
-    if (command) {
+    const command = client.commands.get(cmd.toLocaleLowerCase()) || client.commands.find(a => a.aliases && a.aliases.includes(cmd.toLocaleLowerCase()));
+    if (command && message.content.startsWith(prefix)) {
         command.execute(message, args, cmd, client, Discord, profileData);
     } else if (message.content.startsWith(prefix)) {
         metodosUtiles.insultar(message);
