@@ -42,6 +42,8 @@ module.exports = async (Discord, client, message) => {
         command.execute(message, args, cmd, client, Discord, profileData);
     } else if (message.content.toLowerCase().startsWith(prefix)) {
         metodosUtiles.insultar(message);
+    } else if (message.content.includes("udyr")) {
+        message.reply("no digas ese nombre <:imfine:839081079183900692>")
     } else {
         ruleta(message);
     }
