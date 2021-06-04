@@ -43,7 +43,7 @@ module.exports = async (Discord, client, message) => {
     } else if (message.content.toLowerCase().startsWith(prefix)) {
         metodosUtiles.insultar(message);
     } else if (message.content.includes("udyr")) {
-        message.reply("no digas ese nombre <:imfine:839081079183900692>")
+        message.reply("no digas ese nombre <:imfine:839081079183900692>\nSi quieres usar el bot ahora es \"ramon\"")
     } else {
         ruleta(message);
     }
