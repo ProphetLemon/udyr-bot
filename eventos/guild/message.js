@@ -45,7 +45,7 @@ module.exports = async (Discord, client, message) => {
     } else if (message.content.toLowerCase().includes("udyr")) {
         message.reply("no digas ese nombre <:imfine:839081079183900692>\nSi quieres usar el bot ahora es \"ramon\"").then(msg => {
             message.delete();
-            msg.delete({ timeout: 3000 });
+            msg.delete({ timeout: 6000 });
         });
     } else {
         ruleta(message);
