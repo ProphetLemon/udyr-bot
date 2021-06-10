@@ -40,7 +40,7 @@ module.exports = {
             const newEmbed = new Discord.MessageEmbed()
                 .setColor("#B17428")
                 .setAuthor(`Perfil de ${message.member.displayName}`, message.author.avatarURL())
-                .setDescription(`**Ramoncitos:** ${profileData.ramoncitos} <:udyrcoin:825031865395445760>\n**Ranking:** ${posicion} ${emoji}`)
+                .setDescription(`**Ramoncitos:** ${profileData.ramoncitos} <:ramoncito:852499145608527922>\n**Ranking:** ${posicion} ${emoji}`)
             message.channel.send(newEmbed).then(msg => {
                 msg.delete({ timeout: 10000 });
                 message.delete();
@@ -61,7 +61,7 @@ module.exports = {
                 }
             );
             var targetData;
-            message.channel.send(`${message.member.displayName} ha canjeado la recompensa diaria y consigui\u00F3 ${randomNumber} <:udyrcoin:825031865395445760>`).then(msg => {
+            message.channel.send(`${message.member.displayName} ha canjeado la recompensa diaria y consigui\u00F3 ${randomNumber} <:ramoncito:852499145608527922>`).then(msg => {
                 msg.delete({ timeout: 10000 });
             });
             var personas = await profileModel.find();
@@ -97,7 +97,7 @@ module.exports = {
             const newEmbed = new Discord.MessageEmbed()
                 .setColor("#B17428")
                 .setAuthor(`Perfil de ${message.member.displayName}`, message.author.avatarURL())
-                .setDescription(`**Ramoncitos:** ${targetData.ramoncitos} <:udyrcoin:825031865395445760>\n**Ranking:** ${posicion} ${emoji}`)
+                .setDescription(`**Ramoncitos:** ${targetData.ramoncitos} <:ramoncito:852499145608527922>\n**Ranking:** ${posicion} ${emoji}`)
             message.channel.send(newEmbed).then(msg => {
                 msg.delete({ timeout: 10000 });
                 message.delete();

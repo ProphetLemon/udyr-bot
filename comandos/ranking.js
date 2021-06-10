@@ -36,7 +36,7 @@ module.exports = {
             } else {
                 mensaje += `${i + 1}.- `;
             }
-            mensaje += `${member.displayName} - ${competidor.ramoncitos} <:udyrcoin:825031865395445760> ${competidor.dailyGift.getDate() != hoy.getDate() ? "_no ha canjeado la recompensa diaria_" : ""}${member.roles.cache.get(rolAdmin.id) ? " <:1990_praisethesun:602528888400379935>" : ""}\n`;
+            mensaje += `${member.displayName} - ${competidor.ramoncitos} <:ramoncito:852499145608527922> ${competidor.dailyGift.getDate() != hoy.getDate() ? "_no ha canjeado la recompensa diaria_" : ""}${member.roles.cache.get(rolAdmin.id) ? " <:1990_praisethesun:602528888400379935>" : ""}\n`;
         }
         newEmbed.setDescription(mensaje)
         message.channel.send(newEmbed).then(msg => {
