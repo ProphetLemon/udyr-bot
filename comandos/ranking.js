@@ -8,7 +8,7 @@ module.exports = {
         console.log("INICIO RANKING");
         var personas = await profileModel.find();
         personas.sort(function (a, b) {
-            return b.udyrcoins - a.udyrcoins;
+            return b.ramoncitos - a.ramoncitos;
         });
         var guildMembers = await message.guild.members.fetch();
         var guildRoles = await message.guild.roles.fetch();
@@ -36,7 +36,7 @@ module.exports = {
             } else {
                 mensaje += `${i + 1}.- `;
             }
-            mensaje += `${member.displayName} - ${competidor.udyrcoins} <:udyrcoin:825031865395445760> ${competidor.dailyGift.getDate() != hoy.getDate() ? "_no ha canjeado la recompensa diaria_" : ""}${member.roles.cache.get(rolAdmin.id) ? " <:1990_praisethesun:602528888400379935>" : ""}\n`;
+            mensaje += `${member.displayName} - ${competidor.ramoncitos} <:udyrcoin:825031865395445760> ${competidor.dailyGift.getDate() != hoy.getDate() ? "_no ha canjeado la recompensa diaria_" : ""}${member.roles.cache.get(rolAdmin.id) ? " <:1990_praisethesun:602528888400379935>" : ""}\n`;
         }
         newEmbed.setDescription(mensaje)
         message.channel.send(newEmbed).then(msg => {

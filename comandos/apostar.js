@@ -59,11 +59,11 @@ module.exports = {
             if (!nombre_bandos.includes(bando)) return metodosUtiles.insultar(message);;
 
             let puntos = Number(message.content.split("\"")[2]);
-            if (profileData.udyrcoins == 0) {
+            if (profileData.ramoncitos == 0) {
                 message.reply("No tienes puntos, canjealos con el comando 'udyr puntos'");
                 console.log("FIN APOSTAR");
                 return;
-            } else if (profileData.udyrcoins < puntos) {
+            } else if (profileData.ramoncitos < puntos) {
                 message.reply("Ya te molaria tener esos puntos maric\u00F3n");
                 console.log("FIN APOSTAR");
                 return;

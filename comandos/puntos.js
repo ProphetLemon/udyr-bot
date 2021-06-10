@@ -10,7 +10,7 @@ module.exports = {
         if (profileData.dailyGift.getDate() == hoy.getDate()) {
             var personas = await profileModel.find();
             personas.sort(function (a, b) {
-                return b.udyrcoins - a.udyrcoins;
+                return b.ramoncitos - a.ramoncitos;
             });
             var posicion = 0;
             for (let i = 0; i < personas.length; i++) {
@@ -40,7 +40,7 @@ module.exports = {
             const newEmbed = new Discord.MessageEmbed()
                 .setColor("#B17428")
                 .setAuthor(`Perfil de ${message.member.displayName}`, message.author.avatarURL())
-                .setDescription(`**Ramoncitos:** ${profileData.udyrcoins} <:udyrcoin:825031865395445760>\n**Ranking:** ${posicion} ${emoji}`)
+                .setDescription(`**Ramoncitos:** ${profileData.ramoncitos} <:udyrcoin:825031865395445760>\n**Ranking:** ${posicion} ${emoji}`)
             message.channel.send(newEmbed).then(msg => {
                 msg.delete({ timeout: 10000 });
                 message.delete();
@@ -66,7 +66,7 @@ module.exports = {
             });
             var personas = await profileModel.find();
             personas.sort(function (a, b) {
-                return b.udyrcoins - a.udyrcoins;
+                return b.ramoncitos - a.ramoncitos;
             });
             var posicion = 0;
             for (let i = 0; i < personas.length; i++) {

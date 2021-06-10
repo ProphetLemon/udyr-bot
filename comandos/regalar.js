@@ -29,7 +29,7 @@ module.exports = {
                 console.log("FIN REGALAR");
                 return message.reply("esa persona no esta en la base de datos maric\u00F3n")
             };
-            if (amount > profileData.udyrcoins) {
+            if (amount > profileData.ramoncitos) {
                 console.log("FIN REGALAR");
                 return message.reply("ya te gustaria tener esos <:udyrcoin:825031865395445760> maric\u00F3n")
             };

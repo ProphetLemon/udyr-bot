@@ -108,7 +108,7 @@ module.exports = {
                 jugarseElTitulo = true;
                 hay_apuesta = false;
             } else if (personaje2 == adminActual.nombre && !message.guild.members.cache.get(metodosUtiles.returnIdFromMention(idpj2)).roles.cache.get("598901700761354270")) {
-                if (profileData.udyrcoins < puntos_peaje) {
+                if (profileData.ramoncitos < puntos_peaje) {
                     console.log(`FIN ${cmd.toUpperCase()}`)
                     return message.reply("no tienes puntos ni para comprar pan gilipollas")
                 };
