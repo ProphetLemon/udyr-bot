@@ -16,7 +16,7 @@ module.exports = {
         var mensaje = "";
         const newEmbed = new Discord.MessageEmbed()
             .setColor("#B17428")
-            .setAuthor(`🏆Ranking de udyr coins🏆`);
+            .setAuthor(`🏆Ranking de ramoncitos🏆`);
         var hoy = new Date();
         hoy.setHours(hoy.getHours() - horasDiferencia);
         for (let i = 0; i < personas.length; i++) {

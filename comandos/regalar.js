@@ -15,7 +15,7 @@ module.exports = {
             console.log("FIN REGALAR");
             return message.reply("ni mencionar usuarios sabes maric\u00F3n")
         };
-        if (target.id == message.author.id){
+        if (target.id == message.author.id) {
             console.log("FIN REGALAR");
             return metodosUtiles.insultar(message);
         }
@@ -38,7 +38,7 @@ module.exports = {
             },
                 {
                     $inc: {
-                        udyrcoins: -amount,
+                        ramoncitos: -amount,
                     },
                 })
             await profileModel.findOneAndUpdate({
@@ -46,7 +46,7 @@ module.exports = {
             },
                 {
                     $inc: {
-                        udyrcoins: amount,
+                        ramoncitos: amount,
                     },
                 })
             var guildMembers = await message.guild.members.fetch();
