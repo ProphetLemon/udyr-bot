@@ -6,7 +6,7 @@ module.exports = {
         let numeroMensajes = args[0];
         if (numeroMensajes) {
             if (numeroMensajes % 1 != 0 || numeroMensajes <= 0) {
-                console.log("FIN HACIENDA");
+                console.log("FIN LIMPIAR");
                 return metodosUtiles.insultar(message)
             };
             message.channel.bulkDelete(Number(numeroMensajes) + 1);
