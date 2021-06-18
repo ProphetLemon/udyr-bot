@@ -29,16 +29,16 @@ module.exports = {
                 console.log("FIN REGALAR");
                 return message.reply("esa persona no esta en la base de datos maric\u00F3n")
             };
-            if (amount > profileData.ramoncitos) {
+            if (amount > profileData.udyrcoins) {
                 console.log("FIN REGALAR");
-                return message.reply("ya te gustaria tener esos <:ramoncito:852499145608527922> maric\u00F3n")
+                return message.reply("ya te gustaria tener esos <:udyrcoin:825031865395445760> maric\u00F3n")
             };
             await profileModel.findOneAndUpdate({
                 userID: message.author.id
             },
                 {
                     $inc: {
-                        ramoncitos: -amount,
+                        udyrcoins: -amount,
                     },
                 })
             await profileModel.findOneAndUpdate({
@@ -46,13 +46,13 @@ module.exports = {
             },
                 {
                     $inc: {
-                        ramoncitos: amount,
+                        udyrcoins: amount,
                     },
                 })
             var guildMembers = await message.guild.members.fetch();
             let member = guildMembers.find(member => member.id == target.id);
             console.log("FIN REGALAR");
-            return message.channel.send(`${message.author.username} ha regalado ${amount} <:ramoncito:852499145608527922> a ${member.displayName}.`);
+            return message.channel.send(`${message.author.username} ha regalado ${amount} <:udyrcoin:825031865395445760> a ${member.displayName}.`);
         } catch (err) {
             console.log(err);
         }

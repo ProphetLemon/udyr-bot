@@ -108,11 +108,11 @@ module.exports = {
                 jugarseElTitulo = true;
                 hay_apuesta = false;
             } else if (personaje2 == adminActual.nombre && !message.guild.members.cache.get(metodosUtiles.returnIdFromMention(idpj2)).roles.cache.get("598901700761354270")) {
-                if (profileData.ramoncitos < puntos_peaje) {
+                if (profileData.udyrcoins < puntos_peaje) {
                     console.log(`FIN ${cmd.toUpperCase()}`)
                     return message.reply("no tienes puntos ni para comprar pan gilipollas")
                 };
-                message.channel.send(`${message.member.displayName} se esta jugando ${puntos_peaje} <:ramoncito:852499145608527922>!`).then(msg => { msg.delete({ timeout: 3000 }) });
+                message.channel.send(`${message.member.displayName} se esta jugando ${puntos_peaje} <:udyrcoin:825031865395445760>!`).then(msg => { msg.delete({ timeout: 3000 }) });
                 hay_apuesta = true;
             }
             gladiador1 = new gladiador(personaje1, 100);
@@ -415,8 +415,8 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                 if (hay_apuesta == true) {
                     metodosUtiles.cambiar_puntos(miembroPerdedor.id, `-${puntos_peaje}`);
                     metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);
-                    message.channel.send(`${miembroGanador.displayName} ha ganado ${puntos_peaje} <:ramoncito:852499145608527922>`);
-                    message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:ramoncito:852499145608527922>`);
+                    message.channel.send(`${miembroGanador.displayName} ha ganado ${puntos_peaje} <:udyrcoin:825031865395445760>`);
+                    message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);
                     setTimeout(function () {
                         client.commands.get("ranking").execute(message, undefined, 'ranking', client, Discord);
                     }, 2000);
@@ -441,8 +441,8 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                 if (hay_apuesta == true) {
                     metodosUtiles.cambiar_puntos(miembroPerdedor.id, `-${puntos_peaje}`);
                     metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);
-                    message.channel.send(`${miembroGanador.displayName} ha ganado ${puntos_peaje} <:ramoncito:852499145608527922>`);
-                    message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:ramoncito:852499145608527922>`);
+                    message.channel.send(`${miembroGanador.displayName} ha ganado ${puntos_peaje} <:udyrcoin:825031865395445760>`);
+                    message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:825031865395445760>`);
                     setTimeout(function () {
                         client.commands.get("ranking").execute(message, undefined, 'ranking', client, Discord);
                     }, 2000);

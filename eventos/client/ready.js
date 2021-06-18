@@ -2,7 +2,7 @@ module.exports = (Discord, client) => {
     client.user.setPresence({
         status: "dnd",
         activity: {
-            name: 'minar ramoncitos 💰',
+            name: 'minar udyrcoins 💰',
             type: "PLAYING"
         }
     })

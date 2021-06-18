@@ -120,7 +120,7 @@ global.metodosUtiles = {
             },
                 {
                     $inc: {
-                        ramoncitos: numero
+                        udyrcoins: numero
                     }
                 })
         } else {
@@ -129,7 +129,7 @@ global.metodosUtiles = {
             },
                 {
                     $inc: {
-                        ramoncitos: -numero
+                        udyrcoins: -numero
                     }
                 })
         }

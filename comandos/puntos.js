@@ -10,7 +10,7 @@ module.exports = {
         if (profileData.dailyGift.getDate() == hoy.getDate()) {
             var personas = await profileModel.find();
             personas.sort(function (a, b) {
-                return b.ramoncitos - a.ramoncitos;
+                return b.udyrcoins - a.udyrcoins;
             });
             var posicion = 0;
             for (let i = 0; i < personas.length; i++) {
@@ -40,7 +40,7 @@ module.exports = {
             const newEmbed = new Discord.MessageEmbed()
                 .setColor("#B17428")
                 .setAuthor(`Perfil de ${message.member.displayName}`, message.author.avatarURL())
-                .setDescription(`**Ramoncitos:** ${profileData.ramoncitos} <:ramoncito:852499145608527922>\n**Ranking:** ${posicion} ${emoji}`)
+                .setDescription(`**Udyr coins:** ${profileData.udyrcoins} <:udyrcoin:825031865395445760>\n**Ranking:** ${posicion} ${emoji}`)
             message.channel.send(newEmbed).then(msg => {
                 msg.delete({ timeout: 10000 });
                 message.delete();
@@ -53,7 +53,7 @@ module.exports = {
                 },
                 {
                     $inc: {
-                        ramoncitos: randomNumber
+                        udyrcoins: randomNumber
                     },
                     $set: {
                         dailyGift: hoy
@@ -61,12 +61,12 @@ module.exports = {
                 }
             );
             var targetData;
-            message.channel.send(`${message.member.displayName} ha canjeado la recompensa diaria y consigui\u00F3 ${randomNumber} <:ramoncito:852499145608527922>`).then(msg => {
+            message.channel.send(`${message.member.displayName} ha canjeado la recompensa diaria y consigui\u00F3 ${randomNumber} <:udyrcoin:825031865395445760>`).then(msg => {
                 msg.delete({ timeout: 10000 });
             });
             var personas = await profileModel.find();
             personas.sort(function (a, b) {
-                return b.ramoncitos - a.ramoncitos;
+                return b.udyrcoins - a.udyrcoins;
             });
             var posicion = 0;
             for (let i = 0; i < personas.length; i++) {
@@ -97,7 +97,7 @@ module.exports = {
             const newEmbed = new Discord.MessageEmbed()
                 .setColor("#B17428")
                 .setAuthor(`Perfil de ${message.member.displayName}`, message.author.avatarURL())
-                .setDescription(`**Ramoncitos:** ${targetData.ramoncitos} <:ramoncito:852499145608527922>\n**Ranking:** ${posicion} ${emoji}`)
+                .setDescription(`**Udyr coins:** ${targetData.udyrcoins} <:udyrcoin:825031865395445760>\n**Ranking:** ${posicion} ${emoji}`)
             message.channel.send(newEmbed).then(msg => {
                 msg.delete({ timeout: 10000 });
                 message.delete();

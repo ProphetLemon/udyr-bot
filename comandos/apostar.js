@@ -59,11 +59,11 @@ module.exports = {
             if (!nombre_bandos.includes(bando)) return metodosUtiles.insultar(message);;
 
             let puntos = Number(message.content.split("\"")[2]);
-            if (profileData.ramoncitos == 0) {
+            if (profileData.udyrcoins == 0) {
                 message.reply("No tienes puntos, canjealos con el comando 'udyr puntos'");
                 console.log("FIN APOSTAR");
                 return;
-            } else if (profileData.ramoncitos < puntos) {
+            } else if (profileData.udyrcoins < puntos) {
                 message.reply("Ya te molaria tener esos puntos maric\u00F3n");
                 console.log("FIN APOSTAR");
                 return;
@@ -79,14 +79,14 @@ module.exports = {
                     } else {
                         apuesta_actual.apostadores[i].puntos += puntos;
                         metodosUtiles.cambiar_puntos(message.author.id, String("-" + puntos));
-                        message.reply("Tu apuesta es ahora de " + apuesta_actual.apostadores[i].puntos + " <:ramoncito:852499145608527922>");
+                        message.reply("Tu apuesta es ahora de " + apuesta_actual.apostadores[i].puntos + " <:udyrcoin:825031865395445760>");
                     }
                 }
             }
             if (!existe) {
                 metodosUtiles.cambiar_puntos(nombre, "-" + puntos);
                 apuesta_actual.apostadores.push(new apostador(nombre, puntos, bando));
-                message.reply("Has apostado por '" + bando + "' con " + puntos + " <:ramoncito:852499145608527922>")
+                message.reply("Has apostado por '" + bando + "' con " + puntos + " <:udyrcoin:825031865395445760>")
             }
 
         } else if (cmd = "cerrar") {
@@ -113,7 +113,7 @@ module.exports = {
                     let puntos = Math.floor(apuesta_actual.apostadores[i].puntos * ROI);
                     metodosUtiles.cambiar_puntos(apuesta_actual.apostadores[i].userID, ("+") + (puntos));
                     const targetData = await profileModel.findOne({ userID: apuesta_actual.apostadores[i].userID });
-                    message.channel.send(message.guild.members.cache.get(apuesta_actual.apostadores[i].userID).displayName + " ha ganado " + puntos + " <:ramoncito:852499145608527922> (" + targetData.ramoncitos + " en total)");
+                    message.channel.send(message.guild.members.cache.get(apuesta_actual.apostadores[i].userID).displayName + " ha ganado " + puntos + " <:udyrcoin:825031865395445760> (" + targetData.udyrcoins + " en total)");
                 }
             }
             apuesta_actual = new apuesta(undefined, undefined, undefined);
