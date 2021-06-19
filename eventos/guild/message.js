@@ -16,9 +16,9 @@ module.exports = async (Discord, client, message) => {
         return;
     }
     let channel = await channelModel.findOne({
-        guildID: message.guild.id,
-        channelID: message.channel.id
-    });
+        channelID: message.channel.id,
+        serverID: message.guild.id
+    })
     if (message.author.bot || !channel) return;
     if (message.author.id == focusID) {
         message.member.send("Callate maric\u00F3n");
