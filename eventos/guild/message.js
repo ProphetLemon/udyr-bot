@@ -1,7 +1,7 @@
 const { Client, Message, Discord } = require("discord.js");
 require('dotenv').config();
 const profileModel = require('../../models/profileSchema');
-
+const channelModel = require('../../models/channelSchema');
 
 /**
  * 
@@ -11,8 +11,11 @@ const profileModel = require('../../models/profileSchema');
  */
 module.exports = async (Discord, client, message) => {
     const prefix = process.env.PREFIX + " ";
-    var canales_de_texto = ["598896817161240663", "809786674875334677", "824587579944468530"];
-    if (message.author.bot || !canales_de_texto.includes(message.channel.id)) return;
+    let channel = await channelModel.findOne({
+        guildID: message.guild.id,
+        channelID: message.channel.id
+    });
+    if (message.author.bot || !channel) return;
     if (message.author.id == focusID) {
         message.member.send("Callate maric\u00F3n");
         message.delete();
