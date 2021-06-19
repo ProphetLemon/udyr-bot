@@ -27,13 +27,14 @@ module.exports = {
             channel.save();
         }
         var guildRoles = await message.guild.roles.fetch();
+        var numeroRoles = guildRoles.cache.size;
         var roleAdmin = guildRoles.cache.find(role => role.name == "El Admin");
         if (!roleAdmin) {
             guildRoles.create({
                 data: {
                     name: "El Admin",
-                    color: 'YELLOW',
-                    position: 1
+                    color: [255, 255, 0],
+                    hoist: true
                 },
                 reason: "Rol creado por Udyr"
             });
@@ -44,11 +45,15 @@ module.exports = {
                 data: {
                     name: "Maricones",
                     color: 'DARK_PURPLE',
-                    position: 2
+                    hoist: true
                 },
                 reason: "Rol creado por Udyr"
             });
         }
         console.log("FIN SETUP");
+        message.channel.send("Se ha instalado correctamente el bot").then(msg => {
+            msg.delete({ timeout: 3000 })
+            message.delete();
+        });
     }
 }

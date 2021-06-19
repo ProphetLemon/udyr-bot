@@ -11,6 +11,10 @@ const channelModel = require('../../models/channelSchema');
  */
 module.exports = async (Discord, client, message) => {
     const prefix = process.env.PREFIX + " ";
+    if (message.content == "udyr setup") {
+        client.commands.get("setup").execute(message, undefined, 'setup', client, Discord);
+        return;
+    }
     let channel = await channelModel.findOne({
         guildID: message.guild.id,
         channelID: message.channel.id
