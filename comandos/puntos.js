@@ -8,7 +8,9 @@ module.exports = {
         let hoy = new Date();
         hoy.setHours(hoy.getHours() - horasDiferencia);
         if (profileData.dailyGift.getDate() == hoy.getDate()) {
-            var personas = await profileModel.find();
+            var personas = await profileModel.find({
+                serverID: message.guild.id
+            });
             personas.sort(function (a, b) {
                 return b.udyrcoins - a.udyrcoins;
             });
