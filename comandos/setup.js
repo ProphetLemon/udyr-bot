@@ -27,13 +27,12 @@ module.exports = {
             channel.save();
         }
         var guildRoles = await message.guild.roles.fetch();
-        var numeroRoles = guildRoles.cache.size;
         var roleAdmin = guildRoles.cache.find(role => role.name == "El Admin");
         if (!roleAdmin) {
             guildRoles.create({
                 data: {
                     name: "El Admin",
-                    color: [255, 255, 0],
+                    color: 'GOLD',
                     hoist: true
                 },
                 reason: "Rol creado por Udyr"
