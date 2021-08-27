@@ -2,11 +2,11 @@ module.exports = {
     name: 'estado',
     aliases: [],
     description: 'Funcion para cambiar el estado del bot',
-    execute(message,args,cmd,client,Discord,profileData) {
-        console.log("INICIO ESTADO");
+    execute(message, args, cmd, client, Discord, profileData) {
+        console.log(`INICIO ${cmd.toUpperCase()}`);
         if (message.content.split("\"").length != 3) {
             metodosUtiles.insultar(message);
-            console.log("FIN ESTADO");
+            console.log(`FIN ${cmd.toUpperCase()}`);
             return;
         }
         var estado_personalizado = message.content.split("\"")[1];
@@ -23,9 +23,9 @@ module.exports = {
             case "online":
                 args[0] = "online";
                 break;
-            default:                
+            default:
                 insultar(message);
-                console.log("FIN ESTADO");
+                console.log(`FIN ${cmd.toUpperCase()}`);
                 return;
         }
         switch (args[1]) {
@@ -43,7 +43,7 @@ module.exports = {
                 break;
             default:
                 insultar(message);
-                console.log("FIN ESTADO");
+                console.log(`FIN ${cmd.toUpperCase()}`);
                 return;
         }
         client.user.setPresence({
@@ -54,6 +54,6 @@ module.exports = {
             }
         });
         message.delete();
-        console.log("FIN ESTADO");
+        console.log(`FIN ${cmd.toUpperCase()}`);
     }
 }

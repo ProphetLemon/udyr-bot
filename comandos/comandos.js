@@ -12,7 +12,7 @@ module.exports = {
      * @param {string[]} args
      */
     execute(message, args, cmd, client, Discord, profileData) {
-        console.log("INICIO COMANDOS");
+        console.log(`INICIO ${cmd.toUpperCase()}`);
         const newEmbed = new Discord.MessageEmbed()
             .setColor("#B17428")
             .setTitle("Comandos")
@@ -41,6 +41,6 @@ module.exports = {
             .setImage('https://i.kym-cdn.com/entries/icons/facebook/000/034/006/uga.jpg')
             .setFooter('Ser malos! Buenas noches colegas\nPerro Xanchez - 19/11/10');
         message.channel.send(newEmbed);
-        console.log("FIN COMANDOS");
+        console.log(`FIN ${cmd.toUpperCase()}`);
     }
 }

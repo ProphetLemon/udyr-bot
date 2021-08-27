@@ -2,8 +2,8 @@ module.exports = {
     name: 'alarma',
     aliases: [],
     description: 'Funcion para crear apuestas o apostar en ellas',
-    execute(message,args,cmd,client,Discord,profileData) {
-        console.log("INICIO ALARMA")
+    execute(message, args, cmd, client, Discord, profileData) {
+        console.log(`INICIO ${cmd.toUpperCase()}`)
         let dia = args[0];
         let hora = args[1];
         let motivo = message.content.split("\"")[1];
@@ -12,7 +12,7 @@ module.exports = {
         var regexHora = /\d{1,2}\:\d{2}/;
         if ((!regexHora.test(hora)) || (dia != "hoy" && dia != "ma\u00F1ana" && !regexDia.test(dia))) {
             metodosUtiles.insultar(message);
-            console.log("FIN ALARMA")
+            console.log(`FIN ${cmd.toUpperCase()}`)
             return;
         }
         if (regexDia.test(dia)) {
@@ -32,15 +32,15 @@ module.exports = {
         dtNow.setHours(dtNow.getHours() - horasDiferencia);
         if (dtAlarm - dtNow <= 0) {
             metodosUtiles.insultar(message);
-            console.log("FIN ALARMA")
+            console.log(`FIN ${cmd.toUpperCase()}`)
             return;
         }
         let diff = dtAlarm - dtNow;
         setTimeout(function () { message.reply("Oye, te recuerdo esto : \"" + motivo + "\""); }, diff);
-        message.reply("Se ha creado la alarma correctamente!").then(msg=>{
-            msg.delete({timeout:3000});
+        message.reply("Se ha creado la alarma correctamente!").then(msg => {
+            msg.delete({ timeout: 3000 });
             message.delete();
         });
-        console.log("FIN ALARMA")
+        console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }

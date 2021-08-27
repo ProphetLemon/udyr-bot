@@ -2,8 +2,8 @@ module.exports = {
     name: 'dado',
     aliases: [],
     description: 'Funcion que tira uno o varios dados de 6 o varias caras',
-    execute(message,args,cmd,client,Discord,profileData) {
-        console.log("INICIO DADO");
+    execute(message, args, cmd, client, Discord, profileData) {
+        console.log(`INICIO ${cmd.toUpperCase()}`);
         var numero = args[0];
         var tiradas = args[1];
         if (numero == undefined) {
@@ -12,7 +12,7 @@ module.exports = {
         else {
             if (!metodosUtiles.isValidNumber(numero)) {
                 metodosUtiles.insultar(message);
-                console.log("FIN DADO");
+                console.log(`FIN ${cmd.toUpperCase()}`);
                 return;
             }
         }
@@ -22,7 +22,7 @@ module.exports = {
         else {
             if (!metodosUtiles.isValidNumber(tiradas)) {
                 metodosUtiles.insultar(message);
-                console.log("FIN DADO");
+                console.log(`FIN ${cmd.toUpperCase()}`);
                 return;
             }
         }
@@ -34,6 +34,6 @@ module.exports = {
             mensaje += ":game_die:" + (Math.floor(Math.random() * numero) + 1) + ":game_die:";
         }
         message.reply(mensaje);
-        console.log("FIN DADO");
+        console.log(`FIN ${cmd.toUpperCase()}`);
     }
 }
