@@ -2,30 +2,28 @@ module.exports = {
     name: 'dado',
     aliases: [],
     description: 'Funcion que tira uno o varios dados de 6 o varias caras',
-    execute(message,args,cmd,client,Discord,profileData) {
+    execute(message, args, cmd, client, Discord, profileData) {
         console.log("INICIO DADO");
         var numero = args[0];
         var tiradas = args[1];
         if (numero == undefined) {
             numero = 6;
         }
-        else {
-            if (!metodosUtiles.isValidNumber(numero)) {
-                metodosUtiles.insultar(message);
-                console.log("FIN DADO");
-                return;
-            }
+        else if (!metodosUtiles.isValidNumber(numero)) {
+            metodosUtiles.insultar(message);
+            console.log("FIN DADO");
+            return;
         }
+
         if (tiradas == undefined) {
             tiradas = 1;
         }
-        else {
-            if (!metodosUtiles.isValidNumber(tiradas)) {
-                metodosUtiles.insultar(message);
-                console.log("FIN DADO");
-                return;
-            }
+        else if (!metodosUtiles.isValidNumber(tiradas)) {
+            metodosUtiles.insultar(message);
+            console.log("FIN DADO");
+            return;
         }
+
         var mensaje = "";
         for (var i = 0; i < tiradas; i++) {
             if (i != 0) {

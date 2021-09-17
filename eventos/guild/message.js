@@ -11,15 +11,7 @@ const channelModel = require('../../models/channelSchema');
  */
 module.exports = async (Discord, client, message) => {
     const prefix = process.env.PREFIX + " ";
-    if (message.content == "udyr setup") {
-        client.commands.get("setup").execute(message, undefined, 'setup', client, Discord);
-        return;
-    }
-    let channel = await channelModel.findOne({
-        channelID: message.channel.id,
-        serverID: message.guild.id
-    })
-    if (message.author.bot || !channel) return;
+    if (message.author.bot) return;
     if (message.author.id == focusID) {
         message.member.send("Callate maric\u00F3n");
         message.delete();

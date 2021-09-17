@@ -9,9 +9,13 @@
   "author": "Diego Vidal",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/opus": "github:discordjs/opus",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
+    "ffmpeg-static": "^4.4.0",
     "mongoose": "^5.12.2",
-    "reconlx": "^1.2.41"
+    "reconlx": "^1.2.41",
+    "yt-search": "^2.10.1",
+    "ytdl-core": "^4.9.1"
   }
 }
