@@ -4,7 +4,6 @@ const ytSearch = require('yt-search');
 const queue = new Map();
 
 const { Message } = require('discord.js');
-
 module.exports = {
     name: 'play',
     aliases: ['skip', 'stop'],
@@ -18,6 +17,8 @@ module.exports = {
      * @param {*} Discord 
      */
     async execute(message, args, cmd, client, Discord) {
+        cmd = cmd
+        console.log(`INICIO ${cmd.toUpperCase()}`)
         const voice_channel = message.member.voice.channel;
         if (!voice_channel) return message.channel.send('No est\u00E1s en ning\u00FAn canal de voz, maric\u00F3n').then(msg => msg.delete({ timeout: 4000 }))
         const permissions = voice_channel.permissionsFor(message.client.user)
@@ -43,7 +44,8 @@ module.exports = {
                 if (video) {
                     song = { title: video.title, url: video.url }
                 } else {
-                    message.channel.send('Me he liado, no he encontrado nada parecido.')
+                    console.log(`FIN ${cmd.toUpperCase()}`)
+                    return message.channel.send('Me he liado, no he encontrado nada parecido.')
                 }
             }
             if (!server_queue) {
@@ -68,12 +70,13 @@ module.exports = {
                 }
             } else {
                 server_queue.songs.push(song)
+                console.log(`FIN ${cmd.toUpperCase()}`)
                 return message.channel.send(`🐻👍 **${song.title}** a\u00F1adido a la cola`)
             }
         }
         else if (cmd == 'skip') skip_song(message, server_queue)
         else if (cmd == 'stop') stop_song(message, server_queue)
-
+        console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }
 
@@ -95,7 +98,9 @@ const video_player = async (guild, song) => {
 }
 
 const skip_song = (message, server_queue) => {
-    if (!message.member.voice.channel) return message.channel.send("Igual tendrias que estar en un canal de voz para dar esas ordenes")
+    if (!message.member.voice.channel) {
+        return message.channel.send("Igual tendrias que estar en un canal de voz para dar esas ordenes")
+    }
     if (!server_queue) {
         return message.channel.send("No me lies friki, no hay nada en la cola")
     }
@@ -103,7 +108,10 @@ const skip_song = (message, server_queue) => {
 }
 
 const stop_song = (message, server_queue) => {
-    if (!message.member.voice.channel) return message.channel.send("Igual tendrias que estar en un canal de voz para dar esas ordenes")
+    if (!message.member.voice.channel) {
+        return message.channel.send("Igual tendrias que estar en un canal de voz para dar esas ordenes")
+    }
+    message.reply("que te jodan")
     server_queue.songs = []
     server_queue.connection.dispatcher.end()
 }

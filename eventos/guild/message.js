@@ -11,7 +11,7 @@ const channelModel = require('../../models/channelSchema');
  */
 module.exports = async (Discord, client, message) => {
     const prefix = process.env.PREFIX + " ";
-    if (message.author.bot) return;
+    if (message.author.bot || message.channel.id != "888550185616166922") return;
     if (message.author.id == focusID) {
         message.member.send("Callate maric\u00F3n");
         message.delete();
