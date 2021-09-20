@@ -19,6 +19,7 @@ for (const file of commandFiles) {
 }
 
 mongoose.connect(process.env.MONGODB_SRV, {
+    useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: true
