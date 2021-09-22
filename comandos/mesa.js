@@ -17,11 +17,11 @@ module.exports = {
         console.log(`INICIO ${cmd.toUpperCase()}`);
         let channel = message.member.voice.channel
         if (!channel) {
-            message.reply("debes de estar en un chat de voz")
+            message.reply("maric\u00F3n entra al chat de voz")
             console.log(`FIN ${cmd.toUpperCase()}`);
             return;
         }
-        message.channel.send(`Empieza a jugar ${channel.members.array()[Math.floor(Math.random() * channel.members.size)].displayName}`)
+        message.channel.send(`Le toca al maric\u00F3n de ${channel.members.array()[Math.floor(Math.random() * channel.members.size)].displayName}`)
         console.log(`FIN ${cmd.toUpperCase()}`);
     }
 }
