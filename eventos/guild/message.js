@@ -1,7 +1,6 @@
 const { Client, Message, Discord } = require("discord.js");
 require('dotenv').config();
 const profileModel = require('../../models/profileSchema');
-const channelModel = require('../../models/channelSchema');
 
 /**
  * 

@@ -24,6 +24,7 @@ module.exports = {
         const permissions = voice_channel.permissionsFor(message.client.user)
         if (!permissions.has('CONNECT')) return message.channel.send('No tienes permisos, maric\u00F3n').then(msg => msg.delete({ timeout: 4000 }))
         if (!permissions.has('SPEAK')) return message.channel.send('No tienes permisos, maric\u00F3n').then(msg => msg.delete({ timeout: 4000 }))
+        if (message.channel.name != "musica") return message.channel.send("No estas en el canal de m\u00FAsica, maric\u00F3n").then(msg => msg.delete({ timeout: 4000 }))
 
         const server_queue = queue.get(message.guild.id)
 
