@@ -21,7 +21,10 @@ module.exports = {
             console.log(`FIN ${cmd.toUpperCase()}`);
             return;
         }
-        message.channel.send(`Le toca al maric\u00F3n de ${channel.members.array()[Math.floor(Math.random() * channel.members.size)].displayName}`)
+        do {
+            var member = channel.members.array()[Math.floor(Math.random() * channel.members.size)]
+        } while (member.user.bot)
+        message.channel.send(`Le toca al maric\u00F3n de ${member.displayName}`)
         console.log(`FIN ${cmd.toUpperCase()}`);
     }
 }
