@@ -21,8 +21,8 @@ module.exports = {
                 opciones.splice(i--, 1)
             }
         }
-        if (opciones.length == 0) return message.channel.send("No has puesto ninguna opcion")
-        if (opciones.length == 1) return message.channel.send("Solo has puesto una opcion")
+        if (opciones.length == 0) return message.channel.send("No has puesto ninguna opci\u00F3n")
+        if (opciones.length == 1) return message.channel.send("Solo has puesto una opci\u00F3n")
         message.channel.send(`Tras mucho pensar, elijo:\n**${opciones[Math.floor(Math.random() * opciones.length)]}**`)
     }
 }
