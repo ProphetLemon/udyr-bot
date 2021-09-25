@@ -23,6 +23,19 @@ module.exports = {
         }
         if (opciones.length == 0) return message.channel.send("No has puesto ninguna opci\u00F3n")
         if (opciones.length == 1) return message.channel.send("Solo has puesto una opci\u00F3n")
-        message.channel.send(`Tras mucho pensar, elijo:\n**${opciones[Math.floor(Math.random() * opciones.length)].toUpperCase()}**`)
+        var mensaje = [];
+        mensaje.push("Tras mucho pensar")
+        mensaje.push("He llegado a una conclusi\u00F3n")
+        mensaje.push("Mi decisi\u00F3n final es...")
+        mensaje.push(`**${opciones[Math.floor(Math.random() * opciones.length)].toUpperCase()}**`)
+        leerAburrimiento(mensaje, message)
     }
+}
+async function leerAburrimiento(mensaje, message) {
+    if (mensaje.length == 0) return;
+    setTimeout(function () {
+        message.channel.send(mensaje[0])
+        mensaje.splice(0, 1)
+        leerAburrimiento(mensaje, message)
+    }, 4000)
 }
