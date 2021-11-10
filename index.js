@@ -29,7 +29,7 @@ mongoose.connect(process.env.MONGODB_SRV, {
     console.log(err);
 });
 client.login(process.env.DISCORD_TOKEN);
-global.horasDiferencia = -2;
+global.horasDiferencia = -1;
 
 global.metodosUtiles = {
     numberWithCommas: function (x) {
