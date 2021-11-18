@@ -57,7 +57,8 @@ module.exports = {
                     }
                 }
                 random = Math.floor(Math.random() * campeon_linea.length);
-                log_mensaje.push(`<@!${parguelas[i].id}> te toca jugar ${campeon_linea[random].nombre} en ${linea}`);
+                var nombre = campeon_linea[random].nombre
+                log_mensaje.push(`<@!${parguelas[i].id}> te toca jugar ${nombre} en ${linea}` + `\nhttps://lolalytics.com/lol/${nombre.split("'").join("").split(".").join("").split(" ").join("").toLowerCase()}/build/`);
                 campeon_linea = [];
             }
             log_mensaje.sort(function (a, b) {
@@ -70,10 +71,11 @@ module.exports = {
             message.channel.send(mensaje);
         } else if (linea == LINEAS[6]) {
             var linea_random = Math.floor(Math.random() * 5);
-            message.reply("te toca jugar " + campeones[Math.floor(Math.random() * campeones.length)].nombre + " en " + LINEAS[linea_random]);
+            var nombre = campeones[Math.floor(Math.random() * campeones.length)].nombre
+            message.reply("te toca jugar " + nombre + " en " + LINEAS[linea_random] + `\nhttps://lolalytics.com/lol/${nombre.split("'").join("").split(".").join("").split(" ").join("").toLowerCase()}/build/`);
         } else if (linea == LINEAS[5]) {
             var champ_random = campeones[Math.floor(Math.random() * campeones.length)];
-            message.reply("te toca jugar " + champ_random.nombre + " en " + champ_random.linea[Math.floor(Math.random() * champ_random.linea.length)]);
+            message.reply("te toca jugar " + champ_random.nombre + " en " + champ_random.linea[Math.floor(Math.random() * champ_random.linea.length)] + `\nhttps://lolalytics.com/lol/${champ_random.nombre.split("'").join("").split(".").join("").split(" ").join("").toLowerCase()}/build/`);
         } else {
             for (var i = 0; i < campeones.length; i++) {
                 if (campeones[i].linea.includes(linea)) {
@@ -81,7 +83,7 @@ module.exports = {
                 }
             }
             var random = Math.floor(Math.random() * campeon_linea.length);
-            message.reply("te toca jugar " + campeon_linea[random].nombre);
+            message.reply("te toca jugar " + campeon_linea[random].nombre + `\nhttps://lolalytics.com/lol/${campeon_linea[random].nombre.split("'").join("").split(".").join("").split(" ").join("").toLowerCase()}/build/`);
         }
         console.log("FIN LINEAS_LOL");
     }
