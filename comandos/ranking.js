@@ -53,7 +53,6 @@ module.exports = {
                     i = i - 1;
                     continue;
                 }
-                perso
                 if (member.roles.cache.get(rolAdmin.id)) {
                     mensaje += `<:1990_praisethesun:602528888400379935> ${i + 1}.- ${member.displayName} - ${competidor.udyrcoins} <:udyrcoin:825031865395445760> ${competidor.dailyGift.getDate() != hoy.getDate() ? "_no ha canjeado la recompensa diaria_" : ""} <:1990_praisethesun:602528888400379935>\n`;
                     break;
