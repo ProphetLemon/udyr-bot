@@ -13,9 +13,9 @@ module.exports = {
      * @param {*} Discord 
      * @param {*} profileData 
      */
-   async execute(message,args,cmd,client,Discord,profileData) {
+    async execute(message, args, cmd, client, Discord, profileData) {
         console.log("INICIO MARICON");
-        var rolAdmin = message.member.roles.cache.get("598897304812126208");
+        var rolAdmin = message.member.roles.cache.get("855758798014119966");
         if (!rolAdmin) {
             console.log("FIN MARICON");
             return metodosUtiles.insultar(message)
@@ -23,7 +23,7 @@ module.exports = {
         var guildMember = await message.guild.members.fetch();
         guildMember.forEach(member => {
             var rol = member.roles.cache.get("821415220483326012");
-            if (rol){
+            if (rol) {
                 member.roles.remove(rol);
             }
         });
