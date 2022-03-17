@@ -15,17 +15,16 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log("INICIO MARICON");
-        var rolAdmin = message.member.roles.cache.get("855758798014119966");
+        var roles = await message.guild.roles.fetch()
+        var rolAdmin = roles.cache.find(role => role.name == "Tontitos Supremos")
         if (!rolAdmin) {
             console.log("FIN MARICON");
             return metodosUtiles.insultar(message)
         };
         var guildMember = await message.guild.members.fetch();
+        var mariconRol = roles.cache.find(role => role.name == "Maricones")
         guildMember.forEach(member => {
-            var rol = member.roles.cache.get("821415220483326012");
-            if (rol) {
-                member.roles.remove(rol);
-            }
+            member.roles.remove(mariconRol.id)
         });
         console.log("FIN MARICON");
     }
