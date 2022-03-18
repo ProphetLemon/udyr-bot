@@ -11,7 +11,8 @@ module.exports = {
                 userID: message.author.id,
                 serverID: message.guild.id,
                 udyrcoins: 500,
-                dailyGift: ayer
+                dailyGift: ayer,
+                robar: ayer
             });
             await profile.save();
         }
