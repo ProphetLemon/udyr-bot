@@ -1,5 +1,6 @@
 const { Message } = require('discord.js');
 const fs = require('fs');
+const moment = require('moment');
 const adminModel = require("../models/adminSchema");
 const profileModel = require('../models/profileSchema');
 class gladiador {
@@ -327,8 +328,8 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                 udyr.roles.add(role);
                 message.channel.send(`<:1990_praisethesun:602528888400379935><@!${udyr.id}> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>`);
                 message.channel.send("", { files: ["./images/udyr-admin.jpg"] });
-                var dateNow = new Date();
-                dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
+                var dateNow = getCETorCESTDate();
+                dateNow = moment(dateNow).add(30, 'm').toDate()
                 dateNow.setSeconds(0);
                 adminActual = new admin(udyr.displayName, dateNow);
                 var oldAdmin = await adminModel.find();
@@ -365,8 +366,8 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                     udyr.roles.add(roleAdmin);
                     message.channel.send("<:1990_praisethesun:602528888400379935><@!" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
                     message.channel.send("", { files: ["./images/udyr-admin.jpg"] });
-                    var dateNow = new Date();
-                    dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
+                    var dateNow = getCETorCESTDate();
+                    dateNow = moment(dateNow).add(30, 'm').toDate()
                     dateNow.setSeconds(0);
                     adminActual = new admin(udyr.displayName, dateNow);
                     var oldAdmin = await adminModel.find();
@@ -382,8 +383,8 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                 } else {
                     tioRandom.roles.add(roleAdmin);
                     message.channel.send("<:1990_praisethesun:602528888400379935><@!" + tioRandom.id + "> es el nuevo Admin de este servidor debido a la inutilidad de los otros<:1990_praisethesun:602528888400379935>.");
-                    dateNow = new Date();
-                    dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
+                    var dateNow = getCETorCESTDate();
+                    dateNow = moment(dateNow).add(30, 'm').toDate()
                     dateNow.setSeconds(0);
                     adminActual = new admin(tioRandom.displayName, dateNow);
                     var oldAdmin = await adminModel.find();
@@ -423,8 +424,8 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                     var enlaces = fs.readdirSync(link);
                     message.channel.send("", { files: [`${link}${enlaces[Math.floor(Math.random() * enlaces.length)]}`] });
                 }
-                var dateNow = new Date();
-                dateNow.setHours(dateNow.getHours() - horasDiferencia + 1);
+                var dateNow = getCETorCESTDate();
+                dateNow = moment(dateNow).add(30, 'm').toDate()
                 dateNow.setSeconds(0);
                 adminActual = new admin(miembroGanador.displayName, dateNow);
                 var oldAdmin = await adminModel.find();
@@ -447,11 +448,10 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                     }, 2000);
                 }
             } else if (miembroGanador.roles.cache.get(role.id)) {
-                var dateLater = new Date();
-                dateLater.setHours(dateLater.getHours() - horasDiferencia + 1);
+                var dateLater = getCETorCESTDate();
+                dateLater = moment(dateNow).add(30, 'm').toDate()
                 dateLater.setSeconds(0);
-                let dateNow = new Date();
-                dateNow.setHours(dateNow.getHours() - horasDiferencia);
+                let dateNow = getCETorCESTDate()
                 dateNow.setSeconds(0);
                 message.channel.send(miembroPerdedor.displayName + " no puede volver a enfrentarse a " + miembroGanador.displayName + " hasta dentro de 1 hora (" + dateLater.getHours() + ":" + metodosUtiles.cambiarMinutos(dateLater) + ").");
                 banquillo.push(miembroPerdedor.displayName);
