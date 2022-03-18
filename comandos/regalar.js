@@ -5,7 +5,7 @@ module.exports = {
     aliases: ['donar'],
     description: 'Funcion para regalar dinero a alguien',
     async execute(message, args, cmd, client, Discord, profileData) {
-        if (!profileData) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
+        if (!profileData.udyrcoins) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         if (args.length != 2) {
             console.log("INICIO REGALAR");
             return metodosUtiles.insultar(message)

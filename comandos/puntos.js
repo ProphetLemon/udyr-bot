@@ -4,7 +4,7 @@ module.exports = {
     aliases: [],
     description: 'Funcion para saber los puntos que tienes',
     async execute(message, args, cmd, client, Discord, profileData) {
-        if (!profileData) {
+        if (!profileData.udyrcoins) {
             var ayer = new Date();
             ayer.setDate(ayer.getDate() - 1);
             let profile = await profileModel.create({
