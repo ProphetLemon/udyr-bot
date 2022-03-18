@@ -3,7 +3,7 @@ const profileModel = require('../models/profileSchema');
 const roboModel = require('../models/roboSchema');
 global.listaRobos = new Map()
 module.exports = {
-    name: 'robar',
+    //name: 'robar',
     aliases: [],
     description: 'Funcion para robar a alguien',
     /**
@@ -24,6 +24,10 @@ module.exports = {
                 }, 10000);
             })
             return message.delete()
+        }
+        var dia = new Date()
+        if (dia.getHours() > 23 && dia.getHours() < 12) {
+            return message.channel.send("Solo se puede robar de 12:00 - 00:00")
         }
         var porcentaje = Math.floor(Math.random() * 16) + 15
         var personas = await profileModel.find({

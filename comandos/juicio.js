@@ -2,7 +2,7 @@ const { Message, Client } = require('discord.js');
 const profileModel = require('../models/profileSchema');
 const roboModel = require('../models/roboSchema');
 module.exports = {
-    name: 'juicio',
+    // name: 'juicio',
     aliases: [],
     description: 'Funcion hacer un juicio',
     /**
@@ -31,7 +31,7 @@ module.exports = {
         })
         if (caso) {
             var memes = ["https://thumbs.dreamstime.com/b/ladr%C3%B3n-de-sexo-masculino-que-roba-la-chica-joven-hermosa-47978550.jpg", "https://www.serargentino.com/public/images/2019/12/Tucumanos-ladrones-773x458.jpeg"
-                , "https://versiones.com.mx/wp-content/uploads/2022/03/ladrones-tontos.jpg", "https://ichef.bbci.co.uk/news/640/cpsprodpb/043A/production/_101228010_gettyimages-51431550.jpg",
+                , "https://ichef.bbci.co.uk/news/640/cpsprodpb/043A/production/_101228010_gettyimages-51431550.jpg",
                 "https://www.filco.es/uploads/2019/12/pensadorcarcel1.jpg", "https://static.vecteezy.com/system/resources/previews/002/247/441/non_2x/a-man-thinking-in-prison-vector.jpg",
                 "https://elsumario.com/wp-content/uploads/2018/03/El-Sumario-%E2%80%93-Hombre-va-a-prisi%C3%B3n-por-matar-a-una-cucaracha.jpg", "https://previews.123rf.com/images/bowie15/bowie151202/bowie15120200046/12394056-sad-businessman-in-prison.jpg",
                 "https://media.tenor.com/images/5e2302c3fb99b00a690898303d9bd666/tenor.png", "https://notinerd.com/wp-content/uploads/2018/08/5-193.jpg", "https://www.ustedpregunta.com/data/articulos/por-que-usan-peluca-los-jueces/5eabc7ef6fe1f.jpg"
