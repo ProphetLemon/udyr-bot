@@ -15,6 +15,7 @@ module.exports = {
                 robar: ayer
             });
             await profile.save();
+            profileData = profile
         }
         console.log("INICIO PUNTOS");
         let hoy = new Date();
