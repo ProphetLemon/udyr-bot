@@ -1,10 +1,19 @@
-global.personas = [];
-const { Message } = require('discord.js');
+const { Message, Client } = require('discord.js');
 const profileModel = require('../models/profileSchema');
 module.exports = {
     name: 'ranking',
     aliases: ['rank'],
+
     description: 'Funcion ver el raking de puntos',
+    /**
+     * 
+     * @param {Message} message 
+     * @param {*} args 
+     * @param {*} cmd 
+     * @param {Client} client 
+     * @param {*} Discord 
+     * @param {*} profileData 
+     */
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log("INICIO RANKING");
         var personas = await profileModel.find({

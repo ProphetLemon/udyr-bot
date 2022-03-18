@@ -1,6 +1,18 @@
+const { Message } = require("discord.js");
+
 module.exports = {
     name: 'limpiar',
     description: 'Limpia el focus a alguien',
+    /**
+     * 
+     * @param {Message} message 
+     * @param {*} args 
+     * @param {*} cmd 
+     * @param {*} client 
+     * @param {*} Discord 
+     * @param {*} profileData 
+     * @returns 
+     */
     execute(message, args, cmd, client, Discord, profileData) {
         console.log("INICIO LIMPIAR");
         let numeroMensajes = args[0];

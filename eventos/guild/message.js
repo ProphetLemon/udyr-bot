@@ -24,10 +24,10 @@ module.exports = async (Discord, client, message) => {
             let profile = await profileModel.create({
                 userID: message.author.id,
                 serverID: message.guild.id,
-                ramoncitos: 1000,
+                udyrcoins: 1000,
                 dailyGift: ayer
             });
-            profile.save();
+            await profile.save();
         }
     } catch (err) {
         console.log(err);

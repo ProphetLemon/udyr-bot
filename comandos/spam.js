@@ -1,7 +1,7 @@
 module.exports = {
     name: 'spam',
-    aliases: ['apuesta', 'cerrar'],
-    description: 'Funcion para crear apuestas o apostar en ellas',
+    aliases: [],
+    description: 'Funcion para hacer spam',
     execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`)
         message.delete();

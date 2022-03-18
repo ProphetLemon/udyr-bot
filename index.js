@@ -22,7 +22,7 @@ mongoose.connect(process.env.MONGODB_SRV, {
     useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: true
+    useFindAndModify: false
 }).then(() => {
     console.log("Conectado a la base de datos");
 }).catch((err) => {
@@ -30,6 +30,38 @@ mongoose.connect(process.env.MONGODB_SRV, {
 });
 client.login(process.env.DISCORD_TOKEN);
 global.horasDiferencia = -1;
+
+
+
+global.getCETorCESTDate = function () {
+    var localDate = new Date();
+    var utcOffset = localDate.getTimezoneOffset();
+    var cetOffset = utcOffset + 60;
+    var cestOffset = utcOffset + 120;
+    var cetOffsetInMilliseconds = cetOffset * 60 * 1000;
+    var cestOffsetInMilliseconds = cestOffset * 60 * 1000;
+
+    var cestDateStart = new Date();
+    var cestDateFinish = new Date();
+    var localDateTime = localDate.getTime();
+    var cestDateStartTime;
+    var cestDateFinishTime;
+    var result;
+
+    cestDateStart.setTime(Date.parse('29 March ' + localDate.getFullYear() + ' 02:00:00 GMT+0100'));
+    cestDateFinish.setTime(Date.parse('25 October ' + localDate.getFullYear() + ' 03:00:00 GMT+0200'));
+
+    cestDateStartTime = cestDateStart.getTime();
+    cestDateFinishTime = cestDateFinish.getTime();
+
+    if (localDateTime >= cestDateStartTime && localDateTime <= cestDateFinishTime) {
+        result = new Date(localDateTime + cestOffsetInMilliseconds);
+    } else {
+        result = new Date(localDateTime + cetOffsetInMilliseconds);
+    }
+
+    return result;
+}
 
 global.metodosUtiles = {
     numberWithCommas: function (x) {
