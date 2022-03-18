@@ -3,7 +3,7 @@ const profileModel = require('../models/profileSchema');
 const roboModel = require('../models/roboSchema');
 global.listaRobos = new Map()
 module.exports = {
-    //name: 'robar',
+    name: 'robar',
     aliases: [],
     description: 'Funcion para robar a alguien',
     /**
@@ -16,6 +16,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        if (!profileData) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         var hoy = getCETorCESTDate()
         if (profileData.robar && profileData.robar.getDate() == hoy.getDate()) {
             message.member.send("Ya has robado cabron").then(msg => {
@@ -26,10 +27,10 @@ module.exports = {
             return message.delete()
         }
         var dia = new Date()
-        if (dia.getHours() > 23 && dia.getHours() < 12) {
-            return message.channel.send("Solo se puede robar de 12:00 - 00:00")
+        if (dia.getHours() < 12) {
+            return message.channel.send("Solo se puede robar de 12:00 - 23:59")
         }
-        var porcentaje = Math.floor(Math.random() * 16) + 15
+        var porcentaje = Math.floor(Math.random() * 11) + 15
         var personas = await profileModel.find({
             serverID: message.guild.id
         });

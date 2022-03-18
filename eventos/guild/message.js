@@ -18,17 +18,6 @@ module.exports = async (Discord, client, message) => {
     let profileData;
     try {
         profileData = await profileModel.findOne({ userID: message.author.id });
-        if (!profileData) {
-            var ayer = new Date();
-            ayer.setDate(ayer.getDate() - 1);
-            let profile = await profileModel.create({
-                userID: message.author.id,
-                serverID: message.guild.id,
-                udyrcoins: 1000,
-                dailyGift: ayer
-            });
-            await profile.save();
-        }
     } catch (err) {
         console.log(err);
     }

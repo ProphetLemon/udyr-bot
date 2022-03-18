@@ -4,6 +4,17 @@ module.exports = {
     aliases: [],
     description: 'Funcion para saber los puntos que tienes',
     async execute(message, args, cmd, client, Discord, profileData) {
+        if (!profileData) {
+            var ayer = new Date();
+            ayer.setDate(ayer.getDate() - 1);
+            let profile = await profileModel.create({
+                userID: message.author.id,
+                serverID: message.guild.id,
+                udyrcoins: 500,
+                dailyGift: ayer
+            });
+            await profile.save();
+        }
         console.log("INICIO PUNTOS");
         let hoy = new Date();
         hoy.setHours(hoy.getHours() - horasDiferencia);

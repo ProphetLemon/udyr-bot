@@ -2,7 +2,7 @@ const { Message, Client } = require('discord.js');
 const profileModel = require('../models/profileSchema');
 const roboModel = require('../models/roboSchema');
 module.exports = {
-    // name: 'juicio',
+    name: 'juicio',
     aliases: [],
     description: 'Funcion hacer un juicio',
     /**
@@ -15,6 +15,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        if (!profileData) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         if (!message.mentions.members.first()) {
             return message.reply("no has mencionado a nadie bobo")
         }
