@@ -449,7 +449,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                 }
             } else if (miembroGanador.roles.cache.get(role.id)) {
                 var dateLater = getCETorCESTDate();
-                dateLater = moment(dateNow).add(30, 'm').toDate()
+                dateLater = moment(dateLater).add(30, 'm').toDate()
                 dateLater.setSeconds(0);
                 let dateNow = getCETorCESTDate()
                 dateNow.setSeconds(0);
