@@ -46,11 +46,6 @@ module.exports = {
         message.channel.send("SE HA PRODUCIDO UN ROBO! :scream:")
         message.member.send(`Has robado hoy (${String(hoy.getDate()).padStart(2, '0')}/${String(hoy.getMonth() +
             1).padStart(2, '0')}) a ${personaElegidaMember.displayName} y se la ha robado ${monedasRobadas} udyrcoins (${porcentaje}%)`)
-            .then(msg => {
-                setTimeout(() => {
-                    msg.delete()
-                }, 9000);
-            })
         personaElegidaMember.send(`Te han robado hoy (${String(hoy.getDate()).padStart(2, '0')}/${String(hoy.getMonth() +
             1).padStart(2, '0')}) ${monedasRobadas} udyrcoins\n Para recuperarlos tienes que usar el comando \"udyr juicio @culpable\" mencionando` +
             ` quien t\u00FA crees que es el culpable. Si aciertas se te devolver\u00E1 el dinero y se le har\u00E1 un castigo al ladr\u00F3n,` +
