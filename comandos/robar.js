@@ -26,8 +26,7 @@ module.exports = {
             })
             return message.delete()
         }
-        var dia = new Date()
-        if (dia.getHours() < 12) {
+        if (hoy.getHours() < 12) {
             return message.channel.send("Solo se puede robar de 12:00 - 23:59")
         }
         var porcentaje = Math.floor(Math.random() * 11) + 15
