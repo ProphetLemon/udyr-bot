@@ -1,7 +1,7 @@
 const profileModel = require('../models/profileSchema');
 module.exports = {
     name: 'puntos',
-    aliases: [],
+    aliases: ['points'],
     description: 'Funcion para saber los puntos que tienes',
     async execute(message, args, cmd, client, Discord, profileData) {
         if (!profileData) {
