@@ -318,8 +318,8 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
         if (sucedioEventoUdyr == true) {
             banquillo = [];
             var udyr = guildMembers.find(member => member.id == "849997112930074654");
-            let miembroPerdedor1 = guildMembers.find(member => member.displayName == perdedor[0].nombre);
-            let miembroPerdedor2 = guildMembers.find(member => member.displayName == perdedor[1].nombre);
+            let miembroPerdedor1 = guildMembers.find(member => member.displayName == gladiador1.nombre);
+            let miembroPerdedor2 = guildMembers.find(member => member.displayName == gladiador2.nombre);
             var role = guildRoles.cache.find(role => role.name == "El Admin");
             if (miembroPerdedor1.roles.cache.get(role.id) || miembroPerdedor2.roles.cache.get(role.id)) {
                 miembroPerdedor1.roles.remove(role.id);
