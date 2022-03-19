@@ -29,8 +29,7 @@ module.exports = {
         const newEmbed = new Discord.MessageEmbed()
             .setColor("#B17428")
             .setAuthor(`🏆Ranking de udyrcoins🏆`);
-        var hoy = new Date();
-        hoy.setHours(hoy.getHours() - horasDiferencia);
+        var hoy = getCETorCESTDate()
         let adminLocalizado = false;
         for (let i = 0; i < personas.length && i < 10; i++) {
             let competidor = personas[i];

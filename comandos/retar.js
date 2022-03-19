@@ -162,8 +162,7 @@ async function coliseo(gladiador1, gladiador2, message, client, Discord) {
         return;
     }
     if ((gladiador1.nombre == adminActual.nombre || gladiador2.nombre == adminActual.nombre) && !jugarseElTitulo) {
-        var dateNow = new Date();
-        dateNow.setHours(dateNow.getHours() - horasDiferencia);
+        var dateNow = getCETorCESTDate()
         if (dateNow < adminActual.dateLimite) {
             message.reply("no se puede retar al admin aun, podras retar al admin cuando sean las " + adminActual.dateLimite.getHours() + ":" + metodosUtiles.cambiarMinutos(adminActual.dateLimite));
             console.log("FIN COLISEO");
@@ -453,7 +452,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                 dateLater.setSeconds(0);
                 let dateNow = getCETorCESTDate()
                 dateNow.setSeconds(0);
-                message.channel.send(miembroPerdedor.displayName + " no puede volver a enfrentarse a " + miembroGanador.displayName + " hasta dentro de 1 hora (" + dateLater.getHours() + ":" + metodosUtiles.cambiarMinutos(dateLater) + ").");
+                message.channel.send(miembroPerdedor.displayName + " no puede volver a enfrentarse a " + miembroGanador.displayName + " hasta dentro de 30 minutos (" + dateLater.getHours() + ":" + metodosUtiles.cambiarMinutos(dateLater) + ").");
                 banquillo.push(miembroPerdedor.displayName);
                 setTimeout(function () {
                     for (let i = 0; i < banquillo.length; i++) {

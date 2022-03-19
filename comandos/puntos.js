@@ -18,8 +18,7 @@ module.exports = {
             profileData = profile
         }
         console.log("INICIO PUNTOS");
-        let hoy = new Date();
-        hoy.setHours(hoy.getHours() - horasDiferencia);
+        let hoy = getCETorCESTDate()
         if (profileData.dailyGift.getDate() == hoy.getDate()) {
             var personas = await profileModel.find();
             personas.sort(function (a, b) {

@@ -2,7 +2,7 @@ module.exports = {
     name: 'alarma',
     aliases: [],
     description: 'Funcion para crear apuestas o apostar en ellas',
-    execute(message,args,cmd,client,Discord,profileData) {
+    execute(message, args, cmd, client, Discord, profileData) {
         console.log("INICIO ALARMA")
         let dia = args[0];
         let hora = args[1];
@@ -28,8 +28,7 @@ module.exports = {
         dtAlarm.setMinutes(minutos);
         dtAlarm.setHours(horas);
         dtAlarm.setSeconds(0);
-        let dtNow = new Date();
-        dtNow.setHours(dtNow.getHours() - horasDiferencia);
+        let dtNow = getCETorCESTDate()
         if (dtAlarm - dtNow <= 0) {
             metodosUtiles.insultar(message);
             console.log("FIN ALARMA")
@@ -37,8 +36,8 @@ module.exports = {
         }
         let diff = dtAlarm - dtNow;
         setTimeout(function () { message.reply("Oye, te recuerdo esto : \"" + motivo + "\""); }, diff);
-        message.reply("Se ha creado la alarma correctamente!").then(msg=>{
-            msg.delete({timeout:3000});
+        message.reply("Se ha creado la alarma correctamente!").then(msg => {
+            msg.delete({ timeout: 3000 });
             message.delete();
         });
         console.log("FIN ALARMA")
