@@ -68,7 +68,7 @@ module.exports = {
             })
             clearTimeout(listaRobos.get(acusado.id))
         } else {
-            var memes = ["https://img.mundifrases.com/images/thumb_bundle-118-robar.650x250_q95_box-0,0,647,247.jpg", "https://www.tecnicom.info/wp-content/uploads/perfil-de-un-ladr%C3%B3n.jpg",
+            var memes = ["https://img.mundifrases.com/images/thumb_bundle-118-robar.650x250_q95_box-0,0,647,247.jpg",
                 "https://c.files.bbci.co.uk/3B99/production/_96975251_gettyimages-186869920.jpg", "https://www.redeszone.net/app/uploads-redeszone.net/2019/05/detectar-robo-identidad.jpg?x=480&y=375&quality=40",
                 "https://blog.hernandez-vilches.com/wp-content/uploads/robo-o-hurto.jpg", "https://cdn.discordapp.com/attachments/953974289919520778/954353275765948426/depositphotos_181139154-stock-photo-kidnapper-with-tied-woman-isolated.png",
                 "https://previews.123rf.com/images/kadmy/kadmy1301/kadmy130100017/17276432-dieb-entf%C3%BChrer-mit-kind-isoliert.jpg", "https://thumbs.dreamstime.com/z/el-secuestrador-con-la-mujer-atada-aislada-en-blanco-107917170.jpg",

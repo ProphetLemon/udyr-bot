@@ -337,11 +337,11 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                     userID: udyr.id,
                     endDate: dateNow
                 });
-                crear.save();
-                var prueba = await adminModel.findOneAndRemove({
+                await crear.save();
+                await adminModel.findOneAndRemove({
                     userID: oldAdminModel.userID
                 })
-                prueba.save();
+
             }
         } else if (sucedioEventoAmor == true) {
             banquillo = [];
