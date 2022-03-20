@@ -274,14 +274,14 @@ function combate(gladiador1, gladiador2, message) {
                 break;
             case eventosRandom[1]:
                 sucedioEventoUdyr = true;
-                logCombateText += `🐻 Aparece <@!766271573271248926> y gankea por sorpresa a ${gladiador1.nombre} y a ${gladiador2.nombre}. 🐻\n`;
+                logCombateText += `🐻 Aparece <@!849997112930074654> y gankea por sorpresa a ${gladiador1.nombre} y a ${gladiador2.nombre}. 🐻\n`;
                 gladiador1.vida = 0;
                 gladiador2.vida = 0;
                 gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
                 gladiador2.vida = gladiador2.vida > 100 ? 100 : gladiador2.vida;
                 logCombateText += `${gladiador1.nombre}: ${gladiador1.vida} puntos de vida restantes\n${gladiador2.nombre}: ${gladiador2.vida} puntos de vida restantes.`;
                 combates.get(message.guild.id).push(logCombateText);
-                combates.get(message.guild.id).push("🏆 \u00A1El ganador del combate es <@!766271573271248926>! 🏆");
+                combates.get(message.guild.id).push("🏆 \u00A1El ganador del combate es <@!849997112930074654>! 🏆");
                 break;
             case eventosRandom[2]:
                 logCombateText += "🥰 De tanto darse de hostias se dan cuenta de que estan hechos el uno para el otro y abandonan el combate. 🥰\n";
@@ -416,7 +416,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                 miembroGanador.roles.add(role);
                 banquillo = [];
                 message.channel.send("<:1990_praisethesun:602528888400379935><@!" + miembroGanador.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
-                if (miembroPerdedor.id == "766271573271248926") {
+                if (miembroPerdedor.id == "849997112930074654") {
                     message.channel.send("", { files: ["./images/udyr-no-admin.jpg"] });
                 } else {
                     let link = './images/admin/'

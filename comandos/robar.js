@@ -16,6 +16,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        if (message.channel.id != "809786674875334677") return message.reply("Bien intentado hijo de puta ahora haz el reto en el canal de udyr a ver si hay huevos.")
         if (!profileData) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         var hoy = getCETorCESTDate()
         if (profileData.robar && profileData.robar.getDate() == hoy.getDate()) {
