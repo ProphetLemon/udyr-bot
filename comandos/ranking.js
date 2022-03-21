@@ -66,7 +66,6 @@ module.exports = {
                 }
             }
         }
-        console.log(mensaje)
         newEmbed.setDescription(mensaje)
         message.channel.send(newEmbed).then(msg => {
             message.delete();
