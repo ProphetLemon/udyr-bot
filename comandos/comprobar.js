@@ -1,0 +1,63 @@
+const { Message, Client } = require('discord.js');
+const profileModel = require('../models/profileSchema');
+const roboModel = require('../models/roboSchema');
+global.listaRobos = new Map()
+module.exports = {
+    name: 'comprobar',
+    aliases: [],
+    description: 'Funcion para comprobar los contadores de los robos',
+    /**
+     * 
+     * @param {Message} message 
+     * @param {string[]} args 
+     * @param {string} cmd 
+     * @param {Client} client 
+     * @param {*} Discord 
+     * @param {*} profileData 
+     */
+    async execute(message, args, cmd, client, Discord, profileData) {
+        var robos = await roboModel.find()
+        for (let i = 0; i < robos.length; i++) {
+            var robo = robos[i]
+            if (!listaRobos.get(robo.userIDLadron)) {
+                var profile = await profileModel.findOne({
+                    serverID: message.guild.id,
+                    userID: robo.userIDLadron
+                })
+                var dateNow = getCETorCESTDate()
+                var diff = profile.robar - dateNow
+                if (diff > 0) {
+                    var timeout = setTimeout(async (mensaje, robo) => {
+                        listaRobos.delete(robo.userIDLadron)
+                        await profileModel.findOneAndUpdate({
+                            userID: robo.userIDLadron,
+                            serverID: mensaje.guild.id
+                        }, {
+                            $inc: {
+                                udyrcoins: robo.dinero
+                            }
+                        })
+                        await roboModel.findOneAndRemove({
+                            userIDLadron: robo.userIDLadron
+                        })
+                        message.channel.send(`Han pasado 4 horas asi que <@!${robo.userIDLadron}> ha robado ${robo.dinero} udyrcoins a ${robo.userIDAfectado}`)
+                    }, diff, message, robo);
+                    listaRobos.set(userIDLadron, timeout)
+                } else {
+                    await profileModel.findOneAndUpdate({
+                        userID: robo.userIDLadron,
+                        serverID: mensaje.guild.id
+                    }, {
+                        $inc: {
+                            udyrcoins: robo.dinero
+                        }
+                    })
+                    await roboModel.findOneAndRemove({
+                        userIDLadron: robo.userIDLadron
+                    })
+                    message.channel.send(`Han pasado 4 horas asi que <@!${robo.userIDLadron}> ha robado ${robo.dinero} udyrcoins a ${robo.userIDAfectado}`)
+                }
+            }
+        }
+    }
+}
