@@ -44,7 +44,7 @@ module.exports = {
                         })
                         message.channel.send(`Han pasado 4 horas asi que <@!${robo.userIDLadron}> ha robado ${robo.dinero} udyrcoins a ${robo.userIDAfectado}`)
                     }, diff, message, robo);
-                    listaRobos.set(userIDLadron, timeout)
+                    listaRobos.set(robo.userIDLadron, timeout)
                 } else {
                     await profileModel.findOneAndUpdate({
                         userID: robo.userIDLadron,
