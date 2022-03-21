@@ -1,6 +1,7 @@
 const { Message, Client } = require('discord.js');
 const profileModel = require('../models/profileSchema');
 const roboModel = require('../models/roboSchema');
+const moment = require('moment');
 global.listaRobos = new Map()
 module.exports = {
     name: 'comprobar',
@@ -25,7 +26,7 @@ module.exports = {
                     userID: robo.userIDLadron
                 })
                 var dateNow = getCETorCESTDate()
-                var diff = profile.robar - dateNow
+                var diff = moment(profile.robar).add(4, 'hours').toDate() - dateNow
                 if (diff > 0) {
                     var timeout = setTimeout(async (mensaje, robo) => {
                         listaRobos.delete(robo.userIDLadron)
@@ -46,7 +47,7 @@ module.exports = {
                 } else {
                     await profileModel.findOneAndUpdate({
                         userID: robo.userIDLadron,
-                        serverID: mensaje.guild.id
+                        serverID: message.guild.id
                     }, {
                         $inc: {
                             udyrcoins: robo.dinero
