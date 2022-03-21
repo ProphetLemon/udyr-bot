@@ -207,15 +207,32 @@ async function coliseo(gladiador1, gladiador2, message, client, Discord) {
  */
 function combate(gladiador1, gladiador2, message) {
     var logCombateText = "";
-    var critico = gladiador1.nombre == adminActual.nombre ? Math.floor(Math.random() * 140) + 1 : Math.floor(Math.random() * 7) + 1;
-    var esquive = gladiador1.nombre == adminActual.nombre ? Math.floor(Math.random() * 7) + 1 : Math.floor(Math.random() * 140) + 1;
-    var parry = gladiador1.nombre == adminActual.nombre ? Math.floor(Math.random() * 4) + 1 : Math.floor(Math.random() * 80) + 1;
-    var eventoImprobable = Math.floor(Math.random() * 100);
-    if (eventoImprobable != 23) {
-        if (gladiador1.nombre == adminActual.nombre ? parry == 1 : parry <= 23) {
-            var stun = Math.floor(Math.random() * 5);
-            if (stun <= 1) {
-                if (critico == 1) {
+    /**
+     * CRITICO 12% ADMIN --------- 10% PIBE NORMAL
+     * 
+     * PARRY 28% ADMIN ----- 25% PIBE NORMAL
+     * 
+     * ESCUDO 12% ADMIN --------- 10% PIBE NORMAL
+     * 
+     */
+    var critico = Math.random(Math.floor() * 100) + 1
+    var parry = Math.random(Math.floor() * 100) + 1
+    var escudo = Math.random(Math.floor() * 100) + 1
+    if (gladiador1.nombre == adminActual.nombre) {
+        critico = critico <= 12
+        parry = parry <= 25
+        escudo = escudo <= 10
+    } else {
+        critico = critico <= 10
+        parry = parry <= 28
+        escudo = escudo <= 12
+    }
+    var eventoImprobable = Math.floor(Math.random() * 100) == 23;
+    if (eventoImprobable) {
+        if (parry) {
+            var stun = Math.floor(Math.random() * 7)==0;
+            if (stun) {
+                if (critico) {
                     logCombateText += `:ninja: ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry al ataque **cr\u00EDtico** y le stunea durante 1 turno. :ninja:\n`;
                 }
                 else {
@@ -228,15 +245,15 @@ function combate(gladiador1, gladiador2, message) {
                 gladiador1.vida -= hostia;
             }
             else {
-                if (critico == 1) {
+                if (critico) {
                     logCombateText += `:ninja: ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry al ataque **cr\u00EDtico** y le hace ${parryDmg} puntos de da\u00F1o. :ninja:\n`;
                 } else {
                     logCombateText += `:ninja: ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry y le hace ${parryDmg} puntos de da\u00F1o. :ninja:\n`;
                 }
                 gladiador1.vida -= parryDmg;
             }
-        } else if (gladiador1.nombre == adminActual.nombre ? esquive == 1 : esquive <= 23) {
-            if (critico == 1) {
+        } else if (escudo) {
+            if (critico) {
                 logCombateText += `:shield: ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra esquivar el ataque **cr\u00EDtico**. :shield:\n`;
             } else {
                 logCombateText += `:shield: ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra esquivar el ataque. :shield:\n`;
@@ -245,7 +262,7 @@ function combate(gladiador1, gladiador2, message) {
                 logCombateText += `:heart: ${gladiador2.nombre} se toma una poti a su salud y recupera ${Math.floor((100 - gladiador2.vida) * 50 / 100)} puntos de salud. :heart:\n`;
                 gladiador2.vida += Math.floor((100 - gladiador2.vida) * 50 / 100);
             }
-        } else if (gladiador1.nombre == adminActual.nombre ? critico <= 23 : critico == 1) {
+        } else if (critico) {
             var hostiaCritico = Math.floor(Math.random() * 21) + 60;
             logCombateText += `:boom: ${gladiador1.nombre} golpea y le causa un da\u00F1o tremendo a ${gladiador2.nombre} infligiendole ${hostiaCritico} puntos de da\u00F1o. :boom:\n`;
             logCombateText += gladiador1.nombre + ": <:maestria7:761734001190109194>\n";
