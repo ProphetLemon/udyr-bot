@@ -52,7 +52,6 @@ module.exports = {
             mensaje += `${member.displayName} - ${competidor.udyrcoins} <:udyrcoin:825031865395445760> ${competidor.dailyGift.getDate() != hoy.getDate() ? "_no ha canjeado la recompensa diaria_" : ""}${member.roles.cache.get(rolAdmin.id) ? " <:1990_praisethesun:602528888400379935>" : ""}\n`;
         }
         if (!adminLocalizado) {
-            mensaje = mensaje.split("💩")[0];
             for (let i = 10; i < personas.length; i++) {
                 let competidor = personas[i];
                 var member = guildMembers.find(member => competidor.userID == member.id);
@@ -67,6 +66,7 @@ module.exports = {
                 }
             }
         }
+        console.log(mensaje)
         newEmbed.setDescription(mensaje)
         message.channel.send(newEmbed).then(msg => {
             message.delete();
