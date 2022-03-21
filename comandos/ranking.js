@@ -44,7 +44,7 @@ module.exports = {
                 mensaje += `🥈 `;
             } else if (i == 0) {
                 mensaje += `🥇 `;
-            } else if (i == personas.length - 1 || i == 9) {
+            } else if (i == personas.length - 1) {
                 mensaje += `💩 `;
             } else {
                 mensaje += `${i + 1}.- `;
