@@ -17,6 +17,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        console.log(`INICIO ${cmd.toUpperCase()}`)
         var robos = await roboModel.find()
         for (let i = 0; i < robos.length; i++) {
             var robo = robos[i]
@@ -60,5 +61,12 @@ module.exports = {
                 }
             }
         }
+        message.channel.send("Se han comprobado correctamente los robos!").then(msg => {
+            message.delete()
+            setTimeout(() => {
+                msg.delete()
+            }, 6000);
+        })
+        console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }
