@@ -31,7 +31,7 @@ module.exports = {
             .setAuthor(`🏆Ranking de udyrcoins🏆`);
         var hoy = getCETorCESTDate()
         let adminLocalizado = false;
-        for (let i = 0; i < personas.length && i < 10; i++) {
+        for (let i = 0; i < personas.length; i++) {
             let competidor = personas[i];
             var member = guildMembers.find(member => competidor.userID == member.id);
             if (member.roles.cache.get(rolAdmin.id)) {
