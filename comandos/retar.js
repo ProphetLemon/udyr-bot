@@ -228,9 +228,10 @@ function combate(gladiador1, gladiador2, message) {
         escudo = escudo <= 12
     }
     var eventoImprobable = Math.floor(Math.random() * 100) == 23;
+    console.log(`CRITICO: ${critico}; PARRY: ${parry}; ESCUDO: ${escudo}; EVENTO${eventoImprobable}`)
     if (eventoImprobable) {
         if (parry) {
-            var stun = Math.floor(Math.random() * 7)==0;
+            var stun = Math.floor(Math.random() * 7) == 0;
             if (stun) {
                 if (critico) {
                     logCombateText += `:ninja: ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry al ataque **cr\u00EDtico** y le stunea durante 1 turno. :ninja:\n`;
