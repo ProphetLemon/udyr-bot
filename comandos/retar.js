@@ -215,9 +215,9 @@ function combate(gladiador1, gladiador2, message) {
      * ESCUDO 12% ADMIN --------- 10% PIBE NORMAL
      * 
      */
-    var critico = Math.random(Math.floor() * 100) + 1
-    var parry = Math.random(Math.floor() * 100) + 1
-    var escudo = Math.random(Math.floor() * 100) + 1
+    var critico = Math.floor(Math.random() * 100) + 1
+    var parry = Math.floor(Math.random() * 100) + 1
+    var escudo = Math.floor(Math.random() * 100) + 1
     if (gladiador1.nombre == adminActual.nombre) {
         critico = critico <= 12
         parry = parry <= 25
