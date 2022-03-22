@@ -338,7 +338,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
             let miembroPerdedor1 = guildMembers.find(member => member.displayName == gladiador1.nombre);
             let miembroPerdedor2 = guildMembers.find(member => member.displayName == gladiador2.nombre);
             var role = guildRoles.cache.find(role => role.name == "El Admin");
-            if (miembroPerdedor1.roles.cache.get(role.id) || miembroPerdedor2.roles.cache.get(role.id)) {
+            if (miembroPerdedor1.roles.cache.has(role.id) || miembroPerdedor2.roles.cache.has(role.id)) {
                 miembroPerdedor1.roles.remove(role.id);
                 miembroPerdedor2.roles.remove(role.id);
                 udyr.roles.add(role);
@@ -377,7 +377,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
             var tioRandom = guildMembers.find(member => member.id == idRandom);
             var roleAdmin = guildRoles.cache.find(role => role.name == "El Admin");
             var roleMaricones = guildRoles.cache.find(role => role.name == "Maricones");
-            if (maricon1.roles.cache.get(roleAdmin.id) || maricon2.roles.cache.get(roleAdmin.id)) {
+            if (maricon1.roles.cache.has(roleAdmin.id) || maricon2.roles.cache.has(roleAdmin.id)) {
                 if (maricon1.displayName != udyr.displayName && maricon2.displayName != udyr.displayName) {
                     udyr.roles.add(roleAdmin);
                     message.channel.send("<:1990_praisethesun:602528888400379935><@!" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
@@ -428,7 +428,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
             let miembroGanador = guildMembers.find(member => member.displayName == ganador.nombre);
             let miembroPerdedor = guildMembers.find(member => member.displayName == perdedor.nombre);
             var role = guildRoles.cache.find(role => role.name == "El Admin");
-            if (miembroPerdedor.roles.cache.get(role.id)) {
+            if (miembroPerdedor.roles.cache.has(role.id)) {
                 miembroPerdedor.roles.remove(role.id);
                 miembroGanador.roles.add(role);
                 banquillo = [];
@@ -463,7 +463,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                         client.commands.get("ranking").execute(message, undefined, 'ranking', client, Discord);
                     }, 2000);
                 }
-            } else if (miembroGanador.roles.cache.get(role.id)) {
+            } else if (miembroGanador.roles.cache.has(role.id)) {
                 var dateLater = getCETorCESTDate();
                 dateLater = moment(dateLater).add(30, 'm').toDate()
                 dateLater.setSeconds(0);

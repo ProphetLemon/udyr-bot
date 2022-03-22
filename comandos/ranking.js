@@ -34,7 +34,7 @@ module.exports = {
         for (let i = 0; i < personas.length; i++) {
             let competidor = personas[i];
             var member = guildMembers.find(member => competidor.userID == member.id);
-            if (member.roles.cache.get(rolAdmin.id)) {
+            if (member.roles.cache.has(rolAdmin.id)) {
                 mensaje += `<:1990_praisethesun:602528888400379935> `
                 adminLocalizado = true;
             }
@@ -49,7 +49,7 @@ module.exports = {
             } else {
                 mensaje += `${i + 1}.- `;
             }
-            mensaje += `${member.displayName} - ${competidor.udyrcoins} <:udyrcoin:825031865395445760> ${competidor.dailyGift.getDate() != hoy.getDate() ? "_no ha canjeado la recompensa diaria_" : ""}${member.roles.cache.get(rolAdmin.id) ? " <:1990_praisethesun:602528888400379935>" : ""}\n`;
+            mensaje += `${member.displayName} - ${competidor.udyrcoins} <:udyrcoin:825031865395445760> ${competidor.dailyGift.getDate() != hoy.getDate() ? "_no ha canjeado la recompensa diaria_" : ""}${member.roles.cache.has(rolAdmin.id) ? " <:1990_praisethesun:602528888400379935>" : ""}\n`;
         }
         if (!adminLocalizado) {
             for (let i = 10; i < personas.length; i++) {
@@ -60,7 +60,7 @@ module.exports = {
                     i = i - 1;
                     continue;
                 }
-                if (member.roles.cache.get(rolAdmin.id)) {
+                if (member.roles.cache.has(rolAdmin.id)) {
                     mensaje += `<:1990_praisethesun:602528888400379935> ${i + 1}.- ${member.displayName} - ${competidor.udyrcoins} <:udyrcoin:825031865395445760> ${competidor.dailyGift.getDate() != hoy.getDate() ? "_no ha canjeado la recompensa diaria_" : ""} <:1990_praisethesun:602528888400379935>\n`;
                     break;
                 }

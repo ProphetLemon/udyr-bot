@@ -1,30 +1,47 @@
+const { Message } = require("discord.js");
 var profileModel = require("../models/profileSchema");
 module.exports = {
     name: 'borrar',
     aliases: [],
     description: 'Funcion para borrar a alguien de la bbdd',
+    /**
+     * 
+     * @param {Message} message 
+     * @param {*} args 
+     * @param {*} cmd 
+     * @param {*} client 
+     * @param {*} Discord 
+     * @param {*} profileData 
+     * @returns 
+     */
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log("INICIO BORRAR");
-        if (!message.member.roles.cache.get("598897304812126208")) return message.reply("para usar este comando debes ser admin, maric\u00F3n");
+        var roleManager = await message.guild.roles.fetch()
+        var rolAdmin = roleManager.cache.find(role => role.name == "El Admin")
+        if (!message.member.roles.cache.has(rolAdmin.id)) return message.reply("para usar este comando debes ser admin, maric\u00F3n");
         var targetData = message.mentions.users.first();
         if (!targetData) {
             console.log("FIN BORRAR");
             return message.reply("mucho admin pero no sabes ni mencionar a alguien, maric\u00F3n");
         }
-        var existe = await profileModel.findOne({ userID: targetData.id });
-        if (!existe){ 
+        var existe = await profileModel.findOne({
+            userID: targetData.id,
+            serverID: message.guild.id
+        });
+        if (!existe) {
             console.log("FIN BORRAR");
             return message.reply("como esperas que borre a alguien que ni siquiera habla en el server, maric\u00F3n")
         };
         await profileModel.findOneAndRemove({
-            userID: targetData.id
+            userID: targetData.id,
+            serverID: message.guild.id
         });
-        var guildMembers = await message.guild.members.fetch();
-        var usuarioBorrado = guildMembers.find(member => member.id == targetData.id);
-        message.channel.send(`Se ha borrado correctamente al usuario ${usuarioBorrado.displayName}`).then(msg => {
-            msg.delete({ timeout: 3000 })
-            message.delete();
-        });
+        message.channel.send("Se ha borrado correctamente el usuario!").then(msg => {
+            setTimeout(() => {
+                msg.delete()
+            }, 5000);
+            message.delete()
+        })
         console.log("FIN BORRAR");
     }
 }
