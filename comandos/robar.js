@@ -50,13 +50,13 @@ module.exports = {
         var monedasRobadas = Math.floor((personaRobada.udyrcoins * porcentaje) / 100)
         message.channel.send("SE HA PRODUCIDO UN ROBO! :scream:")
         message.member.send(`Has robado hoy (${String(hoy.getDate()).padStart(2, '0')}/${String(hoy.getMonth() +
-            1).padStart(2, '0')}) a ${personaElegidaMember.displayName} y se la ha robado ${monedasRobadas} udyrcoins (${porcentaje}%)`)
+            1).padStart(2, '0')}) a ${personaElegidaMember.displayName} y se la ha robado ${monedasRobadas} <:udyrcoin:825031865395445760> (${porcentaje}%)`)
         personaElegidaMember.send(`Te han robado hoy (${String(hoy.getDate()).padStart(2, '0')}/${String(hoy.getMonth() +
-            1).padStart(2, '0')}) ${monedasRobadas} udyrcoins\n Para recuperarlos tienes que usar el comando \"udyr juicio @culpable\" mencionando` +
+            1).padStart(2, '0')}) ${monedasRobadas} <:udyrcoin:825031865395445760>\n Para recuperarlos tienes que usar el comando \"udyr juicio @culpable\" mencionando` +
             ` quien t\u00FA crees que es el culpable. Si aciertas se te devolver\u00E1 el dinero y se le har\u00E1 un castigo al ladr\u00F3n,` +
             ` si fallas se te cobrara un impuesto por hacer un juicio a un inocente y no podras recuperar el dinero`).catch((err) => {
                 message.channel.send(`<@!${personaElegidaMember.id}>, te han robado hoy (${String(hoy.getDate()).padStart(2, '0')}/${String(hoy.getMonth() +
-                    1).padStart(2, '0')}) ${monedasRobadas} udyrcoins\n Para recuperarlos tienes que usar el comando \"udyr juicio @culpable\" mencionando` +
+                    1).padStart(2, '0')}) ${monedasRobadas} <:udyrcoin:825031865395445760>\n Para recuperarlos tienes que usar el comando \"udyr juicio @culpable\" mencionando` +
                     ` quien t\u00FA crees que es el culpable. Si aciertas se te devolver\u00E1 el dinero y se le har\u00E1 un castigo al ladr\u00F3n,` +
                     ` si fallas se te cobrara un impuesto por hacer un juicio a un inocente y no podras recuperar el dinero.`)
             })
