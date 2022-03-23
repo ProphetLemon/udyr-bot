@@ -58,7 +58,9 @@ module.exports = {
         if (!profileData.udyrcoins) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         if (combates.get(message.guild.id) != undefined) {
             message.author.send("Callate maric\u00F3n, \u00BFno ves que est\u00E1n peleando los mayores?").then(msg => {
-                msg.delete({ timeout: 60000 })
+                setTimeout(() => {
+                    msg.delete()
+                }, 60000);
                 message.delete();
             });
             return;
