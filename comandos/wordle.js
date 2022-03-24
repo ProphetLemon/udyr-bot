@@ -5,7 +5,7 @@ const wordleModel = require('../models/wordleSchema');
 var resultadosPersonales = new Map()
 const profileModel = require('../models/profileSchema');
 module.exports = {
-    name: 'wordle',
+    // name: 'wordle',
     aliases: [],
     description: 'Funcion para hacer el wordle',
     /**
@@ -26,6 +26,9 @@ module.exports = {
                 }, 10000);
             })
             return
+        }
+        if (moment(profileData.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") == 0) {
+            return message.channel.send("")
         }
         if (!profileData) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         try {
