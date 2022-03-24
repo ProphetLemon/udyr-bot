@@ -29,7 +29,7 @@ module.exports = {
         }
         var dateNow = getCETorCESTDate()
         var hoy = moment(dateNow).format('DD/MM/YYYY')
-        if (moment(profileData.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") == 0) {
+        if (moment(profileData.dailyGift).startOf('day').diff(moment(dateNow).startOf('day'), "days") == 0) {
             return message.channel.send("ya has hecho udyr puntos hoy, eso te invalida hacer el wordle.")
         }
         if (!profileData) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
