@@ -36,6 +36,7 @@ module.exports = {
         var hoy = moment(dateNow).format('DD/MM/YYYY')
         if (profileData.wordle != undefined && profileData.wordle == hoy) return message.reply("Ya has hecho el wordle de hoy")
         var inputs = data.split("\r\n")
+        console.log(inputs)
         var guess = args[0]
         if (guess == undefined) return message.reply("Se te olvid\u00F3 poner una palabra despues de escribir 'udyr wordle'")
         guess = guess.toLowerCase()
