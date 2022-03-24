@@ -27,6 +27,8 @@ module.exports = {
             })
             return
         }
+        var dateNow = getCETorCESTDate()
+        var hoy = moment(dateNow).format('DD/MM/YYYY')
         if (moment(profileData.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") == 0) {
             return message.channel.send("ya has hecho udyr puntos hoy, eso te invalida hacer el wordle.")
         }
@@ -36,8 +38,6 @@ module.exports = {
         } catch (err) {
             console.error(err)
         }
-        var dateNow = getCETorCESTDate()
-        var hoy = moment(dateNow).format('DD/MM/YYYY')
         if (profileData.wordle != undefined && profileData.wordle == hoy) return message.reply("Ya has hecho el wordle de hoy")
         await profileModel.findOneAndUpdate({
             userID: message.author.id,
