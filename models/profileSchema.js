@@ -5,7 +5,8 @@ const profileSchema = new mongoose.Schema({
     serverID: { type: String, require: true },
     udyrcoins: { type: Number },
     dailyGift: { type: Date },
-    robar: { type: Date }
+    robar: { type: Date },
+    wordle: { type: String }
 });
 
 const model = mongoose.model('ProfileModels', profileSchema);

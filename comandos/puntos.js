@@ -1,4 +1,5 @@
 const profileModel = require('../models/profileSchema');
+const moment = require('moment');
 module.exports = {
     name: 'puntos',
     aliases: ['points'],
@@ -19,7 +20,7 @@ module.exports = {
         }
         console.log("INICIO PUNTOS");
         let hoy = getCETorCESTDate()
-        if (profileData.dailyGift.getDate() == hoy.getDate()) {
+        if (moment(profileData.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") == 0) {
             var personas = await profileModel.find();
             personas.sort(function (a, b) {
                 return b.udyrcoins - a.udyrcoins;

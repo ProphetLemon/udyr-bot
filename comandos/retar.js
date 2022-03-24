@@ -55,7 +55,7 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`)
-        if (!profileData.udyrcoins) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
+        if (!profileData) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         if (combates.get(message.guild.id) != undefined) {
             message.author.send("Callate maric\u00F3n, \u00BFno ves que est\u00E1n peleando los mayores?").then(msg => {
                 setTimeout(() => {
@@ -212,9 +212,9 @@ function combate(gladiador1, gladiador2, message) {
     /**
      * CRITICO 12% ADMIN --------- 10% PIBE NORMAL
      * 
-     * PARRY 28% ADMIN ----- 25% PIBE NORMAL
+     * PARRY 28% ADMIN ----------- 25% PIBE NORMAL
      * 
-     * ESCUDO 12% ADMIN --------- 10% PIBE NORMAL
+     * ESCUDO 12% ADMIN ---------- 10% PIBE NORMAL
      * 
      */
     var critico = Math.floor(Math.random() * 100) + 1
