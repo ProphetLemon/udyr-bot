@@ -30,13 +30,13 @@ module.exports = {
         if (!profileData) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         try {
             var data = fs.readFileSync('./wordle/wordle.txt', 'utf8')
+            console.log(data)
         } catch (err) {
             console.error(err)
         }
         var hoy = moment(dateNow).format('DD/MM/YYYY')
         if (profileData.wordle != undefined && profileData.wordle == hoy) return message.reply("Ya has hecho el wordle de hoy")
         var inputs = data.split("\r\n")
-        console.log(inputs)
         var guess = args[0]
         if (guess == undefined) return message.reply("Se te olvid\u00F3 poner una palabra despues de escribir 'udyr wordle'")
         guess = guess.toLowerCase()
