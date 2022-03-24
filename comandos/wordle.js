@@ -5,7 +5,7 @@ const wordleModel = require('../models/wordleSchema');
 var resultadosPersonales = new Map()
 const profileModel = require('../models/profileSchema');
 module.exports = {
-    // name: 'wordle',
+    name: 'wordle',
     aliases: [],
     description: 'Funcion para hacer el wordle',
     /**
@@ -28,7 +28,7 @@ module.exports = {
             return
         }
         if (moment(profileData.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") == 0) {
-            return message.channel.send("")
+            return message.channel.send("ya has hecho udyr puntos hoy, eso te invalida hacer el wordle.")
         }
         if (!profileData) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         try {
@@ -36,8 +36,17 @@ module.exports = {
         } catch (err) {
             console.error(err)
         }
+        var dateNow = getCETorCESTDate()
         var hoy = moment(dateNow).format('DD/MM/YYYY')
         if (profileData.wordle != undefined && profileData.wordle == hoy) return message.reply("Ya has hecho el wordle de hoy")
+        await profileModel.findOneAndUpdate({
+            userID: message.author.id,
+            serverID: "598896817157046281"
+        }, {
+            $set: {
+                wordleEmpezado: true
+            }
+        })
         var inputs = data.split("\n")
         var guess = args[0]
         if (guess == undefined) return message.reply("Se te olvid\u00F3 poner una palabra despues de escribir 'udyr wordle'")
@@ -45,8 +54,6 @@ module.exports = {
         if (guess.length != 5) return message.reply("esa no es una palabra de 5 letras")
         if (!inputs.includes(guess)) return message.reply("esa palabra no la tengo en el diccionario :(")
         if (!profileData) return message.reply("no tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
-        var dateNow = getCETorCESTDate()
-
         var palabra = await wordleModel.findOne({ dia: hoy })
         var palabraWordle = ""
         if (!palabra) {
@@ -135,7 +142,8 @@ module.exports = {
                     udyrcoins: puntos
                 },
                 $set: {
-                    wordle: hoy
+                    wordle: hoy,
+                    wordleEmpezado: false
                 }
             })
         } else if ((resultadosPersonales.get(message.author.id).split("\n").length - 1) == 6) {
@@ -149,7 +157,8 @@ module.exports = {
                 serverID: "598896817157046281"
             }, {
                 $set: {
-                    wordle: hoy
+                    wordle: hoy,
+                    wordleEmpezado: false
                 }
             })
         }

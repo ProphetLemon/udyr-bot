@@ -6,7 +6,8 @@ const profileSchema = new mongoose.Schema({
     udyrcoins: { type: Number },
     dailyGift: { type: Date },
     robar: { type: Date },
-    wordle: { type: String }
+    wordle: { type: String },
+    wordleEmpezado: { type: Boolean }
 });
 
 const model = mongoose.model('ProfileModels', profileSchema);

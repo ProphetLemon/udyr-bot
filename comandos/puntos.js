@@ -20,7 +20,7 @@ module.exports = {
         }
         console.log("INICIO PUNTOS");
         let hoy = getCETorCESTDate()
-        if (moment(profileData.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") == 0) {
+        if (moment(profileData.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") == 0 || ((profileData.wordle != undefined && moment(hoy).format("DD/MM/YYYY") == profileData.wordle) || (profileData.wordleEmpezado != undefined && profileData.wordleEmpezado == true))) {
             var personas = await profileModel.find();
             personas.sort(function (a, b) {
                 return b.udyrcoins - a.udyrcoins;
