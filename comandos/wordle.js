@@ -39,9 +39,9 @@ module.exports = {
         var guess = args[0]
         if (guess == undefined) return message.reply("Se te olvid\u00F3 poner una palabra despues de escribir 'udyr wordle'")
         guess = guess.toLowerCase()
-        if (guess.length != 5) return message.reply("Esa no es una palabra de 5 letras")
-        if (!inputs.includes(guess)) return message.reply("esa palabra no existe")
-        if (!profileData) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
+        if (guess.length != 5) return message.reply("esa no es una palabra de 5 letras")
+        if (!inputs.includes(guess)) return message.reply("esa palabra no la tengo en el diccionario :(")
+        if (!profileData) return message.reply("no tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         var dateNow = getCETorCESTDate()
 
         var palabra = await wordleModel.findOne({ dia: hoy })
