@@ -30,7 +30,6 @@ module.exports = {
         if (!profileData) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         try {
             var data = fs.readFileSync('./wordle/wordle.txt', 'utf8')
-            console.log(data)
         } catch (err) {
             console.error(err)
         }
