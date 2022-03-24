@@ -3369,6 +3369,7 @@ pigra
 pigre
 pigro
 pilar
+pilas
 pilca
 pilla
 pillo
