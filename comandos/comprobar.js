@@ -18,6 +18,10 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`)
+        if (message.channel.id != "809786674875334677") {
+            console.log(`FIN ${cmd.toUpperCase()}`)
+            return message.reply("Hazlo en udyr")
+        }
         var robos = await roboModel.find()
         for (let i = 0; i < robos.length; i++) {
             var robo = robos[i]

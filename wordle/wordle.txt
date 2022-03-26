@@ -585,6 +585,7 @@ berro
 berta
 berza
 besar
+besos
 betel
 betun
 beuda
@@ -982,6 +983,7 @@ cenit
 censo
 centi
 ceoan
+cepas
 cepon
 cepti
 cequi
@@ -2842,6 +2844,7 @@ mosen
 moste
 mosto
 motar
+motes
 motin
 motil
 moton
@@ -2882,6 +2885,7 @@ mural
 murar
 murga
 muria
+murio
 murta
 musar
 musca
@@ -3174,6 +3178,7 @@ palas
 palay
 palca
 palco
+pales
 palia
 palio
 palma
@@ -3302,6 +3307,7 @@ perro
 persa
 perta
 pesar
+pesos
 pesca
 pesce
 pesga
@@ -3309,6 +3315,8 @@ pesia
 peste
 petar
 petra
+petro
+petos
 peuco
 peumo
 pezon

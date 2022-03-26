@@ -16,8 +16,15 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
-        if (message.channel.id != "809786674875334677") return message.reply("Bien intentado hijo de puta ahora intenta robar en el canal de udyr a ver si hay huevos.")
-        if (!profileData) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
+        console.log(`INICIO ${cmd.toUpperCase()}`)
+        if (message.channel.id != "809786674875334677") {
+            console.log(`FIN ${cmd.toUpperCase()}`)
+            return message.reply("Bien intentado hijo de puta ahora intenta robar en el canal de udyr a ver si hay huevos.")
+        }
+        if (!profileData) {
+            console.log(`FIN ${cmd.toUpperCase()}`)
+            return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
+        }
         var hoy = getCETorCESTDate()
         if (profileData.robar && profileData.robar.getDate() == hoy.getDate()) {
             message.member.send("Ya has robado cabron").then(msg => {
@@ -25,9 +32,11 @@ module.exports = {
                     msg.delete()
                 }, 10000);
             })
+            console.log(`FIN ${cmd.toUpperCase()}`)
             return message.delete()
         }
         if (hoy.getHours() < 12) {
+            console.log(`FIN ${cmd.toUpperCase()}`)
             return message.channel.send("Solo se puede robar de 12:00 - 23:59")
         }
         var porcentaje = Math.floor(Math.random() * 11) + 15
@@ -98,5 +107,6 @@ module.exports = {
         }, 14_400_000, message, hurto);
         listaRobos.set(message.member.id, timeout)
         message.delete()
+        console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }

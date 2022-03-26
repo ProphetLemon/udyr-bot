@@ -18,6 +18,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        console.log(`INICIO ${cmd.toUpperCase()}`)
         if (message.guild != null) {
             message.channel.send("El wordle solo se hace en privado que sino es mucho spam").then(msg => {
                 message.delete()
@@ -25,20 +26,29 @@ module.exports = {
                     msg.delete()
                 }, 10000);
             })
+            console.log(`FIN ${cmd.toUpperCase()}`)
             return
         }
         var dateNow = getCETorCESTDate()
         var hoy = moment(dateNow).format('DD/MM/YYYY')
         if (moment(profileData.dailyGift).startOf('day').diff(moment(dateNow).startOf('day'), "days") == 0) {
+            console.log(`FIN ${cmd.toUpperCase()}`)
             return message.channel.send("ya has hecho udyr puntos hoy, eso te invalida hacer el wordle.")
         }
-        if (!profileData) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
+        if (!profileData) {
+            console.log(`FIN ${cmd.toUpperCase()}`)
+            return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
+        }
         try {
             var data = fs.readFileSync('./wordle/wordle.txt', 'utf8')
         } catch (err) {
             console.error(err)
+            return
         }
-        if (profileData.wordle != undefined && profileData.wordle == hoy) return message.reply("Ya has hecho el wordle de hoy")
+        if (profileData.wordle != undefined && profileData.wordle == hoy) {
+            console.log(`FIN ${cmd.toUpperCase()}`)
+            return message.reply("Ya has hecho el wordle de hoy")
+        }
         await profileModel.findOneAndUpdate({
             userID: message.author.id,
             serverID: "598896817157046281"
@@ -49,16 +59,27 @@ module.exports = {
         })
         var inputs = data.split("\n")
         var guess = args[0]
-        if (guess == undefined) return message.reply("Se te olvid\u00F3 poner una palabra despues de escribir 'udyr wordle'")
+        if (guess == undefined) {
+            console.log(`FIN ${cmd.toUpperCase()}`)
+            return message.reply("Se te olvid\u00F3 poner una palabra despues de escribir 'udyr wordle'")
+        }
         guess = guess.toLowerCase()
-        if (guess.length != 5) return message.reply("esa no es una palabra de 5 letras")
-        if (!inputs.includes(guess)) return message.reply("esa palabra no la tengo en el diccionario :(")
-        if (!profileData) return message.reply("no tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
+        if (guess.length != 5) {
+            console.log(`FIN ${cmd.toUpperCase()}`)
+            return message.reply("esa no es una palabra de 5 letras")
+        }
+        if (!inputs.includes(guess)) {
+            console.log(`FIN ${cmd.toUpperCase()}`)
+            return message.reply("esa palabra no la tengo en el diccionario :(")
+        }
+        if (!profileData) {
+            console.log(`FIN ${cmd.toUpperCase()}`)
+            return message.reply("no tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
+        }
         var palabra = await wordleModel.findOne({ dia: hoy })
         var palabraWordle = ""
         if (!palabra) {
             await wordleModel.remove({})
-
             palabraWordle = inputs[Math.floor(Math.random() * inputs.length)]
             let registro = await wordleModel.create({
                 palabra: palabraWordle,
@@ -124,7 +145,7 @@ module.exports = {
         } else {
             resultadosPersonales.set(message.author.id, mensaje + "\n")
         }
-        message.channel.send(`Udyr Wordle #${moment(getCETorCESTDate()).startOf('day').diff(moment().startOf('year'), "days") + 1} ${resultadosPersonales.get(message.author.id).split("\n").length - 1}/6\n` + mensaje)
+        message.channel.send(`Intento ${resultadosPersonales.get(message.author.id).split("\n").length - 1}/6\n` + mensaje)
         var puntos = 0
         if (mensaje == ":green_square:|:green_square:|:green_square:|:green_square:|:green_square:") {
             message.channel.send(`Que vas de listo o que`)
@@ -148,7 +169,7 @@ module.exports = {
             })
         } else if ((resultadosPersonales.get(message.author.id).split("\n").length - 1) == 6) {
             message.channel.send(`Sos malisimo perro, la palabra era **_${palabraWordle.toUpperCase()}_**`)
-            message.channel.send(`Udyr Wordle #${moment(getCETorCESTDate()).startOf('day').diff(moment().startOf('year'), "days") + 1} ${resultadosPersonales.get(message.author.id).split("\n").length - 1}/6\n${resultadosPersonales.get(message.author.id)}`)
+            message.channel.send(`Udyr Wordle #${moment(getCETorCESTDate()).startOf('day').diff(moment().startOf('year'), "days") + 1} X/6\n${resultadosPersonales.get(message.author.id)}`)
             const textChannel = client.guilds.cache.get("598896817157046281").channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
             textChannel.send(`Resultado de ${message.author.username}\nUdyr Wordle #${moment(getCETorCESTDate()).startOf('day').diff(moment().startOf('year'), "days") + 1} ${resultadosPersonales.get(message.author.id).split("\n").length - 1}/6\n${resultadosPersonales.get(message.author.id)}`)
             resultadosPersonales.delete(message.author.id)
@@ -162,5 +183,6 @@ module.exports = {
                 }
             })
         }
+        console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }
