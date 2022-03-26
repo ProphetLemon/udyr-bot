@@ -196,7 +196,7 @@ async function coliseo(gladiador1, gladiador2, message, client, Discord) {
         perdedor = gladiador1;
         combates.get(message.guild.id).push(perdedor.nombre + ", maric\u00F3n");
     }
-    messageCopy.channel.send(combates.get(message.guild.id)[0] + "\nTurno 1:\n" + combates.get(message.guild.id)[1]);
+    messageCopy.channel.send(combates.get(message.guild.id)[0] + "\n**Turno 1:**\n" + combates.get(message.guild.id)[1]);
     console.log("INICIO LEERRONDASPELEA");
     leerRondasPelea(gladiador1, gladiador2, messageCopy, client, Discord);
     console.log("FIN COLISEO");
@@ -501,7 +501,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
         return;
     } else {
         setTimeout(function () {
-            message.channel.send("Turno " + turno + ":\n" + combates.get(message.guild.id)[turno++] + "\n\n");
+            message.channel.send("**Turno " + turno + ":**\n" + combates.get(message.guild.id)[turno++] + "\n\n");
             leerRondasPelea(gladiador1, gladiador2, message, client, Discord);
         }, 6000);
     }
