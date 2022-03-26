@@ -79,7 +79,9 @@ module.exports = {
                     { name: "<:udyrcoin:825031865395445760>", value: `${profileData.udyrcoins}`, inline: true }
                 )
             message.channel.send(newEmbed).then(msg => {
-                msg.delete({ timeout: 10000 });
+                if (cmd != 'perfil') {
+                    msg.delete({ timeout: 10000 });
+                }
                 message.delete();
             });
         } else {
