@@ -139,7 +139,7 @@ module.exports = {
         for (let i = 0; i < 5; i++) {
             mensaje += result.get(i)
         }
-        mensaje = mensaje.substring(0, mensaje.length - 1)
+        mensaje = "|" + mensaje
         if (resultadosPersonales.get(message.author.id)) {
             resultadosPersonales.set(message.author.id, resultadosPersonales.get(message.author.id) + mensaje + "\n")
         } else {
@@ -147,7 +147,7 @@ module.exports = {
         }
         message.channel.send(`Intento ${resultadosPersonales.get(message.author.id).split("\n").length - 1}/6\n` + mensaje)
         var puntos = 0
-        if (mensaje == ":green_square:|:green_square:|:green_square:|:green_square:|:green_square:") {
+        if (mensaje == "|:green_square:|:green_square:|:green_square:|:green_square:|:green_square:|") {
             message.channel.send(`Que vas de listo o que`)
             message.channel.send(`Udyr Wordle #${moment(getCETorCESTDate()).startOf('day').diff(moment().startOf('year'), "days") + 1} ${resultadosPersonales.get(message.author.id).split("\n").length - 1}/6\n${resultadosPersonales.get(message.author.id)}`)
             puntos = 120 - 20 * ((resultadosPersonales.get(message.author.id).split("\n").length - 1) - 1)

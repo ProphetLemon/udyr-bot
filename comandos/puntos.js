@@ -15,6 +15,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        console.log("INICIO PUNTOS");
         if (!profileData) {
             var ayer = new Date();
             ayer.setDate(ayer.getDate() - 1);
@@ -37,9 +38,8 @@ module.exports = {
                 serverID: message.guild.id
             })
         }
-        console.log("INICIO PUNTOS");
         let hoy = getCETorCESTDate()
-        if (message.mentions.members.first() || moment(profileData.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") == 0 || ((profileData.wordle != undefined && moment(hoy).format("DD/MM/YYYY") == profileData.wordle) || (profileData.wordleEmpezado != undefined && profileData.wordleEmpezado == true))) {
+        if (cmd == 'perfil' || message.mentions.members.first() || moment(profileData.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") == 0 || ((profileData.wordle != undefined && moment(hoy).format("DD/MM/YYYY") == profileData.wordle) || (profileData.wordleEmpezado != undefined && profileData.wordleEmpezado == true))) {
             var personas = await profileModel.find();
             personas.sort(function (a, b) {
                 return b.udyrcoins - a.udyrcoins;
