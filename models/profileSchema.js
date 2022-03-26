@@ -7,7 +7,8 @@ const profileSchema = new mongoose.Schema({
     dailyGift: { type: Date },
     robar: { type: Date },
     wordle: { type: String },
-    wordleEmpezado: { type: Boolean }
+    wordleEmpezado: { type: Boolean },
+    descripcion: { type: String, default: 'Un maric\u00F3n m\u00E1s de este servidor' }
 });
 
 const model = mongoose.model('ProfileModels', profileSchema);

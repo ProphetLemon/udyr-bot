@@ -1,9 +1,19 @@
 const profileModel = require('../models/profileSchema');
 const moment = require('moment');
+const { Message } = require('discord.js');
 module.exports = {
     name: 'puntos',
     aliases: ['points'],
     description: 'Funcion para saber los puntos que tienes',
+    /**
+     * 
+     * @param {Message} message 
+     * @param {*} args 
+     * @param {*} cmd 
+     * @param {*} client 
+     * @param {*} Discord 
+     * @param {*} profileData 
+     */
     async execute(message, args, cmd, client, Discord, profileData) {
         if (!profileData) {
             var ayer = new Date();
@@ -52,8 +62,13 @@ module.exports = {
             }
             const newEmbed = new Discord.MessageEmbed()
                 .setColor("#B17428")
-                .setAuthor(`Perfil de ${message.member.displayName}`, message.author.avatarURL())
-                .setDescription(`**Udyr coins:** ${profileData.udyrcoins} <:udyrcoin:825031865395445760>\n**Ranking:** ${posicion} ${emoji}`)
+                .setThumbnail(message.author.avatarURL())
+                .setAuthor(`Perfil de ${message.member.displayName}`)
+                .setDescription(`${profileData.descripcion}`)
+                .addFields(
+                    { name: "Ranking", value: `${posicion} ${emoji}`, inline: true },
+                    { name: "<:udyrcoin:825031865395445760>", value: `${profileData.udyrcoins}`, inline: true }
+                )
             message.channel.send(newEmbed).then(msg => {
                 msg.delete({ timeout: 10000 });
                 message.delete();
@@ -109,8 +124,13 @@ module.exports = {
             }
             const newEmbed = new Discord.MessageEmbed()
                 .setColor("#B17428")
-                .setAuthor(`Perfil de ${message.member.displayName}`, message.author.avatarURL())
-                .setDescription(`**Udyr coins:** ${targetData.udyrcoins} <:udyrcoin:825031865395445760>\n**Ranking:** ${posicion} ${emoji}`)
+                .setThumbnail(message.author.avatarURL())
+                .setAuthor(`Perfil de ${message.member.displayName}`)
+                .setDescription(`${profileData.descripcion}`)
+                .addFields(
+                    { name: "Ranking", value: `${posicion} ${emoji}`, inline: true },
+                    { name: "<:udyrcoin:825031865395445760>", value: `${profileData.udyrcoins}`, inline: true }
+                )
             message.channel.send(newEmbed).then(msg => {
                 msg.delete({ timeout: 10000 });
                 message.delete();
