@@ -212,7 +212,7 @@ function combate(gladiador1, gladiador2, message) {
     /**
      * CRITICO 12% ADMIN --------- 10% PIBE NORMAL
      * 
-     * PARRY 28% ADMIN ----------- 25% PIBE NORMAL
+     * PARRY 20% ADMIN ----------- 17% PIBE NORMAL
      * 
      * ESCUDO 12% ADMIN ---------- 10% PIBE NORMAL
      * 
@@ -222,11 +222,11 @@ function combate(gladiador1, gladiador2, message) {
     var escudo = Math.floor(Math.random() * 100) + 1
     if (gladiador1.nombre == adminActual.nombre) {
         critico = critico <= 12
-        parry = parry <= 25
+        parry = parry <= 17
         escudo = escudo <= 10
     } else {
         critico = critico <= 10
-        parry = parry <= 28
+        parry = parry <= 20
         escudo = escudo <= 12
     }
     var eventoImprobable = Math.floor(Math.random() * 100) == 23;
