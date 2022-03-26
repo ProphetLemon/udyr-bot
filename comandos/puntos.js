@@ -3,7 +3,7 @@ const moment = require('moment');
 const { Message } = require('discord.js');
 module.exports = {
     name: 'puntos',
-    aliases: ['points'],
+    aliases: ['points','perfil'],
     description: 'Funcion para saber los puntos que tienes',
     /**
      * 
