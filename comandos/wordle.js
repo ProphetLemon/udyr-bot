@@ -31,9 +31,9 @@ module.exports = {
         }
         var dateNow = getCETorCESTDate()
         var hoy = moment(dateNow).format('DD/MM/YYYY')
+        var dineros = true
         if (moment(profileData.dailyGift).startOf('day').diff(moment(dateNow).startOf('day'), "days") == 0) {
-            console.log(`FIN ${cmd.toUpperCase()}`)
-            return message.channel.send("ya has hecho udyr puntos hoy, eso te invalida hacer el wordle.")
+            dineros = false
         }
         if (!profileData) {
             console.log(`FIN ${cmd.toUpperCase()}`)
@@ -155,23 +155,36 @@ module.exports = {
             const textChannel = client.guilds.cache.get("598896817157046281").channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
             textChannel.send(`Resultado de ${message.author.username}\nUdyr Wordle #${moment(getCETorCESTDate()).startOf('day').diff(moment().startOf('year'), "days") + 1} ${resultadosPersonales.get(message.author.id).split("\n").length - 1}/6\n${resultadosPersonales.get(message.author.id)}`)
             resultadosPersonales.delete(message.author.id)
-            await profileModel.findOneAndUpdate({
-                userID: message.author.id,
-                serverID: "598896817157046281"
-            }, {
-                $inc: {
-                    udyrcoins: puntos
-                },
-                $set: {
-                    wordle: hoy,
-                    wordleEmpezado: false
-                }
-            })
+            if (dineros == true) {
+                await profileModel.findOneAndUpdate({
+                    userID: message.author.id,
+                    serverID: "598896817157046281"
+                }, {
+                    $inc: {
+                        udyrcoins: puntos
+                    },
+                    $set: {
+                        wordle: hoy,
+                        wordleEmpezado: false
+                    }
+                })
+            } else {
+                await profileModel.findOneAndUpdate({
+                    userID: message.author.id,
+                    serverID: "598896817157046281"
+                }, {
+                    $set: {
+                        wordle: hoy,
+                        wordleEmpezado: false
+                    }
+                })
+            }
+
         } else if ((resultadosPersonales.get(message.author.id).split("\n").length - 1) == 6) {
             message.channel.send(`Sos malisimo perro, la palabra era **_${palabraWordle.toUpperCase()}_**`)
             message.channel.send(`Udyr Wordle #${moment(getCETorCESTDate()).startOf('day').diff(moment().startOf('year'), "days") + 1} X/6\n${resultadosPersonales.get(message.author.id)}`)
             const textChannel = client.guilds.cache.get("598896817157046281").channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
-            textChannel.send(`Resultado de ${message.author.username}\nUdyr Wordle #${moment(getCETorCESTDate()).startOf('day').diff(moment().startOf('year'), "days") + 1} ${resultadosPersonales.get(message.author.id).split("\n").length - 1}/6\n${resultadosPersonales.get(message.author.id)}`)
+            textChannel.send(`Resultado de ${message.author.username}\nUdyr Wordle #${moment(getCETorCESTDate()).startOf('day').diff(moment().startOf('year'), "days") + 1} X/6\n${resultadosPersonales.get(message.author.id)}`)
             resultadosPersonales.delete(message.author.id)
             await profileModel.findOneAndUpdate({
                 userID: message.author.id,
