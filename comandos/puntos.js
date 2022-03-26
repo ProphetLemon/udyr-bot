@@ -3,7 +3,7 @@ const moment = require('moment');
 const { Message } = require('discord.js');
 module.exports = {
     name: 'puntos',
-    aliases: ['points','perfil'],
+    aliases: ['points', 'perfil'],
     description: 'Funcion para saber los puntos que tienes',
     /**
      * 
@@ -28,8 +28,10 @@ module.exports = {
             await profile.save();
             profileData = profile
         }
+        var author = message.author
         if (message.mentions.members.first()) {
-            let target = message.mentions.members.first()
+            var target = message.mentions.members.first()
+            author = target.user
             profileData = await profileModel.findOne({
                 userID: target.id,
                 serverID: message.guild.id
@@ -69,8 +71,8 @@ module.exports = {
             }
             const newEmbed = new Discord.MessageEmbed()
                 .setColor("#B17428")
-                .setThumbnail(message.author.avatarURL())
-                .setAuthor(`Perfil de ${message.member.displayName}`)
+                .setThumbnail(author.avatarURL())
+                .setAuthor(`Perfil de ${target != undefined ? target.displayName : message.member.displayName}`)
                 .setDescription(`${profileData.descripcion}`)
                 .addFields(
                     { name: "Ranking", value: `${posicion} ${emoji}`, inline: true },
