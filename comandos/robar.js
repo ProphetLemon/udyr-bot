@@ -27,6 +27,7 @@ module.exports = {
         }
         var reykjavik = moment.tz(moment().format("YYYY-MM-DD hh:mm:ss"), "Atlantic/Reykjavik")
         var hoy = new Date(reykjavik.clone().tz("Europe/Madrid").format(`MMMM DD, YYYY HH:mm:ss`))
+        console.log(reykjavik.toDate()+"\n"+hoy)
         if (profileData.robar && profileData.robar.getDate() == hoy.getDate()) {
             message.member.send("Ya has robado cabron").then(msg => {
                 setTimeout(() => {
