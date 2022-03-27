@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 const profileModel = require('./models/profileSchema');
 const fs = require('fs');
 global.moment = require('moment-timezone');
-moment.tz.setDefault("Atlantic/Reykjavik")
 client.commands = new Discord.Collection();
 client.events = new Discord.Collection();
 
