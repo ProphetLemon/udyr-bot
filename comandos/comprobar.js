@@ -30,7 +30,7 @@ module.exports = {
                     serverID: message.guild.id,
                     userID: robo.userIDLadron
                 })
-                var dateNow = moment().tz('Europe/Madrid').toDate()
+                var dateNow = moment(new Date()).tz('Europe/Madrid').toDate()
                 var diff = moment(profile.robar).add(4, 'hours').toDate() - dateNow
                 if (diff > 0) {
                     var timeout = setTimeout(async (mensaje, robo) => {

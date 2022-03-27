@@ -164,7 +164,7 @@ async function coliseo(gladiador1, gladiador2, message, client, Discord) {
         return;
     }
     if ((gladiador1.nombre == adminActual.nombre || gladiador2.nombre == adminActual.nombre) && !jugarseElTitulo) {
-        var dateNow = moment().tz('Europe/Madrid').toDate()
+        var dateNow = moment(new Date()).tz('Europe/Madrid').toDate()
         if (dateNow < adminActual.dateLimite) {
             message.reply("no se puede retar al admin aun, podras retar al admin cuando sean las " + adminActual.dateLimite.getHours() + ":" + metodosUtiles.cambiarMinutos(adminActual.dateLimite));
             console.log("FIN COLISEO");
@@ -346,7 +346,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                 udyr.roles.add(role);
                 message.channel.send(`<:1990_praisethesun:602528888400379935><@!${udyr.id}> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>`);
                 message.channel.send("", { files: ["./images/udyr-admin.jpg"] });
-                var dateNow = moment().tz('Europe/Madrid').toDate();
+                var dateNow = moment(new Date()).tz('Europe/Madrid').toDate();
                 dateNow = moment(dateNow).add(30, 'm').toDate()
                 dateNow.setSeconds(0);
                 adminActual = new admin(udyr.displayName, dateNow);
@@ -384,7 +384,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                     udyr.roles.add(roleAdmin);
                     message.channel.send("<:1990_praisethesun:602528888400379935><@!" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
                     message.channel.send("", { files: ["./images/udyr-admin.jpg"] });
-                    var dateNow = moment().tz('Europe/Madrid').toDate();
+                    var dateNow = moment(new Date()).tz('Europe/Madrid').toDate();
                     dateNow = moment(dateNow).add(30, 'm').toDate()
                     dateNow.setSeconds(0);
                     adminActual = new admin(udyr.displayName, dateNow);
@@ -401,7 +401,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                 } else {
                     tioRandom.roles.add(roleAdmin);
                     message.channel.send("<:1990_praisethesun:602528888400379935><@!" + tioRandom.id + "> es el nuevo Admin de este servidor debido a la inutilidad de los otros<:1990_praisethesun:602528888400379935>.");
-                    var dateNow = moment().tz('Europe/Madrid').toDate();
+                    var dateNow = moment(new Date()).tz('Europe/Madrid').toDate();
                     dateNow = moment(dateNow).add(30, 'm').toDate()
                     dateNow.setSeconds(0);
                     adminActual = new admin(tioRandom.displayName, dateNow);
@@ -442,7 +442,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                     var enlaces = fs.readdirSync(link);
                     message.channel.send("", { files: [`${link}${enlaces[Math.floor(Math.random() * enlaces.length)]}`] });
                 }
-                var dateNow = moment().tz('Europe/Madrid').toDate();
+                var dateNow = moment(new Date()).tz('Europe/Madrid').toDate();
                 dateNow = moment(dateNow).add(30, 'm').toDate()
                 dateNow.setSeconds(0);
                 adminActual = new admin(miembroGanador.displayName, dateNow);
@@ -466,10 +466,10 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                     }, 2000);
                 }
             } else if (miembroGanador.roles.cache.has(role.id)) {
-                var dateLater = moment().tz('Europe/Madrid').toDate();
+                var dateLater = moment(new Date()).tz('Europe/Madrid').toDate();
                 dateLater = moment(dateLater).add(30, 'm').toDate()
                 dateLater.setSeconds(0);
-                let dateNow = moment().tz('Europe/Madrid').toDate()
+                let dateNow = moment(new Date()).tz('Europe/Madrid').toDate()
                 dateNow.setSeconds(0);
                 message.channel.send(miembroPerdedor.displayName + " no puede volver a enfrentarse a " + miembroGanador.displayName + " hasta dentro de 30 minutos (" + dateLater.getHours() + ":" + metodosUtiles.cambiarMinutos(dateLater) + ").");
                 banquillo.push(miembroPerdedor.displayName);
