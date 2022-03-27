@@ -26,6 +26,7 @@ module.exports = {
             return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         }
         var hoy = moment(new Date()).tz('Europe/Madrid').toDate()
+        console.log(hoy)
         if (profileData.robar && profileData.robar.getDate() == hoy.getDate()) {
             message.member.send("Ya has robado cabron").then(msg => {
                 setTimeout(() => {
