@@ -25,7 +25,7 @@ module.exports = {
             console.log(`FIN ${cmd.toUpperCase()}`)
             return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         }
-        var reykjavik = moment.tz(moment().format('lll'), "Atlantic/Reykjavik")
+        var reykjavik = moment.tz(moment().format(), "Atlantic/Reykjavik")
         var madrid = reykjavik.clone().tz("Europe/Madrid")
         console.log(madrid.toDate())
         return
