@@ -25,7 +25,7 @@ module.exports = {
             console.log(`FIN ${cmd.toUpperCase()}`)
             return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         }
-        var hoyString = new Date().toLocaleString("en,US", { timeZone: 'Atlantic/Reykjavik' })
+        var hoyString = new Date().toLocaleString("en-US", { timeZone: 'Atlantic/Reykjavik' })
         var d = new Date(hoyString)
         var m = moment(d).tz('Europe/Madrid')
         console.log(hoyString + "\n" + d + "\n" + m.toDate())
