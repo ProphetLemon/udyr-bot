@@ -1,5 +1,5 @@
 const profileModel = require('../models/profileSchema');
-const moment = require('moment');
+
 const { Message } = require('discord.js');
 module.exports = {
     name: 'puntos',
@@ -38,7 +38,7 @@ module.exports = {
                 serverID: message.guild.id
             })
         }
-        let hoy = getCETorCESTDate()
+        let hoy = moment().tz("Europe/Madrid").toDate()
         if (cmd == 'perfil' || message.mentions.members.first() || moment(profileData.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") == 0 || ((profileData.wordle != undefined && moment(hoy).format("DD/MM/YYYY") == profileData.wordle) || (profileData.wordleEmpezado != undefined && profileData.wordleEmpezado == true))) {
             var personas = await profileModel.find();
             personas.sort(function (a, b) {

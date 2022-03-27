@@ -1,5 +1,5 @@
 const profileModel = require('../models/profileSchema');
-const moment = require('moment');
+
 const { Message } = require('discord.js');
 module.exports = {
     name: 'descripcion',

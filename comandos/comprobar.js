@@ -1,7 +1,7 @@
 const { Message, Client } = require('discord.js');
 const profileModel = require('../models/profileSchema');
 const roboModel = require('../models/roboSchema');
-const moment = require('moment');
+
 global.listaRobos = new Map()
 module.exports = {
     name: 'comprobar',
@@ -30,7 +30,7 @@ module.exports = {
                     serverID: message.guild.id,
                     userID: robo.userIDLadron
                 })
-                var dateNow = getCETorCESTDate()
+                var dateNow = moment().tz('Europe/Madrid').toDate()
                 var diff = moment(profile.robar).add(4, 'hours').toDate() - dateNow
                 if (diff > 0) {
                     var timeout = setTimeout(async (mensaje, robo) => {

@@ -28,7 +28,7 @@ module.exports = {
         dtAlarm.setMinutes(minutos);
         dtAlarm.setHours(horas);
         dtAlarm.setSeconds(0);
-        let dtNow = getCETorCESTDate()
+        let dtNow = moment().tz('Europe/Madrid').toDate()
         if (dtAlarm - dtNow <= 0) {
             metodosUtiles.insultar(message);
             console.log("FIN ALARMA")

@@ -1,6 +1,6 @@
 const { Message, Client } = require('discord.js');
 const profileModel = require('../models/profileSchema');
-const moment = require('moment');
+
 module.exports = {
     name: 'ranking',
     aliases: ['rank'],
@@ -30,7 +30,7 @@ module.exports = {
         const newEmbed = new Discord.MessageEmbed()
             .setColor("#B17428")
             .setAuthor(`🏆Ranking de udyrcoins🏆`);
-        var hoy = getCETorCESTDate()
+        var hoy = moment().tz('Europe/Madrid').toDate()
         let adminLocalizado = false;
         for (let i = 0; i < personas.length; i++) {
             let competidor = personas[i];
