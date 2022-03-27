@@ -150,13 +150,13 @@ module.exports = {
         var puntos = 0
         if (mensaje == "|:green_square:|:green_square:|:green_square:|:green_square:|:green_square:|") {
             message.channel.send(`Que vas de listo o que`)
-            message.channel.send(`Udyr Wordle #${moment(new Date(reykjavik.clone().tz("Europe/Madrid").format(`MMMM DD, YYYY HH:mm:ss`))).startOf('day').diff(moment().startOf('year'), "days") + 1} ${resultadosPersonales.get(message.author.id).split("\n").length - 1}/6\n${resultadosPersonales.get(message.author.id)}`)
+            message.channel.send(`Udyr Wordle #${moment(hoy).startOf('day').diff(moment().startOf('year'), "days") + 1} ${resultadosPersonales.get(message.author.id).split("\n").length - 1}/6\n${resultadosPersonales.get(message.author.id)}`)
             puntos = 120 - 20 * ((resultadosPersonales.get(message.author.id).split("\n").length - 1) - 1)
             if (dineros == true) {
                 message.channel.send(`Has ganado ${puntos} <:udyrcoin:825031865395445760>`)
             }
             const textChannel = client.guilds.cache.get("598896817157046281").channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
-            textChannel.send(`Resultado de ${message.author.username}\nUdyr Wordle #${moment(new Date(reykjavik.clone().tz("Europe/Madrid").format(`MMMM DD, YYYY HH:mm:ss`))).startOf('day').diff(moment().startOf('year'), "days") + 1} ${resultadosPersonales.get(message.author.id).split("\n").length - 1}/6\n${resultadosPersonales.get(message.author.id)}`)
+            textChannel.send(`Resultado de ${message.author.username}\nUdyr Wordle #${moment(hoy).startOf('day').diff(moment().startOf('year'), "days") + 1} ${resultadosPersonales.get(message.author.id).split("\n").length - 1}/6\n${resultadosPersonales.get(message.author.id)}`)
             resultadosPersonales.delete(message.author.id)
             if (dineros == true) {
                 await profileModel.findOneAndUpdate({
@@ -185,9 +185,9 @@ module.exports = {
 
         } else if ((resultadosPersonales.get(message.author.id).split("\n").length - 1) == 6) {
             message.channel.send(`Sos malisimo perro, la palabra era **_${palabraWordle.toUpperCase()}_**`)
-            message.channel.send(`Udyr Wordle #${moment(new Date(reykjavik.clone().tz("Europe/Madrid").format(`MMMM DD, YYYY HH:mm:ss`))).startOf('day').diff(moment().startOf('year'), "days") + 1} X/6\n${resultadosPersonales.get(message.author.id)}`)
+            message.channel.send(`Udyr Wordle #${moment(hoy).startOf('day').diff(moment().startOf('year'), "days") + 1} X/6\n${resultadosPersonales.get(message.author.id)}`)
             const textChannel = client.guilds.cache.get("598896817157046281").channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
-            textChannel.send(`Resultado de ${message.author.username}\nUdyr Wordle #${moment(new Date(reykjavik.clone().tz("Europe/Madrid").format(`MMMM DD, YYYY HH:mm:ss`))).startOf('day').diff(moment().startOf('year'), "days") + 1} X/6\n${resultadosPersonales.get(message.author.id)}`)
+            textChannel.send(`Resultado de ${message.author.username}\nUdyr Wordle #${moment(hoy).startOf('day').diff(moment().startOf('year'), "days") + 1} X/6\n${resultadosPersonales.get(message.author.id)}`)
             resultadosPersonales.delete(message.author.id)
             await profileModel.findOneAndUpdate({
                 userID: message.author.id,

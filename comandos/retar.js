@@ -475,7 +475,6 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                 var dateLater = new Date(reykjavik.clone().tz("Europe/Madrid").format(`MMMM DD, YYYY HH:mm:ss`))
                 dateLater = moment(dateLater).add(30, 'm').toDate()
                 dateLater.setSeconds(0);
-                var reykjavik = moment.tz(moment().format("YYYY-MM-DD hh:mm:ss"), "Atlantic/Reykjavik")
                 var dateNow = new Date(reykjavik.clone().tz("Europe/Madrid").format(`MMMM DD, YYYY HH:mm:ss`))
                 dateNow.setSeconds(0);
                 message.channel.send(miembroPerdedor.displayName + " no puede volver a enfrentarse a " + miembroGanador.displayName + " hasta dentro de 30 minutos (" + dateLater.getHours() + ":" + metodosUtiles.cambiarMinutos(dateLater) + ").");
