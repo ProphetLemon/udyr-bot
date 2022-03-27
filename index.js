@@ -4,7 +4,7 @@ require('dotenv').config();
 const mongoose = require("mongoose");
 const profileModel = require('./models/profileSchema');
 const fs = require('fs');
-global.moment = require('moment');
+global.moment = require('moment-timezone');
 moment.locale('es')
 client.commands = new Discord.Collection();
 client.events = new Discord.Collection();
