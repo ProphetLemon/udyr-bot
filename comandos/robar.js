@@ -27,7 +27,7 @@ module.exports = {
         }
         var hoyString = new Date().toLocaleString("en-US", { timeZone: 'Atlantic/Reykjavik' })
         var d = new Date(hoyString)
-        var m = moment(d).tz('Europe/Madrid')
+        var m = moment().tz('Europe/Madrid')
         console.log(hoyString + "\n" + d + "\n" + m.toDate())
         if (profileData.robar && profileData.robar.getDate() == hoy.getDate()) {
             message.member.send("Ya has robado cabron").then(msg => {
