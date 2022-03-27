@@ -26,7 +26,7 @@ module.exports = {
             return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         }
         var reykjavik = moment.tz(moment().format("YYYY-MM-DD hh:mm:ss"), "Atlantic/Reykjavik")
-        var madrid = reykjavik.clone().tz("Europe/Madrid").format()
+        var madrid = moment(reykjavik.clone().tz("Europe/Madrid").format())
         console.log(moment().format("YYYY-MM-DD hh:mm:ss") + "\n" + reykjavik.toDate() + "\n" + madrid)
         return
         if (profileData.robar && profileData.robar.getDate() == hoy.getDate()) {
