@@ -25,7 +25,7 @@ module.exports = {
             console.log(`FIN ${cmd.toUpperCase()}`)
             return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         }
-        var s = "Mar 27, 2022 10:00 GMT"
+        var s = moment().format('lll') + " GMT"
         var d = new Date(s);
         var m = moment(d).tz("America/New_York");
         console.log(s + "\n" + d + "\n" + m.toDate())
