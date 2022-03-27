@@ -12,7 +12,7 @@ module.exports = {
         console.log("INICIO PING");
         var reykjavik = moment.tz(moment().format("YYYY-MM-DD HH:mm:ss"), "Atlantic/Reykjavik")
         var dateNow = new Date(reykjavik.clone().tz("Europe/Madrid").format(`MMMM DD, YYYY HH:mm:ss`))
-        message.channel.send(`🏓 Hay una latencia de ${dateNow - message.createdTimestamp} ms\nLa fecha del servidor es ${dateNow.getDate()}/${dateNow.getMonth() + 1} ${dateNow.getHours()}:${dateNow.getMinutes()}`);
+        message.channel.send(`🏓 Pong\nLa fecha del servidor es ${String(dateNow.getDate()).padStart(2, "0")}/${String(dateNow.getMonth() + 1).padStart(2, "0")} ${String(dateNow.getHours()).padStart(2, "0")}:${String(dateNow.getMinutes()).padStart(2, "0")}`);
         console.log("FIN PING");
     }
 }
