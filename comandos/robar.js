@@ -27,7 +27,7 @@ module.exports = {
         }
         var reykjavik = moment.tz(moment().format(), "Atlantic/Reykjavik")
         var madrid = reykjavik.clone().tz("Europe/Madrid")
-        console.log(madrid.toDate())
+        console.log(moment().format() + "\n" + madrid.toDate())
         return
         if (profileData.robar && profileData.robar.getDate() == hoy.getDate()) {
             message.member.send("Ya has robado cabron").then(msg => {
