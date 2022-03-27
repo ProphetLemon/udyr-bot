@@ -25,9 +25,9 @@ module.exports = {
             console.log(`FIN ${cmd.toUpperCase()}`)
             return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         }
-        var reykjavik = moment.tz(moment().format(), "Atlantic/Reykjavik")
+        var reykjavik = moment.tz(moment().format("YYYY-MM-DD hh:mm:ss"), "Atlantic/Reykjavik")
         var madrid = reykjavik.clone().tz("Europe/Madrid")
-        console.log(moment().format() + "\n" + madrid.toDate())
+        console.log(moment().format("YYYY-MM-DD hh:mm:ss") + "\n" + madrid.toDate())
         return
         if (profileData.robar && profileData.robar.getDate() == hoy.getDate()) {
             message.member.send("Ya has robado cabron").then(msg => {
