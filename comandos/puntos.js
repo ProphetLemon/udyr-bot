@@ -38,7 +38,7 @@ module.exports = {
                 serverID: message.guild.id
             })
         }
-        var reykjavik = moment.tz(moment().format("YYYY-MM-DD hh:mm:ss"), "Atlantic/Reykjavik")
+        var reykjavik = moment.tz(moment().format("YYYY-MM-DD HH:mm:ss"), "Atlantic/Reykjavik")
         var hoy = new Date(reykjavik.clone().tz("Europe/Madrid").format(`MMMM DD, YYYY HH:mm:ss`))
         if (cmd == 'perfil' || message.mentions.members.first() || moment(profileData.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") == 0 || ((profileData.wordle != undefined && moment(hoy).format("DD/MM/YYYY") == profileData.wordle) || (profileData.wordleEmpezado != undefined && profileData.wordleEmpezado == true))) {
             var personas = await profileModel.find();

@@ -30,7 +30,7 @@ module.exports = {
                     serverID: message.guild.id,
                     userID: robo.userIDLadron
                 })
-                var reykjavik = moment.tz(moment().format("YYYY-MM-DD hh:mm:ss"), "Atlantic/Reykjavik")
+                var reykjavik = moment.tz(moment().format("YYYY-MM-DD HH:mm:ss"), "Atlantic/Reykjavik")
                 var dateNow = new Date(reykjavik.clone().tz("Europe/Madrid").format(`MMMM DD, YYYY HH:mm:ss`))
                 var diff = moment(profile.robar).add(4, 'hours').toDate() - dateNow
                 if (diff > 0) {

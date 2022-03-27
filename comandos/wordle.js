@@ -29,7 +29,7 @@ module.exports = {
             console.log(`FIN ${cmd.toUpperCase()}`)
             return
         }
-        var reykjavik = moment.tz(moment().format("YYYY-MM-DD hh:mm:ss"), "Atlantic/Reykjavik")
+        var reykjavik = moment.tz(moment().format("YYYY-MM-DD HH:mm:ss"), "Atlantic/Reykjavik")
         var dateNow = new Date(reykjavik.clone().tz("Europe/Madrid").format(`MMMM DD, YYYY HH:mm:ss`))
         var hoy = moment(dateNow).format('DD/MM/YYYY')
         var dineros = true
