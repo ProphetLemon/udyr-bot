@@ -30,8 +30,7 @@ module.exports = {
         const newEmbed = new Discord.MessageEmbed()
             .setColor("#B17428")
             .setAuthor(`🏆Ranking de udyrcoins🏆`);
-        var reykjavik = moment.tz(moment().format("YYYY-MM-DD HH:mm:ss"), "Atlantic/Reykjavik")
-        var hoy = new Date(reykjavik.clone().tz("Europe/Madrid").format(`MMMM DD, YYYY HH:mm:ss`))
+        var hoy = moment().toDate()
         let adminLocalizado = false;
         for (let i = 0; i < personas.length; i++) {
             let competidor = personas[i];

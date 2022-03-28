@@ -28,8 +28,7 @@ module.exports = {
         dtAlarm.setMinutes(minutos);
         dtAlarm.setHours(horas);
         dtAlarm.setSeconds(0);
-        var reykjavik = moment.tz(moment().format("YYYY-MM-DD HH:mm:ss"), "Atlantic/Reykjavik")
-        var dtNow = new Date(reykjavik.clone().tz("Europe/Madrid").format(`MMMM DD, YYYY HH:mm:ss`))
+        var dtNow = moment().toDate()
         if (dtAlarm - dtNow <= 0) {
             metodosUtiles.insultar(message);
             console.log("FIN ALARMA")
