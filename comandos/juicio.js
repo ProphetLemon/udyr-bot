@@ -1,6 +1,7 @@
 const { Message, Client } = require('discord.js');
 const profileModel = require('../models/profileSchema');
 const roboModel = require('../models/roboSchema');
+const impuestoModel = require('../models/impuestoSchema')
 module.exports = {
     name: 'juicio',
     aliases: [],
@@ -31,6 +32,7 @@ module.exports = {
             userIDAfectado: message.member.id,
             userIDLadron: acusado.id
         })
+        var impuesto = 0
         if (caso) {
             var memes = ["https://thumbs.dreamstime.com/b/ladr%C3%B3n-de-sexo-masculino-que-roba-la-chica-joven-hermosa-47978550.jpg", "https://www.serargentino.com/public/images/2019/12/Tucumanos-ladrones-773x458.jpeg"
                 , "https://ichef.bbci.co.uk/news/640/cpsprodpb/043A/production/_101228010_gettyimages-51431550.jpg",
@@ -46,7 +48,7 @@ module.exports = {
                 userID: acusado.id,
                 serverID: message.guild.id
             })
-            var impuesto = Math.floor((acusadoProfile.udyrcoins * porcentaje) / 100)
+            impuesto = Math.floor((acusadoProfile.udyrcoins * porcentaje) / 100)
             await profileModel.findOneAndUpdate({
                 userID: acusado.id,
                 serverID: message.guild.id
@@ -86,7 +88,7 @@ module.exports = {
                 userID: message.member.id,
                 serverID: message.guild.id
             })
-            var impuesto = Math.floor((acusadoProfile.udyrcoins * porcentaje) / 100)
+            impuesto = Math.floor((acusadoProfile.udyrcoins * porcentaje) / 100)
             await profileModel.findOneAndUpdate({
                 userID: message.member.id,
                 serverID: message.guild.id
@@ -108,6 +110,24 @@ module.exports = {
                 }
             })
             clearTimeout(listaRobos.get(casoVerdadero.userIDLadron))
+        }
+        var arcasDelEstado = await impuestoModel.findOne({
+            serverID: message.guild.id
+        })
+        if (arcasDelEstado) {
+            await impuestoModel.findOneAndUpdate({
+                serverID: message.guild.id
+            }, {
+                $inc: {
+                    udyrcoins: impuesto
+                }
+            })
+        } else {
+            var arcaProfile = await impuestoModel.create({
+                serverID: message.guild.id,
+                udyrcoins: impuesto
+            })
+            await arcaProfile.save()
         }
     }
 }
