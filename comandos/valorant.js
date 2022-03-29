@@ -74,6 +74,12 @@ module.exports = {
             }
             message.channel.send(mensaje)
         } else {
+            var agenteTipo = []
+            for (let j = 0; j < agentes.length; j++) {
+                if (agentes[j].tipo == equipo[i]) {
+                    agenteTipo.push(agentes[j])
+                }
+            }
             var agenteRandom = agenteTipo[Math.floor(Math.random() * agenteTipo.length)]
             message.channel.send(`Te toca jugar ${agenteRandom.nombre}`).then(msg => {
                 message.delete()
