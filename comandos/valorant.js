@@ -82,7 +82,6 @@ module.exports = {
             }
             var agenteRandom = agenteTipo[Math.floor(Math.random() * agenteTipo.length)]
             message.channel.send(`Te toca jugar ${agenteRandom.nombre}`).then(msg => {
-                message.delete()
                 setTimeout(() => {
                     msg.delete()
                 }, 7000);
