@@ -229,7 +229,7 @@ module.exports = {
                 }
             })
         } else {
-            message.channel.send(`LETRAS QUE HAS DICHO BIEN: ${letrasBien.get(message.author.id).join(" ")}\nLETRAS DESCARTADAS: ${letrasMal.get(message.author.id).join(" ")}`)
+            message.channel.send(`LETRAS CORRECTAS: ${letrasBien.get(message.author.id).join(" ")}\nLETRAS DESCARTADAS: ${letrasMal.get(message.author.id).join(" ")}`)
         }
         console.log(`FIN ${cmd.toUpperCase()}`)
     }

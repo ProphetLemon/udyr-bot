@@ -11,6 +11,11 @@ class agente {
     }
 }
 
+/**
+ * 
+ * @param {string[]} array 
+ * @returns 
+ */
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
@@ -18,6 +23,7 @@ function shuffleArray(array) {
         array[i] = array[j];
         array[j] = temp;
     }
+    return array
 }
 module.exports = {
     name: 'valorant',
@@ -34,7 +40,6 @@ module.exports = {
      */
     execute(message, args, cmd, client, Discord, profileData) {
         if (cmd == "valorant") {
-            return
             var equiposDeseados = [
                 [tipo[0], tipo[0], tipo[1], tipo[2], tipo[3]],
                 [tipo[0], tipo[1], tipo[1], tipo[2], tipo[3]],
@@ -42,18 +47,32 @@ module.exports = {
                 [tipo[0], tipo[1], tipo[2], tipo[3], tipo[3]]
             ]
             var equipo = equiposDeseados[Math.floor(Math.random() * equiposDeseados.length)]
-            var miembros = message.member.voice.channel.members.array()
-            let shuffled = equiposDeseados
-                .map(value => ({ value, sort: Math.random() }))
-                .sort((a, b) => a.sort - b.sort)
-                .map(({ value }) => value)
-        } else {
-            var agenteTipo = []
-            for (let i = 0; i < agentes.length; i++) {
-                if (agentes[i].tipo.toLowerCase() == cmd) {
-                    agenteTipo.push(agentes[i])
-                }
+            var channel = message.member.voice.channel
+            if (channel == undefined) {
+                message.channel.send("No estas en un canal de voz bro").then(msg => {
+                    message.delete()
+                    setTimeout(() => {
+                        msg.delete()
+                    }, 7000);
+                })
             }
+            var miembros = channel.members.array()
+            equipo = shuffleArray(equipo)
+            var mensaje = ""
+            for (let i = 0; i < miembros.length; i++) {
+                var agenteTipo = []
+                for (let i = 0; i < agentes.length; i++) {
+                    if (agentes[i].tipo.toLowerCase() == cmd) {
+                        agenteTipo.push(agentes[i])
+                    }
+                }
+                do {
+                    var agente = agenteTipo[Math.floor(Math.random() * agenteTipo.length)]
+                } while (mensaje.split(agente.nombre).length == 2)
+                mensaje += `${miembros[i].displayName} te toca jugar ${agente.nombre}`
+            }
+            message.channel.send(mensaje)
+        } else {
             var agenteRandom = agenteTipo[Math.floor(Math.random() * agenteTipo.length)]
             message.channel.send(`Te toca jugar ${agenteRandom.nombre}`).then(msg => {
                 message.delete()
