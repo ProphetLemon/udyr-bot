@@ -82,6 +82,7 @@ module.exports = {
                 }, 7000);
             })
         }
+        message.delete()
     }
 }
 const tipo = ["CONTROLADOR", "DUELISTA", "INICIADOR", "CENTINELA"]
