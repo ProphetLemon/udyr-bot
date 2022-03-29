@@ -58,7 +58,7 @@ module.exports = {
             message.channel.send(`Te toca jugar ${agenteRandom.nombre}`).then(msg => {
                 message.delete()
                 setTimeout(() => {
-                    msg.deletable()
+                    msg.delete()
                 }, 7000);
             })
         }
@@ -71,7 +71,7 @@ const agentes = [
     new agente("Omen :ghost:", tipo[0]),
     new agente("Viper :snake:", tipo[0]),
     new agente("Jett :dagger:", tipo[1]),
-    new agente("Neon :sparkles:", tipo[1]),
+    new agente("Neon :zap:", tipo[1]),
     new agente("Phoenix :fire:", tipo[1]),
     new agente("Raze :boom:", tipo[1]),
     new agente("Reyna :gun::princess:", tipo[1]),
