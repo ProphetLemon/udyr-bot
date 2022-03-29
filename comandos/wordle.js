@@ -183,9 +183,9 @@ module.exports = {
 
         } else if ((resultadosPersonales.get(message.author.id).split("\n").length - 1) == 6) {
             message.channel.send(`Sos malisimo perro, la palabra era **_${palabraWordle.toUpperCase()}_**`)
-            message.channel.send(`Udyr Wordle #${moment(hoy).startOf('day').diff(moment().startOf('year'), "days") + 1} X/6\n${resultadosPersonales.get(message.author.id)}`)
+            message.channel.send(`Udyr Wordle #${moment().startOf('day').diff(moment().startOf('year'), "days") + 1} X/6\n${resultadosPersonales.get(message.author.id)}`)
             const textChannel = client.guilds.cache.get("598896817157046281").channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
-            textChannel.send(`Resultado de ${message.author.username}\nUdyr Wordle #${moment(hoy).startOf('day').diff(moment().startOf('year'), "days") + 1} X/6\n${resultadosPersonales.get(message.author.id)}`)
+            textChannel.send(`Resultado de ${message.author.username}\nUdyr Wordle #${moment().startOf('day').diff(moment().startOf('year'), "days") + 1} X/6\n${resultadosPersonales.get(message.author.id)}`)
             resultadosPersonales.delete(message.author.id)
             await profileModel.findOneAndUpdate({
                 userID: message.author.id,
