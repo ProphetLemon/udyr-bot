@@ -55,15 +55,20 @@ module.exports = {
                 }
             }
             var agenteRandom = agenteTipo[Math.floor(Math.random() * agenteTipo.length)]
-            message.channel.send(`Te toca jugar ${agenteRandom.nombre}`)
+            message.channel.send(`Te toca jugar ${agenteRandom.nombre}`).then(msg=>{
+                message.delete()
+                setTimeout(() => {
+                    msg.deletable()
+                }, 7000);
+            })
         }
     }
 }
 const tipo = ["CONTROLADOR", "DUELISTA", "INICIADOR", "CENTINELA"]
-const agentes = [new agente("Astra", tipo[0]),
+const agentes = [new agente("Astra :milky_way:", tipo[0]),
 new agente("Brimstone :dash:", tipo[0]),
 new agente("Omen :ghost:", tipo[0]),
-new agente("Viper :skull_crossbones:", tipo[0]),
+new agente("Viper :snake:", tipo[0]),
 new agente("Jett :dagger:", tipo[1]),
 new agente("Neon :sparkles:", tipo[1]),
 new agente("Phoenix :fire:", tipo[1]),
