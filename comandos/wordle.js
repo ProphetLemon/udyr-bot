@@ -3,7 +3,36 @@ const fs = require('fs');
 
 const wordleModel = require('../models/wordleSchema');
 var resultadosPersonales = new Map()
+var letrasBien = new Map()
+var letrasMal = new Map()
 const profileModel = require('../models/profileSchema');
+
+/**
+ * @param {String} id
+ * @param {String} letra
+ * @param {Map} map
+ */
+function meterValor(map, letra, id) {
+    letra = letra.toUpperCase()
+    var letras = map.get(id)
+    if (letras == undefined) {
+        letras = [letra]
+        map.set(id, letras)
+    } else if (letras.includes(letra) == false) {
+        letras.push(letra)
+    }
+}
+
+/**
+ * 
+ * @param {string} id 
+ */
+function borrarResultados(id) {
+    resultadosPersonales.delete(id)
+    letrasBien.delete(id)
+    letrasMal.delete(id)
+}
+
 module.exports = {
     name: 'wordle',
     aliases: [],
@@ -101,6 +130,7 @@ module.exports = {
         for (let i = 0; i < guess.length; i++) {
             if (guess.charAt(i) == palabraWordle.charAt(i)) {
                 result.set(i, ":green_square:|")
+                meterValor(letrasBien, guess.charAt(i), message.author.id)
                 mapeoPalabra.set(guess.charAt(i), mapeoPalabra.get(guess.charAt(i)) - 1)
             } else {
                 if (mapeoPalabra.get(guess.charAt(i))) {
@@ -108,6 +138,7 @@ module.exports = {
                     for (let j = guess.length - 1; j > i; j--) {
                         if (palabraWordle.charAt(j) == guess.charAt(j) && guess.charAt(j) == guess.charAt(i)) {
                             result.set(j, ":green_square:|")
+                            meterValor(letrasBien, guess.charAt(i), message.author.id)
                             encontrado = true
                             mapeoPalabra.set(guess.charAt(i), mapeoPalabra.get(guess.charAt(i)) - 1)
                             if (mapeoPalabra.get(guess.charAt(i)) == 0) {
@@ -118,6 +149,7 @@ module.exports = {
                     }
                     if (!encontrado) {
                         result.set(i, ":yellow_square:|")
+                        meterValor(letrasBien, guess.charAt(i), message.author.id)
                         mapeoPalabra.set(guess.charAt(i), mapeoPalabra.get(guess.charAt(i)) - 1)
                         if (mapeoPalabra.get(guess.charAt(i)) == 0) {
                             mapeoPalabra.delete(guess.charAt(i))
@@ -125,12 +157,15 @@ module.exports = {
                     } else {
                         if (mapeoPalabra.get(guess.charAt(i))) {
                             result.set(i, ":yellow_square:|")
+                            meterValor(letrasBien, guess.charAt(i), message.author.id)
                         } else {
                             result.set(i, ":black_large_square:|")
+                            meterValor(letrasMal, guess.charAt(i), message.author.id)
                         }
                     }
                 } else {
                     result.set(i, ":black_large_square:|")
+                    meterValor(letrasMal, guess.charAt(i), message.author.id)
                 }
             }
         }
@@ -155,7 +190,7 @@ module.exports = {
             }
             const textChannel = client.guilds.cache.get("598896817157046281").channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
             textChannel.send(`Resultado de ${message.author.username}\nUdyr Wordle #${moment().startOf('day').diff(moment().startOf('year'), "days") + 1} ${resultadosPersonales.get(message.author.id).split("\n").length - 1}/6\n${resultadosPersonales.get(message.author.id)}`)
-            resultadosPersonales.delete(message.author.id)
+            borrarResultados(message.author.id)
             if (dineros == true) {
                 await profileModel.findOneAndUpdate({
                     userID: message.author.id,
@@ -186,7 +221,7 @@ module.exports = {
             message.channel.send(`Udyr Wordle #${moment().startOf('day').diff(moment().startOf('year'), "days") + 1} X/6\n${resultadosPersonales.get(message.author.id)}`)
             const textChannel = client.guilds.cache.get("598896817157046281").channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
             textChannel.send(`Resultado de ${message.author.username}\nUdyr Wordle #${moment().startOf('day').diff(moment().startOf('year'), "days") + 1} X/6\n${resultadosPersonales.get(message.author.id)}`)
-            resultadosPersonales.delete(message.author.id)
+            borrarResultados(message.author.id)
             await profileModel.findOneAndUpdate({
                 userID: message.author.id,
                 serverID: "598896817157046281"
@@ -196,6 +231,8 @@ module.exports = {
                     wordleEmpezado: false
                 }
             })
+        } else {
+            message.channel.send(`LETRAS QUE HAS DICHO BIEN: ${letrasBien.get(message.author.id).join(" ")}\nLETRAS DESCARTADAS: ${letrasMal.get(message.author.id).join(" ")}`)
         }
         console.log(`FIN ${cmd.toUpperCase()}`)
     }

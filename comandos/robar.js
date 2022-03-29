@@ -1,6 +1,7 @@
 const { Message, Client } = require('discord.js');
 const profileModel = require('../models/profileSchema');
 const roboModel = require('../models/roboSchema');
+const math = require('mathjs');
 global.listaRobos = new Map()
 module.exports = {
     name: 'robar',
@@ -46,7 +47,16 @@ module.exports = {
         personas.sort(function (a, b) {
             return b.udyrcoins - a.udyrcoins;
         });
-        personas = personas.slice(0, 5)
+        var i = 6
+        do {
+            i = i - 1
+            var dineros = []
+            personas = personas.slice(0, i)
+            for (let i = 0; i < personas.length; i++) {
+                dineros.push(personas[i].udyrcoins)
+            }
+            var sd = math.std(dineros)
+        } while (sd > 200 && personas.length > 1)
         do {
             var personaElegida = personas[Math.floor(Math.random() * personas.length)]
         } while (personaElegida.userID == message.member.id)

@@ -2,7 +2,7 @@ const { Message, Client } = require('discord.js');
 const impuestoModel = require('../models/impuestoSchema')
 module.exports = {
     name: 'impuestos',
-    aliases: ['arca', 'arcas'],
+    aliases: ['arca', 'arcas', 'banca', 'impuesto'],
     description: 'Funcion ver los impuestos recolectados',
     /**
      * 
