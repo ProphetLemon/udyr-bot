@@ -63,7 +63,7 @@ module.exports = {
             for (let i = 0; i < equipo.length; i++) {
                 var agenteTipo = []
                 for (let j = 0; j < agentes.length; j++) {
-                    if (agentes[j].tipo == equipos[i]) {
+                    if (agentes[j].tipo == equipo[i]) {
                         agenteTipo.push(agentes[j])
                     }
                 }
