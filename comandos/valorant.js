@@ -69,7 +69,7 @@ module.exports = {
                 do {
                     var agente = agenteTipo[Math.floor(Math.random() * agenteTipo.length)]
                 } while (mensaje.split(agente.nombre).length == 2)
-                mensaje += `${miembros[i].displayName} te toca jugar ${agente.nombre}`
+                mensaje += `${miembros[i].displayName} te toca jugar ${agente.nombre}\n`
             }
             message.channel.send(mensaje)
         } else {
