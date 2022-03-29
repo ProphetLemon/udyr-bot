@@ -73,7 +73,7 @@ const agentes = [
     new agente("Jett :dagger:", tipo[1]),
     new agente("Neon :sparkles:", tipo[1]),
     new agente("Phoenix :fire:", tipo[1]),
-    new agente("Raze :bomb:", tipo[1]),
+    new agente("Raze :boom:", tipo[1]),
     new agente("Reyna :gun::princess:", tipo[1]),
     new agente("Yoru :japanese_ogre:", tipo[1]),
     new agente("Breach :house_abandoned:", tipo[2]),
