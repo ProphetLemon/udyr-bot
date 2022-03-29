@@ -55,7 +55,7 @@ module.exports = {
                 }
             }
             var agenteRandom = agenteTipo[Math.floor(Math.random() * agenteTipo.length)]
-            message.channel.send(`Te toca jugar ${agenteRandom.nombre}`).then(msg=>{
+            message.channel.send(`Te toca jugar ${agenteRandom.nombre}`).then(msg => {
                 message.delete()
                 setTimeout(() => {
                     msg.deletable()
@@ -65,22 +65,23 @@ module.exports = {
     }
 }
 const tipo = ["CONTROLADOR", "DUELISTA", "INICIADOR", "CENTINELA"]
-const agentes = [new agente("Astra :milky_way:", tipo[0]),
-new agente("Brimstone :dash:", tipo[0]),
-new agente("Omen :ghost:", tipo[0]),
-new agente("Viper :snake:", tipo[0]),
-new agente("Jett :dagger:", tipo[1]),
-new agente("Neon :sparkles:", tipo[1]),
-new agente("Phoenix :fire:", tipo[1]),
-new agente("Raze :bomb:", tipo[1]),
-new agente("Reyna :gun::princess:", tipo[1]),
-new agente("Yoru :japanese_ogre:", tipo[1]),
-new agente("Breach :house_abandoned:", tipo[2]),
-new agente("KAY/O :robot:", tipo[2]),
-new agente("Skye :wolf:", tipo[2]),
-new agente("Sova :bow_and_arrow:", tipo[2]),
-new agente("Chamber :nerd:", tipo[3]),
-new agente("Cypher :cowboy:", tipo[3]),
-new agente("Killjoy :woman_mechanic:", tipo[3]),
-new agente("Sage :ice_cube:", tipo[3]),
+const agentes = [
+    new agente("Astra :milky_way:", tipo[0]),
+    new agente("Brimstone :dash:", tipo[0]),
+    new agente("Omen :ghost:", tipo[0]),
+    new agente("Viper :snake:", tipo[0]),
+    new agente("Jett :dagger:", tipo[1]),
+    new agente("Neon :sparkles:", tipo[1]),
+    new agente("Phoenix :fire:", tipo[1]),
+    new agente("Raze :bomb:", tipo[1]),
+    new agente("Reyna :gun::princess:", tipo[1]),
+    new agente("Yoru :japanese_ogre:", tipo[1]),
+    new agente("Breach :house_abandoned:", tipo[2]),
+    new agente("KAY/O :robot:", tipo[2]),
+    new agente("Skye :wolf:", tipo[2]),
+    new agente("Sova :bow_and_arrow:", tipo[2]),
+    new agente("Chamber :nerd:", tipo[3]),
+    new agente("Cypher :cowboy:", tipo[3]),
+    new agente("Killjoy :wrench:", tipo[3]),
+    new agente("Sage :ice_cube:", tipo[3]),
 ]
