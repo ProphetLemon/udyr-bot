@@ -134,11 +134,11 @@ module.exports = {
                 mapeoPalabra.set(guess.charAt(i), mapeoPalabra.get(guess.charAt(i)) - 1)
             } else {
                 if (mapeoPalabra.get(guess.charAt(i))) {
+                    meterValor(letrasBien, guess.charAt(i), message.author.id)
                     var encontrado = false
                     for (let j = guess.length - 1; j > i; j--) {
                         if (palabraWordle.charAt(j) == guess.charAt(j) && guess.charAt(j) == guess.charAt(i)) {
                             result.set(j, ":green_square:|")
-                            meterValor(letrasBien, guess.charAt(i), message.author.id)
                             encontrado = true
                             mapeoPalabra.set(guess.charAt(i), mapeoPalabra.get(guess.charAt(i)) - 1)
                             if (mapeoPalabra.get(guess.charAt(i)) == 0) {
@@ -149,7 +149,6 @@ module.exports = {
                     }
                     if (!encontrado) {
                         result.set(i, ":yellow_square:|")
-                        meterValor(letrasBien, guess.charAt(i), message.author.id)
                         mapeoPalabra.set(guess.charAt(i), mapeoPalabra.get(guess.charAt(i)) - 1)
                         if (mapeoPalabra.get(guess.charAt(i)) == 0) {
                             mapeoPalabra.delete(guess.charAt(i))
@@ -157,10 +156,8 @@ module.exports = {
                     } else {
                         if (mapeoPalabra.get(guess.charAt(i))) {
                             result.set(i, ":yellow_square:|")
-                            meterValor(letrasBien, guess.charAt(i), message.author.id)
                         } else {
                             result.set(i, ":black_large_square:|")
-                            meterValor(letrasMal, guess.charAt(i), message.author.id)
                         }
                     }
                 } else {
