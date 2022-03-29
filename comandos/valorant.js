@@ -55,6 +55,7 @@ module.exports = {
                         msg.delete()
                     }, 7000);
                 })
+                return
             }
             var miembros = channel.members.array()
             equipo = shuffleArray(equipo)
