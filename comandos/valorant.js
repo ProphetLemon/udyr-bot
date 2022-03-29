@@ -76,7 +76,7 @@ module.exports = {
         } else {
             var agenteTipo = []
             for (let j = 0; j < agentes.length; j++) {
-                if (agentes[j].tipo == equipo[i]) {
+                if (agentes[j].tipo.toLowerCase() == cmd) {
                     agenteTipo.push(agentes[j])
                 }
             }
