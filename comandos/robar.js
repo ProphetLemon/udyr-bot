@@ -57,6 +57,15 @@ module.exports = {
             }
             var sd = math.std(dineros)
         } while (sd > 200 && personas.length > 1)
+        if (personas.length == 1 && personas[0].userID == message.author.id) {
+            personas = await profileModel.find({
+                serverID: message.guild.id
+            });
+            personas.sort(function (a, b) {
+                return b.udyrcoins - a.udyrcoins;
+            });
+            personas.slice(0, 3)
+        }
         do {
             var personaElegida = personas[Math.floor(Math.random() * personas.length)]
         } while (personaElegida.userID == message.member.id)
