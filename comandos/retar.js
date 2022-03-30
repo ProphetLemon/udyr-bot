@@ -501,7 +501,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
         return;
     } else {
         setTimeout(function () {
-            message.channel.send("**Turno " + turno + ":**\n" + combates.get(message.guild.id)[turno++] + "\n\n");
+            message.channel.send("Turno " + turno + ":\n" + combates.get(message.guild.id)[turno++] + "\n\n");
             leerRondasPelea(gladiador1, gladiador2, message, client, Discord);
         }, 6000);
     }
