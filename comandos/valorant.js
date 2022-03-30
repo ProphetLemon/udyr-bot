@@ -60,7 +60,7 @@ module.exports = {
             var miembros = channel.members.array()
             equipo = shuffleArray(equipo)
             var mensaje = ""
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < miembros.length && i < 5; i++) {
                 var agenteTipo = []
                 for (let j = 0; j < agentes.length; j++) {
                     if (agentes[j].tipo == equipo[i]) {
