@@ -39,6 +39,10 @@ function ruleta(message) {
         message.reply("por el culo te la hinco, maric\u00F3n");
         return;
     }
+    if (message.content.trim().toLowerCase() == "a" || message.content.trim().toLowerCase() == "ª") {
+        message.channel.send("https://c.tenor.com/K_fk1dEUTzcAAAAC/mister-jagger-a.gif")
+        return
+    }
     if (message.content.trim().toLowerCase() == "vikingos") {
         message.channel.send("LA👊PUTA👊MEJOR👊SERIE👊", { files: ["./images/vikingos.gif"] });
         return;
