@@ -91,7 +91,9 @@ module.exports = {
                 mensaje += `${stringToDate(registro.forecast[i].day)}:${textToEmoji(registro.forecast[i].skytextday)} T.M\u00E1xima: ${registro.forecast[i].high}ºC, T.M\u00EDnima: ${registro.forecast[i].low}ºC, Prob. LLuvia: ${registro.forecast[i].precip}%\n`
             }
             message.channel.send(mensaje).then(msg => {
-                message.delete()
+                if (message.guild != null) {
+                    message.delete()
+                }
                 setTimeout(() => {
                     msg.delete()
                 }, 12000);
