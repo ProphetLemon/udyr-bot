@@ -93,10 +93,10 @@ module.exports = {
             message.channel.send(mensaje).then(msg => {
                 if (message.guild != null) {
                     message.delete()
+                    setTimeout(() => {
+                        msg.delete()
+                    }, 12000);
                 }
-                setTimeout(() => {
-                    msg.delete()
-                }, 12000);
             })
         });
 
