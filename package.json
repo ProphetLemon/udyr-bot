@@ -19,6 +19,7 @@
     "node-gyp": "^8.2.0",
     "opusscript": "0.0.8",
     "reconlx": "^1.2.41",
+    "weather-js": "^2.0.0",
     "yt-search": "^2.10.1",
     "ytdl-core": "^4.11.0"
   },

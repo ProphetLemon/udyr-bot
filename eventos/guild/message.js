@@ -10,7 +10,7 @@ const profileModel = require('../../models/profileSchema');
  */
 module.exports = async (Discord, client, message) => {
     const prefix = process.env.PREFIX + " ";
-    if (message.author.bot || message.channel.id == "953974289919520778") return;
+    if (message.author.bot || message.channel.id != "953974289919520778") return;
     if (message.author.id == focusID) {
         message.member.send("Callate maric\u00F3n");
         message.delete();
