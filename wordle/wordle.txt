@@ -4215,6 +4215,8 @@ tinge
 tinta
 tinte
 tinto
+tiñes
+tipex
 tiple
 tipoy
 tique
@@ -7734,6 +7736,7 @@ purgo
 puspa
 puspo
 putal
+putas
 putea
 putee
 puteo
