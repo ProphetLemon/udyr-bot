@@ -31,7 +31,7 @@ module.exports = {
                     userID: robo.userIDLadron
                 })
                 var dateNow = moment().toDate()
-                var diff = moment(profile.robar).add(4, 'hours').toDate() - dateNow
+                var diff = moment(profile.robar).add(12, 'hours').toDate() - dateNow
                 if (diff > 0) {
                     var timeout = setTimeout(async (mensaje, robo) => {
                         listaRobos.delete(robo.userIDLadron)
@@ -46,7 +46,7 @@ module.exports = {
                         await roboModel.findOneAndRemove({
                             userIDLadron: robo.userIDLadron
                         })
-                        message.channel.send(`Han pasado 4 horas asi que <@!${robo.userIDLadron}> ha robado ${robo.dinero} <:udyrcoin:825031865395445760> a <@!${robo.userIDAfectado}>`)
+                        message.channel.send(`Han pasado 12 horas asi que <@!${robo.userIDLadron}> ha robado ${robo.dinero} <:udyrcoin:825031865395445760> a <@!${robo.userIDAfectado}>`)
                     }, diff, message, robo);
                     listaRobos.set(robo.userIDLadron, timeout)
                 } else {
@@ -61,7 +61,7 @@ module.exports = {
                     await roboModel.findOneAndRemove({
                         userIDLadron: robo.userIDLadron
                     })
-                    message.channel.send(`Han pasado 4 horas asi que <@!${robo.userIDLadron}> ha robado ${robo.dinero} <:udyrcoin:825031865395445760> a <@!${robo.userIDAfectado}>`)
+                    message.channel.send(`Han pasado 12 horas asi que <@!${robo.userIDLadron}> ha robado ${robo.dinero} <:udyrcoin:825031865395445760> a <@!${robo.userIDAfectado}>`)
                 }
             }
         }

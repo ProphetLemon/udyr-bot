@@ -48,6 +48,7 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`)
+        //AQUI SE MIRA SI LO HACES EN PRIVADO
         if (message.guild != null) {
             message.channel.send("El wordle solo se hace en privado que sino es mucho spam").then(msg => {
                 message.delete()
@@ -58,21 +59,41 @@ module.exports = {
             console.log(`FIN ${cmd.toUpperCase()}`)
             return
         }
+        //AQUI SI LA PALABRA EXISTE Y ESTA VERIFICADA
         var hoy = moment().format('DD/MM/YYYY')
-        var dineros = true
-        if (moment(profileData.dailyGift).startOf('day').diff(moment().startOf('day'), "days") == 0) {
-            dineros = false
-        }
-        if (!profileData) {
-            console.log(`FIN ${cmd.toUpperCase()}`)
-            return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
-        }
-        try {
-            var data = fs.readFileSync('./wordle/wordle.txt', 'utf8')
-        } catch (err) {
-            console.error(err)
+        var palabra = await wordleModel.findOne({ dia: hoy })
+        var palabraWordle = ""
+        if (!palabra) {
+            await wordleModel.remove({})
+            try {
+                var data = fs.readFileSync('./wordle/wordle.txt', 'utf8')
+            } catch (err) {
+                console.error(err)
+                return
+            }
+            var inputs = data.split("\n")
+            palabraWordle = inputs[Math.floor(Math.random() * inputs.length)]
+            let registro = await wordleModel.create({
+                palabra: palabraWordle,
+                dia: hoy,
+                aprobada: false
+            })
+            await registro.save()
+            message.channel.send(`El wordle de hoy todavia no esta aprobado por la moderacion`)
+            return
+        } else if (palabra.aprobada == false) {
+            message.channel.send(`El wordle de hoy todavia no esta aprobado por la moderacion`)
             return
         }
+        else {
+            palabraWordle = palabra.palabra
+        }
+        //AQUI COMPRUEBO SI EL USUARIO VA A RECIBIR RECOMPENSA POR HACER EL WORDLE
+        var dineros = true
+        if (profileData && moment(profileData.dailyGift).startOf('day').diff(moment().startOf('day'), "days") == 0) {
+            dineros = false
+        }
+        //AQUI SI HAS HECHO HOY EL WORDLE
         if (profileData.wordle != undefined && profileData.wordle == hoy) {
             console.log(`FIN ${cmd.toUpperCase()}`)
             return message.reply("Ya has hecho el wordle de hoy")
@@ -85,7 +106,7 @@ module.exports = {
                 wordleEmpezado: true
             }
         })
-        var inputs = data.split("\n")
+
         var guess = args[0]
         if (guess == undefined) {
             console.log(`FIN ${cmd.toUpperCase()}`)
@@ -100,23 +121,7 @@ module.exports = {
             console.log(`FIN ${cmd.toUpperCase()}`)
             return message.reply("esa palabra no la tengo en el diccionario :(")
         }
-        if (!profileData) {
-            console.log(`FIN ${cmd.toUpperCase()}`)
-            return message.reply("no tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
-        }
-        var palabra = await wordleModel.findOne({ dia: hoy })
-        var palabraWordle = ""
-        if (!palabra) {
-            await wordleModel.remove({})
-            palabraWordle = inputs[Math.floor(Math.random() * inputs.length)]
-            let registro = await wordleModel.create({
-                palabra: palabraWordle,
-                dia: hoy
-            })
-            await registro.save()
-        } else {
-            palabraWordle = palabra.palabra
-        }
+
         var mapeoPalabra = new Map()
         for (let i = 0; i < palabraWordle.length; i++) {
             if (mapeoPalabra.get(palabraWordle.charAt(i))) {

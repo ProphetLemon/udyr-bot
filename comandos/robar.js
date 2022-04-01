@@ -111,6 +111,7 @@ module.exports = {
             }
         })
         var timeout = setTimeout(async (mensaje, hurto) => {
+            message.channel.send(`Han pasado 12 horas asi que <@!${hurto.userIDLadron}> ha robado ${hurto.dinero} <:udyrcoin:825031865395445760> a <@!${hurto.userIDAfectado}>`)
             listaRobos.delete(mensaje.member.id)
             await profileModel.findOneAndUpdate({
                 userID: mensaje.member.id,
@@ -123,7 +124,7 @@ module.exports = {
             await roboModel.findOneAndRemove({
                 userIDLadron: hurto.userIDLadron
             })
-        }, 14_400_000, message, hurto);
+        }, 43_200_000, message, hurto);
         listaRobos.set(message.member.id, timeout)
         message.delete()
         console.log(`FIN ${cmd.toUpperCase()}`)
