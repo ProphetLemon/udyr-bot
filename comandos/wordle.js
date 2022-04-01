@@ -63,15 +63,15 @@ module.exports = {
         var hoy = moment().format('DD/MM/YYYY')
         var palabra = await wordleModel.findOne({ dia: hoy })
         var palabraWordle = ""
+        try {
+            var data = fs.readFileSync('./wordle/wordle.txt', 'utf8')
+        } catch (err) {
+            console.error(err)
+            return
+        }
+        var inputs = data.split("\n")
         if (!palabra) {
             await wordleModel.remove({})
-            try {
-                var data = fs.readFileSync('./wordle/wordle.txt', 'utf8')
-            } catch (err) {
-                console.error(err)
-                return
-            }
-            var inputs = data.split("\n")
             palabraWordle = inputs[Math.floor(Math.random() * inputs.length)]
             let registro = await wordleModel.create({
                 palabra: palabraWordle,
