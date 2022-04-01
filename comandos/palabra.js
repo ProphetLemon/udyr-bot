@@ -29,7 +29,7 @@ module.exports = {
                 return message.author.send("A callar friki")
             }
         }
-        /*
+
         if (message.guild) {
             return message.channel.send("Bro eso por privado que hay gente mirando").then(msg => {
                 message.delete()
@@ -37,7 +37,7 @@ module.exports = {
                     msg.delete()
                 }, 7000);
             })
-        }*/
+        }
         //AQUI SI LA PALABRA EXISTE Y ESTA VERIFICADA
         var aprobado = args[0]
         var hoy = moment().format('DD/MM/YYYY')
