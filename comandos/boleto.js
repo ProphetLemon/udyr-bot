@@ -33,7 +33,7 @@ module.exports = {
                 .addFields(
                     { name: "COMPRADOR", value: message.member.displayName, inline: true },
                     { name: "NUMERO", value: user.numeroBoleto, inline: true })
-                .setImage("https://tulotero.es/wp-content/uploads/2018/09/D%C3%A9cimo-Loter%C3%ADa-de-Navidad-2018.jpeg")
+                .setImage("https://cdn.discordapp.com/attachments/953974289919520778/961736600537161728/loteria_udyr.png")
             console.log(`FIN ${cmd.toUpperCase()}`)
             return message.channel.send(newEmbed)
         }
@@ -78,21 +78,21 @@ module.exports = {
                 }, 8000);
             })
         } else {
-            /* await profileModel.findOneAndUpdate({
-                 userID: message.author.id,
-                 serverID: message.guild.id
-             }, {
-                 $inc: {
-                     udyrcoins: -50
-                 }
-             })
+            await profileModel.findOneAndUpdate({
+                userID: message.author.id,
+                serverID: message.guild.id
+            }, {
+                $inc: {
+                    udyrcoins: -50
+                }
+            })
             await impuestoModel.findOneAndUpdate({
                 serverID: message.guild.id
             }, {
                 $inc: {
                     udyrcoins: 50
                 }
-            })*/
+            })
         }
         //AQUI SE COMPRA EL BOLETO SI TODO SALE GUCCI
         var boletoFinal = await boletoModel.create({
@@ -107,7 +107,7 @@ module.exports = {
             .addFields(
                 { name: "COMPRADOR", value: message.member.displayName, inline: true },
                 { name: "N\u00DAMERO", value: numeroBoletoUser, inline: true })
-            .setImage("https://tulotero.es/wp-content/uploads/2018/09/D%C3%A9cimo-Loter%C3%ADa-de-Navidad-2018.jpeg")
+            .setImage("https://cdn.discordapp.com/attachments/953974289919520778/961736600537161728/loteria_udyr.png")
         message.channel.send(`Has comprado el boleto con n\u00FAmero ${numeroBoletoUser}!`)
         message.channel.send(newEmbed)
         message.delete()

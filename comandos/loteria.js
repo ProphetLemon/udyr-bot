@@ -39,6 +39,9 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`)
+        if (message.author.id != "202065665597636609") {
+            return message.channel.send("No eres el admin bro")
+        }
         if (message.guild == null) {
             console.log(`FIN ${cmd.toUpperCase()}`)
             return message.channel.send("Esto se hace en el canal de udyr")
@@ -70,7 +73,7 @@ module.exports = {
                 .setColor("#B17428")
                 .setTitle(`LOTERIA DE UDYR`)
                 .addFields(
-                    { name: "COMPRADOR", value: ganador.userID, inline: true },
+                    { name: "COMPRADOR", value: `<@!${ganador.userID}>`, inline: true },
                     { name: "NUMERO", value: ganador.numeroBoleto, inline: true })
                 .setImage("https://tulotero.es/wp-content/uploads/2018/09/D%C3%A9cimo-Loter%C3%ADa-de-Navidad-2018.jpeg")
             discurso.push(newEmbed)
