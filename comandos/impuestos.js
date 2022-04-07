@@ -21,7 +21,7 @@ module.exports = {
         if (serverDinero) {
             dinero = serverDinero.udyrcoins
         }
-        message.channel.send(`El servidor '${message.guild.name}' tiene ${dinero} <:udyrcoin:825031865395445760>`).then(msg => {
+        message.channel.send(`El servidor '${message.guild.name}' tiene ${dinero} <:udyrcoin:961729720104419408>`).then(msg => {
             message.delete()
             setTimeout(() => {
                 msg.delete()

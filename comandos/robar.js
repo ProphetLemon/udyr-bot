@@ -64,7 +64,7 @@ module.exports = {
             personas.sort(function (a, b) {
                 return b.udyrcoins - a.udyrcoins;
             });
-            personas.slice(0, 3)
+            personas = personas.slice(0, 3)
         }
         do {
             var personaElegida = personas[Math.floor(Math.random() * personas.length)]
@@ -78,13 +78,13 @@ module.exports = {
         var monedasRobadas = Math.floor((personaRobada.udyrcoins * porcentaje) / 100)
         message.channel.send("SE HA PRODUCIDO UN ROBO! :scream:")
         message.member.send(`Has robado hoy (${String(hoy.getDate()).padStart(2, '0')}/${String(hoy.getMonth() +
-            1).padStart(2, '0')}) a ${personaElegidaMember.displayName} y se la ha robado ${monedasRobadas} <:udyrcoin:825031865395445760> (${porcentaje}%)`)
+            1).padStart(2, '0')}) a ${personaElegidaMember.displayName} y se la ha robado ${monedasRobadas} <:udyrcoin:961729720104419408> (${porcentaje}%)`)
         personaElegidaMember.send(`Te han robado hoy (${String(hoy.getDate()).padStart(2, '0')}/${String(hoy.getMonth() +
-            1).padStart(2, '0')}) ${monedasRobadas} <:udyrcoin:825031865395445760>\n Para recuperarlos tienes que usar el comando \"udyr juicio @culpable\" mencionando` +
+            1).padStart(2, '0')}) ${monedasRobadas} <:udyrcoin:961729720104419408>\n Para recuperarlos tienes que usar el comando \"udyr juicio @culpable\" mencionando` +
             ` quien t\u00FA crees que es el culpable. Si aciertas se te devolver\u00E1 el dinero y se le har\u00E1 un castigo al ladr\u00F3n,` +
             ` si fallas se te cobrara un impuesto por hacer un juicio a un inocente y no podras recuperar el dinero`).catch((err) => {
                 message.channel.send(`<@!${personaElegidaMember.id}>, te han robado hoy (${String(hoy.getDate()).padStart(2, '0')}/${String(hoy.getMonth() +
-                    1).padStart(2, '0')}) ${monedasRobadas} <:udyrcoin:825031865395445760>\n Para recuperarlos tienes que usar el comando \"udyr juicio @culpable\" mencionando` +
+                    1).padStart(2, '0')}) ${monedasRobadas} <:udyrcoin:961729720104419408>\n Para recuperarlos tienes que usar el comando \"udyr juicio @culpable\" mencionando` +
                     ` quien t\u00FA crees que es el culpable. Si aciertas se te devolver\u00E1 el dinero y se le har\u00E1 un castigo al ladr\u00F3n,` +
                     ` si fallas se te cobrara un impuesto por hacer un juicio a un inocente y no podras recuperar el dinero.`)
             })
@@ -111,7 +111,7 @@ module.exports = {
             }
         })
         var timeout = setTimeout(async (mensaje, hurto) => {
-            message.channel.send(`Han pasado 12 horas asi que <@!${hurto.userIDLadron}> ha robado ${hurto.dinero} <:udyrcoin:825031865395445760> a <@!${hurto.userIDAfectado}>`)
+            message.channel.send(`Han pasado 12 horas asi que <@!${hurto.userIDLadron}> ha robado ${hurto.dinero} <:udyrcoin:961729720104419408> a <@!${hurto.userIDAfectado}>`)
             listaRobos.delete(mensaje.member.id)
             await profileModel.findOneAndUpdate({
                 userID: mensaje.member.id,

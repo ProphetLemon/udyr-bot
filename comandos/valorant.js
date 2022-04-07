@@ -39,6 +39,7 @@ module.exports = {
      * @param {*} profileData 
      */
     execute(message, args, cmd, client, Discord, profileData) {
+        console.log(`INICIO ${cmd.toUpperCase()}`)
         if (cmd == "valorant") {
             var equiposDeseados = [
                 [tipo[0], tipo[0], tipo[1], tipo[2], tipo[3]],
@@ -48,16 +49,13 @@ module.exports = {
             ]
             var equipo = equiposDeseados[Math.floor(Math.random() * equiposDeseados.length)]
             var channel = message.member.voice.channel
+            var miembros = []
             if (channel == undefined) {
-                message.channel.send("No estas en un canal de voz bro").then(msg => {
-                    message.delete()
-                    setTimeout(() => {
-                        msg.delete()
-                    }, 7000);
-                })
-                return
+                miembros = args
+                miembros.slice(0, 5)
+            } else {
+                miembros = channel.members.array()
             }
-            var miembros = channel.members.array()
             equipo = shuffleArray(equipo)
             var mensaje = ""
             for (let i = 0; i < miembros.length && i < 5; i++) {
@@ -88,6 +86,7 @@ module.exports = {
             })
         }
         message.delete()
+        console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }
 const tipo = ["CONTROLADOR", "DUELISTA", "INICIADOR", "CENTINELA"]

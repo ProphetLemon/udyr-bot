@@ -32,7 +32,7 @@ module.exports = {
             };
             if (amount > profileData.udyrcoins) {
                 console.log("FIN REGALAR");
-                return message.reply("ya te gustaria tener esos <:udyrcoin:825031865395445760> maric\u00F3n")
+                return message.reply("ya te gustaria tener esos <:udyrcoin:961729720104419408> maric\u00F3n")
             };
             await profileModel.findOneAndUpdate({
                 userID: message.author.id
@@ -53,7 +53,7 @@ module.exports = {
             var guildMembers = await message.guild.members.fetch();
             let member = guildMembers.find(member => member.id == target.id);
             console.log("FIN REGALAR");
-            return message.channel.send(`${message.author.username} ha regalado ${amount} <:udyrcoin:825031865395445760> a ${member.displayName}.`);
+            return message.channel.send(`${message.author.username} ha regalado ${amount} <:udyrcoin:961729720104419408> a ${member.displayName}.`);
         } catch (err) {
             console.log(err);
         }

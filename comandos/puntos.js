@@ -76,7 +76,7 @@ module.exports = {
                 .setDescription(`${profileData.descripcion}`)
                 .addFields(
                     { name: "Ranking", value: `${posicion} ${emoji}`, inline: true },
-                    { name: "<:udyrcoin:825031865395445760>", value: `${profileData.udyrcoins}`, inline: true }
+                    { name: "<:udyrcoin:961729720104419408>", value: `${profileData.udyrcoins}`, inline: true }
                 )
             message.channel.send(newEmbed).then(msg => {
                 if (cmd != 'perfil') {
@@ -100,7 +100,7 @@ module.exports = {
                 }
             );
             var targetData;
-            message.channel.send(`${message.member.displayName} ha canjeado la recompensa diaria y consigui\u00F3 ${randomNumber} <:udyrcoin:825031865395445760>`).then(msg => {
+            message.channel.send(`${message.member.displayName} ha canjeado la recompensa diaria y consigui\u00F3 ${randomNumber} <:udyrcoin:961729720104419408>`).then(msg => {
                 msg.delete({ timeout: 10000 });
             });
             var personas = await profileModel.find();
@@ -140,7 +140,7 @@ module.exports = {
                 .setDescription(`${profileData.descripcion}`)
                 .addFields(
                     { name: "Ranking", value: `${posicion} ${emoji}`, inline: true },
-                    { name: "<:udyrcoin:825031865395445760>", value: `${profileData.udyrcoins}`, inline: true }
+                    { name: "<:udyrcoin:961729720104419408>", value: `${profileData.udyrcoins}`, inline: true }
                 )
             message.channel.send(newEmbed).then(msg => {
                 msg.delete({ timeout: 10000 });

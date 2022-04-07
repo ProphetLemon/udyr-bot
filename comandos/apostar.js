@@ -80,14 +80,14 @@ module.exports = {
                     } else {
                         apuesta_actual.apostadores[i].puntos += puntos;
                         metodosUtiles.cambiar_puntos(message.author.id, String("-" + puntos));
-                        message.reply("Tu apuesta es ahora de " + apuesta_actual.apostadores[i].puntos + " <:udyrcoin:825031865395445760>");
+                        message.reply("Tu apuesta es ahora de " + apuesta_actual.apostadores[i].puntos + " <:udyrcoin:961729720104419408>");
                     }
                 }
             }
             if (!existe) {
                 metodosUtiles.cambiar_puntos(nombre, "-" + puntos);
                 apuesta_actual.apostadores.push(new apostador(nombre, puntos, bando));
-                message.reply("Has apostado por '" + bando + "' con " + puntos + " <:udyrcoin:825031865395445760>")
+                message.reply("Has apostado por '" + bando + "' con " + puntos + " <:udyrcoin:961729720104419408>")
             }
 
         } else if (cmd = "cerrar") {
@@ -114,7 +114,7 @@ module.exports = {
                     let puntos = Math.floor(apuesta_actual.apostadores[i].puntos * ROI);
                     metodosUtiles.cambiar_puntos(apuesta_actual.apostadores[i].userID, ("+") + (puntos));
                     const targetData = await profileModel.findOne({ userID: apuesta_actual.apostadores[i].userID });
-                    message.channel.send(message.guild.members.cache.get(apuesta_actual.apostadores[i].userID).displayName + " ha ganado " + puntos + " <:udyrcoin:825031865395445760> (" + targetData.udyrcoins + " en total)");
+                    message.channel.send(message.guild.members.cache.get(apuesta_actual.apostadores[i].userID).displayName + " ha ganado " + puntos + " <:udyrcoin:961729720104419408> (" + targetData.udyrcoins + " en total)");
                 }
             }
             apuesta_actual = new apuesta(undefined, undefined, undefined);

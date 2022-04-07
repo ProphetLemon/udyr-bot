@@ -46,7 +46,7 @@ module.exports = {
                         await roboModel.findOneAndRemove({
                             userIDLadron: robo.userIDLadron
                         })
-                        message.channel.send(`Han pasado 12 horas asi que <@!${robo.userIDLadron}> ha robado ${robo.dinero} <:udyrcoin:825031865395445760> a <@!${robo.userIDAfectado}>`)
+                        message.channel.send(`Han pasado 12 horas asi que <@!${robo.userIDLadron}> ha robado ${robo.dinero} <:udyrcoin:961729720104419408> a <@!${robo.userIDAfectado}>`)
                     }, diff, message, robo);
                     listaRobos.set(robo.userIDLadron, timeout)
                 } else {
@@ -61,7 +61,7 @@ module.exports = {
                     await roboModel.findOneAndRemove({
                         userIDLadron: robo.userIDLadron
                     })
-                    message.channel.send(`Han pasado 12 horas asi que <@!${robo.userIDLadron}> ha robado ${robo.dinero} <:udyrcoin:825031865395445760> a <@!${robo.userIDAfectado}>`)
+                    message.channel.send(`Han pasado 12 horas asi que <@!${robo.userIDLadron}> ha robado ${robo.dinero} <:udyrcoin:961729720104419408> a <@!${robo.userIDAfectado}>`)
                 }
             }
         }

@@ -188,7 +188,7 @@ module.exports = {
             message.channel.send(`Udyr Wordle #${moment().startOf('day').diff(moment().startOf('year'), "days") + 1} ${resultadosPersonales.get(message.author.id).split("\n").length - 1}/6\n${resultadosPersonales.get(message.author.id)}`)
             puntos = 120 - 20 * ((resultadosPersonales.get(message.author.id).split("\n").length - 1) - 1)
             if (dineros == true) {
-                message.channel.send(`Has ganado ${puntos} <:udyrcoin:825031865395445760>`)
+                message.channel.send(`Has ganado ${puntos} <:udyrcoin:961729720104419408>`)
             }
             const textChannel = client.guilds.cache.get("598896817157046281").channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
             textChannel.send(`Resultado de ${message.author.username}\nUdyr Wordle #${moment().startOf('day').diff(moment().startOf('year'), "days") + 1} ${resultadosPersonales.get(message.author.id).split("\n").length - 1}/6\n${resultadosPersonales.get(message.author.id)}`)
