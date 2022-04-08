@@ -1,7 +1,7 @@
 const { Message, Client, MessageEmbed } = require('discord.js');
-const message = require('../eventos/guild/message');
 const boletoModel = require('../models/boletoSchema');
 const impuestoModel = require('../models/impuestoSchema')
+const profileModel = require('../models/profileSchema');
 var loteria = new Map()
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -85,6 +85,19 @@ module.exports = {
             message.channel.send(discurso[0])
             discurso.splice(0, 1)
             leerDiscurso(discurso, message)
+            await profileModel.findOneAndUpdate({
+                userID: ganador.userID,
+                serverID: message.guild.id
+            }, {
+                $inc: serverDinero.udyrcoins
+            })
+            await impuestoModel.findOneAndUpdate({
+                serverID: message.guild.id
+            }, {
+                $set: {
+                    udyrcoins: 0
+                }
+            })
         }, diff);
         loteria.set(message.guild.id, timeout)
         message.channel.send(`La loteria se ha programado correctamente!`)
