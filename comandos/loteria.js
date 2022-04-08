@@ -80,7 +80,7 @@ module.exports = {
                 .addFields(
                     { name: "COMPRADOR", value: `<@!${ganador.userID}>`, inline: true },
                     { name: "NUMERO", value: ganador.numeroBoleto, inline: true })
-                .setImage("https://tulotero.es/wp-content/uploads/2018/09/D%C3%A9cimo-Loter%C3%ADa-de-Navidad-2018.jpeg")
+                .setImage("https://cdn.discordapp.com/attachments/953974289919520778/961736600537161728/loteria_udyr.png")
             discurso.push(newEmbed)
             message.channel.send(discurso[0])
             discurso.splice(0, 1)
