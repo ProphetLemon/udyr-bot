@@ -42,14 +42,20 @@ module.exports = {
         if (message.author.id != "202065665597636609") {
             return message.channel.send("No eres el admin bro")
         }
-        if (message.guild == null) {
+        if (message.guild == null || message.channel.id != "809786674875334677") {
             console.log(`FIN ${cmd.toUpperCase()}`)
             return message.channel.send("Esto se hace en el canal de udyr")
         }
         if (loteria.get(message.guild.id)) {
             return message.channel.send("La loteria ya estaba en marcha")
         }
-        var diff = 0
+        var dateNow = new Date()
+        var dateLoteria = new Date()
+        dateLoteria.setDate(10)
+        dateLoteria.setHours(21)
+        dateLoteria.setMinutes(0)
+        dateLoteria.setSeconds(0)
+        var diff = dateLoteria - dateNow
         var timeout = setTimeout(async () => {
             loteria.delete(message.guild.id)
             var boletos = await boletoModel.find({})
@@ -60,8 +66,7 @@ module.exports = {
             })
             var discurso = []
             discurso.push("BIEVENIDOS A LA PRIMERA LOTERIA DE UDYR")
-            discurso.push(`AHORA MISMO NOS ESTAN VIENDO POR EL CANAL DE VOZ ${message.guild.channels.cache.get("961580945587200030").members.array().length} PERSONAS`)
-            discurso.push(`Y EN ESTE EVENTO HAN PARTICIPADO ${boletos.length} PERSONAS`)
+            discurso.push(`EN ESTE EVENTO HAN PARTICIPADO ${boletos.length} PERSONAS`)
             discurso.push(`PERO SOLO UNA SE LLEVARA LOS ${serverDinero.udyrcoins} <:udyrcoin:961729720104419408>`)
             discurso.push(`VOY DECIR LOS NUMEROS DEL BOLETO GANADOR UNO A UNO, SIENDO EL PRIMERO EL DE LA IZQUIERDA DEL TODO`)
             discurso.push(`EL PRIMER NUMERO ES EL ${ganador.numeroBoleto.charAt(0)}`)
@@ -82,6 +87,7 @@ module.exports = {
             leerDiscurso(discurso, message)
         }, diff);
         loteria.set(message.guild.id, timeout)
+        message.channel.send(`La loteria se ha programado correctamente!`)
         console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }
