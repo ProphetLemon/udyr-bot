@@ -14,6 +14,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        console.log(`INICIO ${cmd.toUpperCase()}`)
         var serverDinero = await impuestoModel.findOne({
             serverID: message.guild.id
         })
@@ -27,5 +28,6 @@ module.exports = {
                 msg.delete()
             }, 6000);
         })
+        console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }
