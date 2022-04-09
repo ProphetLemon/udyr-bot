@@ -23,7 +23,7 @@ module.exports = {
             mensaje = `Por ahora han participado ${boletos.length} personas!\n`
             var memberManager = await message.guild.members.fetch()
             for (let i = 0; i < boletos.length; i++) {
-                var memberI = memberManager.find(member => { member.id == boletos[i].userID })
+                var memberI = memberManager.find(member => member.id == boletos[i].userID)
                 mensaje += `${memberI.displayName}: ${boletos[i].numeroBoleto}\n`
             }
             message.channel.send(mensaje).then(msg => {
