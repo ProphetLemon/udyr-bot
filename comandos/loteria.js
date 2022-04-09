@@ -13,9 +13,7 @@ function shuffleArray(array) {
     return array
 }
 function leerDiscurso(array, message) {
-    if (array.length == 2) {
-        message.channel.send(array[0])
-        message.channel.send(array[1])
+    if (array.length == 0) {
         return
     }
     setTimeout(() => {
@@ -61,35 +59,48 @@ module.exports = {
             var boletos = await boletoModel.find({})
             boletos = shuffleArray(boletos)
             var ganador = boletos[0]
+            var segundo = boletos[1]
+            var tercero = boletos[2]
             var serverDinero = await impuestoModel.findOne({
                 serverID: message.guild.id
             })
             var discurso = []
             discurso.push("BIEVENIDOS A LA PRIMERA LOTERIA DE UDYR")
             discurso.push(`EN ESTE EVENTO HAN PARTICIPADO ${boletos.length} PERSONAS`)
-            discurso.push(`PERO SOLO UNA SE LLEVARA LOS ${serverDinero.udyrcoins} <:udyrcoin:961729720104419408>`)
-            discurso.push(`VOY DECIR LOS NUMEROS DEL BOLETO GANADOR UNO A UNO, SIENDO EL PRIMERO EL DE LA IZQUIERDA DEL TODO`)
-            discurso.push(`EL PRIMER NUMERO ES EL ${ganador.numeroBoleto.charAt(0)}`)
-            discurso.push(`EL SEGUNDO NUMERO ES EL ${ganador.numeroBoleto.charAt(1)}`)
-            discurso.push(`EL TERCER NUMERO ES EL ${ganador.numeroBoleto.charAt(2)}`)
-            discurso.push(`EL CUARTO NUMERO ES EL ${ganador.numeroBoleto.charAt(3)}`)
-            discurso.push(`EL QUINTO Y ULTIMO NUMERO ES EL ${ganador.numeroBoleto.charAt(4)}`)
-            const newEmbed = new MessageEmbed()
-                .setColor("#B17428")
-                .setTitle(`LOTERIA DE UDYR`)
-                .addFields(
-                    { name: "COMPRADOR", value: `<@!${ganador.userID}>`, inline: true },
-                    { name: "NUMERO", value: ganador.numeroBoleto, inline: true })
-                .setImage("https://cdn.discordapp.com/attachments/953974289919520778/961736600537161728/loteria_udyr.png")
-            discurso.push(newEmbed)
+            discurso.push(`Y 3 PERSONAS SE REPARTIRAN DE MANERA POCO JUSTA LOS ${serverDinero.udyrcoins} <:udyrcoin:961729720104419408>`)
+            discurso.push(`EL PRIMER GANADOR ES:`)
+            discurso.push(`<@!849997112930074654>`)
+            discurso.push(`jajano`)
+            discurso.push(`EL PRIMER PREMIO ES PARA:`)
+            discurso.push(`<@!${ganador.userID}>`)
+            discurso.push(`EL SEGUNDO PREMIO ES PARA:`)
+            discurso.push(`<@!${segundo.userID}>`)
+            discurso.push(`EL TERCER Y ULTIMO PREMIO ES PARA:`)
+            discurso.push(`<@!${tercero.userID}>`)
             message.channel.send(discurso[0])
             discurso.splice(0, 1)
             leerDiscurso(discurso, message)
+            var dineroPrimerPremio = Math.floor(Number(serverDinero.udyrcoins) * 60 / 100)
+            var dineroSegundoPremio = Math.floor((Number(serverDinero.udyrcoins) - dineroPrimerPremio) * 60 / 100)
+            var tercerPremio = Number(serverDinero.udyrcoins) - dineroPrimerPremio - dineroSegundoPremio
+            console.log(dineroPrimerPremio + " " + dineroSegundoPremio + " " + tercerPremio)
             await profileModel.findOneAndUpdate({
                 userID: ganador.userID,
                 serverID: message.guild.id
             }, {
-                $inc: serverDinero.udyrcoins
+                $inc: dineroPrimerPremio
+            })
+            await profileModel.findOneAndUpdate({
+                userID: segundo.userID,
+                serverID: message.guild.id
+            }, {
+                $inc: dineroSegundoPremio
+            })
+            await profileModel.findOneAndUpdate({
+                userID: tercero.userID,
+                serverID: message.guild.id
+            }, {
+                $inc: tercerPremio
             })
             await impuestoModel.findOneAndUpdate({
                 serverID: message.guild.id
