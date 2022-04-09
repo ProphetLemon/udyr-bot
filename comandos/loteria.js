@@ -45,7 +45,12 @@ module.exports = {
             return message.channel.send("Esto se hace en el canal de udyr")
         }
         if (loteria.get(message.guild.id)) {
-            return message.channel.send("La loteria ya estaba en marcha")
+            return message.channel.send("La loteria ya estaba en marcha").then(msg => {
+                message.delete()
+                setTimeout(() => {
+                    msg.delete()
+                }, 7000);
+            })
         }
         var dateNow = new Date()
         var dateLoteria = new Date()
@@ -111,7 +116,12 @@ module.exports = {
             })
         }, diff);
         loteria.set(message.guild.id, timeout)
-        message.channel.send(`La loteria se ha programado correctamente!`)
+        message.channel.send(`La loteria se ha programado correctamente!`).then(msg => {
+            message.delete()
+            setTimeout(() => {
+                msg.delete()
+            }, 7000);
+        })
         console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }
