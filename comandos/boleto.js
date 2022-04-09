@@ -28,6 +28,9 @@ module.exports = {
             }
             message.channel.send(mensaje).then(msg => {
                 message.delete()
+                setTimeout(() => {
+                    msg.delete()
+                }, 7000);
             })
             console.log(`FIN ${cmd.toUpperCase()}`)
             return
