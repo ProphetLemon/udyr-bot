@@ -4,7 +4,7 @@ const profileModel = require('../models/profileSchema');
 const impuestoModel = require('../models/impuestoSchema')
 module.exports = {
     name: 'boleto',
-    aliases: [],
+    aliases: ['boletos'],
     description: 'Funcion que te compra un boleto',
     /**
      * 
@@ -17,6 +17,21 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`)
+        //SI USAS EL COMANDO 'BOLETOS'
+        if (cmd.toLocaleLowerCase() == 'boletos') {
+            var boletos = await boletoModel.find({})
+            mensaje = `Por ahora han participado ${boletos.length} personas!\n`
+            var memberManager = await message.guild.members.fetch()
+            for (let i = 0; i < boletos.length; i++) {
+                var memberI = memberManager.find(member => { member.id == boletos[i].userID })
+                mensaje += `${memberI.displayName}: ${boletos[i].numeroBoleto}\n`
+            }
+            message.channel.send(mensaje).then(msg => {
+                message.delete()
+            })
+            console.log(`FIN ${cmd.toUpperCase()}`)
+            return
+        }
         //COMPROBAR QUE ESTAS EN LA BBDD
         if (!profileData) {
             console.log(`FIN ${cmd.toUpperCase()}`)
