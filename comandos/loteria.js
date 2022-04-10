@@ -93,19 +93,25 @@ module.exports = {
                 userID: ganador.userID,
                 serverID: message.guild.id
             }, {
-                $inc: dineroPrimerPremio
+                $inc: {
+                    udyrcoins: dineroPrimerPremio
+                }
             })
             await profileModel.findOneAndUpdate({
                 userID: segundo.userID,
                 serverID: message.guild.id
             }, {
-                $inc: dineroSegundoPremio
+                $inc: {
+                    udyrcoins: dineroSegundoPremio
+                }
             })
             await profileModel.findOneAndUpdate({
                 userID: tercero.userID,
                 serverID: message.guild.id
             }, {
-                $inc: tercerPremio
+                $inc: {
+                    udyrcoins: tercerPremio
+                }
             })
             await impuestoModel.findOneAndUpdate({
                 serverID: message.guild.id
