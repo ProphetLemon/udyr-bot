@@ -20,13 +20,19 @@ module.exports = {
         //SI USAS EL COMANDO 'BOLETOS'
         if (cmd.toLocaleLowerCase() == 'boletos') {
             var boletos = await boletoModel.find({})
-            mensaje = `Por ahora han participado ${boletos.length} personas!\n`
+            var log = []
             var memberManager = await message.guild.members.fetch()
             for (let i = 0; i < boletos.length; i++) {
                 var memberI = memberManager.find(member => member.id == boletos[i].userID)
-                mensaje += `${memberI.displayName}: ${boletos[i].numeroBoleto}\n`
+                log.push(`${memberI.displayName}: ${boletos[i].numeroBoleto}\n`)
             }
-            message.channel.send(mensaje).then(msg => {
+            log.sort(function (a, b) {
+                if (a < b) { return -1; }
+                if (a > b) { return 1; }
+                return 0;
+            })
+            log.splice(0, 0, `Por ahora han participado ${boletos.length} personas!`)
+            message.channel.send(log.join("\n")).then(msg => {
                 message.delete()
                 setTimeout(() => {
                     msg.delete()
