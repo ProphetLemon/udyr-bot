@@ -36,6 +36,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        return
         console.log(`INICIO ${cmd.toUpperCase()}`)
         if (message.author.id != "202065665597636609") {
             return message.channel.send("No eres el admin bro")

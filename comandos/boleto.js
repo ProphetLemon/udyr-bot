@@ -16,6 +16,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        return
         console.log(`INICIO ${cmd.toUpperCase()}`)
         //SI USAS EL COMANDO 'BOLETOS'
         if (cmd.toLowerCase() == 'boletos') {
