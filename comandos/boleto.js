@@ -24,7 +24,7 @@ module.exports = {
             var memberManager = await message.guild.members.fetch()
             for (let i = 0; i < boletos.length; i++) {
                 var memberI = memberManager.find(member => member.id == boletos[i].userID)
-                log.push(`${memberI.displayName}: ${boletos[i].numeroBoleto}\n`)
+                log.push(`${memberI.displayName}: ${boletos[i].numeroBoleto}`)
             }
             log.sort(function (a, b) {
                 if (a < b) { return -1; }
