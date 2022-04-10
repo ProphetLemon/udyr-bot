@@ -36,9 +36,6 @@ module.exports = {
             log.splice(0, 0, `Por ahora han participado ${boletos.length} personas!`)
             message.channel.send(log.join("\n")).then(msg => {
                 message.delete()
-                setTimeout(() => {
-                    msg.delete()
-                }, 7000);
             })
             console.log(`FIN ${cmd.toUpperCase()}`)
             return
