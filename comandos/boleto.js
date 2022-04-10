@@ -18,7 +18,7 @@ module.exports = {
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`)
         //SI USAS EL COMANDO 'BOLETOS'
-        if (cmd.toLocaleLowerCase() == 'boletos') {
+        if (cmd.toLowerCase() == 'boletos') {
             var boletos = await boletoModel.find({})
             var log = []
             var memberManager = await message.guild.members.fetch()
@@ -27,6 +27,8 @@ module.exports = {
                 log.push(`${memberI.displayName}: ${boletos[i].numeroBoleto}`)
             }
             log.sort(function (a, b) {
+                a = a.toLowerCase()
+                b = b.toLowerCase()
                 if (a < b) { return -1; }
                 if (a > b) { return 1; }
                 return 0;
