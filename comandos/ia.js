@@ -36,6 +36,7 @@ module.exports = {
         });
         messageUdyr.delete()
         if (!response || !response.data || !response.data.choices || !response.data.choices[0].text) {
+            historiales.delete(id)
             return message.channel.send("Ha habido un problemilla, intentalo mas tarde")
         }
         historiales.set(id, historiales.get(id) + cosas + response.data.choices[0].text + "\n" + "\n")
