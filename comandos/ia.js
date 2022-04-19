@@ -30,7 +30,7 @@ module.exports = {
             message.channel.send("Me he liado")
         });
         messageUdyr.delete()
-        if (!response.data || !response.data.choices || !response.data.choices[0].text) {
+        if (!response || !response.data || !response.data.choices || !response.data.choices[0].text) {
             return message.channel.send("Ha habido un problemilla, intentalo mas tarde")
         }
         for (let i = 0; i < response.data.choices[0].text.length; i += 2000) {
