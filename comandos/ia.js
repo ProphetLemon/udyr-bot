@@ -32,6 +32,7 @@ module.exports = {
             frequency_penalty: 0,
             presence_penalty: 0,
         }).catch(error => {
+            console.log(error)
             message.channel.send("Me he liado")
         });
         messageUdyr.delete()
