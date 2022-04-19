@@ -10,7 +10,7 @@ client.events = new Discord.Collection();
 const { Configuration, OpenAIApi } = require("openai");
 
 const configuration = new Configuration({
-    apiKey: "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",
+    apiKey: process.env.OPENAI_TOKEN,
 });
 global.openai = new OpenAIApi(configuration);
 ['command_handler', 'event_handler'].forEach(handler => {
