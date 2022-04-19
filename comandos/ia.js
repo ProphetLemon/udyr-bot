@@ -44,14 +44,12 @@ module.exports = {
             presence_penalty: 0,
         }).catch(error => {
             console.log(error)
-            message.channel.send("Me he liado")
         });
         //BORRO EL MENSAJE DE ESCRIBIENDO
         messageUdyr.delete()
         //COMPRUEBO SI EL BOT HA PETADO Y BORRO HISTORIAL SI ASI HA SIDO
         if (!response || !response.data || !response.data.choices || !response.data.choices[0].text) {
             historiales.delete(id)
-            message.channel.send("Hay demasiado en memoria, voy borrar el historial")
             return message.channel.send("Ha habido un problemilla, intentalo mas tarde")
         }
         //AQUI SOLO SE LLEGA SI NO HA PETADO
