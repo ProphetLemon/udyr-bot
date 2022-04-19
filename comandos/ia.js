@@ -24,7 +24,6 @@ module.exports = {
         message.channel.send("Escribiendo...").then(msg => {
             messageUdyr = msg
         })
-        console.log("PROMPT: " + historiales.get(id) + cosas)
         const response = await openai.createCompletion("text-davinci-002", {
             prompt: historiales.get(id) + cosas,
             temperature: 0.8,
@@ -39,7 +38,6 @@ module.exports = {
         if (!response || !response.data || !response.data.choices || !response.data.choices[0].text) {
             return message.channel.send("Ha habido un problemilla, intentalo mas tarde")
         }
-        console.log("SAVE: " + historiales.get(id) + cosas + response.data.choices[0].text + "\n" + "\n")
         historiales.set(id, historiales.get(id) + cosas + response.data.choices[0].text + "\n" + "\n")
         for (let i = 0; i < response.data.choices[0].text.length; i += 2000) {
             message.channel.send(response.data.choices[0].text.substring(i, i + 2000));
