@@ -1,5 +1,6 @@
 const { Message } = require("discord.js");
 var historiales = new Map()
+var timeouts = new Map()
 module.exports = {
     name: 'ia',
     aliases: ['ai'],
@@ -21,6 +22,8 @@ module.exports = {
         if (!historiales.get(id)) {
             historiales.set(id, "")
         }
+        clearTimeout(timeouts.get(id))
+        timeouts.delete(id)
         message.channel.send("Escribiendo...").then(msg => {
             messageUdyr = msg
         })
@@ -42,6 +45,10 @@ module.exports = {
             return message.channel.send("Ha habido un problemilla, intentalo mas tarde")
         }
         historiales.set(id, historiales.get(id) + cosas + response.data.choices[0].text + "\n" + "\n")
+        var timeout = setTimeout((id) => {
+            historiales.delete(id)
+        }, 30000, id);
+        timeouts.set(id, timeout)
         for (let i = 0; i < response.data.choices[0].text.length; i += 2000) {
             message.channel.send(response.data.choices[0].text.substring(i, i + 2000));
         }
