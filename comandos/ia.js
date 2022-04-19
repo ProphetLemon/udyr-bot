@@ -38,6 +38,7 @@ module.exports = {
         messageUdyr.delete()
         if (!response || !response.data || !response.data.choices || !response.data.choices[0].text) {
             historiales.delete(id)
+            message.channel.send("Hay demasiado en memoria, voy borrar el historial")
             return message.channel.send("Ha habido un problemilla, intentalo mas tarde")
         }
         historiales.set(id, historiales.get(id) + cosas + response.data.choices[0].text + "\n" + "\n")
@@ -45,11 +46,7 @@ module.exports = {
             message.channel.send(response.data.choices[0].text.substring(i, i + 2000));
         }
         if (3000 - (historiales.get(id).length / 4) <= 200) {
-            message.channel.send("Hay demasiado en memoria, voy borrar el historial").then(msg => {
-                setTimeout(() => {
-                    msg.delete()
-                }, 8000);
-            })
+            message.channel.send("Hay demasiado en memoria, voy borrar el historial")
             historiales.delete(id)
         }
         console.log(`FIN ${cmd.toUpperCase()}`);
