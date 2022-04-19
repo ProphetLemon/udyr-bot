@@ -17,6 +17,7 @@
     "moment-timezone": "^0.5.34",
     "mongoose": "^5.12.2",
     "node-gyp": "^8.2.0",
+    "openai": "^2.0.5",
     "opusscript": "0.0.8",
     "reconlx": "^1.2.41",
     "weather-js": "^2.0.0",
