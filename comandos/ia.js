@@ -1,7 +1,7 @@
 const { Message } = require("discord.js");
 module.exports = {
     name: 'ia',
-    aliases: [],
+    aliases: ['ai'],
     description: 'Funcion para calcular lo que te roba hacienda',
     /**
      * 
@@ -21,8 +21,8 @@ module.exports = {
         })
         const response = await openai.createCompletion("text-davinci-002", {
             prompt: cosas,
-            temperature: 0.7,
-            max_tokens: 3900,
+            temperature: 0.5,
+            max_tokens: 500,
             top_p: 1,
             frequency_penalty: 0,
             presence_penalty: 0,
