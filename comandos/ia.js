@@ -1,6 +1,4 @@
 const { Message } = require("discord.js");
-var peticiones = new Map()
-
 module.exports = {
     name: 'ia',
     aliases: [],
@@ -28,9 +26,9 @@ module.exports = {
             top_p: 1,
             frequency_penalty: 0,
             presence_penalty: 0,
+        }).catch(error => {
+            message.channel.send("Me he liado")
         });
-        clearTimeout(peticiones.get("849997112930074654"))
-        peticiones.delete(message.author.id)
         messageUdyr.delete()
         if (!response.data || !response.data.choices || !response.data.choices[0].text) {
             return message.channel.send("Ha habido un problemilla, intentalo mas tarde")
