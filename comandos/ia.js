@@ -1,31 +1,6 @@
 const { Message } = require("discord.js");
 var peticiones = new Map()
-/**
- * 
- * @param {Message} message 
- */
-function editarMensaje(message) {
-    if (message.content == "Escribiendo.") {
-        var timeout = setTimeout(() => {
-            message.edit("Escribiendo..")
-            return editarMensaje(message)
-        }, 1000);
 
-    }
-    if (message.content == "Escribiendo..") {
-        var timeout = setTimeout(() => {
-            message.edit("Escribiendo...")
-            return editarMensaje(message)
-        }, 1000);
-    }
-    if (message.content == "Escribiendo...") {
-        var timeout = setTimeout(() => {
-            message.edit("Escribiendo.")
-            return editarMensaje(message)
-        }, 1000);
-    }
-    peticiones.set(message.author.id, timeout)
-}
 module.exports = {
     name: 'ia',
     aliases: [],
@@ -43,9 +18,8 @@ module.exports = {
         console.log(`INICIO ${cmd.toUpperCase()}`);
         var cosas = args.join(" ") + "."
         var messageUdyr
-        message.channel.send("Escribiendo.").then(msg => {
+        message.channel.send("Escribiendo...").then(msg => {
             messageUdyr = msg
-            editarMensaje(msg)
         })
         const response = await openai.createCompletion("text-davinci-002", {
             prompt: cosas,
