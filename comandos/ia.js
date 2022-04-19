@@ -14,14 +14,14 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`);
-        var cosas = args.join(" ") + "."
+        var cosas = args.join(" ")
         var messageUdyr
         message.channel.send("Escribiendo...").then(msg => {
             messageUdyr = msg
         })
         const response = await openai.createCompletion("text-davinci-002", {
             prompt: cosas,
-            temperature: 0.5,
+            temperature: 0.8,
             max_tokens: 500,
             top_p: 1,
             frequency_penalty: 0,
