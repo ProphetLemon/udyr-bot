@@ -2,8 +2,8 @@ const { Message } = require("discord.js");
 var historiales = new Map()
 var timeouts = new Map()
 module.exports = {
-    name: 'ia',
-    aliases: ['ai'],
+   // name: 'ia',
+    //aliases: ['ai'],
     description: 'Funcion para calcular lo que te roba hacienda',
     /**
      * 
