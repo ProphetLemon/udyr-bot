@@ -1,4 +1,4 @@
-const { Message, Client } = require('discord.js');
+const { Message, Client, MessageEmbed } = require('discord.js');
 const profileModel = require('../models/profileSchema');
 
 module.exports = {
@@ -25,16 +25,16 @@ module.exports = {
         });
         var guildMembers = await message.guild.members.fetch();
         var guildRoles = await message.guild.roles.fetch();
-        var rolAdmin = guildRoles.cache.find(role => role.name == "El Admin");
+        var rolAdmin = guildRoles.get("855758139140079646")
         var mensaje = "";
-        const newEmbed = new Discord.MessageEmbed()
+        const newEmbed = new MessageEmbed()
             .setColor("#B17428")
-            .setAuthor(`🏆Ranking de udyrcoins🏆`);
+            .setAuthor({ name: `🏆Ranking de udyrcoins🏆` });
         var hoy = moment().toDate()
         let adminLocalizado = false;
         for (let i = 0; i < personas.length; i++) {
             let competidor = personas[i];
-            var member = guildMembers.find(member => competidor.userID == member.id);
+            var member = guildMembers.get(competidor.userID)
             if (member.roles.cache.has(rolAdmin.id)) {
                 mensaje += `<:1990_praisethesun:602528888400379935> `
                 adminLocalizado = true;
@@ -55,7 +55,7 @@ module.exports = {
         if (!adminLocalizado) {
             for (let i = 10; i < personas.length; i++) {
                 let competidor = personas[i];
-                var member = guildMembers.find(member => competidor.userID == member.id);
+                var member = guildMembers.get(competidor.userID)
                 if (member == undefined) {
                     personas.splice(i, 1);
                     i = i - 1;
@@ -68,7 +68,7 @@ module.exports = {
             }
         }
         newEmbed.setDescription(mensaje)
-        message.channel.send(newEmbed).then(msg => {
+        message.channel.send({ embeds: [newEmbed] }).then(msg => {
             message.delete();
         });
         console.log("FIN RANKING");

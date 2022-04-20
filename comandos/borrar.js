@@ -17,7 +17,7 @@ module.exports = {
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log("INICIO BORRAR");
         var roleManager = await message.guild.roles.fetch()
-        var rolAdmin = roleManager.cache.find(role => role.name == "El Admin")
+        var rolAdmin = roleManager.get("855758139140079646")
         if (!message.member.roles.cache.has(rolAdmin.id)) return message.reply("para usar este comando debes ser admin, maric\u00F3n");
         var targetData = message.mentions.users.first();
         if (!targetData) {

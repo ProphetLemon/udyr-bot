@@ -1,6 +1,6 @@
 const profileModel = require('../models/profileSchema');
 
-const { Message } = require('discord.js');
+const { Message, MessageEmbed } = require('discord.js');
 module.exports = {
     name: 'puntos',
     aliases: ['points', 'perfil'],
@@ -69,18 +69,20 @@ module.exports = {
                     emoji = "";
                     break;
             }
-            const newEmbed = new Discord.MessageEmbed()
+            const newEmbed = new MessageEmbed()
                 .setColor("#B17428")
                 .setThumbnail(author.avatarURL())
-                .setAuthor(`Perfil de ${target != undefined ? target.displayName : message.member.displayName}`)
+                .setAuthor({ name: `Perfil de ${target != undefined ? target.displayName : message.member.displayName}` })
                 .setDescription(`${profileData.descripcion}`)
                 .addFields(
                     { name: "Ranking", value: `${posicion} ${emoji}`, inline: true },
                     { name: "<:udyrcoin:961729720104419408>", value: `${profileData.udyrcoins}`, inline: true }
                 )
-            message.channel.send(newEmbed).then(msg => {
+            message.channel.send({ embeds: [newEmbed] }).then(msg => {
                 if (cmd != 'perfil') {
-                    msg.delete({ timeout: 10000 });
+                    setTimeout(() => {
+                        msg.delete();
+                    }, 10000);
                 }
                 message.delete();
             });
@@ -133,17 +135,19 @@ module.exports = {
                     emoji = "";
                     break;
             }
-            const newEmbed = new Discord.MessageEmbed()
+            const newEmbed = new MessageEmbed()
                 .setColor("#B17428")
                 .setThumbnail(message.author.avatarURL())
-                .setAuthor(`Perfil de ${message.member.displayName}`)
+                .setAuthor({ name: `Perfil de ${message.member.displayName}` })
                 .setDescription(`${profileData.descripcion}`)
                 .addFields(
                     { name: "Ranking", value: `${posicion} ${emoji}`, inline: true },
                     { name: "<:udyrcoin:961729720104419408>", value: `${profileData.udyrcoins}`, inline: true }
                 )
-            message.channel.send(newEmbed).then(msg => {
-                msg.delete({ timeout: 10000 });
+            message.channel.send({ embeds: [newEmbed] }).then(msg => {
+                setTimeout(() => {
+                    msg.delete()
+                }, 10000);
                 message.delete();
             });
         }

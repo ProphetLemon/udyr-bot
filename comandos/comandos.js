@@ -1,4 +1,4 @@
-const { Discord, MessageEmbed } = require("discord.js")
+const { Discord, MessageEmbed, Message } = require("discord.js")
 
 module.exports = {
     name: 'comandos',
@@ -41,8 +41,8 @@ module.exports = {
                 { name: 'udyr tiempo _ciudad_', value: 'El bot te dice el tiempo de la ciudad dada' },
             )
             .setImage('https://i.kym-cdn.com/entries/icons/facebook/000/034/006/uga.jpg')
-            .setFooter('Ser malos! Buenas noches colegas\nPerro Xanchez - 19/11/10');
-        message.channel.send(newEmbed);
+            .setFooter({ text: 'Ser malos! Buenas noches colegas\nPerro Xanchez - 19/11/10' });
+        message.channel.send({ embeds: [newEmbed] });
         console.log("FIN COMANDOS");
     }
 }

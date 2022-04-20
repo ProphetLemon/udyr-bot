@@ -4,6 +4,16 @@ module.exports = {
     name: 'regalar',
     aliases: ['donar'],
     description: 'Funcion para regalar dinero a alguien',
+    /**
+     * 
+     * @param {Message} message 
+     * @param {string[]} args 
+     * @param {*} cmd 
+     * @param {*} client 
+     * @param {*} Discord 
+     * @param {*} profileData 
+     * @returns 
+     */
     async execute(message, args, cmd, client, Discord, profileData) {
         if (!profileData.udyrcoins) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         if (args.length != 2) {
@@ -51,7 +61,7 @@ module.exports = {
                     },
                 })
             var guildMembers = await message.guild.members.fetch();
-            let member = guildMembers.find(member => member.id == target.id);
+            let member = guildMembers.get(target.id)
             console.log("FIN REGALAR");
             return message.channel.send(`${message.author.username} ha regalado ${amount} <:udyrcoin:961729720104419408> a ${member.displayName}.`);
         } catch (err) {

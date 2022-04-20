@@ -70,7 +70,7 @@ module.exports = {
             var personaElegida = personas[Math.floor(Math.random() * personas.length)]
         } while (personaElegida.userID == message.member.id)
         var guildMembers = await message.guild.members.fetch()
-        var personaElegidaMember = guildMembers.find(member => member.id == personaElegida.userID)
+        var personaElegidaMember = guildMembers.get(personaElegida.userID)
         var personaRobada = await profileModel.findOne({
             serverID: message.guild.id,
             userID: personaElegidaMember.id

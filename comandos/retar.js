@@ -69,7 +69,7 @@ module.exports = {
             var adminBBDD = await adminModel.find();
             var adminModelo = adminBBDD[0];
             var memberManager = await message.guild.members.fetch();
-            var memberAdmin = memberManager.find(member => member.id == adminModelo.userID);
+            var memberAdmin = memberManager.get(adminModelo.userID)
             adminActual = new admin(memberAdmin.displayName, adminModelo.endDate);
         }
         var personaje2 = "";
@@ -125,7 +125,7 @@ module.exports = {
             if (personaje1 == adminActual.nombre) {
                 jugarseElTitulo = true;
                 hay_apuesta = false;
-            } else if (personaje2 == adminActual.nombre && !guildMembers.find(member => member.id == metodosUtiles.returnIdFromMention(idpj2)).user.bot) {
+            } else if (personaje2 == adminActual.nombre && !guildMembers.get(metodosUtiles.returnIdFromMention(idpj2)).user.bot) {
                 if (profileData.udyrcoins < puntos_peaje) {
                     console.log(`FIN ${cmd.toUpperCase()}`)
                     return message.reply("no tienes puntos ni para comprar pan gilipollas")
@@ -138,8 +138,8 @@ module.exports = {
         }
         else if (cmd == 'coliseo') {
             let guildMembers = await message.guild.members.fetch();
-            let id1 = guildMembers.array()[Math.floor(Math.random() * guildMembers.array().length)].id;
-            let id2 = guildMembers.array()[Math.floor(Math.random() * guildMembers.array().length)].id;
+            let id1 = guildMembers.random().id;
+            let id2 = guildMembers.random().id;
             message.channel.send("<@!" + id1 + "> vs <@!" + id2 + ">");
             var gladiador1 = new gladiador(guildMembers.get(id1).displayName, 100);
             var gladiador2 = new gladiador(guildMembers.get(id2).displayName, 100);
@@ -336,10 +336,10 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
         turno = 2;
         if (sucedioEventoUdyr == true) {
             banquillo = [];
-            var udyr = guildMembers.find(member => member.id == "849997112930074654");
+            var udyr = guildMembers.get("849997112930074654")
             let miembroPerdedor1 = guildMembers.find(member => member.displayName == gladiador1.nombre);
             let miembroPerdedor2 = guildMembers.find(member => member.displayName == gladiador2.nombre);
-            var role = guildRoles.cache.find(role => role.name == "El Admin");
+            var role = guildRoles.find(role => role.name == "El Admin");
             if (miembroPerdedor1.roles.cache.has(role.id) || miembroPerdedor2.roles.cache.has(role.id)) {
                 miembroPerdedor1.roles.remove(role.id);
                 miembroPerdedor2.roles.remove(role.id);
@@ -366,7 +366,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
             banquillo = [];
             var maricon1 = guildMembers.find(member => member.displayName == gladiador1.nombre);
             var maricon2 = guildMembers.find(member => member.displayName == gladiador2.nombre);
-            var udyr = guildMembers.find(member => member.id == "849997112930074654");
+            var udyr = guildMembers.get("849997112930074654");
             var personasBBDD = await profileModel.find({
                 serverID: message.guild.id
             });

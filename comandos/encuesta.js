@@ -1,4 +1,4 @@
-const { Message, Discord } = require("discord.js");
+const { Message, Discord, MessageEmbed } = require("discord.js");
 
 module.exports = {
     name: 'encuesta',
@@ -12,11 +12,11 @@ module.exports = {
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`);
         var memberManager = await message.guild.members.fetch();
-        var newEmbed = new Discord.MessageEmbed()
+        var newEmbed = new MessageEmbed()
             .setColor("#B17428")
-            .setFooter(`Encuesta hecha por ${message.member.displayName}`, message.author.avatarURL())
+            .setFooter({ text: `Encuesta hecha por ${message.member.displayName}`, iconURL: message.author.avatarURL() })
             .setTitle(`${args.join(" ").toUpperCase()}`)
-        var messagePoll = await message.channel.send(newEmbed);
+        var messagePoll = await message.channel.send({ embeds: [newEmbed] });
         messagePoll.react('👍')
         messagePoll.react('👎')
         message.delete({ timeout: 500 });
@@ -28,20 +28,20 @@ module.exports = {
 
             for (var [key, value] of collected.get('👍').users.cache) {
                 if (key == "849997112930074654") continue;
-                votosSI += `\n${memberManager.find(member => member.id == key).displayName}`;
+                votosSI += `\n${memberManager.get(key).displayName}`;
             }
             for (var [key, value] of collected.get('👎').users.cache) {
                 if (key == "849997112930074654") continue;
-                votosNO += `\n${memberManager.find(member => member.id == key).displayName}`;
+                votosNO += `\n${memberManager.get(key).displayName}`;
             }
-            newEmbed = new Discord.MessageEmbed()
+            newEmbed = new MessageEmbed()
                 .setColor("#B17428")
                 .setTitle(`Fin de la encuesta *${args.join(" ").toUpperCase()}*`)
                 .addFields(
                     { name: `VOTOS 👍 (${collected.get('👍').users.cache.size - 1})`, value: votosSI == "" ? "\u200B" : votosSI, inline: true },
                     { name: `VOTOS 👎 (${collected.get('👎').users.cache.size - 1})`, value: votosNO == "" ? "\u200B" : votosNO, inline: true }
                 )
-            message.channel.send(newEmbed)
+            message.channel.send({ embeds: [newEmbed] })
         });
         console.log(`FIN ${cmd.toUpperCase()}`);
     }
