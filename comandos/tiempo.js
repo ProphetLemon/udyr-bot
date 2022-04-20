@@ -56,6 +56,9 @@ function textToEmoji(text) {
         case "Light Rain":
             emoji = ":cloud_rain:"
             break;
+        case "Rain":
+            emoji = ":cloud_rain:"
+            break;
         default:
             emoji = text
     }
