@@ -85,7 +85,7 @@ module.exports = {
                 }
             } else {
                 server_queue.songs.push(song)
-                return message.channel.send(`😎👍 **${song.title}** se ha a\u00F1adido correctamente`)
+                return message.channel.send(`:bear:👍 **${song.title}** se ha a\u00F1adido correctamente`)
             }
         }
         else if (cmd === "skip") skip_song(message, server_queue)
