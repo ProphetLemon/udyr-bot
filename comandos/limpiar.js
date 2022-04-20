@@ -24,7 +24,9 @@ module.exports = {
             message.channel.bulkDelete(Number(numeroMensajes) + 1);
             setTimeout(function () {
                 message.channel.send(`Se han eliminado ${numeroMensajes} mensajes`).then(msg => {
-                    msg.delete({ timeout: 3000 })
+                    setTimeout(() => {
+                        msg.delete()
+                    }, 3000);
                 })
             }, 1000);
         } else {
@@ -32,7 +34,11 @@ module.exports = {
                 clearTimeout(timeOutFocus);
                 timeOutFocus = undefined;
                 focusID = "";
-                message.channel.send("Se ha quitado el focus correctamente!").then(msg => { msg.delete({ timeout: 2000 }) });
+                message.channel.send("Se ha quitado el focus correctamente!").then(msg => {
+                    setTimeout(() => {
+                        msg.delete()
+                    }, 2000);
+                });
             }
             else {
                 metodosUtiles.insultar(message);

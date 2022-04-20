@@ -103,7 +103,9 @@ module.exports = {
             );
             var targetData;
             message.channel.send(`${message.member.displayName} ha canjeado la recompensa diaria y consigui\u00F3 ${randomNumber} <:udyrcoin:961729720104419408>`).then(msg => {
-                msg.delete({ timeout: 10000 });
+                setTimeout(() => {
+                    msg.delete()
+                }, 10000);
             });
             var personas = await profileModel.find();
             personas.sort(function (a, b) {

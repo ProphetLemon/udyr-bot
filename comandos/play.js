@@ -21,27 +21,39 @@ module.exports = {
         console.log(`INICIO ${cmd.toUpperCase()}`)
         const voice_channel = message.member.voice.channel;
         if (!voice_channel) return message.channel.send('No est\u00E1s en ning\u00FAn canal de voz, maric\u00F3n').then(msg => {
-            msg.delete({ timeout: 4000 })
+            setTimeout(() => {
+                msg.delete()
+            }, 4000);
             message.delete()
         })
         const permissions = voice_channel.permissionsFor(message.client.user)
         if (!permissions.has('CONNECT')) return message.channel.send('No tienes permisos, maric\u00F3n').then(msg => {
-            msg.delete({ timeout: 4000 })
+            setTimeout(() => {
+                msg.delete()
+            }, 4000);
             message.delete()
         })
         if (!permissions.has('SPEAK')) return message.channel.send('No tienes permisos, maric\u00F3n').then(msg => {
-            msg.delete({ timeout: 4000 })
+            setTimeout(() => {
+                msg.delete()
+            }, 4000);
             message.delete()
         })
         if (message.channel.name != "musica") return message.channel.send("No estas en el canal de m\u00FAsica, maric\u00F3n").then(msg => {
-            msg.delete({ timeout: 4000 })
+            setTimeout(() => {
+                msg.delete()
+            }, 4000);
             message.delete()
         })
 
         const server_queue = queue.get(message.guild.id)
 
         if (cmd == 'play') {
-            if (!args.length) return message.channel.send('No has mandado m\u00FAsica, maric\u00F3n').then(msg => msg.delete({ timeout: 4000 }))
+            if (!args.length) return message.channel.send('No has mandado m\u00FAsica, maric\u00F3n').then(msg => {
+                setTimeout(() => {
+                    msg.delete()
+                }, 4000);
+            })
             let song = {}
 
             if (ytdl.validateURL(args[0])) {

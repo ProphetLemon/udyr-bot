@@ -19,7 +19,9 @@ module.exports = {
         var messagePoll = await message.channel.send({ embeds: [newEmbed] });
         messagePoll.react('👍')
         messagePoll.react('👎')
-        message.delete({ timeout: 500 });
+        setTimeout(() => {
+            message.delete();
+        }, 500);
         const filter = (reaction) => reaction.emoji.name == '👍' || reaction.emoji.name == '👎';
         const collector = messagePoll.createReactionCollector(filter, { time: 30000 });
         collector.on('collect', r => console.log(`Collected ${r.emoji.name}`));
