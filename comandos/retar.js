@@ -349,7 +349,12 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                 miembroPerdedor2.roles.remove(role.id);
                 udyr.roles.add(role);
                 message.channel.send(`<:1990_praisethesun:602528888400379935><@!${udyr.id}> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>`);
-                message.channel.send("", { files: ["./images/udyr-admin.jpg"] });
+                message.channel.send({
+                    files: [{
+                        attachment: "./images/udyr-admin.jpg",
+                        name: 'file.png'
+                    }]
+                })
                 var dateNow = moment().toDate()
                 dateNow = moment(dateNow).add(30, 'm').toDate()
                 dateNow.setSeconds(0);
@@ -387,7 +392,12 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                 if (maricon1.displayName != udyr.displayName && maricon2.displayName != udyr.displayName) {
                     udyr.roles.add(roleAdmin);
                     message.channel.send("<:1990_praisethesun:602528888400379935><@!" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
-                    message.channel.send("", { files: ["./images/udyr-admin.jpg"] });
+                    message.channel.send({
+                        files: [{
+                            attachment: "./images/udyr-admin.jpg",
+                            name: 'file.png'
+                        }]
+                    })
                     var dateNow = moment().toDate()
                     dateNow = moment(dateNow).add(30, 'm').toDate()
                     dateNow.setSeconds(0);
@@ -440,11 +450,21 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                 banquillo = [];
                 message.channel.send("<:1990_praisethesun:602528888400379935><@!" + miembroGanador.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
                 if (miembroPerdedor.id == "849997112930074654") {
-                    message.channel.send("", { files: ["./images/udyr-no-admin.jpg"] });
+                    message.channel.send({
+                        files: [{
+                            attachment: "./images/udyr-no-admin.jpg",
+                            name: 'file.png'
+                        }]
+                    })
                 } else {
                     let link = './images/admin/'
                     var enlaces = fs.readdirSync(link);
-                    message.channel.send("", { files: [`${link}${enlaces[Math.floor(Math.random() * enlaces.length)]}`] });
+                    message.channel.send({
+                        files: [{
+                            attachment: `${link}${enlaces[Math.floor(Math.random() * enlaces.length)]}`,
+                            name: 'file.png'
+                        }]
+                    })
                 }
                 var dateNow = moment().toDate()
                 dateNow = moment(dateNow).add(30, 'm').toDate()
