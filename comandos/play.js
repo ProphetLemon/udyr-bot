@@ -127,7 +127,7 @@ const leave = (message, server_queue) => {
 const pause_song = async (message, server_queue) => {
     if (!message.member.voice.channel) return message.channel.send("Tienes que estar en un chat de voz para hacer eso")
     player.pause();
-    await song_queue.text_channel.send(`Me callo 😶`)
+    await server_queue.text_channel.send(`Me callo 😶`)
 }
 
 const resume_song = (message, server_queue) => {
