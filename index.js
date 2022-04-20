@@ -12,11 +12,11 @@ client.events = new Discord.Collection();
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_TOKEN,
 });
-global.openai = new OpenAIApi(configuration);
+global.openai = new OpenAIApi(configuration);*/
 ['command_handler', 'event_handler'].forEach(handler => {
     require(`./handlers/${handler}`)(client, Discord);
 });
-*/
+
 const commandFiles = fs.readdirSync('./comandos/').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
     const command = require(`./comandos/${file}`);
