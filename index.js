@@ -7,9 +7,9 @@ const client = new Client({
     Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
     Intents.FLAGS.GUILDS,
     Intents.FLAGS.GUILD_VOICE_STATES,
-    Intents.FLAGS.GUILD_PRESENCES]
+    Intents.FLAGS.GUILD_PRESENCES],
+    partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 });
-
 require('dotenv').config();
 const mongoose = require("mongoose");
 const profileModel = require('./models/profileSchema');
