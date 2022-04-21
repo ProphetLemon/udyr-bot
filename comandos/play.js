@@ -11,9 +11,11 @@ var player = createAudioPlayer();
 var guild
 player.on('stateChange', (oldState, newState) => {
     if (oldState.status === AudioPlayerStatus.Playing && newState.status === AudioPlayerStatus.Idle) {
-        queue.get(guild.id).songs.shift()
-        player.pause()
-        video_player(guild, queue.get(guild.id).songs[0])
+        setTimeout(() => {
+            queue.get(guild.id).songs.shift()
+            player.pause()
+            video_player(guild, queue.get(guild.id).songs[0])
+        }, 5000);
     }
 });
 module.exports = {
