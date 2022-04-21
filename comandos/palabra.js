@@ -44,7 +44,7 @@ module.exports = {
         var palabra = await wordleModel.findOne({ dia: hoy })
         var palabraWordle = ""
         if (!palabra || aprobado == "false") {
-            await wordleModel.remove({})
+            await wordleModel.deleteMany({})
             try {
                 var data = fs.readFileSync('./wordle/wordle.txt', 'utf8')
             } catch (err) {

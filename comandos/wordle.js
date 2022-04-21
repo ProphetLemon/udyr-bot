@@ -71,7 +71,7 @@ module.exports = {
         }
         var inputs = data.split("\n")
         if (!palabra) {
-            await wordleModel.remove({})
+            await wordleModel.deleteMany({})
             palabraWordle = inputs[Math.floor(Math.random() * inputs.length)]
             let registro = await wordleModel.create({
                 palabra: palabraWordle,
