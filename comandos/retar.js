@@ -77,55 +77,29 @@ module.exports = {
         var gladiador1;
         var gladiador2;
         if (cmd == 'pelea') {
-            var args = message.content.split("\"");
-            var nombre1 = args[1];
-            var nombre2 = args[3];
-            if (nombre1 == undefined || nombre2 == undefined) {
-                message.reply("eres tan maric\u00F3n que te heriste a ti mismo");
-                console.log(`FIN ${cmd.toUpperCase()}`)
-                return;
-            }
-            if (metodosUtiles.isMention(nombre1)) {
-                nombre1 = message.guild.members.cache.get(metodosUtiles.returnIdFromMention(nombre1)).displayName;
-            } else if (metodosUtiles.isRol(nombre1)) {
+            if (message.mentions.members.size != 2) {
                 metodosUtiles.insultar(message);
                 console.log(`FIN ${cmd.toUpperCase()}`)
                 return;
             }
-            if (metodosUtiles.isMention(nombre2)) {
-                nombre2 = message.guild.members.cache.get(metodosUtiles.returnIdFromMention(nombre2)).displayName;
-            } else if (metodosUtiles.isRol(nombre2)) {
-                metodosUtiles.insultar(message);
-                console.log(`FIN ${cmd.toUpperCase()}`)
-                return;
-            }
+            var nombre1 = message.mentions.members.get(message.mentions.members.keyAt(0)).displayName;
+            var nombre2 = message.mentions.members.get(message.mentions.members.keyAt(1)).displayName;
             gladiador1 = new gladiador(nombre1, 100);
             gladiador2 = new gladiador(nombre2, 100);
         } else if (cmd == 'retar') {
             personaje1 = message.guild.members.cache.get(message.author.id).displayName;
-            var idpj2 = args[0];
-            if (idpj2 == undefined) {
+            var idpj2 = message.mentions.members.first();
+            if (!idpj2) {
                 message.reply("eres tan maric\u00F3n que te heriste a ti mismo");
                 console.log(`FIN ${cmd.toUpperCase()}`)
                 return;
             }
-            personaje2 = "";
-            if (metodosUtiles.isMention(idpj2)) {
-                personaje2 = message.guild.members.cache.get(metodosUtiles.returnIdFromMention(idpj2)).displayName;
-            } else if (metodosUtiles.isRol(idpj2)) {
-                metodosUtiles.insultar(message);
-                console.log(`FIN ${cmd.toUpperCase()}`)
-                return;
-            } else {
-                message.reply("eres tan maric\u00F3n que te heriste a ti mismo");
-                console.log(`FIN ${cmd.toUpperCase()}`)
-                return;
-            }
+            personaje2 = idpj2.displayName;
             var guildMembers = await message.guild.members.fetch();
             if (personaje1 == adminActual.nombre) {
                 jugarseElTitulo = true;
                 hay_apuesta = false;
-            } else if (personaje2 == adminActual.nombre && !guildMembers.get(metodosUtiles.returnIdFromMention(idpj2)).user.bot) {
+            } else if (personaje2 == adminActual.nombre && !guildMembers.get(idpj2.id).user.bot) {
                 if (profileData.udyrcoins < puntos_peaje) {
                     console.log(`FIN ${cmd.toUpperCase()}`)
                     return message.reply("no tienes puntos ni para comprar pan gilipollas")
@@ -170,7 +144,7 @@ async function coliseo(gladiador1, gladiador2, message, client, Discord) {
     if ((gladiador1.nombre == adminActual.nombre || gladiador2.nombre == adminActual.nombre) && !jugarseElTitulo) {
         var dateNow = moment().toDate()
         if (dateNow < adminActual.dateLimite) {
-            message.reply("no se puede retar al admin aun, podras retar al admin cuando sean las " + adminActual.dateLimite.getHours() + ":" + metodosUtiles.cambiarMinutos(adminActual.dateLimite));
+            message.reply("no se puede retar al admin aun, podras retar al admin cuando sean las " + String(adminActual.dateLimite.getHours()).padStart(2, "0") + ":" + String(adminActual.dateLimite.getMinutes()).padStart(2, "0"));
             console.log("FIN COLISEO");
             return;
         }
@@ -495,7 +469,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                 dateLater.setSeconds(0);
                 var dateNow = moment().toDate()
                 dateNow.setSeconds(0);
-                message.channel.send(miembroPerdedor.displayName + " no puede volver a enfrentarse a " + miembroGanador.displayName + " hasta dentro de 30 minutos (" + dateLater.getHours() + ":" + metodosUtiles.cambiarMinutos(dateLater) + ").");
+                message.channel.send(miembroPerdedor.displayName + " no puede volver a enfrentarse a " + miembroGanador.displayName + " hasta dentro de 30 minutos (" + String(dateLater.getHours()).padStart(2, "0") + ":" + String(dateLater.getMinutes()).padStart(2, "0") + ").");
                 banquillo.push(miembroPerdedor.displayName);
                 setTimeout(function () {
                     for (let i = 0; i < banquillo.length; i++) {

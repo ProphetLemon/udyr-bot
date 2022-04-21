@@ -100,7 +100,7 @@ global.metodosUtiles = {
         var numero = String(aux);
         var numeros = "1234567890"
         var isValid = false;
-        for (var i = 0; i < numero.length; i++) {
+        for (var i = 0; i < numero.length && isValid; i++) {
             isValid = false;
             for (var j = 0; j < numeros.length; j++) {
                 if (numero.charAt(i) == numeros.charAt(j)) {
@@ -108,52 +108,8 @@ global.metodosUtiles = {
                     break;
                 }
             }
-            if (!isValid) {
-                break;
-            }
         }
         return isValid;
-    },
-
-    isMention: function (mention) {
-        let inicio = mention.slice(0, 3);
-        let numero = 0;
-        let fin = mention.slice(mention.length - 1, mention.length);
-        if (inicio == "<@!") {
-            numero = mention.slice(3, mention.length - 1);
-            fin = mention.slice(mention.length - 1, mention.length);
-        } else if ("<@") {
-            inicio = mention.slice(0, 2);
-            numero = mention.slice(2, mention.length - 1);
-        }
-        return (inicio == "<@!" || inicio == "<@") && metodosUtiles.isValidNumber(numero) && fin == ">";
-    },
-
-    isRol: function (mention) {
-        let inicio = mention.slice(0, 3);
-        let numero = mention.slice(3, mention.length - 1);
-        let fin = mention.slice(mention.length - 1, mention.length);
-        return inicio == "<@&" && metodosUtiles.isValidNumber(numero) && fin == ">";
-    },
-
-    returnIdFromMention: function (mention) {
-        let inicio = mention.slice(0, 3);
-        let numero = 0
-        if (inicio == "<@!" || inicio == "<@&") {
-            numero = mention.slice(3, mention.length - 1);
-        } else {
-            numero = mention.slice(2, mention.length - 1);
-        }
-        return numero;
-    },
-
-    cambiarMinutos: function (date) {
-        var minutos = String(date.getMinutes());
-        if (minutos.length == 1) {
-            return "0" + minutos;
-        } else {
-            return minutos;
-        }
     },
 
     insultar: function (message) {

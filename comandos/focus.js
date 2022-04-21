@@ -1,19 +1,29 @@
+const { Message } = require("discord.js");
 global.focusID = "";
 global.timeOutFocus = undefined;
 var messageCopy;
 module.exports = {
     name: 'focus',
     description: 'Funcion para retar a alguien',
-    execute(message,args,cmd,client,Discord,profileData) {
+    /**
+     * 
+     * @param {Message} message 
+     * @param {*} args 
+     * @param {*} cmd 
+     * @param {*} client 
+     * @param {*} Discord 
+     * @param {*} profileData 
+     * @returns 
+     */
+    execute(message, args, cmd, client, Discord, profileData) {
         console.log("INICIO FOCUS");
         if (focusID != "") {
             message.reply("ya estoy insultando, d\u00E9jame tranquilo");
             console.log("FIN FOCUS");
             return;
         }
-        let user = message.content.split(/ +/)[2];
-    
-        if (metodosUtiles.isMention(user) == false) {
+        let user = message.mentions.members.first();
+        if (!user) {
             metodosUtiles.insultar(message);
             console.log("FIN FOCUS");
             return;
@@ -33,12 +43,12 @@ module.exports = {
         messageCopy.channel.send("<@!" + focusID + ">" + " cementerio de choripanes");
         let aux = setTimeout(function () {
             minutos -= 2;
-            focusBucle(minutos, messageCopy,client);
+            focusBucle(minutos, messageCopy, client);
         }, 120_000);
         timeOutFocus = aux;
     }
 }
-function focusBucle(minutos, message,client) {
+function focusBucle(minutos, message, client) {
     if (minutos <= 0) {
         const command = client.commands.get("limpiar");
         command.execute(client, message);
