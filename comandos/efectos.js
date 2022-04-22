@@ -16,7 +16,8 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`)
-        var target = message.mentions.members.first() ? message.mentions.members.first() : message.member
+        var md = message.guild == undefined
+        var target = !md && message.mentions.members.first() ? message.mentions.members.first() : message.member
         var texto = ""
         if (args.length > 1) {
             if (target.id != message.member.id) {
@@ -84,7 +85,7 @@ module.exports = {
         }
         if (cmd == "kiss") {
             let avatar = target.user.displayAvatarURL({ dynamic: false, format: 'png' });
-            let avatar2 = (message.mentions.members.size == 2 ? message.mentions.members.get(message.mentions.members.keyAt(1)).user : message.author).displayAvatarURL({ dynamic: false, format: 'png' });
+            let avatar2 = (!md && message.mentions.members.size == 2 ? message.mentions.members.get(message.mentions.members.keyAt(1)).user : message.author).displayAvatarURL({ dynamic: false, format: 'png' });
             let image = await Canvacord.kiss(avatar2, avatar)
             let attachment = new MessageAttachment(image, "kiss.png");
             message.channel.send({ files: [attachment] })
@@ -97,7 +98,7 @@ module.exports = {
         }
         if (cmd == "slap") {
             let avatar = target.user.displayAvatarURL({ dynamic: false, format: 'png' });
-            let avatar2 = (message.mentions.members.size == 2 ? message.mentions.members.get(message.mentions.members.keyAt(1)).user : message.author).displayAvatarURL({ dynamic: false, format: 'png' });
+            let avatar2 = (!md && message.mentions.members.size == 2 ? message.mentions.members.get(message.mentions.members.keyAt(1)).user : message.author).displayAvatarURL({ dynamic: false, format: 'png' });
             let image = await Canvacord.slap(avatar2, avatar)
             let attachment = new MessageAttachment(image, "slap.png");
             message.channel.send({ files: [attachment] })
