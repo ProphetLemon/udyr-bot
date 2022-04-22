@@ -17,11 +17,11 @@ module.exports = async (Discord, client, message) => {
     }
     let profileData;
     try {
-        profileData = await profileModel.findOne({ userID: message.author.id, serverID: message.guild ? message.guild.id : "" });
+        profileData = await profileModel.findOne({ userID: message.author.id, serverID: message.guild ? message.guild.id : "598896817157046281" });
         if (profileData) {
             await profileModel.findOneAndUpdate({
                 userID: message.author.id,
-                serverID: message.guild ? message.guild.id : ""
+                serverID: message.guild ? message.guild.id : "598896817157046281"
             }, {
                 $inc: {
                     nivel: 1
