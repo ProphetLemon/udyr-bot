@@ -108,7 +108,9 @@ module.exports = {
             let attachment = new MessageAttachment(image, "slap.png");
             message.channel.send({ files: [attachment] })
         }
-        message.delete()
+        if (!md) {
+            message.delete()
+        }
         console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }
