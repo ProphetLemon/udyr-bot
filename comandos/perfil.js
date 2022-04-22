@@ -1,6 +1,5 @@
 const { Message, Client, MessageAttachment } = require('discord.js');
 const profileModel = require('../models/profileSchema');
-const { Rank, Canvacord } = require("canvacord");
 const Canvas = require('canvas');
 /**
  * 
