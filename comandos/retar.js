@@ -1,6 +1,6 @@
-const { Message } = require('discord.js');
+const { Message, Client, MessageAttachment } = require('discord.js');
 const fs = require('fs');
-
+const { Canvacord } = require("canvacord");
 const adminModel = require("../models/adminSchema");
 const profileModel = require('../models/profileSchema');
 class gladiador {
@@ -128,7 +128,15 @@ module.exports = {
     }
 }
 
-
+/**
+ * 
+ * @param {gladiador} gladiador1 
+ * @param {gladiador} gladiador2 
+ * @param {Message} message 
+ * @param {Client} client 
+ * @param {*} Discord 
+ * @returns 
+ */
 async function coliseo(gladiador1, gladiador2, message, client, Discord) {
     console.log("INICIO COLISEO");
     if ((banquillo.includes(gladiador1.nombre) || banquillo.includes(gladiador2.nombre)) && (gladiador1.nombre == adminActual.nombre || gladiador2.nombre == adminActual.nombre) && !jugarseElTitulo) {
@@ -145,6 +153,16 @@ async function coliseo(gladiador1, gladiador2, message, client, Discord) {
         var dateNow = moment().toDate()
         if (dateNow < adminActual.dateLimite) {
             message.reply("no se puede retar al admin aun, podras retar al admin cuando sean las " + String(adminActual.dateLimite.getHours()).padStart(2, "0") + ":" + String(adminActual.dateLimite.getMinutes()).padStart(2, "0"));
+            let avatar = message.author.displayAvatarURL({ dynamic: false, format: 'png' });
+            var members = await message.guild.members.fetch()
+            let avatar2 = members.get("849997112930074654").displayAvatarURL({ dynamic: false, format: 'png' });
+            let image = await Canvacord.slap(avatar2, avatar)
+            let attachment = new Discord.MessageAttachment(image, "slap.png");
+            message.reply({
+                content: "no se puede retar al admin aun, podras retar al admin cuando sean las " + String(adminActual.dateLimite.getHours()).padStart(2, "0") +
+                    ":" + String(adminActual.dateLimite.getMinutes()).padStart(2, "0"),
+                files: [attachment]
+            })
             console.log("FIN COLISEO");
             return;
         }
