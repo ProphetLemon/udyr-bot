@@ -17,14 +17,9 @@ module.exports = {
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`)
         var md = message.guild == undefined
-        var target
-        if (md) {
-            target = message.author
-        } else {
-            target = message.mentions.users.first() ? message.mentions.users.first() : message.author
-        }
+        var target = message.mentions.users.first() ? message.mentions.users.first() : message.author
         var texto = ""
-        if (args.length > 1) {
+        if (args.length >= 1) {
             if (target.id != message.author.id) {
                 args.splice(0, 1)
             }
@@ -90,7 +85,7 @@ module.exports = {
         }
         if (cmd == "kiss") {
             let avatar = target.displayAvatarURL({ dynamic: false, format: 'png' });
-            let avatar2 = (!md && message.mentions.users.size == 2 ? message.mentions.users.get(message.mentions.users.keyAt(1)) : message.author).displayAvatarURL({ dynamic: false, format: 'png' });
+            let avatar2 = (message.mentions.users.size == 2 ? message.mentions.users.get(message.mentions.users.keyAt(1)) : message.author).displayAvatarURL({ dynamic: false, format: 'png' });
             let image = await Canvacord.kiss(avatar2, avatar)
             let attachment = new MessageAttachment(image, "kiss.png");
             message.channel.send({ files: [attachment] })
@@ -103,7 +98,7 @@ module.exports = {
         }
         if (cmd == "slap") {
             let avatar = target.displayAvatarURL({ dynamic: false, format: 'png' });
-            let avatar2 = (!md && message.mentions.users.size == 2 ? message.mentions.users.get(message.mentions.users.keyAt(1)) : message.author).displayAvatarURL({ dynamic: false, format: 'png' });
+            let avatar2 = (message.mentions.users.size == 2 ? message.mentions.users.get(message.mentions.users.keyAt(1)) : message.author).displayAvatarURL({ dynamic: false, format: 'png' });
             let image = await Canvacord.slap(avatar2, avatar)
             let attachment = new MessageAttachment(image, "slap.png");
             message.channel.send({ files: [attachment] })
