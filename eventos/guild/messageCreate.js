@@ -19,6 +19,9 @@ module.exports = async (Discord, client, message) => {
     try {
         profileData = await profileModel.findOne({ userID: message.author.id, serverID: message.guild ? message.guild.id : "598896817157046281" });
         if (profileData) {
+            if ((profileData.nivel + 1) % 100 == 0) {
+                message.channel.send(`Has subido de nivel!\nAhora sos level ${(profileData.nivel + 1) / 100}`)
+            }
             await profileModel.findOneAndUpdate({
                 userID: message.author.id,
                 serverID: message.guild ? message.guild.id : "598896817157046281"
