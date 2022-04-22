@@ -30,6 +30,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        console.log(`INICIO ${cmd.toUpperCase()}`)
         // Create a 700x250 pixel canvas and get its context
         // The context will be used to modify the canvas
         const canvas = Canvas.createCanvas(832, 1150);
@@ -41,7 +42,13 @@ module.exports = {
                 serverID: message.guild.id
             })
             if (!profileData) {
+                console.log(`FIN ${cmd.toUpperCase()}`)
                 return message.reply("Ese pibe no ta en la BBDD")
+            }
+        } else {
+            if (!profileData) {
+                console.log(`FIN ${cmd.toUpperCase()}`)
+                return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
             }
         }
         const avatar = await Canvas.loadImage(target.displayAvatarURL({ format: 'png' }));
@@ -83,5 +90,6 @@ module.exports = {
         const attachment = new MessageAttachment(canvas.toBuffer(), 'profile-image.png');
 
         message.channel.send({ files: [attachment] });
+        console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }
