@@ -8,6 +8,7 @@ const profileSchema = new mongoose.Schema({
     robar: { type: Date },
     wordle: { type: String },
     wordleEmpezado: { type: Boolean },
+    nivel: { type: Number, default: 0 },
     descripcion: { type: String, default: 'Un maric\u00F3n m\u00E1s de este servidor' }
 });
 

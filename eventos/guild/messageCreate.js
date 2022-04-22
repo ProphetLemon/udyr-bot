@@ -10,18 +10,27 @@ const profileModel = require('../../models/profileSchema');
  */
 module.exports = async (Discord, client, message) => {
     const prefix = process.env.PREFIX + " ";
-    if (message.author.bot || message.channel.id == "953974289919520778") return;
+    if (message.author.bot || message.channel.id != "953974289919520778") return;
     if (message.author.id == focusID) {
         message.member.send("Callate maric\u00F3n");
         message.delete();
     }
     let profileData;
     try {
-        profileData = await profileModel.findOne({ userID: message.author.id });
+        profileData = await profileModel.findOne({ userID: message.author.id, serverID: message.guild.id });
+        if (profileData) {
+            await profileModel.findOneAndUpdate({
+                userID: message.author.id,
+                serverID: message.guild.id
+            }, {
+                $inc: {
+                    nivel: 1
+                }
+            })
+        }
     } catch (err) {
         console.log(err);
     }
-
     const args = message.content.slice(prefix.length).split(/ +/);
     const cmd = args.shift().toLowerCase();
     const command = client.commands.get(cmd.toLocaleLowerCase()) || client.commands.find(a => a.aliases && a.aliases.includes(cmd.toLocaleLowerCase()));

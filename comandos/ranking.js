@@ -4,7 +4,6 @@ const profileModel = require('../models/profileSchema');
 module.exports = {
     name: 'ranking',
     aliases: ['rank'],
-
     description: 'Funcion ver el raking de puntos',
     /**
      * 

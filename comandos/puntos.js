@@ -3,7 +3,7 @@ const profileModel = require('../models/profileSchema');
 const { Message, MessageEmbed } = require('discord.js');
 module.exports = {
     name: 'puntos',
-    aliases: ['points', 'perfil'],
+    aliases: ['points'],
     description: 'Funcion para saber los puntos que tienes',
     /**
      * 
@@ -39,53 +39,8 @@ module.exports = {
             })
         }
         var hoy = moment().toDate()
-        if (cmd == 'perfil' || message.mentions.members.first() || moment(profileData.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") == 0 || ((profileData.wordle != undefined && moment(hoy).format("DD/MM/YYYY") == profileData.wordle) || (profileData.wordleEmpezado != undefined && profileData.wordleEmpezado == true))) {
-            var personas = await profileModel.find();
-            personas.sort(function (a, b) {
-                return b.udyrcoins - a.udyrcoins;
-            });
-            var posicion = 0;
-            for (let i = 0; i < personas.length; i++) {
-                if (personas[i].userID == profileData.userID) {
-                    posicion = i + 1;
-                    break;
-                }
-            }
-            var emoji;
-            switch (posicion) {
-                case 1:
-                    emoji = "🥇";
-                    break;
-                case 2:
-                    emoji = "🥈";
-                    break;
-                case 3:
-                    emoji = "🥉";
-                    break;
-                case personas.length:
-                    emoji = "💩";
-                    break;
-                default:
-                    emoji = "";
-                    break;
-            }
-            const newEmbed = new MessageEmbed()
-                .setColor("#B17428")
-                .setThumbnail(author.avatarURL())
-                .setAuthor({ name: `Perfil de ${target != undefined ? target.displayName : message.member.displayName}` })
-                .setDescription(`${profileData.descripcion}`)
-                .addFields(
-                    { name: "Ranking", value: `${posicion} ${emoji}`, inline: true },
-                    { name: "<:udyrcoin:961729720104419408>", value: `${profileData.udyrcoins}`, inline: true }
-                )
-            message.channel.send({ embeds: [newEmbed] }).then(msg => {
-                if (cmd != 'perfil') {
-                    setTimeout(() => {
-                        msg.delete();
-                    }, 10000);
-                }
-                message.delete();
-            });
+        if (moment(profileData.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") == 0 || ((profileData.wordle != undefined && moment(hoy).format("DD/MM/YYYY") == profileData.wordle) || (profileData.wordleEmpezado != undefined && profileData.wordleEmpezado == true))) {
+            message.channel.send("No puedes canjear los puntos diarios hoy")
         } else {
             const randomNumber = Math.floor(Math.random() * 31) + 20;
             await profileModel.findOneAndUpdate(
@@ -101,57 +56,8 @@ module.exports = {
                     }
                 }
             );
-            var targetData;
-            message.channel.send(`${message.member.displayName} ha canjeado la recompensa diaria y consigui\u00F3 ${randomNumber} <:udyrcoin:961729720104419408>`).then(msg => {
-                setTimeout(() => {
-                    msg.delete()
-                }, 10000);
-            });
-            var personas = await profileModel.find();
-            personas.sort(function (a, b) {
-                return b.udyrcoins - a.udyrcoins;
-            });
-            var posicion = 0;
-            for (let i = 0; i < personas.length; i++) {
-                if (personas[i].userID == profileData.userID) {
-                    targetData = personas[i];
-                    posicion = i + 1;
-                    break;
-                }
-            }
-            var emoji;
-            switch (posicion) {
-                case 1:
-                    emoji = "🥇";
-                    break;
-                case 2:
-                    emoji = "🥈";
-                    break;
-                case 3:
-                    emoji = "🥉";
-                    break;
-                case personas.length:
-                    emoji = "💩";
-                    break;
-                default:
-                    emoji = "";
-                    break;
-            }
-            const newEmbed = new MessageEmbed()
-                .setColor("#B17428")
-                .setThumbnail(message.author.avatarURL())
-                .setAuthor({ name: `Perfil de ${message.member.displayName}` })
-                .setDescription(`${profileData.descripcion}`)
-                .addFields(
-                    { name: "Ranking", value: `${posicion} ${emoji}`, inline: true },
-                    { name: "<:udyrcoin:961729720104419408>", value: `${profileData.udyrcoins}`, inline: true }
-                )
-            message.channel.send({ embeds: [newEmbed] }).then(msg => {
-                setTimeout(() => {
-                    msg.delete()
-                }, 10000);
-                message.delete();
-            });
+            message.channel.send(`${message.member.displayName} ha canjeado la recompensa diaria y consigui\u00F3 ${randomNumber} <:udyrcoin:961729720104419408>`);
+            client.commands.get("perfil").execute(message, args, 'perfil', client, Discord, profileData);
         }
         console.log("FIN PUNTOS");
     }
