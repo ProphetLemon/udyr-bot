@@ -101,6 +101,7 @@ const video_player = async (guild, song) => {
         song_queue.songs = []
         song_queue.connection.destroy();
         queue.delete(guild.id)
+        await song_queue.text_channel.send(`Me voy, que os jodan`)
         return
     }
     const stream = await ytdl(song.url, { filter: 'audioonly' });
@@ -125,6 +126,7 @@ const leave = (message, server_queue) => {
     if (!message.member.voice.channel) return message.channel.send("Tienes que estar en un chat de voz para hacer eso")
     server_queue.songs = []
     server_queue.connection.destroy();
+    await server_queue.text_channel.send(`Me voy, que os jodan`)
     queue.delete(guild.id)
 }
 
