@@ -40,7 +40,12 @@ module.exports = {
         }
         var hoy = moment().toDate()
         if (moment(profileData.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") == 0 || ((profileData.wordle != undefined && moment(hoy).format("DD/MM/YYYY") == profileData.wordle) || (profileData.wordleEmpezado != undefined && profileData.wordleEmpezado == true))) {
-            message.channel.send("No puedes canjear los puntos diarios hoy")
+            message.channel.send("No puedes canjear los puntos diarios hoy").then(msg => {
+                message.delete()
+                setTimeout(() => {
+                    msg.delete()
+                }, 6000);
+            })
         } else {
             const randomNumber = Math.floor(Math.random() * 31) + 20;
             await profileModel.findOneAndUpdate(
