@@ -105,9 +105,13 @@ const video_player = async (guild, song) => {
     }
     const stream = await ytdl(song.url, { filter: 'audioonly' });
     const resource = await createAudioResource(stream);
-    await player.play(resource);
-    song_queue.connection.subscribe(player);
-    await song_queue.text_channel.send(`:bear:🎶 Est\u00E1 sonando **${song.title}**`)
+    try {
+        await player.play(resource);
+        song_queue.connection.subscribe(player);
+        await song_queue.text_channel.send(`:bear:🎶 Est\u00E1 sonando **${song.title}**`)
+    } catch (err) {
+        await song_queue.text_channel.send(`jaja me he muerto, vuelve a intentarlo`)
+    }
 }
 const skip_song = (message, server_queue) => {
     if (!message.member.voice.channel) return message.channel.send("Tienes que estar en un chat de voz para hacer eso")
