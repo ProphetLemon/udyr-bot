@@ -122,7 +122,7 @@ const skip_song = (message, server_queue) => {
     video_player(message.guild, server_queue.songs[0])
 }
 
-const leave = (message, server_queue) => {
+const leave = async (message, server_queue) => {
     if (!message.member.voice.channel) return message.channel.send("Tienes que estar en un chat de voz para hacer eso")
     server_queue.songs = []
     server_queue.connection.destroy();
