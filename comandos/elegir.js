@@ -1,5 +1,4 @@
 const { Message } = require("discord.js");
-
 module.exports = {
     name: 'elegir',
     aliases: [],
@@ -23,19 +22,37 @@ module.exports = {
         }
         if (opciones.length == 0) return message.channel.send("No has puesto ninguna opci\u00F3n")
         if (opciones.length == 1) return message.channel.send("Solo has puesto una opci\u00F3n")
-        var mensaje = [];
-        mensaje.push("Tras mucho pensar")
-        mensaje.push("He llegado a una conclusi\u00F3n")
-        mensaje.push("Mi decisi\u00F3n final es...")
-        mensaje.push(`**${opciones[Math.floor(Math.random() * opciones.length)].toUpperCase()}**`)
-        leerAburrimiento(mensaje, message)
+        var tiradas = (opciones.length * 2) + 1
+        var cont = 0
+        do {
+            cont = cont + 1
+            var resultados = new Map()
+            for (let i = 0; i < tiradas; i++) {
+                var resultado = opciones[Math.floor(Math.random() * opciones.length)]
+                var concurrencias = resultados.get(resultado)
+                if (concurrencias) {
+                    resultados.set(resultado, concurrencias + 1)
+                } else {
+                    resultados.set(resultado, 1)
+                }
+            }
+            const max = Math.max(...resultados.values());
+            var finalistas = getByValue(resultados, max)
+        } while (finalistas.length != 1)
+        message.channel.send(`Despues de ${tiradas * cont} tiradas ha salido vencedor:\n**${finalistas[0].toUpperCase()}**`)
     }
 }
-async function leerAburrimiento(mensaje, message) {
-    if (mensaje.length == 0) return;
-    setTimeout(function () {
-        message.channel.send(mensaje[0])
-        mensaje.splice(0, 1)
-        leerAburrimiento(mensaje, message)
-    }, 4000)
+/**
+ * 
+ * @param {Map} map 
+ * @param {number} searchValue 
+ * @returns 
+ */
+function getByValue(map, searchValue) {
+    var resultados = []
+    for (let [key, value] of map.entries()) {
+        if (value === searchValue)
+            resultados.push(key)
+    }
+    return resultados
 }
