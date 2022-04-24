@@ -54,7 +54,7 @@ module.exports = {
                 miembros = args
                 miembros.slice(0, 5)
             } else {
-                miembros = channel.members.values()
+                miembros = Array.from(channel.members.values())
             }
             equipo = shuffleArray(equipo)
             var mensaje = ""
