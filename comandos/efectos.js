@@ -3,7 +3,7 @@ const { Canvacord } = require("canvacord");
 
 module.exports = {
     name: 'efectos',
-    aliases: ['trigger', 'ohno', 'rip', 'phub', 'joke', 'pornhub', 'affect', 'opinion', 'kiss', 'beautiful', 'slap'],
+    aliases: ['trigger', 'ohno', 'rip', 'phub', 'joke', 'pornhub', 'affect', 'opinion', 'kiss', 'beautiful', 'slap', 'memes'],
     description: 'Funcion ver el raking de puntos',
     /**
      * 
@@ -25,7 +25,7 @@ module.exports = {
             }
             texto = args.join(" ")
         }
-        if (cmd == "efectos") {
+        if (cmd == "efectos" || cmd == "memes") {
             var mensaje = ""
             var efectos = this.aliases
             for (let i = 0; i < efectos.length; i++) {

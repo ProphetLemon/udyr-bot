@@ -28,7 +28,7 @@ module.exports = {
         dtAlarm.setMinutes(minutos);
         dtAlarm.setHours(horas);
         dtAlarm.setSeconds(0);
-        var dtNow = moment().toDate()
+        var dtNow = new Date()
         if (dtAlarm - dtNow <= 0) {
             metodosUtiles.insultar(message);
             console.log("FIN ALARMA")
