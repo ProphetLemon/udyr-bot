@@ -1,7 +1,7 @@
 const { Client, Message, Discord } = require("discord.js");
 require('dotenv').config();
 const profileModel = require('../../models/profileSchema');
-
+const diaModel = require('../../models/diaSchema');
 /**
  * 
  * @param {Discord} Discord
@@ -15,6 +15,7 @@ module.exports = async (Discord, client, message) => {
         message.member.send("Callate maric\u00F3n");
         message.delete();
     }
+    felicitarDia(message)
     let profileData;
     try {
         profileData = await profileModel.findOne({ userID: message.author.id, serverID: message.guild ? message.guild.id : "598896817157046281" });
@@ -45,6 +46,56 @@ module.exports = async (Discord, client, message) => {
         ruleta(message);
     }
 }
+
+/**
+ * 
+ * @param {Message} message 
+ */
+async function felicitarDia(message) {
+    if (!message.guild || message.guild.id != "598896817157046281") {
+        return
+    }
+    var hoy = new Date()
+    var diaServer = await diaModel.findOne({
+        serverID: "598896817157046281"
+    })
+    if (!diaServer) {
+        var diaCreate = await diaModel.create({
+            serverID: "598896817157046281",
+            dia: hoy
+        })
+        await diaCreate.save()
+        var hora = hoy.getHours()
+        if (hora >= 21 || hora < 5) {
+            message.channel.send("Primero de todo, buenas noches")
+        } else if (hora >= 5 && hora < 13) {
+            message.channel.send("Primero de todo, buenos dias")
+        } else if (hora >= 13 && hora < 21) {
+            message.channel.send("Primero de todo, buenos tardes")
+        }
+    } else {
+        if (diaServer.dia.getDate() == hoy.getDate()) {
+            return
+        } else {
+            await diaModel.findOneAndUpdate({
+                serverID: message.guild.id
+            }, {
+                $set: {
+                    dia: hoy
+                }
+            })
+            var hora = hoy.getHours()
+            if (hora >= 21 || hora < 5) {
+                message.channel.send("Primero de todo, buenas noches")
+            } else if (hora >= 5 && hora < 13) {
+                message.channel.send("Primero de todo, buenos dias")
+            } else if (hora >= 13 && hora < 21) {
+                message.channel.send("Primero de todo, buenos tardes")
+            }
+        }
+    }
+}
+
 
 function ruleta(message) {
     if (message.content.charAt(message.content.length - 1) == '5' || message.content.slice(message.content.length - 5, message.content.length).trim() == "cinco") {
