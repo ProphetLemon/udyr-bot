@@ -95,7 +95,18 @@ global.metodosUtiles = {
         return (dd1 == dd2 && mm1 == mm2 && yyyy1 == yyyy2);
 
     },
+    /**
+     * 
+     * @param {Date} date 
+     * @returns 
+     */
+    formatDate: function (date) {
+        var dia = String(date.getDate()).padStart(2, "0")
+        var mes = String(date.getMonth() + 1).padStart(2, "0")
+        var year = String(date.getFullYear()).padStart(2, "0")
+        return `${dia}/${mes}/${year}`;
 
+    },
     isValidNumber: function (aux) {
         var numero = String(aux);
         var numeros = "1234567890"

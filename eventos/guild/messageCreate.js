@@ -2,6 +2,7 @@ const { Client, Message, Discord } = require("discord.js");
 require('dotenv').config();
 const profileModel = require('../../models/profileSchema');
 const diaModel = require('../../models/diaSchema');
+var ultimoSaludo
 /**
  * 
  * @param {Discord} Discord
@@ -56,15 +57,22 @@ async function felicitarDia(message) {
         return
     }
     var hoy = new Date()
-    var diaServer = await diaModel.findOne({
-        serverID: "598896817157046281"
-    })
-    if (!diaServer) {
-        var diaCreate = await diaModel.create({
-            serverID: "598896817157046281",
-            dia: hoy
+    if (ultimoSaludo == undefined) {
+        var diaServer = await diaModel.findOne({
+            serverID: "598896817157046281"
         })
-        await diaCreate.save()
+        ultimoSaludo = diaServer.dia
+    }
+    if (metodosUtiles.formatDate(ultimoSaludo) == metodosUtiles.formatDate(hoy)) {
+        return
+    } else {
+        await diaModel.findOneAndUpdate({
+            serverID: message.guild.id
+        }, {
+            $set: {
+                dia: hoy
+            }
+        })
         var hora = hoy.getHours()
         if (hora >= 21 || hora < 5) {
             message.channel.send("Primero de todo, buenas noches")
@@ -72,26 +80,6 @@ async function felicitarDia(message) {
             message.channel.send("Primero de todo, buenos dias")
         } else if (hora >= 13 && hora < 21) {
             message.channel.send("Primero de todo, buenos tardes")
-        }
-    } else {
-        if (diaServer.dia.getDate() == hoy.getDate()) {
-            return
-        } else {
-            await diaModel.findOneAndUpdate({
-                serverID: message.guild.id
-            }, {
-                $set: {
-                    dia: hoy
-                }
-            })
-            var hora = hoy.getHours()
-            if (hora >= 21 || hora < 5) {
-                message.channel.send("Primero de todo, buenas noches")
-            } else if (hora >= 5 && hora < 13) {
-                message.channel.send("Primero de todo, buenos dias")
-            } else if (hora >= 13 && hora < 21) {
-                message.channel.send("Primero de todo, buenos tardes")
-            }
         }
     }
 }
