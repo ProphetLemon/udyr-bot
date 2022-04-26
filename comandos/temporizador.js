@@ -1,7 +1,7 @@
 const { Message, Client } = require("discord.js")
 module.exports = {
     name: 'temporizador',
-    aliases: ['temp'],
+    aliases: ['temp', 'tempo'],
     description: 'Funcion para crear temporizadores',
     /**
      * 
@@ -15,22 +15,27 @@ module.exports = {
     execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`)
         if (isNaN(args[0])) {
-            return message.channel.send("Maric\u00F3n, se esperaba un numero, el comando se usa asi:\nudyr temp 5 _mensaje opcional_\nsiendo 5 los minutos de espera")
+            return message.channel.send("Maric\u00F3n, se esperaba un numero, el comando se usa asi:\nudyr temp 5 _mensaje opcional_\nsiendo 5 los minutos de espera.")
         }
         var minutos = Math.floor(Number(args[0]))
         if (minutos == 0) {
-            return message.channel.send("Maric\u00F3n, ese numero no es valido, el comando se usa asi:\nudyr temp 5 _mensaje opcional_\nsiendo 5 los minutos de espera")
+            return message.channel.send("Maric\u00F3n, ese numero no es valido, el comando se usa asi:\nudyr temp 5 _mensaje opcional_\nsiendo 5 los minutos de espera.")
         }
         args.splice(0, 1)
         var mensaje = ""
         if (args.length > 0) {
             mensaje = args.join(" ")
         } else {
-            mensaje = `Han pasado ya los ${minutos} minutos`
+            mensaje = `<@${message.author.id}> Han pasado ya los ${minutos} minutos`
         }
         setTimeout((message, mensaje) => {
             message.channel.send(mensaje)
         }, minutos * 60 * 1000, message, mensaje);
+        message.channel.send("Se ha creado el temporizador correctamente!").then(msg => {
+            setTimeout(() => {
+                msg.delete()
+            }, 6000);
+        })
         if (message.guild) {
             message.delete()
         }
