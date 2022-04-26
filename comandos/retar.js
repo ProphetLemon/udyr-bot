@@ -152,7 +152,6 @@ async function coliseo(gladiador1, gladiador2, message, client, Discord) {
     if ((gladiador1.nombre == adminActual.nombre || gladiador2.nombre == adminActual.nombre) && !jugarseElTitulo) {
         var dateNow = moment().toDate()
         if (dateNow < adminActual.dateLimite) {
-            message.reply("no se puede retar al admin aun, podras retar al admin cuando sean las " + String(adminActual.dateLimite.getHours()).padStart(2, "0") + ":" + String(adminActual.dateLimite.getMinutes()).padStart(2, "0"));
             let avatar = message.author.displayAvatarURL({ dynamic: false, format: 'png' });
             var members = await message.guild.members.fetch()
             let avatar2 = members.get("849997112930074654").displayAvatarURL({ dynamic: false, format: 'png' });
