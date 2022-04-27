@@ -18,7 +18,7 @@ player.on('stateChange', (oldState, newState) => {
 });
 module.exports = {
     name: 'play',
-    aliases: ['skip', 'pause', 'leave', 'resume', 'unpause'],
+    aliases: ['skip', 'pause', 'leave', 'resume', 'unpause', 'stop'],
     description: 'Bot de musica avanzado',
     /**
      * 
@@ -91,7 +91,7 @@ module.exports = {
         else if (cmd === "skip") skip_song(message, server_queue)
         else if (cmd === "pause") pause_song(message, server_queue)
         else if (cmd === "resume" || cmd == "unpause") resume_song(message, server_queue)
-        else if (cmd === "leave") leave(message, server_queue)
+        else if (cmd === "leave" || cmd == "stop") leave(message, server_queue)
     }
 }
 
