@@ -66,6 +66,7 @@ async function felicitarDia(message) {
     if (metodosUtiles.formatDate(ultimoSaludo) == metodosUtiles.formatDate(hoy)) {
         return
     } else {
+        ultimoSaludo = hoy
         await diaModel.findOneAndUpdate({
             serverID: message.guild.id
         }, {
