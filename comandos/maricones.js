@@ -22,6 +22,7 @@ module.exports = {
             return metodosUtiles.insultar(message)
         };
         var guildMember = await message.guild.members.fetch();
+        message.delete()
         var mariconRol = roles.get("855758141906878486")
         guildMember.forEach(member => {
             member.roles.remove(mariconRol.id)
