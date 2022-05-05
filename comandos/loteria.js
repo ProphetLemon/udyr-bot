@@ -88,7 +88,7 @@ module.exports = {
             leerDiscurso(discurso, message)
             var dineroPrimerPremio = Math.floor(Number(serverDinero.udyrcoins) * 60 / 100)
             var dineroSegundoPremio = Math.floor((Number(serverDinero.udyrcoins) - dineroPrimerPremio) * 60 / 100)
-            var tercerPremio = Number(serverDinero.udyrcoins) - dineroPrimerPremio - dineroSegundoPremio
+            var tercerPremio = Math.floor((Number(serverDinero.udyrcoins) - dineroPrimerPremio - dineroSegundoPremio) * 60 / 100)
             console.log(dineroPrimerPremio + " " + dineroSegundoPremio + " " + tercerPremio)
             await profileModel.findOneAndUpdate({
                 userID: ganador.userID,

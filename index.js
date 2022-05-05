@@ -111,13 +111,16 @@ global.metodosUtiles = {
         var numero = String(aux);
         var numeros = "1234567890"
         var isValid = false;
-        for (var i = 0; i < numero.length && isValid; i++) {
+        for (var i = 0; i < numero.length; i++) {
             isValid = false;
             for (var j = 0; j < numeros.length; j++) {
                 if (numero.charAt(i) == numeros.charAt(j)) {
                     isValid = true;
                     break;
                 }
+            }
+            if (isValid == false) {
+                break;
             }
         }
         return isValid;

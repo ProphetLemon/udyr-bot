@@ -16,6 +16,10 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`)
+        var mensajeABorrar
+        message.channel.send("Generando imagen...").then(msg => {
+            mensajeABorrar = msg
+        })
         var md = message.guild == undefined
         var target = message.mentions.users.first() ? message.mentions.users.first() : message.author
         var texto = ""
@@ -106,6 +110,7 @@ module.exports = {
         if (!md) {
             message.delete()
         }
+        mensajeABorrar.delete()
         console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }

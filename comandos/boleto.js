@@ -1,7 +1,8 @@
-const { Message, Client, MessageEmbed } = require('discord.js');
+const { Message, Client, MessageEmbed, MessageAttachment } = require('discord.js');
 const boletoModel = require('../models/boletoSchema');
 const profileModel = require('../models/profileSchema');
 const impuestoModel = require('../models/impuestoSchema')
+const Canvas = require('canvas');
 module.exports = {
     name: 'boleto',
     aliases: ['boletos'],
@@ -130,15 +131,35 @@ module.exports = {
         })
         await boletoFinal.save()
         //AQUI MUESTRO EL BOLETO DESPUES DE COMPRARLO
+        // Create a 700x250 pixel canvas and get its context
+        // The context will be used to modify the canvas
+        const canvas = Canvas.createCanvas(1024, 616);
+        const context = canvas.getContext('2d');
+        const background = await Canvas.loadImage('./images/loteria_udyr.png');
+
+        // This uses the canvas dimensions to stretch the image onto the entire canvas
+        context.drawImage(background, 0, 0, canvas.width, canvas.height);
+        // Use the helpful Attachment class structure to process the file for you
+
+        // Select the font size and type from one of the natively available fonts
+        context.font = '80px algerian';
+
+        // Select the style that will be used to fill the text in
+        context.fillStyle = '#000000';
+
+        // Actually fill the text with a solid color
+        context.fillText(numeroBoletoUser.split('').join(" "), canvas.width / 2.35, canvas.height / 4.3);
+
+        const attachment = new MessageAttachment(canvas.toBuffer(), 'boleto.png');
         const newEmbed = new MessageEmbed()
             .setColor("#B17428")
             .setTitle(`LOTERIA DE UDYR`)
             .addFields(
                 { name: "COMPRADOR", value: message.member.displayName, inline: true },
                 { name: "N\u00DAMERO", value: numeroBoletoUser, inline: true })
-            .setImage("https://cdn.discordapp.com/attachments/953974289919520778/961736600537161728/loteria_udyr.png")
+            .setImage("attachment://boleto.png")
         message.channel.send(`Has comprado el boleto con n\u00FAmero ${numeroBoletoUser}!`)
-        message.channel.send(newEmbed)
+        message.channel.send({ embeds: [newEmbed], files: [attachment] })
         message.delete()
         console.log(`FIN ${cmd.toUpperCase()}`)
     }
