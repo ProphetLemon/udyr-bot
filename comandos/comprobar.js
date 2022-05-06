@@ -1,8 +1,6 @@
 const { Message, Client } = require('discord.js');
 const profileModel = require('../models/profileSchema');
 const roboModel = require('../models/roboSchema');
-
-global.listaRobos = new Map()
 module.exports = {
     name: 'comprobar',
     aliases: [],

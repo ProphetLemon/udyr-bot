@@ -2,7 +2,6 @@ const { Message, Client, MessageEmbed } = require('discord.js');
 const boletoModel = require('../models/boletoSchema');
 const impuestoModel = require('../models/impuestoSchema')
 const profileModel = require('../models/profileSchema');
-var loteria = new Map()
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
