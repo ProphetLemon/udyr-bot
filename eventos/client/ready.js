@@ -74,6 +74,7 @@ async function configurarLoteria(guild, textChannel) {
         var dineroPrimerPremio = Math.floor(Number(serverDinero.udyrcoins) * 60 / 100)
         var dineroSegundoPremio = Math.floor((Number(serverDinero.udyrcoins) - dineroPrimerPremio) * 60 / 100)
         var tercerPremio = Math.floor((Number(serverDinero.udyrcoins) - dineroPrimerPremio - dineroSegundoPremio) * 60 / 100)
+        var todoElDinero = dineroPrimerPremio + dineroSegundoPremio + tercerPremio
         console.log(dineroPrimerPremio + " " + dineroSegundoPremio + " " + tercerPremio)
         await profileModel.findOneAndUpdate({
             userID: ganador.userID,
@@ -102,8 +103,8 @@ async function configurarLoteria(guild, textChannel) {
         await impuestoModel.findOneAndUpdate({
             serverID: guild.id
         }, {
-            $set: {
-                udyrcoins: 0
+            $inc: {
+                udyrcoins: -todoElDinero
             }
         })
     }, diff);
