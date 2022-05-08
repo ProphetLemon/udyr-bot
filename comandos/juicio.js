@@ -48,8 +48,7 @@ module.exports = {
                 userID: acusado.id,
                 serverID: message.guild.id
             })
-            impuesto = Math.floor((acusadoProfile.udyrcoins * porcentaje) / 100)
-            impuesto = impuesto < 0 ? -impuesto : impuesto
+            impuesto = Math.abs(Math.floor((acusadoProfile.udyrcoins * porcentaje) / 100))
             await profileModel.findOneAndUpdate({
                 userID: acusado.id,
                 serverID: message.guild.id
