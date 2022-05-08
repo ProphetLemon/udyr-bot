@@ -16,7 +16,7 @@ module.exports = (Discord, client) => {
     var guild = client.guilds.cache.get("598896817157046281")
     const textChannel = guild.channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
     robos(guild, textChannel)
-    configurarLoteria(guild, textChannel)
+    // configurarLoteria(guild, textChannel)
 }
 
 function shuffleArray(array) {
