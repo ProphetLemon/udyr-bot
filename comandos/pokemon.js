@@ -59,8 +59,7 @@ module.exports = {
             evoluciones = evoluciones.split(pokemon.name).join(`**${pokemon.name}**`)
         }
         catch (err) {
-            evoluciones = pokemon.name
-            evoluciones = evoluciones.split(pokemon.name).join(`**${pokemon.name}**`)
+            evoluciones = `**${pokemon.name}**`
         }
         var tipos = pokemon.types
         var debilidades = new Map()
