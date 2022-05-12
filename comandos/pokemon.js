@@ -20,8 +20,12 @@ module.exports = {
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`)
         if ((message.channel.id == "974244009100857405" || message.guild == undefined) == false) {
-            message.reply("Esto mejor en el canal de pokemon")
-            message.delete()
+            message.channel.send("Esto mejor en el canal de pokemon").then(msg => {
+                message.delete()
+                setTimeout(() => {
+                    msg.delete()
+                }, 5000);
+            })
             console.log(`FIN ${cmd.toUpperCase()}`)
             return
         }
