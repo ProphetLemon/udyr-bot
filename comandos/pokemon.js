@@ -23,6 +23,28 @@ module.exports = {
         } catch (err) {
             return message.reply("Escribe bien hijo de puta")
         }
+        var pokemonSpecies = await P.getPokemonSpeciesByName(pokemon.name)
+        var pokemonEvolutionChain = await P.resource(pokemonSpecies.evolution_chain.url)
+        var primeraEvolucion = pokemonEvolutionChain.chain.species.name
+        //var segundaEvolucion = pokemonEvolutionChain.chain.evolves_to.length == 0 ? "" : pokemonEvolutionChain.chain.evolves_to[0].species.name
+        var segundaEvolucion = ""
+        for (let i = 0; i < pokemonEvolutionChain.chain.evolves_to.length; i++) {
+            let evolution = pokemonEvolutionChain.chain.evolves_to[i]
+            segundaEvolucion += `${evolution.species.name}/`
+        }
+        segundaEvolucion = segundaEvolucion == "" ? "" : " -> " + segundaEvolucion.substring(0, segundaEvolucion.length - 1)
+        var terceraEvolucion = ""
+        for (let i = 0; i < pokemonEvolutionChain.chain.evolves_to.length; i++) {
+            let evolution = pokemonEvolutionChain.chain.evolves_to[i]
+            if (evolution.evolves_to.length > 0) {
+                for (let j = 0; j < evolution.evolves_to.length; j++) {
+                    terceraEvolucion += evolution.evolves_to[j].species.name + "/"
+                }
+            }
+        }
+        terceraEvolucion = terceraEvolucion == "" ? "" : " -> " + terceraEvolucion.substring(0, terceraEvolucion.length - 1)
+        var evoluciones = primeraEvolucion + segundaEvolucion + terceraEvolucion
+        evoluciones = evoluciones.split(pokemon.name).join(`**${pokemon.name}**`)
         var tipos = pokemon.types
         var debilidades = new Map()
         debilidades.set("normal", 1)
@@ -88,6 +110,7 @@ module.exports = {
         newEmbed.setAuthor({
             name: `${pokemon.name.toUpperCase()}`
         })
+        newEmbed.setDescription(evoluciones)
         newEmbed.setColor("00FBFF")
         //newEmbed.setThumbnail(`${shiny ? pokemon.sprites.front_shiny : pokemon.sprites.front_default}`)        
         /* if (quadra.length > 0) {
