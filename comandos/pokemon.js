@@ -18,15 +18,22 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        console.log(`INICIO ${cmd.toUpperCase()}`)
+        if ((message.channel.id == "974244009100857405" || message.guild == undefined) == false) {
+            message.reply("Esto mejor en el canal de pokemon")
+            message.delete()
+            console.log(`FIN ${cmd.toUpperCase()}`)
+            return
+        }
         try {
             var pokemon = await P.getPokemonByName(args.join("-").split(":").join("").toLowerCase())
         } catch (err) {
+            console.log(`FIN ${cmd.toUpperCase()}`)
             return message.reply("Escribe bien hijo de puta")
         }
         var pokemonSpecies = await P.getPokemonSpeciesByName(pokemon.name)
         var pokemonEvolutionChain = await P.resource(pokemonSpecies.evolution_chain.url)
         var primeraEvolucion = pokemonEvolutionChain.chain.species.name
-        //var segundaEvolucion = pokemonEvolutionChain.chain.evolves_to.length == 0 ? "" : pokemonEvolutionChain.chain.evolves_to[0].species.name
         var segundaEvolucion = ""
         for (let i = 0; i < pokemonEvolutionChain.chain.evolves_to.length; i++) {
             let evolution = pokemonEvolutionChain.chain.evolves_to[i]
@@ -112,22 +119,6 @@ module.exports = {
         })
         newEmbed.setDescription(evoluciones)
         newEmbed.setColor("00FBFF")
-        //newEmbed.setThumbnail(`${shiny ? pokemon.sprites.front_shiny : pokemon.sprites.front_default}`)        
-        /* if (quadra.length > 0) {
-             newEmbed.addField(":skull: (x4)", `${quadra.join(" ")}`)
-         }
-         if (double.length > 0) {
-             newEmbed.addField(":face_with_spiral_eyes: (x2)", `${double.join(" ")}`)
-         }
-         if (half.length > 0) {
-             newEmbed.addField(":sunglasses: (x0.5)", `${half.join(" ")}`)
-         }
-         if (doublehalf.length > 0) {
-             newEmbed.addField(":joy: (x0.25)", `${doublehalf.join(" ")}`)
-         }
-         if (inmune.length > 0) {
-             newEmbed.addField(":yawning_face: (x0)", `${inmune.join(" ")}`)
-         }*/
         newEmbed.addFields(
             { name: ":skull: (x4)", value: `${quadra.length > 0 ? quadra.join("\n") : '\u200B'}`, inline: true },
             { name: ":face_with_spiral_eyes: (x2)", value: `${double.length > 0 ? double.join("\n") : '\u200B'}`, inline: true },
@@ -138,24 +129,16 @@ module.exports = {
             { name: ":yawning_face: (x0)", value: `${inmune.length > 0 ? inmune.join("\n") : '\u200B'}`, inline: true },
         )
 
-        // message.reply({ embeds: [newEmbed] })
-
-
-        // Create a 700x250 pixel canvas and get its context
-        // The context will be used to modify the canvas
         const canvas = Canvas.createCanvas(100 * 2, 110 * 2);
         const context = canvas.getContext('2d');
         if (pokemon.name == "vaporeon") {
             const background = await Canvas.loadImage('./images/vaporeon.png');
 
-            // This uses the canvas dimensions to stretch the image onto the entire canvas
             context.drawImage(background, -140, 0)
         }
         const pokemonSprite = new Image()
         pokemonSprite.onload = function () {
-            // This uses the canvas dimensions to stretch the image onto the entire canvas
             context.drawImage(pokemonSprite, 20, 0, 98 * 1.75, 98 * 1.75);
-            // Use the helpful Attachment class structure to process the file for you
             var tipo1 = new Image()
             if (pokemon.types.length == 1) {
                 tipo1.onload = function () {
@@ -190,8 +173,9 @@ module.exports = {
 
         }
         pokemonSprite.src = `${shiny ? pokemon.sprites.front_shiny : pokemon.sprites.front_default}`
-
+        console.log(`FIN ${cmd.toUpperCase()}`)
     }
+
 }
 function comprobarArrays(arrayAComprobar, debilidades, damage) {
     for (let i = 0; i < arrayAComprobar.length; i++) {
