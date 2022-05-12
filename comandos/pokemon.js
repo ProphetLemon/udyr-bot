@@ -45,7 +45,12 @@ module.exports = {
             evoluciones = await getEvoluciones(pokemon.name)
         }
         catch (err) {
-            evoluciones = await getEvoluciones(pokemon.name.split("-galar").join("").split("-alola").join(""))
+            try {
+                evoluciones = await getEvoluciones(pokemon.name.split("-galar").join("").split("-alola").join(""))
+            } catch (err2) {
+                console.log(`FIN ${cmd.toUpperCase()}`)
+                return message.reply("Existe, pero que te den")
+            }
         }
         var tipos = pokemon.types
         var debilidades = new Map()
