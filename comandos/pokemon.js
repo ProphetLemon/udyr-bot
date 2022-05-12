@@ -130,6 +130,11 @@ module.exports = {
 
             context.drawImage(background, -140, 0)
         }
+        if (pokemon.name == "dragonite") {
+            const background = await Canvas.loadImage('./images/espana.png');
+
+            context.drawImage(background, -70, 0)
+        }
         const pokemonSprite = new Image()
         pokemonSprite.onload = function () {
             context.drawImage(pokemonSprite, 20, 0, 98 * 1.75, 98 * 1.75);
@@ -151,18 +156,9 @@ module.exports = {
                     tipo2.onload = function () {
                         context.drawImage(tipo2, 58 * 2, 90 * 2, 32 * 1.75, 14 * 1.75)
                         const attachment = new MessageAttachment(canvas.toBuffer(), 'pokemon.png');
-                        if (pokemon.name == "dragonite") {
-                            newEmbed.setImage("https://areajugones.sport.es/wp-content/uploads/2022/02/leyendas-pokemon-arceus-1.jpg")
-                            newEmbed.setThumbnail("attachment://pokemon.png")
-                            mensajeABorrar.delete()
-                            message.channel.send({ embeds: [newEmbed], files: [attachment] })
-                        } else {
-                            newEmbed.setImage("attachment://pokemon.png")
-
-                            mensajeABorrar.delete()
-                            message.channel.send({ embeds: [newEmbed], files: [attachment] })
-                        }
-
+                        newEmbed.setImage("attachment://pokemon.png")
+                        mensajeABorrar.delete()
+                        message.channel.send({ embeds: [newEmbed], files: [attachment] })
                     }
                     tipo2.src = getLinkByTipo(pokemon.types[1].type.name)
                 }
