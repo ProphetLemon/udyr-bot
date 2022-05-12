@@ -91,6 +91,10 @@ function ruleta(message) {
         message.reply("por el culo te la hinco, maric\u00F3n");
         return;
     }
+    if (message.content.trim().toLowerCase() == "vaporeon") {
+        message.channel.send("Hola chicos, ¿sabíais que en lo que respecta a la cría de Pokémon machos y hembras, Vaporeon es el Pokémon más compatible para los humanos? No sólo pertenecen al grupo de los huevos de campo, que se compone principalmente de mamíferos, sino que Vaporeon mide una media de 1 m y pesa 29 kg, lo que significa que son lo suficientemente grandes como para poder manejar pollas humanas, y con sus impresionantes estadísticas base de PS y el acceso a Armadura Ácida, puedes ser duro con uno. Debido a su biología basada principalmente en el agua, no me cabe duda de que un Vaporeon excitado estaría increíblemente húmedo, tanto que podrías tener sexo con uno durante horas sin que te doliera. Además, pueden aprender los movimientos Atracción, Ojitos Tiernos, Cautivar, Encanto y Látigo, y no tienen pelaje para ocultar los pezones, por lo que sería increíblemente fácil que uno te pusiera palote. Con sus habilidades Absorbe Agua e Hidratación, pueden recuperarse fácilmente de la fatiga con suficiente agua. Ningún otro Pokémon se acerca a este nivel de compatibilidad. Además, como dato curioso, si le das lo suficiente, puedes hacer que tu Vaporeon se vuelva blanco. Vaporeon está literalmente hecho para la polla humana. Una estadística de defensa insana + un alto nivel de PS + el ataque Armadura Ácida significa que puede aguantar pollas todo el día, de todas las formas y tamaños, y seguir queriendo más.")
+        return
+    }
     if (message.content.trim().toLowerCase() == "a" || message.content.trim().toLowerCase() == "ª") {
         message.channel.send("https://c.tenor.com/K_fk1dEUTzcAAAAC/mister-jagger-a.gif")
         return
