@@ -29,10 +29,7 @@ module.exports = {
             console.log(`FIN ${cmd.toUpperCase()}`)
             return
         }
-        var mensajeABorrar
-        message.channel.send("Cargando pokemon...").then(msg => {
-            mensajeABorrar = msg
-        })
+        var mensajeABorrar = await message.channel.send("Cargando pokemon...")
         try {
             var pokemon = await P.getPokemonByName(args.join("-").split(":").join("").split("_").join("-").toLowerCase())
         } catch (err) {
@@ -45,12 +42,7 @@ module.exports = {
             evoluciones = await getEvoluciones(pokemon.name)
         }
         catch (err) {
-            try {
-                evoluciones = await getEvoluciones(pokemon.name.split("-galar").join("").split("-alola").join(""))
-            } catch (err2) {
-                console.log(`FIN ${cmd.toUpperCase()}`)
-                return message.reply("Existe, pero que te den")
-            }
+            evoluciones = await getEvoluciones(pokemon.name.split("-")[0])
         }
         var tipos = pokemon.types
         var debilidades = new Map()
