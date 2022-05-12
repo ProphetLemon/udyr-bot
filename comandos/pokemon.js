@@ -100,6 +100,8 @@ module.exports = {
         var doublehalf = []
         var inmune = []
         for (var [key, value] of debilidades) {
+            var traduccion = await P.getTypeByName(key)
+            key = traduccion.names[5].name
             switch (value) {
                 case 4:
                     quadra.push(key)
