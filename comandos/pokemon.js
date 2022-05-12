@@ -109,7 +109,7 @@ module.exports = {
         var shiny = Math.floor(Math.random() * 255) + 1 == 255 ? true : false
         var newEmbed = new MessageEmbed();
         newEmbed.setAuthor({
-            name: `${pokemon.name.toUpperCase()}`
+            name: `${shiny ? "✨" : ""}${pokemon.name.toUpperCase()}${shiny ? "✨" : ""}`
         })
         newEmbed.setDescription(evoluciones)
         newEmbed.setColor("00FBFF")
