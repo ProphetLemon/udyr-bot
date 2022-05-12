@@ -29,9 +29,14 @@ module.exports = {
             console.log(`FIN ${cmd.toUpperCase()}`)
             return
         }
+        var mensajeABorrar
+        message.channel.send("Cargando pokemon...").then(msg => {
+            mensajeABorrar = msg
+        })
         try {
             var pokemon = await P.getPokemonByName(args.join("-").split(":").join("").split("_").join("-").toLowerCase())
         } catch (err) {
+            mensajeABorrar.delete()
             console.log(`FIN ${cmd.toUpperCase()}`)
             return message.reply("Escribe bien hijo de puta")
         }
@@ -156,6 +161,7 @@ module.exports = {
                     context.drawImage(tipo1, 31 * 2.3, 90 * 2, 32 * 1.75, 14 * 1.75)
                     const attachment = new MessageAttachment(canvas.toBuffer(), 'pokemon.png');
                     newEmbed.setImage("attachment://pokemon.png")
+                    mensajeABorrar.delete()
                     message.channel.send({ embeds: [newEmbed], files: [attachment] })
                 }
                 tipo1.src = getLinkByTipo(pokemon.types[0].type.name)
@@ -170,9 +176,12 @@ module.exports = {
                         if (pokemon.name == "dragonite") {
                             newEmbed.setImage("https://areajugones.sport.es/wp-content/uploads/2022/02/leyendas-pokemon-arceus-1.jpg")
                             newEmbed.setThumbnail("attachment://pokemon.png")
+                            mensajeABorrar.delete()
                             message.channel.send({ embeds: [newEmbed], files: [attachment] })
                         } else {
                             newEmbed.setImage("attachment://pokemon.png")
+
+                            mensajeABorrar.delete()
                             message.channel.send({ embeds: [newEmbed], files: [attachment] })
                         }
 
