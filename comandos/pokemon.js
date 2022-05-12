@@ -30,7 +30,7 @@ module.exports = {
             return
         }
         try {
-            var pokemon = await P.getPokemonByName(args.join("-").split(":").join("").toLowerCase())
+            var pokemon = await P.getPokemonByName(args.join("-").split(":").join("").split("_").join("-").toLowerCase())
         } catch (err) {
             console.log(`FIN ${cmd.toUpperCase()}`)
             return message.reply("Escribe bien hijo de puta")
