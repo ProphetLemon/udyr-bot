@@ -170,7 +170,7 @@ module.exports = {
             }
 
         }
-        pokemonSprite.src = `${shiny ? pokemon.sprites.front_shiny : pokemon.sprites.front_default}`
+        pokemonSprite.src = `${shiny ? pokemon.sprites.front_shiny : pokemon.sprites.front_default == null ? pokemon.sprites.other["official-artwork"].front_default : pokemon.sprites.front_default}`
         console.log(`FIN ${cmd.toUpperCase()}`)
     }
 
