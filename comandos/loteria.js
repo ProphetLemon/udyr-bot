@@ -35,7 +35,6 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
-        return
         console.log(`INICIO ${cmd.toUpperCase()}`)
         if (message.author.id != "202065665597636609") {
             return message.channel.send("No eres el admin bro")
@@ -54,7 +53,7 @@ module.exports = {
         }
         var dateNow = new Date()
         var dateLoteria = new Date()
-        dateLoteria.setDate(8)
+        dateLoteria.setDate(15)
         dateLoteria.setHours(21)
         dateLoteria.setMinutes(0)
         dateLoteria.setSeconds(0)
