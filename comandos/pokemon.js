@@ -6,7 +6,7 @@ const Canvas = require('canvas');
 const { Image } = require('canvas');
 module.exports = {
     name: 'pokemon',
-    aliases: ['poke'],
+    aliases: ['poke', 'pokedex'],
     description: 'Funcion que te da las debilidades y fortalezas de un pokemon',
     /**
      * 
@@ -19,6 +19,7 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`)
+        //AQUI REVISO SI LO HACES EN EL CANAL DE POKEMON O POR PRIVADO
         if ((message.channel.id == "974244009100857405" || message.guild == undefined) == false) {
             message.channel.send("Esto mejor en el canal de pokemon").then(msg => {
                 message.delete()
@@ -29,7 +30,9 @@ module.exports = {
             console.log(`FIN ${cmd.toUpperCase()}`)
             return
         }
+        //AQUI MANDO UN MENSAJE DE 'CARGANDO POKEMON' QUE LO ELIMINO CUANDO GENERO LA FOTO
         var mensajeABorrar = await message.channel.send("Cargando pokemon...")
+        //AQUI BUSCO EL POKEMON Y SINO EXISTE TE LO HAGO SABER
         try {
             var pokemon = await P.getPokemonByName(args.join("-").split(":").join("").split("_").join("-").toLowerCase())
         } catch (err) {
@@ -37,6 +40,7 @@ module.exports = {
             console.log(`FIN ${cmd.toUpperCase()}`)
             return message.reply("Escribe bien hijo de puta")
         }
+        //AQUI COJO LAS EVOLUCIONES DEL POKEMON Y SI FALLA ES PORQUE SEGURAMENTE SE UNA VERSION TIPO ALOLA O DERIVADOS ASI QUE TE DEVUELVO LAS EVOLUCIONES DEL POKEMON BASE
         var evoluciones = ""
         try {
             evoluciones = await getEvoluciones(pokemon.name)
@@ -44,7 +48,15 @@ module.exports = {
         catch (err) {
             evoluciones = await getEvoluciones(pokemon.name.split("-")[0])
         }
-        var tipos = pokemon.types
+
+        //AQUI RECOJO TODO LOS STATS BASE Y LA SUMA DE TODOS ELLOS
+        var bst = 0
+        var bsm = ""
+        for (let i = 0; i < pokemon.stats.length; i++) {
+            bsm += `${getEmojiByStat(pokemon.stats[i].stat.name)}: ${pokemon.stats[i].base_stat}\n`
+            bst += pokemon.stats[i].base_stat
+        }
+        //AQUI INICIALIZO EL MAPA CON LAS DEBILIDADES
         var debilidades = new Map()
         debilidades.set("normal", 1)
         debilidades.set("fighting", 1)
@@ -64,18 +76,15 @@ module.exports = {
         debilidades.set("bug", 1)
         debilidades.set("electric", 1)
         debilidades.set("dragon", 1)
-        var bst = 0
-        var bsm = ""
-        for (let i = 0; i < pokemon.stats.length; i++) {
-            bsm += `${getEmojiByStat(pokemon.stats[i].stat.name)}: ${pokemon.stats[i].base_stat}\n`
-            bst += pokemon.stats[i].base_stat
-        }
+        //AQUI RECORRO LOS TIPOS DEL POKEMON QUE HAS BUSCADO (1-2) Y MODIFICO EL MAPA 'DEBILIDADES' EN FUNCION DE LA RELACION DE DAÑO QUE RECIBE EL POKEMON SELECCIONADO
+        var tipos = pokemon.types
         for (let i = 0; i < tipos.length; i++) {
             var tipo = await P.getTypeByName(tipos[i].type.name)
             comprobarArrays(tipo.damage_relations.double_damage_from, debilidades, 2)
             comprobarArrays(tipo.damage_relations.half_damage_from, debilidades, 1 / 2)
             comprobarArrays(tipo.damage_relations.no_damage_from, debilidades, 0)
         }
+        //AQUI RECORRO EL MAP PARA CLASIFICAR LAS DEBILIDADES DEL POKEMON Y APARTE TRADUZCO LOS TIPOS
         var quadra = []
         var double = []
         var neutral = []
@@ -106,13 +115,17 @@ module.exports = {
                     break;
             }
         }
+        //A PARTIR DE AQUI FORMO LO QUE ES EL EMBED Y LA FOTO
+        //EN ESTA LINEA DETERMINO SI EL SPRITE QUE VA SALIR ES SHINY O NO
         var shiny = Math.floor(Math.random() * 255) + 1 == 255 ? true : false
         var newEmbed = new MessageEmbed();
         newEmbed.setAuthor({
             name: `${shiny ? "✨" : ""}${pokemon.name.toUpperCase()}${shiny ? "✨" : ""}`
         })
+        //AQUI AÑADO LAS EVOLUCIONES
         newEmbed.setDescription(evoluciones)
         newEmbed.setColor("00FBFF")
+        //AQUI INSERTO TANTO LAS DEBILIDADES COMO LOS STAT BASE
         newEmbed.addFields(
             { name: ":skull: (x4)", value: `${quadra.length > 0 ? quadra.join("\n") : '\u200B'}`, inline: true },
             { name: ":face_with_spiral_eyes: (x2)", value: `${double.length > 0 ? double.join("\n") : '\u200B'}`, inline: true },
@@ -125,6 +138,7 @@ module.exports = {
 
         const canvas = Canvas.createCanvas(100 * 2, 110 * 2);
         const context = canvas.getContext('2d');
+        //MEMES
         if (pokemon.name == "vaporeon") {
             const background = await Canvas.loadImage('./images/vaporeon.png');
 
@@ -171,12 +185,24 @@ module.exports = {
     }
 
 }
+/**
+ * Funcion que que recorro un array en el cual aparecen un listado de tipos de pokemon y en funcion del parametro
+ * 'damage' multiplico su valor en el mapa de debilidades del pokemon
+ * @param {string[]} arrayAComprobar array con los tipos que iterracionan con el pokemon
+ * @param {Map} debilidades mapa de las relaciones de daño del pokemon con todos los tipos
+ * @param {Number} damage relacion del daño que recibe el pokemon en funcion del array
+ */
 function comprobarArrays(arrayAComprobar, debilidades, damage) {
     for (let i = 0; i < arrayAComprobar.length; i++) {
         var valorInicial = debilidades.get(arrayAComprobar[i].name)
         debilidades.set(arrayAComprobar[i].name, valorInicial * damage)
     }
 }
+/**
+ * Funcion que recoge todas las evoluciones del pokemon que se le pasa por parametro
+ * @param {String} name Nombre del pokemon
+ * @returns String con las evoluciones
+ */
 async function getEvoluciones(name) {
     var pokemonSpecies = await P.getPokemonSpeciesByName(name)
     var pokemonEvolutionChain = await P.resource(pokemonSpecies.evolution_chain.url)
@@ -201,6 +227,11 @@ async function getEvoluciones(name) {
     evoluciones = evoluciones.split(name).join(`**${name}**`)
     return evoluciones
 }
+/**
+ * Funcion simple que en base al nombre de un stat te devuelve la traduccion y emojis representativos
+ * @param {string} stat 
+ * @returns 
+ */
 function getEmojiByStat(stat) {
     switch (stat) {
         case "hp":
@@ -217,6 +248,11 @@ function getEmojiByStat(stat) {
             return "♿ (Vel)"
     }
 }
+/**
+ * Funcion que en base a un string que define el tipo del pokemon devuelve el link a la foto del tipo especificado
+ * @param {string} tipo 
+ * @returns link del tipo de pokemon
+ */
 function getLinkByTipo(tipo) {
     var link
     switch (tipo) {
