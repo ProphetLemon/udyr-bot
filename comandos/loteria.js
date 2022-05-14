@@ -56,13 +56,13 @@ module.exports = {
         fechaLoteria.setHours(21)
         fechaLoteria.setMinutes(0)
         fechaLoteria.setSeconds(0)
-        var startTime = moment(fechaLoteria).add(-1, "minutes").toDate()
+        var startTime = moment(fechaLoteria).add(-15, "minutes").toDate()
         //AQUI BORRO LA LOTERIA SI YA HUBIERA UNA PROGRAMA PARA SOBRESCRIBIRLA
         if (loteria.get(guild.id)) {
             clearTimeout(loteria.get(guild.id))
             loteria.delete(guild.id)
-            loteriaModel.remove({ serverID: guild.id })
         }
+        await loteriaModel.remove({ serverID: guild.id })
         var evento = await guild.scheduledEvents.create({ name: "Loteria de udyr", scheduledStartTime: startTime, scheduledEndTime: fechaLoteria, privacyLevel: 'GUILD_ONLY', entityType: 'EXTERNAL', entityMetadata: { location: "En el canal de udyr" }, description: "EMPIEZA LA LOTERIA DE UDYR\nUsa el comando 'udyr boleto' seguido de un numero de 5 cifras y participa en este evento en el que se reparte dinero de manera poco justa" })
         var dateNow = new Date()
         var diff = fechaLoteria - dateNow
