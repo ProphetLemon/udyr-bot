@@ -1,7 +1,8 @@
-const { Message, Client, MessageEmbed } = require('discord.js');
+const { Message, Client } = require('discord.js');
+const loteriaModel = require('../models/loteriaSchema')
+const profileModel = require('../models/profileSchema');
 const boletoModel = require('../models/boletoSchema');
 const impuestoModel = require('../models/impuestoSchema')
-const profileModel = require('../models/profileSchema');
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -11,14 +12,14 @@ function shuffleArray(array) {
     }
     return array
 }
-function leerDiscurso(array, message) {
+function leerDiscurso(array, textChannel) {
     if (array.length == 0) {
         return
     }
     setTimeout(() => {
-        message.channel.send(array[0])
+        textChannel.send(array[0])
         array.splice(0, 1)
-        leerDiscurso(array, message)
+        leerDiscurso(array, textChannel)
     }, 10000);
 }
 module.exports = {
@@ -35,42 +36,48 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
-        return
-        console.log(`INICIO ${cmd.toUpperCase()}`)
+        //AQUI TE ECHO SI NO ERES EL ADMIN
         if (message.author.id != "202065665597636609") {
-            return message.channel.send("No eres el admin bro")
-        }
-        if (message.guild == null || message.channel.id != "809786674875334677") {
-            console.log(`FIN ${cmd.toUpperCase()}`)
-            return message.channel.send("Esto se hace en el canal de udyr")
-        }
-        if (loteria.get(message.guild.id)) {
-            return message.channel.send("La loteria ya estaba en marcha").then(msg => {
+            return message.reply("Si no y si quieres te la chupo maricón").then(msg => {
                 message.delete()
                 setTimeout(() => {
                     msg.delete()
                 }, 7000);
             })
         }
+        var guild = message.guild
+        const textChannel = guild.channels.cache.find(channel => channel.id === "953974289919520778" && channel.isText())
+        //AQUI PARSEO LA FECHA
+        var fecha = args.join(" ") //udyr loteria (24/05/2022)
+        var fechaLoteria = new Date()
+        fechaLoteria.setDate(fecha.split("/")[0])
+        fechaLoteria.setMonth(Number(fecha.split("/")[1]) - 1)
+        fechaLoteria.setFullYear(fecha.split("/")[2])
+        fechaLoteria.setHours(21)
+        fechaLoteria.setMinutes(0)
+        fechaLoteria.setSeconds(0)
+        var startTime = moment(fechaLoteria).add(-1, "minutes").toDate()
+        //AQUI BORRO LA LOTERIA SI YA HUBIERA UNA PROGRAMA PARA SOBRESCRIBIRLA
+        if (loteria.get(guild.id)) {
+            clearTimeout(loteria.get(guild.id))
+            loteria.delete(guild.id)
+            loteriaModel.remove({ serverID: guild.id })
+        }
+        var evento = await guild.scheduledEvents.create({ name: "Loteria de udyr", scheduledStartTime: startTime, scheduledEndTime: fechaLoteria, privacyLevel: 'GUILD_ONLY', entityType: 'EXTERNAL', entityMetadata: { location: "En el canal de udyr" }, description: "EMPIEZA LA LOTERIA DE UDYR\nUsa el comando 'udyr boleto' seguido de un numero de 5 cifras y participa en este evento en el que se reparte dinero de manera poco justa" })
         var dateNow = new Date()
-        var dateLoteria = new Date()
-        dateLoteria.setDate(15)
-        dateLoteria.setHours(21)
-        dateLoteria.setMinutes(0)
-        dateLoteria.setSeconds(0)
-        var diff = dateLoteria - dateNow
+        var diff = fechaLoteria - dateNow
         var timeout = setTimeout(async () => {
-            loteria.delete(message.guild.id)
+            loteria.delete(guild.id)
             var boletos = await boletoModel.find({})
             boletos = shuffleArray(boletos)
             var ganador = boletos[0]
             var segundo = boletos[1]
             var tercero = boletos[2]
             var serverDinero = await impuestoModel.findOne({
-                serverID: message.guild.id
+                serverID: guild.id
             })
             var discurso = []
-            discurso.push("BIEVENIDOS A LA PRIMERA LOTERIA DE UDYR")
+            discurso.push("BIEVENIDOS A LA LOTERIA DE UDYR")
             discurso.push(`EN ESTE EVENTO HAN PARTICIPADO ${boletos.length} PERSONAS`)
             discurso.push(`Y 3 PERSONAS SE REPARTIRAN DE MANERA POCO JUSTA LOS ${serverDinero.udyrcoins} <:udyrcoin:961729720104419408>`)
             discurso.push(`EL PRIMER PREMIO ES PARA:`)
@@ -79,16 +86,16 @@ module.exports = {
             discurso.push(`<@!${segundo.userID}>`)
             discurso.push(`EL TERCER Y ULTIMO PREMIO ES PARA:`)
             discurso.push(`<@!${tercero.userID}>`)
-            message.channel.send(discurso[0])
+            textChannel.send(discurso[0])
             discurso.splice(0, 1)
-            leerDiscurso(discurso, message)
+            leerDiscurso(discurso, textChannel)
             var dineroPrimerPremio = Math.floor(Number(serverDinero.udyrcoins) * 60 / 100)
             var dineroSegundoPremio = Math.floor((Number(serverDinero.udyrcoins) - dineroPrimerPremio) * 60 / 100)
-            var tercerPremio = Math.floor((Number(serverDinero.udyrcoins) - dineroPrimerPremio - dineroSegundoPremio) * 60 / 100)
+            var tercerPremio = Number(serverDinero.udyrcoins) - dineroPrimerPremio - dineroSegundoPremio
             console.log(dineroPrimerPremio + " " + dineroSegundoPremio + " " + tercerPremio)
             await profileModel.findOneAndUpdate({
                 userID: ganador.userID,
-                serverID: message.guild.id
+                serverID: guild.id
             }, {
                 $inc: {
                     udyrcoins: dineroPrimerPremio
@@ -96,7 +103,7 @@ module.exports = {
             })
             await profileModel.findOneAndUpdate({
                 userID: segundo.userID,
-                serverID: message.guild.id
+                serverID: guild.id
             }, {
                 $inc: {
                     udyrcoins: dineroSegundoPremio
@@ -104,27 +111,29 @@ module.exports = {
             })
             await profileModel.findOneAndUpdate({
                 userID: tercero.userID,
-                serverID: message.guild.id
+                serverID: guild.id
             }, {
                 $inc: {
                     udyrcoins: tercerPremio
                 }
             })
             await impuestoModel.findOneAndUpdate({
-                serverID: message.guild.id
+                serverID: guild.id
             }, {
                 $set: {
                     udyrcoins: 0
                 }
             })
+            await boletoModel.remove({})
+            loteriaModel.remove({ serverID: guild.id })
         }, diff);
-        loteria.set(message.guild.id, timeout)
-        message.channel.send(`La loteria se ha programado correctamente!`).then(msg => {
-            message.delete()
-            setTimeout(() => {
-                msg.delete()
-            }, 7000);
+        loteria.set(guild.id, timeout)
+        var loteriaBBDD = await loteriaModel.create({
+            serverID: guild.id,
+            dia: fechaLoteria
         })
-        console.log(`FIN ${cmd.toUpperCase()}`)
+        await loteriaBBDD.save()
+        message.channel.send("Loteria configurada!")
     }
+
 }

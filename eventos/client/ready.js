@@ -1,22 +1,26 @@
 const { Client, Discord } = require("discord.js");
 const profileModel = require('../../models/profileSchema');
 const roboModel = require('../../models/roboSchema');
+const loteriaModel = require('../../models/loteriaSchema')
 const boletoModel = require('../../models/boletoSchema');
 const impuestoModel = require('../../models/impuestoSchema')
 /**
  * @param {Discord} Discord
  * @param {Client} client
  */
-module.exports = (Discord, client) => {
+module.exports = async (Discord, client) => {
     client.user.setPresence({
         status: "dnd",
         activities: [{ name: 'minar udyrcoins 💰', type: "PLAYING" }]
     })
     console.log("El bot ta ready");
     var guild = client.guilds.cache.get("598896817157046281")
-    const textChannel = guild.channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
+    const textChannel = guild.channels.cache.find(channel => channel.id === "953974289919520778" && channel.isText())
     robos(guild, textChannel)
-    configurarLoteria(guild, textChannel)
+    var loteriaBBDD = await loteriaModel.findOne({ serverID: guild.id })
+    if (loteriaBBDD) {
+        configurarLoteria(guild, textChannel, loteriaBBDD)
+    }
 }
 
 function shuffleArray(array) {
@@ -39,13 +43,14 @@ function leerDiscurso(array, textChannel) {
     }, 10000);
 }
 
-async function configurarLoteria(guild, textChannel) {
+async function configurarLoteria(guild, textChannel, loteriaBBDD) {
     console.log("Configurando loteria")
     var dateNow = new Date()
     var dateLoteria = new Date()
-    dateLoteria.setDate(15)
-    dateLoteria.setHours(21)
-    dateLoteria.setMinutes(0)
+    dateLoteria.setDate(loteriaBBDD.dia.getDate())
+    dateLoteria.setHours(loteriaBBDD.dia.getHours())
+    dateLoteria.setMinutes(loteriaBBDD.dia.getMinutes())
+    dateLoteria.setFullYear(loteriaBBDD.dia.getFullYear())
     dateLoteria.setSeconds(0)
     var diff = dateLoteria - dateNow
     var timeout = setTimeout(async () => {
@@ -59,7 +64,7 @@ async function configurarLoteria(guild, textChannel) {
             serverID: guild.id
         })
         var discurso = []
-        discurso.push("BIEVENIDOS A LA PRIMERA LOTERIA DE UDYR")
+        discurso.push("BIENVENIDOS A LA PRIMERA LOTERIA DE UDYR")
         discurso.push(`EN ESTE EVENTO HAN PARTICIPADO ${boletos.length} PERSONAS`)
         discurso.push(`Y 3 PERSONAS SE REPARTIRAN DE MANERA POCO JUSTA LOS ${serverDinero.udyrcoins} <:udyrcoin:961729720104419408>`)
         discurso.push(`EL PRIMER PREMIO ES PARA:`)
@@ -73,8 +78,7 @@ async function configurarLoteria(guild, textChannel) {
         leerDiscurso(discurso, textChannel)
         var dineroPrimerPremio = Math.floor(Number(serverDinero.udyrcoins) * 60 / 100)
         var dineroSegundoPremio = Math.floor((Number(serverDinero.udyrcoins) - dineroPrimerPremio) * 60 / 100)
-        var tercerPremio = Math.floor((Number(serverDinero.udyrcoins) - dineroPrimerPremio - dineroSegundoPremio) * 60 / 100)
-        var todoElDinero = dineroPrimerPremio + dineroSegundoPremio + tercerPremio
+        var tercerPremio = Number(serverDinero.udyrcoins) - dineroPrimerPremio - dineroSegundoPremio
         console.log(dineroPrimerPremio + " " + dineroSegundoPremio + " " + tercerPremio)
         await profileModel.findOneAndUpdate({
             userID: ganador.userID,
@@ -103,10 +107,12 @@ async function configurarLoteria(guild, textChannel) {
         await impuestoModel.findOneAndUpdate({
             serverID: guild.id
         }, {
-            $inc: {
-                udyrcoins: -todoElDinero
+            $set: {
+                udyrcoins: 0
             }
         })
+        await boletoModel.remove({})
+        loteriaModel.remove({ serverID: guild.id })
     }, diff);
     loteria.set(guild.id, timeout)
     console.log("Loteria configurada!")
