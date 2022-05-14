@@ -16,7 +16,7 @@ module.exports = (Discord, client) => {
     var guild = client.guilds.cache.get("598896817157046281")
     const textChannel = guild.channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
     robos(guild, textChannel)
-    // configurarLoteria(guild, textChannel)
+    configurarLoteria(guild, textChannel)
 }
 
 function shuffleArray(array) {
@@ -43,7 +43,7 @@ async function configurarLoteria(guild, textChannel) {
     console.log("Configurando loteria")
     var dateNow = new Date()
     var dateLoteria = new Date()
-    dateLoteria.setDate(8)
+    dateLoteria.setDate(15)
     dateLoteria.setHours(21)
     dateLoteria.setMinutes(0)
     dateLoteria.setSeconds(0)
