@@ -64,7 +64,7 @@ async function configurarLoteria(guild, textChannel, loteriaBBDD) {
             serverID: guild.id
         })
         var discurso = []
-        discurso.push("BIENVENIDOS A LA PRIMERA LOTERIA DE UDYR")
+        discurso.push("BIENVENIDOS A LA LOTERIA DE UDYR")
         discurso.push(`EN ESTE EVENTO HAN PARTICIPADO ${boletos.length} PERSONAS`)
         discurso.push(`Y 3 PERSONAS SE REPARTIRAN DE MANERA POCO JUSTA LOS ${serverDinero.udyrcoins} <:udyrcoin:961729720104419408>`)
         discurso.push(`EL PRIMER PREMIO ES PARA:`)
