@@ -30,7 +30,9 @@ module.exports = {
          * 
          *  56161 (15) 32424 (par) 4535 (12-34) 15618 (1c)
          */
+        console.log(`INICIO ${cmd.toUpperCase()}`)
         if (message.channel.id != "975690578333405204") {
+            console.log(`FIN ${cmd.toUpperCase()}`)
             return message.reply("Esto mejor en el canal de 'ruleta'").then(msg => {
                 message.delete()
                 setTimeout(() => {
@@ -40,19 +42,21 @@ module.exports = {
         }
         var apuestas = args.join(" ").toLowerCase()
         if (apuestas.trim() == "") {
-            return message.channel.send("**COMO SE JUEGA:**\n"
-                + "udyr ruleta _dinero_ (_tipoApuesta_)\n"
-                + "Ejemplo: udyr ruleta 100 (rojo)\n"
-                + "**TIPOS DE APUESTA:**\n"
-                + "rojo/negro" + "\n"
-                + "par/impar" + "\n"
-                + "un numero en concreto" + "\n"
-                + "un grupo de numeros (Ejemplo: 14-23)" + "\n"
-                + "1T/2T/3T" + "\n"
-                + "1M/2M" + "\n"
-                + "1C/2C/3C" + "\n"
-                + "**IMPORTANTE: **" + "Puedes hacer varias apuestas a la misma tirada (Ejemplo: udyr ruleta 56161 (15) 32424 (par) 4535 (12-34) 15618 (1c))"
-            )
+            console.log(`FIN ${cmd.toUpperCase()}`)
+            return message.channel.send({
+                files: ['./images/ruleta.png'], content: "**COMO SE JUEGA:**\n"
+                    + "udyr ruleta _dinero_ (_tipoApuesta_)\n"
+                    + "Ejemplo: udyr ruleta 100 (rojo)\n"
+                    + "**TIPOS DE APUESTA:**\n"
+                    + "rojo/negro" + "\n"
+                    + "par/impar" + "\n"
+                    + "un numero en concreto" + "\n"
+                    + "un grupo de numeros (Ejemplo: 14-23)" + "\n"
+                    + "1T/2T/3T" + "\n"
+                    + "1M/2M" + "\n"
+                    + "1C/2C/3C" + "\n"
+                    + "**IMPORTANTE: **" + "Puedes hacer varias apuestas a la misma tirada (Ejemplo: udyr ruleta 56161 (15) 32424 (par) 4535 (12-34) 15618 (1c))"
+            })
         }
         var numeroRandom = Math.floor(Math.random() * 37)
         var tirada = numeroRandom + "-" + RULETA.get(numeroRandom)
@@ -62,21 +66,25 @@ module.exports = {
                 userID: message.author.id
             })
             if (apuestas.split("(").length == 1) {
+                console.log(`FIN ${cmd.toUpperCase()}`)
                 return message.reply("No has apostado a nada bobo")
             }
             var dinero = apuestas.split("(")[0]
             if (isNaN(dinero) || Number(dinero) < 0) {
+                console.log(`FIN ${cmd.toUpperCase()}`)
                 return message.reply("Has apostado una cantidad de dinero invalida")
             } else {
                 dinero = Number(apuestas.split("(")[0])
             }
             if (profileData.udyrcoins < dinero) {
+                console.log(`FIN ${cmd.toUpperCase()}`)
                 return message.reply("Lo siento maricón pero te has quedado sin pasta")
             }
             var tipoApuesta = apuestas.split("(")[1].split(")")[0]
             await apuesta(message, tipoApuesta, dinero, tirada)
             apuestas = apuestas.substring(apuestas.indexOf(")") + 1, apuestas.length)
         } while (apuestas.indexOf("(") != -1)
+        console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }
 
