@@ -36,7 +36,7 @@ module.exports = {
                     + "**COMO JUGAR:**" + "\n"
                     + "Tienes varias opciones" + "\n"
                     + "carta (Se te dará una carta más)" + "\n"
-                    + "paso/pasar/plantar (Te plantas y le toca a Udyr coger cartas hasta ganarte o perder)" + "\n"
+                    + "paso/pasar/plantar/planto (Te plantas y le toca a Udyr coger cartas hasta ganarte o perder)" + "\n"
                     + "doblar (Coges una ultima carta y doblas tu apuesta)" + "\n"
                 )
             }
