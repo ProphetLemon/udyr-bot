@@ -5,7 +5,7 @@ var games = new Map()
 var timeouts = new Map()
 module.exports = {
     name: 'blackjack',
-    aliases: ['carta', 'paso', 'pasar', 'plantar', 'doblar'],
+    aliases: ['carta', 'paso', 'pasar', 'plantar', 'doblar', 'planto'],
     description: 'Funcion que sirve para tirar en la ruleta',
     /**
      * 
@@ -27,7 +27,7 @@ module.exports = {
         }
         if (cmd == "blackjack") {
             if (args.join("").trim() == "") {
-                return message.channel.send("**COMO SE JUEGA:**"
+                return message.channel.send("**COMO SE JUEGA:**\n"
                     + "**OBJETIVO:**" + "\n"
                     + "Robar cartas hasta sumar en total 21 o acercarte lo máximo posible a ese valor sin parte o pierdes.\nLas figuras cuentan como 10 y los ases valen 1 o 11 (está scripteado de tal manera que te cogera el valor adecuado para tu situación)." + "\n"
                     + "**CREAR PARTIDA:**" + "\n"
