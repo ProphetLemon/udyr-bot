@@ -109,7 +109,7 @@ module.exports = {
                 return message.reply("No tienes una partida empezada")
             }
             var partida = games.get(message.author.id)
-            if (profileData.udyrcoins < dinero * 2) {
+            if (profileData.udyrcoins < partida.dinero * 2) {
                 return message.reply("No puedes doblar la apuesta porque no tienes tanto dinero")
             }
             partida.dinero = partida.dinero * 2
