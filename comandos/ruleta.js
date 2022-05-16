@@ -46,6 +46,7 @@ module.exports = {
                 + "1T/2T/3T" + "\n"
                 + "1M/2M" + "\n"
                 + "1C/2C/3C" + "\n"
+                + "**IMPORTANTE:**" + "Puedes hacer varias apuestas a la misma tirada (Ejemplo: udyr ruleta 56161 (15) 32424 (par) 4535 (12-34) 15618 (1c))"
             )
         }
         var numeroRandom = Math.floor(Math.random() * 37)
