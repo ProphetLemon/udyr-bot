@@ -145,7 +145,7 @@ async function finalPartida(message, partida) {
     clearTimeout(timeouts.get(message.author.id))
     timeouts.delete(message.author.id)
     if (getValorMano(partida.udyr.cartas) > 21) {
-        var dineroGanado = partida.user.blackjack ? partida.dinero * 1.5 : partida.dinero
+        var dineroGanado = partida.user.blackjack ? Math.floor(partida.dinero * 1.5) : partida.dinero
         await darDinero(message, dineroGanado)
         return message.reply(`Has ganado! Te llevas ${dineroGanado} udyrcoins`)
     } else if (getValorMano(partida.udyr.cartas) == getValorMano(partida.user.cartas)) {
