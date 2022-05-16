@@ -5,7 +5,7 @@ var games = new Map()
 var timeouts = new Map()
 module.exports = {
     name: 'blackjack',
-    aliases: ['carta', 'paso', 'pasar', 'plantar', 'doblar', 'planto'],
+    aliases: ['carta', 'paso', 'pasar', 'plantar', 'doblar', 'planto', 'bj'],
     description: 'Funcion que sirve para tirar en la ruleta',
     /**
      * 
@@ -25,7 +25,7 @@ module.exports = {
                 }, 6000);
             })
         }
-        if (cmd == "blackjack") {
+        if (cmd == "blackjack" || cmd == "bj") {
             if (args.join("").trim() == "") {
                 return message.channel.send("**COMO SE JUEGA:**\n"
                     + "**OBJETIVO:**" + "\n"
@@ -52,7 +52,7 @@ module.exports = {
                     return message.reply("No puedes poner un numero menor o igual que 0")
                 }
                 if (dinero > profileData.udyrcoins) {
-                    return message.reply("No tienes ese dinero")
+                    return message.reply("No tienes ese dinero. Si quieres aumentar tu saldo de udyrcoin haz un ingreso de 10€ en esta cuenta https://paypal.me/Superfalo")
                 }
             }
             var baraja = getBaraja()
