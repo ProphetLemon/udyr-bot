@@ -139,7 +139,7 @@ function juegaUdyr(partida) {
  * @param {*} partida 
  * @returns 
  */
-function finalPartida(message, partida) {
+async function finalPartida(message, partida) {
     getResultado(message, partida)
     games.delete(message.author.id)
     clearTimeout(timeouts.get(message.author.id))
