@@ -70,15 +70,15 @@ module.exports = {
                 return message.reply("No has apostado a nada bobo")
             }
             var dinero = apuestas.split("(")[0]
-            if (isNaN(dinero) || Number(dinero) < 0) {
+            if (isNaN(dinero) || Number(dinero) <= 0) {
                 console.log(`FIN ${cmd.toUpperCase()}`)
                 return message.reply("Has apostado una cantidad de dinero invalida")
             } else {
-                dinero = Number(apuestas.split("(")[0])
+                dinero = Math.floor(Number(apuestas.split("(")[0]))
             }
             if (profileData.udyrcoins < dinero) {
                 console.log(`FIN ${cmd.toUpperCase()}`)
-                return message.reply("Lo siento maricón pero te has quedado sin pasta")
+                return message.reply("Lo siento maricón pero te has quedado sin pasta. Si quieres aumentar tu saldo de udyrcoin haz un ingreso de 10€ en esta cuenta https://paypal.me/Superfalo")
             }
             var tipoApuesta = apuestas.split("(")[1].split(")")[0]
             await apuesta(message, tipoApuesta, dinero, tirada)
