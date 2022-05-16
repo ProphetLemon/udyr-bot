@@ -92,19 +92,19 @@ async function apuesta(message, tipoApuesta, dinero, tirada) {
         resultado = numeroTirada % 2 != 0
         dineroPosible = dinero * 2
         await repartirDinero(message, resultado, dinero, dineroPosible)
-        return message.reply(`Salió ${tirada} y apostaste a ${tipoApuesta}\n${resultado ? `Has ganado ${dineroPosible - dinero} udyrcoin!` : `Mejor suerte la proxima vez`}`)
+        return message.reply(`Salió ${tirada} y apostaste a ${tipoApuesta}\n${resultado ? `Has ganado ${dineroPosible} udyrcoin! (Balance: ${dineroPosible -dinero})` : `Mejor suerte la proxima vez`}`)
     }
     if (tipoApuesta == "par") {
         resultado = numeroTirada % 2 == 0 && numeroTirada != 0
         dineroPosible = dinero * 2
         await repartirDinero(message, resultado, dinero, dineroPosible)
-        return message.reply(`Salió ${tirada} y apostaste a ${tipoApuesta}\n${resultado ? `Has ganado ${dineroPosible - dinero} udyrcoin!` : `Mejor suerte la proxima vez`}`)
+        return message.reply(`Salió ${tirada} y apostaste a ${tipoApuesta}\n${resultado ? `Has ganado ${dineroPosible} udyrcoin! (Balance: ${dineroPosible -dinero})` : `Mejor suerte la proxima vez`}`)
     }
     if (tipoApuesta == "rojo" || tipoApuesta == "negro") {
         resultado = colorTirada == tipoApuesta
         dineroPosible = dinero * 2
         await repartirDinero(message, resultado, dinero, dineroPosible)
-        return message.reply(`Salió ${tirada} y apostaste a ${tipoApuesta}\n${resultado ? `Has ganado ${dineroPosible - dinero} udyrcoin!` : `Mejor suerte la proxima vez`}`)
+        return message.reply(`Salió ${tirada} y apostaste a ${tipoApuesta}\n${resultado ? `Has ganado ${dineroPosible} udyrcoin! (Balance: ${dineroPosible -dinero})` : `Mejor suerte la proxima vez`}`)
     }
     if (isNaN(tipoApuesta) == false) {
         if (tipoApuesta < 0 || tipoApuesta > 36) {
@@ -113,7 +113,7 @@ async function apuesta(message, tipoApuesta, dinero, tirada) {
         resultado = numeroTirada == Number(tipoApuesta)
         dineroPosible = dinero * 36
         await repartirDinero(message, resultado, dinero, dineroPosible)
-        return message.reply(`Salió ${tirada} y apostaste a ${tipoApuesta}\n${resultado ? `Has ganado ${dineroPosible - dinero} udyrcoin!` : `Mejor suerte la proxima vez`}`)
+        return message.reply(`Salió ${tirada} y apostaste a ${tipoApuesta}\n${resultado ? `Has ganado ${dineroPosible} udyrcoin! (Balance: ${dineroPosible -dinero})` : `Mejor suerte la proxima vez`}`)
     }
     switch (tipoApuesta) {
         case "1t":
@@ -142,13 +142,13 @@ async function apuesta(message, tipoApuesta, dinero, tirada) {
         resultado = minimo <= numeroTirada && maximo >= numeroTirada
         dineroPosible = Math.floor((dinero / posibilidades) * 36)
         await repartirDinero(message, resultado, dinero, dineroPosible)
-        return message.reply(`Salió ${tirada} y apostaste a ${tipoApuesta}\n${resultado ? `Has ganado ${dineroPosible - dinero} udyrcoin!` : `Mejor suerte la proxima vez`}`)
+        return message.reply(`Salió ${tirada} y apostaste a ${tipoApuesta}\n${resultado ? `Has ganado ${dineroPosible} udyrcoin! (Balance: ${dineroPosible -dinero})` : `Mejor suerte la proxima vez`}`)
     }
     if (tipoApuesta == "1c" || tipoApuesta == "2c" || tipoApuesta == "3c") {
         resultado = tipoApuesta == columna
         dineroPosible = Math.floor((dinero / 12) * 36)
         await repartirDinero(message, resultado, dinero, dineroPosible)
-        return message.reply(`Salió ${tirada} y apostaste a ${tipoApuesta}\n${resultado ? `Has ganado ${dineroPosible - dinero} udyrcoin!` : `Mejor suerte la proxima vez`}`)
+        return message.reply(`Salió ${tirada} y apostaste a ${tipoApuesta}\n${resultado ? `Has ganado ${dineroPosible} udyrcoin! (Balance: ${dineroPosible -dinero})` : `Mejor suerte la proxima vez`}`)
     }
     return message.reply("No has puesto un tipo valido de apuesta")
 }
