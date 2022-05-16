@@ -30,9 +30,9 @@ module.exports = {
          * 
          *  56161 (15) 32424 (par) 4535 (12-34) 15618 (1c)
          */
-        /* if (message.channel.id != "975690578333405204") {
+         if (message.channel.id != "975690578333405204") {
              return message.reply("Esto mejor en el canal de 'ruleta'")
-         }*/
+         }
         var apuestas = args.join(" ").toLowerCase()
         if (apuestas.trim() == "") {
             return message.channel.send("**COMO SE JUEGA:**\n"
