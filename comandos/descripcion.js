@@ -3,7 +3,7 @@ const profileModel = require('../models/profileSchema');
 const { Message } = require('discord.js');
 module.exports = {
     name: 'descripcion',
-    aliases: ['desc'],
+    aliases: ['desc', 'bio'],
     description: 'Funcion para modificar la descripcion de tu perfil',
     /**
      * 

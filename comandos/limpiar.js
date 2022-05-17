@@ -21,6 +21,9 @@ module.exports = {
                 console.log("FIN LIMPIAR");
                 return metodosUtiles.insultar(message)
             };
+            if (numeroMensajes > 99) {
+                return metodosUtiles.insultar(message)
+            }
             message.channel.bulkDelete(Number(numeroMensajes) + 1);
             setTimeout(function () {
                 message.channel.send(`Se han eliminado ${numeroMensajes} mensajes`).then(msg => {
