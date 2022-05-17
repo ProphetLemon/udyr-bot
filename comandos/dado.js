@@ -29,7 +29,7 @@ module.exports = {
             if (i != 0) {
                 mensaje += "\n";
             }
-            mensaje += ":game_die:" + (Math.floor(Math.random() * numero) + 1) + ":game_die:";
+            mensaje += ":game_die:" + (metodosUtiles.getRandom(numero-1) + 1) + ":game_die:";
         }
         message.reply(mensaje);
         console.log("FIN DADO");

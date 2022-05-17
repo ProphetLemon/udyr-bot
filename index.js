@@ -126,7 +126,17 @@ global.metodosUtiles = {
         }
         return isValid;
     },
-
+    getRandom: function (limite) {
+        var cifras = String(limite).length
+        var r = 4
+        var x = Math.random()
+        var random = Math.floor(r * x * (1 - x) * Math.pow(10, cifras))
+        if (random > limite) {
+            return metodosUtiles.getRandom(limite)
+        } else {
+            return String(random)
+        }
+    },
     insultar: function (message) {
         message.reply("maric\u00F3n");
     },

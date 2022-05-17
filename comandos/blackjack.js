@@ -213,7 +213,7 @@ function getValorMano(cartas) {
     return total
 }
 function getCarta(baraja) {
-    var posicion = Math.floor(Math.random() * baraja.length)
+    var posicion = metodosUtiles.getRandom(baraja.length - 1)
     var carta = baraja[posicion]
     baraja.splice(posicion, 1)
     return carta

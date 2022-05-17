@@ -58,7 +58,7 @@ module.exports = {
                     + "**IMPORTANTE: **" + "Puedes hacer varias apuestas a la misma tirada (Ejemplo: udyr ruleta 56161 (15) 32424 (par) 4535 (12-34) 15618 (1c))"
             })
         }
-        var numeroRandom = Math.floor(Math.random() * 37)
+        var numeroRandom = metodosUtiles.getRandom(36)
         var tirada = numeroRandom + "-" + RULETA.get(numeroRandom)
         do {
             profileData = await profileModel.findOne({

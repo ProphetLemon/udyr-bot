@@ -28,7 +28,7 @@ module.exports = {
             cont = cont + 1
             var resultados = new Map()
             for (let i = 0; i < tiradas; i++) {
-                var resultado = opciones[Math.floor(Math.random() * opciones.length)]
+                var resultado = opciones[metodosUtiles.getRandom(opciones.length - 1)]
                 var concurrencias = resultados.get(resultado)
                 if (concurrencias) {
                     resultados.set(resultado, concurrencias + 1)
