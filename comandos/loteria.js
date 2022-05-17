@@ -49,14 +49,14 @@ module.exports = {
         const textChannel = guild.channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
         //AQUI PARSEO LA FECHA
         var fecha = args.join(" ") //udyr loteria (24/05/2022)
-        var fechaLoteria = new Date()
-        fechaLoteria.setDate(fecha.split("/")[0])
-        fechaLoteria.setMonth(Number(fecha.split("/")[1]) - 1)
-        fechaLoteria.setFullYear(fecha.split("/")[2])
-        fechaLoteria.setHours(21)
-        fechaLoteria.setMinutes(0)
-        fechaLoteria.setSeconds(0)
-        var startTime = moment(fechaLoteria).add(-15, "minutes").toDate()
+        var fechaLoteria = null
+        /*fechaLoteria.setDate(fecha.split("/")[0])
+fechaLoteria.setMonth(Number(fecha.split("/")[1]) - 1)
+fechaLoteria.setFullYear(fecha.split("/")[2])
+fechaLoteria.setHours(21)
+fechaLoteria.setMinutes(0)
+fechaLoteria.setSeconds(0) */
+        var startTime = new Date()
         //AQUI BORRO LA LOTERIA SI YA HUBIERA UNA PROGRAMA PARA SOBRESCRIBIRLA
         if (loteria.get(guild.id)) {
             clearTimeout(loteria.get(guild.id))
