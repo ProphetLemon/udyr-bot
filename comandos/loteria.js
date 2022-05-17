@@ -88,7 +88,7 @@ fechaLoteria.setSeconds(0) */
             discurso.push(`<@!${tercero.userID}>`)
             textChannel.send(discurso[0])
             discurso.splice(0, 1)
-            leerDiscurso(discurso, textChannel)
+            //leerDiscurso(discurso, textChannel)
             var dineroPrimerPremio = Math.floor(Number(serverDinero.udyrcoins) * 60 / 100)
             var dineroSegundoPremio = Math.floor((Number(serverDinero.udyrcoins) - dineroPrimerPremio) * 60 / 100)
             var tercerPremio = Number(serverDinero.udyrcoins) - dineroPrimerPremio - dineroSegundoPremio
