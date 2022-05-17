@@ -63,7 +63,7 @@ fechaLoteria.setSeconds(0) */
             loteria.delete(guild.id)
         }
         await loteriaModel.remove({ serverID: guild.id })
-        var evento = await guild.scheduledEvents.create({ name: "Loteria de Udyr", image: "./images/loteria_udyr.png", scheduledStartTime: startTime, scheduledEndTime: fechaLoteria, privacyLevel: 'GUILD_ONLY', entityType: 'EXTERNAL', entityMetadata: { location: "En el canal de udyr" }, description: "EMPIEZA LA LOTERIA DE UDYR\nUsa el comando 'udyr boleto' seguido de un numero de 5 cifras y participa en este evento en el que se reparte dinero de manera poco justa" })
+        // var evento = await guild.scheduledEvents.create({ name: "Loteria de Udyr", image: "./images/loteria_udyr.png", scheduledStartTime: startTime, scheduledEndTime: fechaLoteria, privacyLevel: 'GUILD_ONLY', entityType: 'EXTERNAL', entityMetadata: { location: "En el canal de udyr" }, description: "EMPIEZA LA LOTERIA DE UDYR\nUsa el comando 'udyr boleto' seguido de un numero de 5 cifras y participa en este evento en el que se reparte dinero de manera poco justa" })
         var dateNow = new Date()
         var diff = fechaLoteria - dateNow
         var timeout = setTimeout(async () => {
