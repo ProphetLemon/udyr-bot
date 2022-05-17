@@ -134,7 +134,7 @@ global.metodosUtiles = {
         if (random > limite) {
             return metodosUtiles.getRandom(limite)
         } else {
-            return String(random)
+            return random
         }
     },
     insultar: function (message) {
