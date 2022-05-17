@@ -81,7 +81,7 @@ global.getCETorCESTDate = function () {
 
 global.metodosUtiles = {
     numberWithCommas: function (x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     },
 
     isSameDay: function (date1, date2) {
