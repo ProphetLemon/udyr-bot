@@ -92,6 +92,7 @@ module.exports = {
         */
 
         if (cmd == "bolsa") {
+            var resultados = ""
             var acciones = await bolsaModel.find({})
             for (let i = 0; i < acciones.length; i++) {
                 var stock = acciones[i]
