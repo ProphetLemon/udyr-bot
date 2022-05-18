@@ -15,6 +15,7 @@
     "canvas": "^2.9.1",
     "discord.js": "^13.7.0",
     "dotenv": "^8.2.0",
+    "ffmpeg-static": "^4.4.1",
     "mathjs": "^10.4.2",
     "moment-timezone": "^0.5.34",
     "mongoose": "^5.12.2",
