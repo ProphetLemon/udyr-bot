@@ -30,11 +30,18 @@ async function configurarBolsa() {
     for (let i = 0; i < acciones.length; i++) {
         var stock = acciones[i]
         var t1 = new Date()
-        var dateFinal = stock.dateFinal
-        var valorFinal = stock.valorFinal
         var nombre = stock.nombre
-        var random = stock.random
-        setTimeout(async (nombre, dateFinal, valorFinal, random) => {
+        var dateFinal = stock.dateFinal
+        setTimeout(async (stock) => {
+            var dateFinal = stock.dateFinal
+            var valorFinal = stock.valorFinal
+            var nombre = stock.nombre
+            var random = stock.random
+            var historico = stock.historico
+            historico.push(valorFinal)
+            if (historico.length == 13) {
+                historico.splice(0, 1)
+            }
             var desplome = Math.floor(Math.random() * 8000) == 11 ? true : false
             do {
                 var proximoValor = desplome ? Math.floor(valorFinal / 2) : Math.floor(valorFinal + random + (randn_bm(0, 1000, 1) - 500))
@@ -50,11 +57,12 @@ async function configurarBolsa() {
                 $set: {
                     dateFinal: dateFinal,
                     valorInicial: valorFinal,
-                    valorFinal: proximoValor
+                    valorFinal: proximoValor,
+                    historico: historico
                 }
             })
             configurarBolsa(t1)
-        }, dateFinal - t1, nombre, dateFinal, valorFinal, random);
+        }, dateFinal - t1, stock);
         actualizarRandom(t1, nombre)
     }
     console.log("Bolsa configurada!")

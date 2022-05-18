@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const bolsaModel = require('../models/bolsaSchema')
 const profileModel = require('../models/profileSchema')
 const superfalo = "Has considerado que en vez de malgastar el dinero en bolsa debas meter 10 € en https://www.paypal.me/Superfalo ?"
+const QuickChart = require('quickchart-js');
 module.exports = {
     name: 'bolsa',
     aliases: ['comprar', 'acciones', 'vender'],
@@ -19,7 +20,7 @@ module.exports = {
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`)
         if (message.channel.id != "976611174915375174") {
-            return message.reply("Esto mejor en el canal de bolsa").then(msg => {
+            return message.reply("Esto mejor en el canal de 'bolsa'").then(msg => {
                 message.delete()
                 setTimeout(() => {
                     msg.delete()
@@ -92,7 +93,6 @@ module.exports = {
 
         if (cmd == "bolsa") {
             var acciones = await bolsaModel.find({})
-            var resultados = ""
             for (let i = 0; i < acciones.length; i++) {
                 var stock = acciones[i]
                 var valorActual = getValorEmpresa(stock)
