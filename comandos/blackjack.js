@@ -147,9 +147,9 @@ async function finalPartida(message, partida) {
     if (getValorMano(partida.udyr.cartas) > 21) {
         var dineroGanado = partida.user.blackjack ? Math.floor(partida.dinero * 1.5) : partida.dinero
         await darDinero(message, dineroGanado)
-        return message.reply(`Has ganado! Te llevas ${dineroGanado} udyrcoins`)
+        return message.reply(`Has ganado! Te llevas ${dineroGanado} <:udyrcoin:961729720104419408>`)
     } else if (getValorMano(partida.udyr.cartas) == getValorMano(partida.user.cartas)) {
-        return message.reply(`Has empatado y te quedas con los ${partida.dinero} udyrcoins`)
+        return message.reply(`Has empatado y te quedas con los ${partida.dinero} <:udyrcoin:961729720104419408>`)
     } else {
         await darDinero(message, -(partida.dinero))
         await impuestoModel.findOneAndUpdate({
@@ -159,7 +159,7 @@ async function finalPartida(message, partida) {
                 udyrcoins: partida.dinero
             }
         })
-        return message.reply(`Has perdido ${partida.dinero} udyrcoins`)
+        return message.reply(`Has perdido ${partida.dinero} <:udyrcoin:961729720104419408>`)
     }
 }
 
