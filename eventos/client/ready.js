@@ -4,6 +4,7 @@ const roboModel = require('../../models/roboSchema');
 const loteriaModel = require('../../models/loteriaSchema')
 const boletoModel = require('../../models/boletoSchema');
 const impuestoModel = require('../../models/impuestoSchema')
+const bolsaModel = require('../../models/bolsaSchema')
 /**
  * @param {Discord} Discord
  * @param {Client} client
@@ -21,6 +22,81 @@ module.exports = async (Discord, client) => {
     if (loteriaBBDD) {
         configurarLoteria(guild, textChannel, loteriaBBDD)
     }
+    configurarBolsa()
+}
+
+async function configurarBolsa() {
+    var acciones = await bolsaModel.find({})
+    for (let i = 0; i < acciones.length; i++) {
+        var stock = acciones[i]
+        var t1 = new Date()
+        var dateFinal = stock.dateFinal
+        var valorFinal = stock.valorFinal
+        var nombre = stock.nombre
+        var random = stock.random
+        setTimeout(async (nombre, dateFinal, valorFinal, random) => {
+            var desplome = Math.floor(Math.random() * 8000) == 11 ? true : false
+            do {
+                var proximoValor = desplome ? Math.floor(valorFinal / 2) : Math.floor(valorFinal + random + (randn_bm(0, 1000, 1) - 500))
+            } while (proximoValor <= 150)
+            do {
+                var dateFinal = moment(dateFinal).add(1, "hours").toDate()
+            } while (dateFinal < t1)
+            dateFinal.setSeconds(0)
+            dateFinal.setMilliseconds(0)
+            await bolsaModel.findOneAndUpdate({
+                nombre: nombre
+            }, {
+                $set: {
+                    dateFinal: dateFinal,
+                    valorInicial: valorFinal,
+                    valorFinal: proximoValor
+                }
+            })
+            configurarBolsa(t1)
+        }, dateFinal - t1, nombre, dateFinal, valorFinal, random);
+        actualizarRandom(t1, nombre)
+    }
+    console.log("Bolsa configurada!")
+}
+
+function actualizarRandom(t1, nombre) {
+    var dateActualizarRandom = moment(t1).toDate()
+    dateActualizarRandom = moment(dateActualizarRandom).add(1, "minutes").toDate()
+    while (dateActualizarRandom.getMinutes() % 5 != 0) {
+        dateActualizarRandom = moment(dateActualizarRandom).add(1, "minutes").toDate()
+    }
+    dateActualizarRandom.setSeconds(0)
+    dateActualizarRandom.setMilliseconds(0)
+    setTimeout(async (nombre) => {
+        var random = Math.floor(randn_bm(0, 300, 1)) - 150
+        await bolsaModel.findOneAndUpdate({
+            nombre: nombre
+        }, {
+            $set: {
+                random: random
+            }
+        })
+        actualizarRandom(new Date(), nombre)
+    }, dateActualizarRandom - t1, nombre);
+}
+
+function randn_bm(min, max, skew) {
+    let u = 0, v = 0;
+    while (u === 0) u = Math.random() //Converting [0,1) to (0,1)
+    while (v === 0) v = Math.random()
+    let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v)
+
+    num = num / 10.0 + 0.5 // Translate to 0 -> 1
+    if (num > 1 || num < 0)
+        num = randn_bm(min, max, skew) // resample between 0 and 1 if out of range
+
+    else {
+        num = Math.pow(num, skew) // Skew
+        num *= max - min // Stretch to fill range
+        num += min // offset to min
+    }
+    return num
 }
 
 function shuffleArray(array) {

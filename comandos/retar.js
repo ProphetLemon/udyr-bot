@@ -156,7 +156,7 @@ async function coliseo(gladiador1, gladiador2, message, client, Discord) {
             var members = await message.guild.members.fetch()
             let avatar2 = members.get("849997112930074654").displayAvatarURL({ dynamic: false, format: 'png' });
             let image = await Canvacord.slap(avatar2, avatar)
-            let attachment = new Discord.MessageAttachment(image, "slap.png");
+            let attachment = new MessageAttachment(image, "slap.png");
             message.reply({
                 content: "no se puede retar al admin aun, podras retar al admin cuando sean las " + String(adminActual.dateLimite.getHours()).padStart(2, "0") +
                     ":" + String(adminActual.dateLimite.getMinutes()).padStart(2, "0"),

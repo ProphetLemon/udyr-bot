@@ -49,7 +49,7 @@ module.exports = {
             } else {
                 mensaje += `${i + 1}.- `;
             }
-            mensaje += `${member.displayName} - ${competidor.udyrcoins} <:udyrcoin:961729720104419408> ${(moment(competidor.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") != 0 && ((competidor.wordle == undefined || moment(hoy).format("DD/MM/YYYY") != competidor.wordle) && (competidor.wordleEmpezado == undefined || competidor.wordleEmpezado == false))) ? "_no ha canjeado la recompensa diaria_" : ""} ${member.roles.cache.has(rolAdmin.id) ? "<:1990_praisethesun:602528888400379935>" : ""}\n`;
+            mensaje += `${member.displayName} - ${metodosUtiles.numberWithCommas(competidor.udyrcoins)} <:udyrcoin:961729720104419408> ${(moment(competidor.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") != 0 && ((competidor.wordle == undefined || moment(hoy).format("DD/MM/YYYY") != competidor.wordle) && (competidor.wordleEmpezado == undefined || competidor.wordleEmpezado == false))) ? "_no ha canjeado la recompensa diaria_" : ""} ${member.roles.cache.has(rolAdmin.id) ? "<:1990_praisethesun:602528888400379935>" : ""}\n`;
         }
         if (!adminLocalizado) {
             for (let i = 10; i < personas.length; i++) {
@@ -61,7 +61,7 @@ module.exports = {
                     continue;
                 }
                 if (member.roles.cache.has(rolAdmin.id)) {
-                    mensaje += `<:1990_praisethesun:602528888400379935> ${i + 1}.- ${member.displayName} - ${competidor.udyrcoins} <:udyrcoin:961729720104419408> ${(moment(profileData.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") != 0 && ((profileData.wordle != undefined && moment(hoy).format("DD/MM/YYYY") != profileData.wordle) && (profileData.wordleEmpezado != undefined && profileData.wordleEmpezado == false))) ? "_no ha canjeado la recompensa diaria_" : ""} <:1990_praisethesun:602528888400379935>\n`;
+                    mensaje += `<:1990_praisethesun:602528888400379935> ${i + 1}.- ${member.displayName} - ${metodosUtiles.numberWithCommas(competidor.udyrcoins)} <:udyrcoin:961729720104419408> ${(moment(profileData.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") != 0 && ((profileData.wordle != undefined && moment(hoy).format("DD/MM/YYYY") != profileData.wordle) && (profileData.wordleEmpezado != undefined && profileData.wordleEmpezado == false))) ? "_no ha canjeado la recompensa diaria_" : ""} <:1990_praisethesun:602528888400379935>\n`;
                     break;
                 }
             }
