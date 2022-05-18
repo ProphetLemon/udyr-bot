@@ -69,7 +69,7 @@ module.exports = {
                 console.log(`FIN ${cmd.toUpperCase()}`)
                 return message.reply("No has apostado a nada bobo")
             }
-            if (apuestas.indexOf(")") != -1) {
+            if (apuestas.indexOf(")") == -1) {
                 return message.reply("Jajaj bug gracioso")
             }
             var dinero = apuestas.split("(")[0]
