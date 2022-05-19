@@ -129,7 +129,7 @@ module.exports = {
                 image: {
                     url: url,
                 },
-                description: `**Valores bolsa a las ${String(dateUltimoRegistro.getHours()).padStart(2, "0")}:${String(dateUltimoRegistro.getMinutes()).padStart(2, "0")}**`
+                description: `**Valores de la bolsa a las ${String(dateUltimoRegistro.getHours()).padStart(2, "0")}:${String(dateUltimoRegistro.getMinutes()).padStart(2, "0")}**`
             };
             message.channel.send({ embeds: [chartEmbed] });
         }
