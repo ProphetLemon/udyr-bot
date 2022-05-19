@@ -6,7 +6,7 @@ const superfalo = "Has considerado que en vez de malgastar el dinero en bolsa de
 const QuickChart = require('quickchart-js');
 module.exports = {
     name: 'bolsa',
-    aliases: ['comprar', 'acciones', 'vender'],
+    aliases: ['comprar', 'acciones', 'vender', 'historial'],
     description: 'Funcion para ver los valores en bolsa ahora mismo',
     /**
      * 
@@ -26,6 +26,9 @@ module.exports = {
                     msg.delete()
                 }, 8000);
             })
+        }
+        if (cmd == "historial") {
+            return message.author.send(profileData.historial.toObject().join("\n"))
         }
         if (cmd == "vender") {
             if (!profileData.wallet) {
@@ -59,12 +62,18 @@ module.exports = {
             if (wallet.get(nombre) == 0) {
                 wallet.delete(nombre)
             }
+            var historial = profileData.historial
+            historial.push(`${moment().format('DD/MM HH:mm')}- Has vendido ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}`)
+            if (historial.length == 21) {
+                historial.splice(0, 1)
+            }
             await profileModel.findOneAndUpdate({
                 userID: message.author.id,
                 serverID: message.guild.id
             }, {
                 $set: {
-                    wallet: wallet
+                    wallet: wallet,
+                    historial: historial
                 },
                 $inc: {
                     udyrcoins: dineroAGanar
@@ -180,12 +189,18 @@ module.exports = {
             } else {
                 wallet.set(nombre, cantidad)
             }
+            var historial = profileData.historial
+            historial.push(`${moment().format('DD/MM HH:mm')}- Has comprado ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}`)
+            if (historial.length == 21) {
+                historial.splice(0, 1)
+            }
             await profileModel.findOneAndUpdate({
                 userID: message.author.id,
                 serverID: message.guild.id
             }, {
                 $set: {
-                    wallet: wallet
+                    wallet: wallet,
+                    historial: historial
                 },
                 $inc: {
                     udyrcoins: -dineroAGastar

@@ -10,7 +10,8 @@ const profileSchema = new mongoose.Schema({
     wordleEmpezado: { type: Boolean },
     nivel: { type: Number, default: 0 },
     descripcion: { type: String, default: 'Un maric\u00F3n m\u00E1s de este servidor' },
-    wallet: { type: Map }
+    wallet: { type: Map },
+    historial: { type: [String], default: [] }
 });
 
 const model = mongoose.model('ProfileModels', profileSchema);
