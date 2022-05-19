@@ -180,6 +180,13 @@ async function repartirDinero(message, resultado, dinero, dineroPosible) {
                 udyrcoins: dineroGanado
             }
         })
+        await impuestoModel.updateOne({
+            serverID: message.guild.id
+        }, {
+            $inc: {
+                udyrcoins: -dineroGanado
+            }
+        })
     } else {
         await profileModel.updateOne({
             serverID: message.guild.id,

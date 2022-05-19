@@ -89,9 +89,10 @@ module.exports = {
             textChannel.send(discurso[0])
             discurso.splice(0, 1)
             leerDiscurso(discurso, textChannel)
-            var dineroPrimerPremio = Math.floor(Number(serverDinero.udyrcoins) * 60 / 100)
-            var dineroSegundoPremio = Math.floor((Number(serverDinero.udyrcoins) - dineroPrimerPremio) * 60 / 100)
-            var tercerPremio = Number(serverDinero.udyrcoins) - dineroPrimerPremio - dineroSegundoPremio
+            var dineroPrimerPremio = 60000
+            var dineroSegundoPremio = 25000
+            var tercerPremio = 15000
+            var dineroTotal = dineroPrimerPremio + dineroSegundoPremio + tercerPremio
             console.log(dineroPrimerPremio + " " + dineroSegundoPremio + " " + tercerPremio)
             await profileModel.findOneAndUpdate({
                 userID: ganador.userID,
@@ -120,8 +121,8 @@ module.exports = {
             await impuestoModel.findOneAndUpdate({
                 serverID: guild.id
             }, {
-                $set: {
-                    udyrcoins: 0
+                $inc: {
+                    udyrcoins: -dineroTotal
                 }
             })
             await boletoModel.remove({})
