@@ -112,6 +112,16 @@ module.exports = {
                 type: 'line',
                 data: {
                     labels: labels, datasets: []
+                },
+                options: {
+                    plugins: {
+                        datalabels: {
+                            display: true,
+                            align: 'bottom',
+                            backgroundColor: '#ccc',
+                            borderRadius: 3
+                        },
+                    }
                 }
             }
             var fields = []
