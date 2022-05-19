@@ -92,14 +92,21 @@ module.exports = {
         */
 
         if (cmd == "bolsa") {
-            var resultados = ""
-            var historicos = new Map()
             var acciones = await bolsaModel.find({})
+            var fields = []
+            var config = {
+                type: 'line',
+                data: {
+                    labels: labels, datasets: []
+                }
+            }
             for (let i = 0; i < acciones.length; i++) {
                 var stock = acciones[i]
-                var valorActual = getValorEmpresa(stock)
-                historicos.set(stock.nombre, stock.historico)
-                resultados += `El valor de **_${stock.nombre}_** actualmente es: ${valorActual}<:udyrcoin:961729720104419408>\n`
+                config.data.datasets.push({ label: stock, data: stock.historico.toObject() })
+                fields.push({ name: stock.nombre, value: String(getValorEmpresa(stock)) + "<:udyrcoin:961729720104419408>", inline: true })
+            }
+            if (fields.length % 2 != 0) {
+                fields.push({ name: '\u200B', value: '\u200B', inline: true })
             }
             var hoy = new Date()
             var labels = []
@@ -107,20 +114,6 @@ module.exports = {
                 var dateLabels = moment(hoy).add(-hoy.getMinutes(), "minutes")
                 var date = dateLabels.add(-acciones[0].historico.length + 1 + i, "hours").toDate()
                 labels.push(String(date.getHours()).padStart(2, "0") + ":00")
-            }
-            var config = {
-                type: 'line',
-                data: {
-                    labels: labels, datasets: []
-                }
-            }
-            var fields = []
-            for (var [key, value] of historicos) {
-                config.data.datasets.push({ label: key, data: value.toObject() })
-                fields.push({ name: key, value: String(value.toObject()[value.toObject().length - 1]) + "<:udyrcoin:961729720104419408>", inline: true })
-            }
-            if (fields.length % 2 != 0) {
-                fields.push({ name: '\u200B', value: '\u200B', inline: true })
             }
             const chart = new QuickChart();
             chart.setConfig(config)
