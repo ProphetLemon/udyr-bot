@@ -28,6 +28,9 @@ module.exports = {
             })
         }
         if (cmd == "historial") {
+            if (profileData.historial.toObject().length == 0) {
+                return message.reply("No tienes ninguna transacción reciente")
+            }
             return message.author.send(profileData.historial.toObject().join("\n")).then(msg => {
                 if (message.guild) {
                     message.delete()
