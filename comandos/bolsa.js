@@ -63,7 +63,7 @@ module.exports = {
                 wallet.delete(nombre)
             }
             var historial = profileData.historial
-            historial.push(`${moment().format('DD/MM HH:mm')}- Has vendido ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}`)
+            historial.push(`${moment().format('DD/MM HH:mm')}- Has vendido ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""} por ${dineroAGanar} (la acción estaba a ${valorEmpresa})`)
             if (historial.length == 21) {
                 historial.splice(0, 1)
             }
@@ -190,7 +190,7 @@ module.exports = {
                 wallet.set(nombre, cantidad)
             }
             var historial = profileData.historial
-            historial.push(`${moment().format('DD/MM HH:mm')}- Has comprado ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}`)
+            historial.push(`${moment().format('DD/MM HH:mm')}- Has vendido ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""} por ${dineroAGastar} (la acción estaba a ${valorEmpresa})`)
             if (historial.length == 21) {
                 historial.splice(0, 1)
             }
