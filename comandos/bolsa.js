@@ -119,12 +119,17 @@ module.exports = {
             const chart = new QuickChart();
             chart.setConfig(config)
             var url = await chart.getUrl()
+            var dateUltimoRegistro = new Date()
+            while (dateUltimoRegistro.getMinutes() % 5 != 0) {
+                dateUltimoRegistro = moment(dateUltimoRegistro).add(-1, "minutes").toDate()
+            }
             const chartEmbed = {
                 title: 'Registro ultimas 12 horas',
                 fields: fields,
                 image: {
                     url: url,
-                }
+                },
+                description: `**Valores bolsa a las ${String(dateUltimoRegistro.getHours()).padStart(2, "0")}:${String(dateUltimoRegistro.getMinutes()).padStart(2, "0")}**`
             };
             message.channel.send({ embeds: [chartEmbed] });
         }
