@@ -73,11 +73,27 @@ module.exports = {
             message.channel.send(`Has vendido ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}!`)
         }
         if (cmd == "acciones") {
+            var author
+            if (message.mentions.users) {
+                author = message.mentions.users.first()
+                var mentionData = await profileModel.findOne({
+                    userID: author.id,
+                    serverID: message.guild.id
+                })
+                if (mentionData) {
+                    profileData = mentionData
+                }
+                else {
+                    return message.reply("Ese no ta en la BBDD")
+                }
+            } else {
+                author = message.author
+            }
             var acciones = profileData.wallet
             if (acciones) {
                 var newEmbed = new MessageEmbed()
-                newEmbed.setTitle(`Acciones de ${message.member ? message.member.displayName : message.author.username}`)
-                newEmbed.setThumbnail(message.author.displayAvatarURL({ format: "png" }))
+                newEmbed.setTitle(`Acciones de ${author.username}`)
+                newEmbed.setThumbnail(author.displayAvatarURL({ format: "png" }))
                 for (var [key, value] of acciones) {
                     newEmbed.addField(key, String(value), true)
                 }
