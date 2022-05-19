@@ -93,13 +93,46 @@ module.exports = {
 
         if (cmd == "bolsa") {
             var resultados = ""
+            var historicos = new Map()
             var acciones = await bolsaModel.find({})
             for (let i = 0; i < acciones.length; i++) {
                 var stock = acciones[i]
                 var valorActual = getValorEmpresa(stock)
+                historicos.set(stock.nombre, stock.historico)
                 resultados += `El valor de **_${stock.nombre}_** actualmente es: ${valorActual}<:udyrcoin:961729720104419408>\n`
             }
-            message.channel.send(resultados)
+            var hoy = new Date()
+            var labels = []
+            for (let i = 0; i < acciones[0].historico.length; i++) {
+                var dateLabels = moment(hoy).add(-hoy.getMinutes(), "minutes")
+                var date = dateLabels.add(-acciones[0].historico.length + 1 + i, "hours").toDate()
+                labels.push(String(date.getHours()).padStart(2, "0") + ":00")
+            }
+            var config = {
+                type: 'line',
+                data: {
+                    labels: labels, datasets: []
+                }
+            }
+            var fields = []
+            for (var [key, value] of historicos) {
+                config.data.datasets.push({ label: key, data: value.toObject() })
+                fields.push({ name: key, value: String(value.toObject()[value.toObject().length - 1]) + "<:udyrcoin:961729720104419408>", inline: true })
+            }
+            if (fields.length % 2 != 0) {
+                fields.push({ name: '\u200B', value: '\u200B', inline: true })
+            }
+            const chart = new QuickChart();
+            chart.setConfig(config)
+            var url = await chart.getUrl()
+            const chartEmbed = {
+                title: 'Registro ultimas 12 horas',
+                fields: fields,
+                image: {
+                    url: url,
+                }
+            };
+            message.channel.send({ embeds: [chartEmbed] });
         }
         /**
          * udyr comprar nombreDeAccion cantidad_de_acciones
