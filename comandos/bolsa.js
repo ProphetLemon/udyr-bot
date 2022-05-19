@@ -74,7 +74,7 @@ module.exports = {
         }
         if (cmd == "acciones") {
             var author
-            if (message.mentions.users) {
+            if (message.mentions.users.first()) {
                 author = message.mentions.users.first()
                 var mentionData = await profileModel.findOne({
                     userID: author.id,
