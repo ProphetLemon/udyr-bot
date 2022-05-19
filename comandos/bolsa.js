@@ -28,7 +28,11 @@ module.exports = {
             })
         }
         if (cmd == "historial") {
-            return message.author.send(profileData.historial.toObject().join("\n"))
+            return message.author.send(profileData.historial.toObject().join("\n")).then(msg => {
+                if (message.guild) {
+                    message.delete()
+                }
+            })
         }
         if (cmd == "vender") {
             if (!profileData.wallet) {
@@ -63,7 +67,7 @@ module.exports = {
                 wallet.delete(nombre)
             }
             var historial = profileData.historial
-            historial.push(`${moment().format('DD/MM HH:mm')}- Has vendido ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""} por ${dineroAGanar} (la acción estaba a ${valorEmpresa})`)
+            historial.push(`${moment().format('DD/MM HH:mm')}- Has vendido ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""} por ${dineroAGanar} (la acción estaba a ${valorEmpresa}<:udyrcoin:961729720104419408>)`)
             if (historial.length == 21) {
                 historial.splice(0, 1)
             }
@@ -190,7 +194,7 @@ module.exports = {
                 wallet.set(nombre, cantidad)
             }
             var historial = profileData.historial
-            historial.push(`${moment().format('DD/MM HH:mm')}- Has vendido ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""} por ${dineroAGastar} (la acción estaba a ${valorEmpresa})`)
+            historial.push(`${moment().format('DD/MM HH:mm')}- Has vendido ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""} por ${dineroAGastar} (la acción estaba a ${valorEmpresa}<:udyrcoin:961729720104419408>)`)
             if (historial.length == 21) {
                 historial.splice(0, 1)
             }
