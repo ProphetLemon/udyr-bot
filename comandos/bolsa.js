@@ -97,7 +97,7 @@ module.exports = {
             var config = {
                 type: 'line',
                 data: {
-                    labels: labels, datasets: []
+                    datasets: []
                 }
             }
             for (let i = 0; i < acciones.length; i++) {
@@ -115,6 +115,7 @@ module.exports = {
                 var date = dateLabels.add(-acciones[0].historico.length + 1 + i, "hours").toDate()
                 labels.push(String(date.getHours()).padStart(2, "0") + ":00")
             }
+            config.data["labels"] = labels
             const chart = new QuickChart();
             chart.setConfig(config)
             var url = await chart.getUrl()
