@@ -43,8 +43,9 @@ async function configurarBolsa() {
                 historico.splice(0, 1)
             }
             var desplome = Math.floor(Math.random() * 8000) == 11 ? true : false
+            var toTHeMoon = Math.floor(Math.random() * 8000) == 11 ? true : false
             do {
-                var proximoValor = desplome ? Math.floor(valorFinal / 2) : Math.floor(valorFinal + random + (randn_bm(0, 1000, 1) - 500))
+                var proximoValor = desplome ? Math.floor(valorFinal / 2) : toTHeMoon ? Math.floor(valorFinal * 2) : Math.floor(valorFinal + random + (randn_bm(0, 1000, 1) - 500))
             } while (proximoValor <= 150)
             do {
                 var dateFinal = moment(dateFinal).add(1, "hours").toDate()
