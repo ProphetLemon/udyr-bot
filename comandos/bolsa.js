@@ -151,7 +151,7 @@ module.exports = {
             const chart = new QuickChart();
             chart.setConfig(config)
             var url = await chart.getUrl()
-            url = url.split("chart?").join("chart?bkg=%231f2c34&")
+            url = url.split("chart?").join("chart?bkg=%231f2933&")
             var dateUltimoRegistro = new Date()
             while (dateUltimoRegistro.getMinutes() % 5 != 0) {
                 dateUltimoRegistro = moment(dateUltimoRegistro).add(-1, "minutes").toDate()
@@ -238,19 +238,18 @@ function getValorEmpresa(stock) {
 function getColor(stock) {
     switch (stock.nombre) {
         case "udyrcripto":
-            return "#e842eb"
+            return "#9a59b5"
         case "oso":
-            return "#944203"
+            return "#be651c"
         case "fenix":
-            return "#f52540"
+            return "#e94c3c"
         case "tortuga":
-            return "#40d8e3"
+            return "#3598db"
         case "mercadona":
-            return "#33f525"
+            return "#2dcc70"
         case "limon":
-            return '#fff203'
-        //return "#f5f525"
+            return '#f1c50e'
         case "tigre":
-            return "#ffffff"
+            return "#ecf1f0"
     }
 }
