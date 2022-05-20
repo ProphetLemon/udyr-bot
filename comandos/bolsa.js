@@ -18,6 +18,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        return message.reply("Se ha jodido la bolsa")
         console.log(`INICIO ${cmd.toUpperCase()}`)
         if (message.channel.id != "976611174915375174") {
             return message.reply("Esto mejor en el canal de 'bolsa'").then(msg => {
