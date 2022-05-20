@@ -78,7 +78,7 @@ module.exports = {
                 nombre: stock.nombre
             }, {
                 $set: {
-                    valorFinal: stock.valorFinal * (1 - (0.01 * cantidad))
+                    valorFinal: Math.floor(stock.valorFinal * (1 - (0.01 * cantidad)))
                 }
             })
             await profileModel.findOneAndUpdate({
@@ -90,7 +90,7 @@ module.exports = {
                     historial: historial
                 },
                 $inc: {
-                    udyrcoins: dineroAGanar * (1 - (0.05 * cantidad))
+                    udyrcoins: Math.floor(dineroAGanar * (1 - (0.05 * cantidad)))
                 }
             })
             message.channel.send(`Has vendido ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}!\nAhora cuentas con ${profileData.udyrcoins + dineroAGanar * (1 - (0.05 * cantidad))} (recarga del 5% por cada acción: ${dineroAGanar - dineroAGanar * (1 - (0.05 * cantidad))}) <:udyrcoin:961729720104419408> en tu perfil`)
@@ -217,7 +217,7 @@ module.exports = {
                 nombre: stock.nombre
             }, {
                 $set: {
-                    valorFinal: stock.valorFinal * (1 + (0.01 * cantidad))
+                    valorFinal: Math.floor(stock.valorFinal * (1 + (0.01 * cantidad)))
                 }
             })
             await profileModel.findOneAndUpdate({
