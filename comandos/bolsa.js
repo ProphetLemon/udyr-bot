@@ -2,6 +2,7 @@ const { Message, Client, MessageEmbed } = require('discord.js');
 const Discord = require('discord.js');
 const bolsaModel = require('../models/bolsaSchema')
 const profileModel = require('../models/profileSchema')
+const impuestoModel = require('../models/impuestoSchema')
 const superfalo = "Has considerado que en vez de malgastar el dinero en bolsa debas meter 10 € en https://www.paypal.me/Superfalo ?"
 const QuickChart = require('quickchart-js');
 module.exports = {
@@ -18,7 +19,6 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
-        return message.reply("Se ha jodido la bolsa")
         console.log(`INICIO ${cmd.toUpperCase()}`)
         if (message.channel.id != "976611174915375174") {
             return message.reply("Esto mejor en el canal de 'bolsa'").then(msg => {
@@ -79,7 +79,7 @@ module.exports = {
                 nombre: stock.nombre
             }, {
                 $set: {
-                    valorFinal: Math.floor(stock.valorFinal * (1 - (0.01 * cantidad)))
+                    valorFinal: valorEmpresa - 0.1 * valorEmpresa * Math.log10(cantidad)
                 }
             })
             await profileModel.findOneAndUpdate({
@@ -91,7 +91,14 @@ module.exports = {
                     historial: historial
                 },
                 $inc: {
-                    udyrcoins: Math.floor(dineroAGanar * (1 - (0.05 * cantidad)))
+                    udyrcoins: Math.floor(dineroAGanar * 0.95)
+                }
+            })
+            await impuestoModel.findOneAndUpdate({
+                serverID: message.guild.id
+            }, {
+                $inc: {
+                    udyrcoins: Math.floor(dineroAGanar * 0.05)
                 }
             })
             message.channel.send(`Has vendido ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}!\nAhora cuentas con ${profileData.udyrcoins + dineroAGanar * (1 - (0.05 * cantidad))} (recarga del 5% por cada acción: ${dineroAGanar - dineroAGanar * (1 - (0.05 * cantidad))}) <:udyrcoin:961729720104419408> en tu perfil`)
@@ -218,7 +225,7 @@ module.exports = {
                 nombre: stock.nombre
             }, {
                 $set: {
-                    valorFinal: Math.floor(stock.valorFinal * (1 + (0.01 * cantidad)))
+                    valorFinal: valorEmpresa + 0.1 * valorEmpresa * Math.log10(cantidad)
                 }
             })
             await profileModel.findOneAndUpdate({
