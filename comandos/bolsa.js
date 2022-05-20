@@ -151,7 +151,7 @@ module.exports = {
             const chart = new QuickChart();
             chart.setConfig(config)
             var url = await chart.getUrl()
-            url=url.split("chart?").join("chart?bkg=black&")
+            url = url.split("chart?").join("chart?bkg=%231f2c34&")
             var dateUltimoRegistro = new Date()
             while (dateUltimoRegistro.getMinutes() % 5 != 0) {
                 dateUltimoRegistro = moment(dateUltimoRegistro).add(-1, "minutes").toDate()
