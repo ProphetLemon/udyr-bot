@@ -151,7 +151,7 @@ function leerDiscurso(array, textChannel) {
         textChannel.send(array[0])
         array.splice(0, 1)
         leerDiscurso(array, textChannel)
-    }, 10000);
+    }, 5000);
 }
 
 async function configurarLoteria(guild, textChannel, loteriaBBDD) {
