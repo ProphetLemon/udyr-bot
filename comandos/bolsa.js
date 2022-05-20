@@ -218,7 +218,7 @@ module.exports = {
                     udyrcoins: -dineroAGastar
                 }
             })
-            message.channel.send(`Has comprado ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}!\nAhora cuentan con ${profileData.udyrcoins - dineroAGastar} <:udyrcoin:961729720104419408> en tu perfil`)
+            message.channel.send(`Has comprado ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}!\nAhora cuentas con ${profileData.udyrcoins - dineroAGastar} <:udyrcoin:961729720104419408> en tu perfil`)
         }
         console.log(`FIN ${cmd.toUpperCase()}`)
     }
