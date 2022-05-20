@@ -86,7 +86,7 @@ module.exports = {
                     udyrcoins: dineroAGanar
                 }
             })
-            message.channel.send(`Has vendido ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}!`)
+            message.channel.send(`Has vendido ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}!\nAhora cuentas con ${profileData.udyrcoins + dineroAGanar} <:udyrcoin:961729720104419408> en tu perfil`)
         }
         if (cmd == "acciones") {
             var author
@@ -188,8 +188,12 @@ module.exports = {
             cantidad = Number(cantidad)
             var valorEmpresa = getValorEmpresa(stock)
             var dineroAGastar = valorEmpresa * cantidad
-            if (profileData.udyrcoins < dineroAGastar) {
-                return message.reply(`No tienes dinero para comprar tantas acciones de esa empresa. ${superfalo}`)
+            while (profileData.udyrcoins < dineroAGastar) {
+                cantidad = cantidad - 1
+                if (cantidad == 0) {
+                    return message.reply("Subnormal, no tienes dinero ni pa 1. " + superfalo)
+                }
+                dineroAGastar = valorEmpresa * cantidad
             }
             var wallet = profileData.wallet ? profileData.wallet : new Map()
             if (wallet.get(nombre)) {
@@ -214,7 +218,7 @@ module.exports = {
                     udyrcoins: -dineroAGastar
                 }
             })
-            message.channel.send(`Has comprado ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}!`)
+            message.channel.send(`Has comprado ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}!\nAhora cuentan con ${profileData.udyrcoins - dineroAGastar} <:udyrcoin:961729720104419408> en tu perfil`)
         }
         console.log(`FIN ${cmd.toUpperCase()}`)
     }
