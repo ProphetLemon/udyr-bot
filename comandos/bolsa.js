@@ -134,7 +134,7 @@ module.exports = {
             }
             for (let i = 0; i < acciones.length; i++) {
                 var stock = acciones[i]
-                config.data.datasets.push({ label: stock.nombre, data: stock.historico.toObject() })
+                config.data.datasets.push({ label: stock.nombre, data: stock.historico.toObject(), backgroundColor: "transparent", borderColor: getColor(stock) })
                 fields.push({ name: stock.nombre, value: String(getValorEmpresa(stock)) + "<:udyrcoin:961729720104419408>", inline: true })
             }
             if (fields.length % 2 != 0) {
@@ -232,4 +232,24 @@ function getValorEmpresa(stock) {
     var timestep = Math.floor((((dateFinal - t1) / 1000) / 60) / 5)
     var valorActual = Math.floor(valorInicial + (valorFinal - valorInicial) / 12 * (12 - timestep) + random)
     return valorActual
+}
+
+function getColor(stock) {
+    switch (stock.nombre) {
+        case "udyrcripto":
+            return "#e842eb"
+        case "oso":
+            return "#944203"
+        case "fenix":
+            return "#f52540"
+        case "tortuga":
+            return "#40d8e3"
+        case "mercadona":
+            return "#33f525"
+        case "limon":
+            return '#fff203'
+        //return "#f5f525"
+        case "tigre":
+            return "#000000"
+    }
 }
