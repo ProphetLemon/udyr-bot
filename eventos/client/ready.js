@@ -30,11 +30,13 @@ async function configurarBolsa() {
     for (let i = 0; i < acciones.length; i++) {
         var stock = acciones[i]
         var t1 = new Date()
-        var nombre = stock.nombre
         var dateFinal = stock.dateFinal
         setTimeout(async (stock) => {
             var dateFinal = stock.dateFinal
             var valorFinal = stock.valorFinal
+            if (valorFinal == 0) {
+                return await borrar(stock)
+            }
             var nombre = stock.nombre
             var random = stock.random
             var historico = stock.historico
@@ -43,10 +45,11 @@ async function configurarBolsa() {
                 historico.splice(0, 1)
             }
             var desplome = Math.floor(Math.random() * 8000) == 11 ? true : false
-            var toTHeMoon = Math.floor(Math.random() * 8000) == 11 ? true : false
-            do {
-                var proximoValor = desplome ? Math.floor(valorFinal / 2) : toTHeMoon ? Math.floor(valorFinal * 2) : Math.floor(valorFinal + random + (randn_bm(0, 1000, 1) - 500))
-            } while (proximoValor <= 150)
+            var toTheMoon = Math.floor(Math.random() * 8000) == 11 ? true : false
+            var proximoValor = desplome ? Math.floor(valorFinal / 2) : toTheMoon ? Math.floor(valorFinal * 2) : Math.floor(valorFinal + random + (randn_bm(0, 1000, 1) - 500))
+            if (proximoValor < 0) {
+                proximoValor = 0
+            }
             do {
                 var dateFinal = moment(dateFinal).add(1, "hours").toDate()
             } while (dateFinal < t1)
@@ -62,14 +65,37 @@ async function configurarBolsa() {
                     historico: historico
                 }
             })
-            configurarBolsa(t1)
+            configurarBolsa()
         }, dateFinal - t1, stock);
-        actualizarRandom(t1, nombre)
+        actualizarRandom(t1, stock)
     }
     console.log("Bolsa configurada!")
 }
 
-function actualizarRandom(t1, nombre) {
+async function borrar(stock) {
+    await bolsaModel.findByIdAndRemove({
+        nombre: stock.nombre
+    })
+    var personas = await profileModel.find({})
+    for (let i = 0; i < personas.length; i++) {
+        var persona = personas[i]
+        var wallet = persona.wallet
+        if (wallet.get(stock.nombre)) {
+            wallet.delete(stock.nombre)
+            await profileModel.findOne({
+                userID: persona.userID,
+                serverID: persona.serverID
+            }, {
+                $set: {
+                    wallet: wallet
+                }
+            })
+        }
+    }
+}
+
+
+function actualizarRandom(t1, stock) {
     var dateActualizarRandom = moment(t1).toDate()
     dateActualizarRandom = moment(dateActualizarRandom).add(1, "minutes").toDate()
     while (dateActualizarRandom.getMinutes() % 5 != 0) {
@@ -77,17 +103,17 @@ function actualizarRandom(t1, nombre) {
     }
     dateActualizarRandom.setSeconds(0)
     dateActualizarRandom.setMilliseconds(0)
-    setTimeout(async (nombre) => {
-        var random = Math.floor(randn_bm(0, 300, 1)) - 150
+    setTimeout(async (stock) => {
+        var random = stock.valorFinal == 0 ? 0 : Math.floor(randn_bm(0, 300, 1)) - 150
         await bolsaModel.findOneAndUpdate({
-            nombre: nombre
+            nombre: stock.nombre
         }, {
             $set: {
                 random: random
             }
         })
-        actualizarRandom(new Date(), nombre)
-    }, dateActualizarRandom - t1, nombre);
+        actualizarRandom(new Date(), stock)
+    }, dateActualizarRandom - t1, stock);
 }
 
 function randn_bm(min, max, skew) {
