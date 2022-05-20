@@ -101,7 +101,7 @@ module.exports = {
                     udyrcoins: Math.floor(dineroAGanar * 0.05)
                 }
             })
-            message.channel.send(`Has vendido ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}!\nAhora cuentas con ${profileData.udyrcoins + Math.floor(dineroAGanar * 0.05)} (recarga del 5%: ${Math.floor(dineroAGanar * 0.05)}) <:udyrcoin:961729720104419408> en tu perfil`)
+            message.channel.send(`Has vendido ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}!\nAhora cuentas con ${profileData.udyrcoins + Math.floor(dineroAGanar * 0.95)} (recarga del 5%: ${Math.floor(dineroAGanar * 0.05)}) <:udyrcoin:961729720104419408> en tu perfil`)
         }
         if (cmd == "acciones") {
             var author
