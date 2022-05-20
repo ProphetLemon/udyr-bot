@@ -74,6 +74,13 @@ module.exports = {
             if (historial.length == 21) {
                 historial.splice(0, 1)
             }
+            await bolsaModel.findOneAndUpdate({
+                nombre: stock.nombre
+            }, {
+                $set: {
+                    valorFinal: stock.valorFinal * (1 - (0.01 * cantidad))
+                }
+            })
             await profileModel.findOneAndUpdate({
                 userID: message.author.id,
                 serverID: message.guild.id
@@ -83,7 +90,7 @@ module.exports = {
                     historial: historial
                 },
                 $inc: {
-                    udyrcoins: dineroAGanar
+                    udyrcoins: dineroAGanar * (1 - (0.05 * cantidad))
                 }
             })
             message.channel.send(`Has vendido ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}!\nAhora cuentas con ${profileData.udyrcoins + dineroAGanar} <:udyrcoin:961729720104419408> en tu perfil`)
@@ -206,6 +213,13 @@ module.exports = {
             if (historial.length == 21) {
                 historial.splice(0, 1)
             }
+            await bolsaModel.findOneAndUpdate({
+                nombre: stock.nombre
+            }, {
+                $set: {
+                    valorFinal: stock.valorFinal * (1 + (0.01 * cantidad))
+                }
+            })
             await profileModel.findOneAndUpdate({
                 userID: message.author.id,
                 serverID: message.guild.id
