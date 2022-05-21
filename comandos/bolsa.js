@@ -72,7 +72,7 @@ module.exports = {
             }
             var historial = profileData.historial
             historial.push(`${moment().format('DD/MM HH:mm')}- Has vendido ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""} por ${dineroAGanar} (la acción estaba a ${valorEmpresa}<:udyrcoin:961729720104419408>)`)
-            if (historial.length == 21) {
+            if (historial.length == 11) {
                 historial.splice(0, 1)
             }
             await bolsaModel.findOneAndUpdate({
@@ -218,7 +218,7 @@ module.exports = {
             }
             var historial = profileData.historial
             historial.push(`${moment().format('DD/MM HH:mm')}- Has comprado ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""} por ${dineroAGastar} (la acción estaba a ${valorEmpresa}<:udyrcoin:961729720104419408>)`)
-            if (historial.length == 21) {
+            if (historial.length == 11) {
                 historial.splice(0, 1)
             }
             await bolsaModel.findOneAndUpdate({
