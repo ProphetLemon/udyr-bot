@@ -35,7 +35,8 @@ async function configurarBolsa() {
             var dateFinal = stock.dateFinal
             var valorFinal = stock.valorFinal
             if (valorFinal == 0) {
-                return await borrar(stock)
+                await borrar(stock)
+                return
             }
             var nombre = stock.nombre
             var random = stock.random
@@ -73,7 +74,7 @@ async function configurarBolsa() {
 }
 
 async function borrar(stock) {
-    await bolsaModel.findByIdAndRemove({
+    await bolsaModel.findOneAndRemove({
         nombre: stock.nombre
     })
     var personas = await profileModel.find({})
