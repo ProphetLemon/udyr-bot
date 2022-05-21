@@ -5,7 +5,7 @@ var games = new Map()
 var timeouts = new Map()
 module.exports = {
     name: 'blackjack',
-    aliases: ['carta', 'paso', 'pasar', 'plantar', 'doblar', 'planto', 'bj'],
+    aliases: ['bj'],
     description: 'Funcion que sirve para tirar en la ruleta',
     /**
      * 
@@ -25,66 +25,16 @@ module.exports = {
                 }, 6000);
             })
         }
-        if (cmd == "blackjack" || cmd == "bj") {
-            if (args.join("").trim() == "") {
-                return message.channel.send("**COMO SE JUEGA:**\n"
-                    + "**OBJETIVO:**" + "\n"
-                    + "Robar cartas hasta sumar en total 21 o acercarte lo máximo posible a ese valor sin parte o pierdes.\nLas figuras cuentan como 10 y los ases valen 1 o 11 (está scripteado de tal manera que te cogera el valor adecuado para tu situación)." + "\n"
-                    + "**CREAR PARTIDA:**" + "\n"
-                    + "Las partidas duran 10 min, si tardas más de eso en jugar la partida se cerrará automaticamente y tendrás que crear otra." + "\n"
-                    + "udyr blackjack _dinero a apostar_ (Ejemplo: udyr blackjack 100)" + "\n"
-                    + "**COMO JUGAR:**" + "\n"
-                    + "Tienes varias opciones" + "\n"
-                    + "carta (Se te dará una carta más)" + "\n"
-                    + "paso/pasar/plantar/planto (Te plantas y le toca a Udyr coger cartas hasta ganarte o perder)" + "\n"
-                    + "doblar (Coges una ultima carta y doblas tu apuesta)" + "\n"
-                )
+        if (args.join(" ").includes("paso") || args.join(" ").includes("pasar") || args.join(" ").includes("plantar") || args.join(" ").includes("planto")) {
+            if (!games.get(message.author.id)) {
+                return message.reply("No tienes una partida empezada")
             }
-            if (games.get(message.author.id)) {
-                return message.reply("Ya tienes una partida empezada")
-            }
-            var dinero = args[0]
-            if (isNaN(dinero)) {
-                return message.reply("No has escrito un numero valido de apuesta")
-            } else {
-                dinero = Math.floor(Number(dinero))
-                if (dinero <= 0) {
-                    return message.reply("No puedes poner un numero menor o igual que 0")
-                }
-                if (dinero > profileData.udyrcoins) {
-                    return message.reply("No tienes ese dinero. Si quieres aumentar tu saldo de udyrcoin haz un ingreso de 10€ en esta cuenta https://paypal.me/Superfalo")
-                }
-            }
-            var baraja = getBaraja()
-            var cartaTuya1 = getCarta(baraja)
-            var cartaTuya2 = getCarta(baraja)
-            var cartaUdyr = getCarta(baraja)
-            var partida = {
-                user: {
-                    name: message.member.displayName,
-                    cartas: [cartaTuya1, cartaTuya2],
-                    blackjack: false
-                },
-                udyr: {
-                    name: 'Udyr',
-                    cartas: [cartaUdyr]
-                },
-                baraja: baraja,
-                dinero: dinero
-            }
-            getResultado(message, partida)
-            if (getValorMano(partida.user.cartas) == 21) {
-                message.channel.send("**BLACKJACK**")
-                partida.user.blackjack = true
-            }
-            games.set(message.author.id, partida)
-            var timeout = setTimeout((partida, userID) => {
-                message.channel.send(`La partida de ${partida.user.name} se ha terminado porque se acabó el tiempo`)
-                games.delete(userID)
-                timeouts.delete(userID)
-            }, 10 * 60 * 1000, partida, message.author.id);
-            timeouts.set(message.author.id, timeout)
-        } else if (cmd == "carta") {
+            var partida = games.get(message.author.id)
+            juegaUdyr(partida)
+            finalPartida(message, partida)
+            return
+        }
+        if (args.join(" ").includes("carta")) {
             if (!games.get(message.author.id)) {
                 return message.reply("No tienes una partida empezada")
             }
@@ -97,14 +47,9 @@ module.exports = {
             } else {
                 getResultado(message, partida)
             }
-        } else if (cmd == "paso" || cmd == "pasar" || cmd == "plantar" || cmd == "planto") {
-            if (!games.get(message.author.id)) {
-                return message.reply("No tienes una partida empezada")
-            }
-            var partida = games.get(message.author.id)
-            juegaUdyr(partida)
-            finalPartida(message, partida)
-        } else if (cmd == "doblar") {
+            return
+        }
+        if (args.join("").includes("doblar")) {
             if (!games.get(message.author.id)) {
                 return message.reply("No tienes una partida empezada")
             }
@@ -122,7 +67,67 @@ module.exports = {
                 juegaUdyr(partida)
                 finalPartida(message, partida)
             }
+            return
         }
+        if (args.join("").trim() == "") {
+            return message.channel.send("**COMO SE JUEGA:**\n"
+                + "**OBJETIVO:**" + "\n"
+                + "Robar cartas hasta sumar en total 21 o acercarte lo máximo posible a ese valor sin parte o pierdes.\nLas figuras cuentan como 10 y los ases valen 1 o 11 (está scripteado de tal manera que te cogera el valor adecuado para tu situación)." + "\n"
+                + "**CREAR PARTIDA:**" + "\n"
+                + "Las partidas duran 10 min, si tardas más de eso en jugar la partida se cerrará automaticamente y tendrás que crear otra." + "\n"
+                + "udyr blackjack _dinero a apostar_ (Ejemplo: udyr blackjack 100)" + "\n"
+                + "**COMO JUGAR:**" + "\n"
+                + "Tienes varias opciones" + "\n"
+                + "carta (Se te dará una carta más)" + "\n"
+                + "paso/pasar/plantar/planto (Te plantas y le toca a Udyr coger cartas hasta ganarte o perder)" + "\n"
+                + "doblar (Coges una ultima carta y doblas tu apuesta)" + "\n"
+            )
+        }
+        if (games.get(message.author.id)) {
+            return message.reply("Ya tienes una partida empezada")
+        }
+        var dinero = args[0]
+        if (isNaN(dinero)) {
+            return message.reply("No has escrito un numero valido de apuesta")
+        } else {
+            dinero = Math.floor(Number(dinero))
+            if (dinero <= 0) {
+                return message.reply("No puedes poner un numero menor o igual que 0")
+            }
+            if (dinero > profileData.udyrcoins) {
+                return message.reply("No tienes ese dinero. Si quieres aumentar tu saldo de udyrcoin haz un ingreso de 10€ en esta cuenta https://paypal.me/Superfalo")
+            }
+        }
+        var baraja = getBaraja()
+        var cartaTuya1 = getCarta(baraja)
+        var cartaTuya2 = getCarta(baraja)
+        var cartaUdyr = getCarta(baraja)
+        var partida = {
+            user: {
+                name: message.member.displayName,
+                cartas: [cartaTuya1, cartaTuya2],
+                blackjack: false
+            },
+            udyr: {
+                name: 'Udyr',
+                cartas: [cartaUdyr]
+            },
+            baraja: baraja,
+            dinero: dinero
+        }
+        getResultado(message, partida)
+        if (getValorMano(partida.user.cartas) == 21) {
+            message.channel.send("**BLACKJACK**")
+            partida.user.blackjack = true
+        }
+        games.set(message.author.id, partida)
+        var timeout = setTimeout((partida, userID) => {
+            message.channel.send(`La partida de ${partida.user.name} se ha terminado porque se acabó el tiempo`)
+            games.delete(userID)
+            timeouts.delete(userID)
+        }, 10 * 60 * 1000, partida, message.author.id);
+        timeouts.set(message.author.id, timeout)
+
         console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }
