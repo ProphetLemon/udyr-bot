@@ -47,7 +47,7 @@ async function configurarBolsa() {
             }
             var desplome = Math.floor(Math.random() * 8000) == 11 ? true : false
             var toTheMoon = Math.floor(Math.random() * 8000) == 11 ? true : false
-            var proximoValor = desplome ? Math.floor(valorFinal / 2) : toTheMoon ? Math.floor(valorFinal * 2) : Math.floor(valorFinal + random + (randn_bm(0, 1000, 1) - 500))
+            var proximoValor = desplome ? Math.floor(valorFinal / 2) : toTheMoon ? Math.floor(valorFinal * 2) : Math.floor(valorFinal + random + (randn_bm(0, 2000, 1) - 1000))
             if (proximoValor < 0) {
                 proximoValor = 0
             }
@@ -105,7 +105,7 @@ function actualizarRandom(t1, stock) {
     dateActualizarRandom.setSeconds(0)
     dateActualizarRandom.setMilliseconds(0)
     setTimeout(async (stock) => {
-        var random = stock.valorFinal == 0 ? 0 : Math.floor(randn_bm(0, 300, 1)) - 150
+        var random = stock.valorFinal == 0 ? 0 : Math.floor(randn_bm(0, 600, 1)) - 300
         await bolsaModel.findOneAndUpdate({
             nombre: stock.nombre
         }, {
