@@ -273,6 +273,8 @@ function getColor(stock) {
             return "#3598db"
         case "mercadona":
             return "#2dcc70"
+        case "viagra":
+            return "#2069e0"
         case "limon":
             return '#f1c50e'
         case "tigre":
