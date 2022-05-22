@@ -186,7 +186,7 @@ module.exports = {
         if (mensaje == "|:green_square:|:green_square:|:green_square:|:green_square:|:green_square:|") {
             message.channel.send(`Que vas de listo o que`)
             message.channel.send(`Udyr Wordle #${moment().startOf('day').diff(moment().startOf('year'), "days") + 1} ${resultadosPersonales.get(message.author.id).split("\n").length - 1}/6\n${resultadosPersonales.get(message.author.id)}`)
-            puntos = 120 - 20 * ((resultadosPersonales.get(message.author.id).split("\n").length - 1) - 1)
+            puntos = (120 - 20 * ((resultadosPersonales.get(message.author.id).split("\n").length - 1) - 1)) * 10
             if (dineros == true) {
                 message.channel.send(`Has ganado ${puntos} <:udyrcoin:961729720104419408>`)
             }
