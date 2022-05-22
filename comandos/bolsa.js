@@ -275,7 +275,7 @@ function getColor(stock) {
             return "#2dcc70"
         case "viagra":
             return "#2069e0"
-        case "limon":
+        case "criptolimon":
             return '#f1c50e'
         case "tigre":
             return "#ecf1f0"
