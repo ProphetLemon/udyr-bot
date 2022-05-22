@@ -47,7 +47,7 @@ async function configurarPayout(guild) {
         await model.save()
         payout = await payoutModel.findOne({ serverID: guild.id })
     }
-    setTimeout((guild) => {
+    setTimeout(async (guild) => {
         var personas = await profileModel.find({ wallet: { $ne: null } })
         for (let i = 0; i < personas.length; i++) {
             var persona = personas[i]
