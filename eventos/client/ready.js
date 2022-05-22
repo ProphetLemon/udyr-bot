@@ -81,7 +81,7 @@ async function borrar(stock) {
     for (let i = 0; i < personas.length; i++) {
         var persona = personas[i]
         var wallet = persona.wallet
-        if (wallet.get(stock.nombre)) {
+        if (wallet && wallet.get(stock.nombre)) {
             wallet.delete(stock.nombre)
             await profileModel.findOneAndUpdate({
                 userID: persona.userID,
