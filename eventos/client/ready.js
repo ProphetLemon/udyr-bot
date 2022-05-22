@@ -56,7 +56,7 @@ async function configurarPayout(guild) {
             for (var [key, value] of wallet) {
                 var stock = await bolsaModel.findOne({ nombre: key })
                 var valorEmpresa = getValorEmpresa(stock)
-                dinero += valorEmpresa * value * 0.05
+                dinero += Math.floor(valorEmpresa * value * 0.05)
             }
             await profileModel.findOneAndUpdate({
                 serverID: persona.serverID,
