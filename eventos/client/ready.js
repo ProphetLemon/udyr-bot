@@ -49,6 +49,7 @@ async function configurarPayout(guild) {
     }
     setTimeout(async (guild) => {
         var personas = await profileModel.find({ wallet: { $ne: null } })
+        var bolsaChannel = guild.channels.cache.find(channel => channel.id === "976611174915375174" && channel.isText())
         for (let i = 0; i < personas.length; i++) {
             var persona = personas[i]
             var wallet = persona.wallet
@@ -58,6 +59,7 @@ async function configurarPayout(guild) {
                 var valorEmpresa = getValorEmpresa(stock)
                 dinero += Math.floor(valorEmpresa * value * 0.05)
             }
+            bolsaChannel.send(`<@${persona.userID}>, han pasado dos días y los dividendos de tus acciones te han otorgado ${dinero}<:udyrcoin:961729720104419408>`)
             await profileModel.findOneAndUpdate({
                 serverID: persona.serverID,
                 userID: persona.userID
