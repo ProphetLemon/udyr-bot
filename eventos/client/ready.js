@@ -1,10 +1,11 @@
-const { Client, Discord } = require("discord.js");
+const { Client, Discord, Guild } = require("discord.js");
 const profileModel = require('../../models/profileSchema');
 const roboModel = require('../../models/roboSchema');
 const loteriaModel = require('../../models/loteriaSchema')
 const boletoModel = require('../../models/boletoSchema');
 const impuestoModel = require('../../models/impuestoSchema')
 const bolsaModel = require('../../models/bolsaSchema')
+const payoutModel = require('../../models/payoutSchema')
 /**
  * @param {Discord} Discord
  * @param {Client} client
@@ -23,8 +24,73 @@ module.exports = async (Discord, client) => {
         configurarLoteria(guild, textChannel, loteriaBBDD)
     }
     configurarBolsa()
+    configurarPayout(guild)
 }
 
+/**
+ * 
+ * @param {Guild} guild 
+ */
+async function configurarPayout(guild) {
+    var payout = await payoutModel.findOne({ serverID: guild.id })
+    var hoy = new Date()
+    if (!payout) {
+        var datePago = new Date()
+        datePago.setHours(12)
+        datePago.setMinutes(30)
+        datePago.setSeconds(0)
+        datePago.setMilliseconds(0)
+        let model = await payoutModel.create({
+            serverID: guild.id,
+            datePago: datePago
+        })
+        await model.save()
+        payout = await payoutModel.findOne({ serverID: guild.id })
+    }
+    setTimeout((guild) => {
+        var personas = await profileModel.find({ wallet: { $ne: null } })
+        for (let i = 0; i < personas.length; i++) {
+            var persona = personas[i]
+            var wallet = persona.wallet
+            var dinero = 0
+            for (var [key, value] of wallet) {
+                var stock = await bolsaModel.findOne({ nombre: key })
+                var valorEmpresa = getValorEmpresa(stock)
+                dinero += valorEmpresa * value * 0.05
+            }
+            await profileModel.findOneAndUpdate({
+                serverID: persona.serverID,
+                userID: persona.userID
+            }, {
+                $inc: {
+                    udyrcoins: dinero
+                }
+            })
+        }
+        await payoutModel.findOneAndUpdate({
+            serverID: guild.id
+        }, {
+            datePago: moment().add(2, "days").toDate()
+        })
+        configurarPayout(guild)
+    }, payout.datePago - hoy, guild);
+    console.log("Se han configurado los pagos")
+}
+function getValorEmpresa(stock) {
+    var t1 = new Date()
+    t1.setSeconds(0)
+    t1.setMilliseconds(0)
+    while (t1.getMinutes() % 5 != 0) {
+        t1 = moment(t1).add(-1, "minutes").toDate()
+    }
+    var dateFinal = stock.dateFinal
+    var valorInicial = stock.valorInicial
+    var valorFinal = stock.valorFinal
+    var random = stock.random
+    var timestep = Math.floor((((dateFinal - t1) / 1000) / 60) / 5)
+    var valorActual = Math.floor(valorInicial + (valorFinal - valorInicial) / 12 * (12 - timestep) + random)
+    return valorActual
+}
 async function configurarBolsa() {
     var acciones = await bolsaModel.find({})
     for (let i = 0; i < acciones.length; i++) {
