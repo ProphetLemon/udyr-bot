@@ -42,7 +42,7 @@ module.exports = {
         if (profileData.userID != message.author.id || moment(profileData.dailyGift).startOf('day').diff(moment(hoy).startOf('day'), "days") == 0 || ((profileData.wordle != undefined && moment(hoy).format("DD/MM/YYYY") == profileData.wordle) || (profileData.wordleEmpezado != undefined && profileData.wordleEmpezado == true))) {
             return message.channel.send(`Tiene${message.author.id == profileData.userID ? "s" : ""} ${profileData.udyrcoins} <:udyrcoin:961729720104419408>`)
         } else {
-            const randomNumber = Math.floor(Math.random() * 31) + 20;
+            const randomNumber = (Math.floor(Math.random() * 31) + 20) * 10;
             await profileModel.findOneAndUpdate(
                 {
                     userID: profileData.userID
