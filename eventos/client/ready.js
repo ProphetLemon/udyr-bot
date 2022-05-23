@@ -134,7 +134,7 @@ async function configurarBolsa() {
                     historico: historico
                 }
             })
-            configurarBolsa()
+            await configurarBolsa()
         }, dateFinal - t1, stock);
         actualizarRandom(t1, stock)
     }
