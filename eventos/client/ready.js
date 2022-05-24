@@ -93,12 +93,12 @@ function getValorEmpresa(stock) {
     var valorActual = Math.floor(valorInicial + (valorFinal - valorInicial) / 12 * (12 - timestep) + random)
     return valorActual
 }
-async function configurarBolsa() {
+async function configurarBolsa(dateFinal) {
     var acciones = await bolsaModel.find({})
     for (let i = 0; i < acciones.length; i++) {
         var stock = acciones[i]
         var t1 = new Date()
-        var dateFinal = stock.dateFinal
+        var dateFinal = dateFinal ? dateFinal : stock.dateFinal
         setTimeout(async (stock) => {
             var dateFinal = stock.dateFinal
             var valorFinal = stock.valorFinal
@@ -134,7 +134,7 @@ async function configurarBolsa() {
                     historico: historico
                 }
             })
-            await configurarBolsa()
+            await configurarBolsa(dateFinal)
         }, dateFinal - t1, stock);
         actualizarRandom(t1, stock)
     }
