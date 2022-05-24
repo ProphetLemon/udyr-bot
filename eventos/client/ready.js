@@ -102,7 +102,7 @@ async function configurarBolsa(dateFinal) {
         setTimeout(async (stock) => {
             var dateFinal = stock.dateFinal
             var valorFinal = stock.valorFinal
-            if (valorFinal == 0) {
+            if (valorFinal <= 0) {
                 await borrar(stock)
                 return
             }
@@ -173,7 +173,7 @@ function actualizarRandom(t1, stock) {
     dateActualizarRandom.setSeconds(0)
     dateActualizarRandom.setMilliseconds(0)
     setTimeout(async (stock) => {
-        var random = stock.valorFinal == 0 ? 0 : Math.floor(randn_bm(0, 600, 1)) - 300
+        var random = stock.valorFinal <= 0 ? 0 : Math.floor(randn_bm(0, 600, 1)) - 300
         await bolsaModel.findOneAndUpdate({
             nombre: stock.nombre
         }, {

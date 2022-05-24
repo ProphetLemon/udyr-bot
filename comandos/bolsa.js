@@ -208,6 +208,9 @@ module.exports = {
             }
             cantidad = Number(cantidad)
             var valorEmpresa = getValorEmpresa(stock)
+            if (valorEmpresa <= 0) {
+                return message.reply("La bolsa no permite la compra de este activo por ahora.")
+            }
             var dineroAGastar = valorEmpresa * cantidad
             while (profileData.udyrcoins < dineroAGastar) {
                 cantidad = cantidad - 1
