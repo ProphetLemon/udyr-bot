@@ -32,7 +32,13 @@ module.exports = {
             if (profileData.historial.toObject().length == 0) {
                 return message.reply("No tienes ninguna transacción reciente")
             }
-            return message.author.send(profileData.historial.toObject().join("\n")).then(msg => {
+            var historial = profileData.historial.toObject()
+            var mensaje = historial.join("\n")
+            while (mensaje.length > 2000) {
+                historial.splice(0, 1)
+                mensaje = historial.join("\n")
+            }
+            return message.author.send(mensaje).then(msg => {
                 if (message.guild) {
                     message.delete()
                 }
