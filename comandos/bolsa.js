@@ -71,6 +71,9 @@ module.exports = {
                 return message.reply(`No tienes tantas acciones de ${nombre}. ${superfalo}`)
             }
             var valorEmpresa = getValorEmpresa(stock)
+            if (valorEmpresa <= 0) {
+                return message.reply("La bolsa no permite la compra de este activo por ahora.")
+            }
             var dineroAGanar = valorEmpresa * cantidad
             wallet.set(nombre, wallet.get(nombre) - cantidad)
             if (wallet.get(nombre) == 0) {
