@@ -102,7 +102,7 @@ async function configurarBolsa(dateFinal) {
         setTimeout(async (stock) => {
             var dateFinal = stock.dateFinal
             var valorFinal = stock.valorFinal
-            if (valorFinal == 0) {
+            if (valorFinal <= 0) {
                 await borrar(stock)
                 return
             }
