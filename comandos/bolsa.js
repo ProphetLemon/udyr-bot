@@ -88,7 +88,7 @@ module.exports = {
                 nombre: stock.nombre
             }, {
                 $set: {
-                    valorFinal: Math.floor(valorEmpresa - 0.1 * valorEmpresa * Math.log10(cantidad))
+                    valorFinal: Math.floor(stock.valorInicial - 0.1 * valorEmpresa * Math.log10(cantidad))
                 }
             })
             await profileModel.findOneAndUpdate({
@@ -237,7 +237,7 @@ module.exports = {
                 nombre: stock.nombre
             }, {
                 $set: {
-                    valorFinal: Math.floor(valorEmpresa + 0.1 * valorEmpresa * Math.log10(cantidad))
+                    valorFinal: Math.floor(stock.valorInicial + 0.1 * valorEmpresa * Math.log10(cantidad))
                 }
             })
             await profileModel.findOneAndUpdate({
