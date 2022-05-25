@@ -185,6 +185,9 @@ function actualizarRandom(t1, stock) {
     dateActualizarRandom.setMilliseconds(0)
     setTimeout(async (stock) => {
         var random = stock.valorFinal <= 0 ? 0 : Math.floor(randn_bm(0, 600, 1)) - 300
+        if (stock.valorFinal + random <= 0) {
+            random = -stock.valorFinal
+        }
         await bolsaModel.findOneAndUpdate({
             nombre: stock.nombre
         }, {
