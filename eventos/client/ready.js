@@ -136,14 +136,14 @@ async function configurarAccion(accion) {
         })
         await configurarAccion(accion)
     }, dateFinal - t1, accion);
-    await actualizarRandom(t1, accion)
+    actualizarRandom(t1, accion)
     console.log(`${accion.nombre} configurado!`)
 }
 async function configurarBolsa() {
     var acciones = await bolsaModel.find({})
     for (let i = 0; i < acciones.length; i++) {
         var accion = acciones[i]
-        configurarAccion(accion)
+        await configurarAccion(accion)
     }
 }
 
@@ -151,11 +151,16 @@ async function borrar(stock) {
     await bolsaModel.findOneAndRemove({
         nombre: stock.nombre
     })
-    var personas = await profileModel.find({})
+    var personas = await profileModel.find({
+        $and: [
+            { wallet: { $ne: null } },
+            { wallet: { $ne: [] } }
+        ]
+    })
     for (let i = 0; i < personas.length; i++) {
         var persona = personas[i]
         var wallet = persona.wallet
-        if (wallet && wallet.get(stock.nombre)) {
+        if (wallet.get(stock.nombre)) {
             wallet.delete(stock.nombre)
             await profileModel.findOneAndUpdate({
                 userID: persona.userID,

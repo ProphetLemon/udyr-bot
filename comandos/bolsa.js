@@ -275,7 +275,7 @@ function getValorEmpresa(stock) {
 
 function getColor(stock) {
     switch (stock.nombre) {
-        case "udyrcripto":
+        case "aidacoin":
             return "#9a59b5"
         case "oso":
             return "#be651c"
