@@ -276,6 +276,7 @@ function getValorEmpresa(stock) {
 function getColor(stock) {
     switch (stock.nombre) {
         case "aidacoin":
+        case "gigachad":
             return "#9a59b5"
         case "oso":
             return "#be651c"
