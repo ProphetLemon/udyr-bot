@@ -242,6 +242,7 @@ async function configurarLoteria(guild, textChannel, loteriaBBDD) {
     var dateNow = new Date()
     var dateLoteria = new Date()
     dateLoteria.setDate(loteriaBBDD.dia.getDate())
+    dateLoteria.setMonth(loteriaBBDD.dia.getMonth())
     dateLoteria.setHours(loteriaBBDD.dia.getHours())
     dateLoteria.setMinutes(loteriaBBDD.dia.getMinutes())
     dateLoteria.setFullYear(loteriaBBDD.dia.getFullYear())
