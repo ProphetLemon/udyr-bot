@@ -76,11 +76,11 @@ async function felicitarDia(message) {
         })
         var hora = hoy.getHours()
         if (hora >= 21 || hora < 5) {
-            message.channel.send("Primero de todo, buenas noches")
+            message.channel.send("Primero de todo, buenas noches <:bloodtrail:979874011632779355>")
         } else if (hora >= 5 && hora < 13) {
-            message.channel.send("Primero de todo, buenos dias")
+            message.channel.send("Primero de todo, buenos dias <:bloodtrail:979874011632779355>")
         } else if (hora >= 13 && hora < 21) {
-            message.channel.send("Primero de todo, buenos tardes")
+            message.channel.send("Primero de todo, buenos tardes <:bloodtrail:979874011632779355>")
         }
     }
 }
