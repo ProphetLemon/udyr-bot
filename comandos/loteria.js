@@ -79,7 +79,7 @@ module.exports = {
             var discurso = []
             discurso.push("BIEVENIDOS A LA LOTERIA DE UDYR")
             discurso.push(`EN ESTE EVENTO HAN PARTICIPADO ${boletos.length} PERSONAS`)
-            discurso.push(`Y 3 PERSONAS SE REPARTIRAN DE MANERA POCO JUSTA LOS ${serverDinero.udyrcoins} <:udyrcoin:961729720104419408>`)
+            discurso.push(`Y 3 PERSONAS SE REPARTIRAN DE MANERA POCO JUSTA 100.000 <:udyrcoin:961729720104419408>`)
             discurso.push(`EL PRIMER PREMIO ES PARA:`)
             discurso.push(`<@!${ganador.userID}>`)
             discurso.push(`EL SEGUNDO PREMIO ES PARA:`)
