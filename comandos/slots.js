@@ -78,9 +78,10 @@ module.exports = {
         }
         var dineroGanado = -(dinero * tiradas)
         for (let i = 0; i < tiradas; i++) {
-            var mensaje = await getResultadoSpin(partida, dinero, message, dineroGanado)
-            if (mensaje.includes("Has ganado")) {
-                message.reply("Tirada " + (i + 1) + `de ${message.member.displayName}\n` + mensaje)
+            var resultado = await getResultadoSpin(partida, dinero, message)
+            if (resultado[0].includes("Has ganado")) {
+                message.reply("Tirada " + (i + 1) + ` de ${message.member.displayName}\n` + mensaje)
+                dineroGanado += resultado[1]
             } else {
                 message.channel.send("Tirada " + (i + 1) + `de ${message.member.displayName}\n` + mensaje)
             }
@@ -92,7 +93,8 @@ module.exports = {
     }
 }
 
-async function getResultadoSpin(partida, dinero, message, dineroGanado) {
+async function getResultadoSpin(partida, dinero, message) {
+    var dineroGanado = 0
     var mensaje = ""
     //RUEDA1
     var spinRueda1 = Math.floor(Math.random() * partida.rueda1.length)
@@ -293,7 +295,7 @@ async function getResultadoSpin(partida, dinero, message, dineroGanado) {
         default:
             mensaje += "No has conseguido nada..."
     }
-    return mensaje
+    return [mensaje, dineroGanado]
 }
 
 /**
