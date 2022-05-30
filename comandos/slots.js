@@ -76,16 +76,23 @@ module.exports = {
             }
             partidas.set(message.author.id, partida)
         }
+        var dineroGanado = -(dinero * tiradas)
         for (let i = 0; i < tiradas; i++) {
-            var mensaje = await getResultadoSpin(partida, dinero, message)
-            message.reply("Tirada " + (i + 1) + "\n" + mensaje)
+            var mensaje = await getResultadoSpin(partida, dinero, message, dineroGanado)
+            if (mensaje.includes("Has ganado")) {
+                message.reply("Tirada " + (i + 1) + `de ${message.member.displayName}\n` + mensaje)
+            } else {
+                message.channel.send("Tirada " + (i + 1) + `de ${message.member.displayName}\n` + mensaje)
+            }
+
         }
+        message.reply("Balance: " + dineroGanado)
         partidas.delete(message.author.id)
         console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }
 
-async function getResultadoSpin(partida, dinero, message) {
+async function getResultadoSpin(partida, dinero, message, dineroGanado) {
     var mensaje = ""
     //RUEDA1
     var spinRueda1 = Math.floor(Math.random() * partida.rueda1.length)
@@ -124,6 +131,7 @@ async function getResultadoSpin(partida, dinero, message) {
                     udyrcoins: -(dinero * 500)
                 }
             })
+            dineroGanado += dinero * 500
             break;
         case ":heart:|:heart:|:heart:":
             mensaje += "Has ganado " + dinero * 100 + "<:udyrcoin:961729720104419408>"
@@ -142,6 +150,7 @@ async function getResultadoSpin(partida, dinero, message) {
                     udyrcoins: -(dinero * 100)
                 }
             })
+            dineroGanado += dinero * 100
             break;
         case ":green_heart:|:green_heart:|:green_heart:":
             mensaje += "Has ganado " + dinero * 50 + "<:udyrcoin:961729720104419408>"
@@ -160,6 +169,7 @@ async function getResultadoSpin(partida, dinero, message) {
                     udyrcoins: -(dinero * 50)
                 }
             })
+            dineroGanado += dinero * 50
             break;
         case ":bear:|:bear:|:bear:":
             mensaje += "Has ganado " + dinero * 20 + "<:udyrcoin:961729720104419408>"
@@ -178,6 +188,7 @@ async function getResultadoSpin(partida, dinero, message) {
                     udyrcoins: -(dinero * 20)
                 }
             })
+            dineroGanado += dinero * 20
             break;
         case ":bird:|:bird:|:bird:":
             mensaje += "Has ganado " + dinero * 16 + "<:udyrcoin:961729720104419408>"
@@ -196,6 +207,7 @@ async function getResultadoSpin(partida, dinero, message) {
                     udyrcoins: -(dinero * 16)
                 }
             })
+            dineroGanado += dinero * 16
             break;
         case ":turtle:|:turtle:|:turtle:":
             mensaje += "Has ganado " + dinero * 12 + "<:udyrcoin:961729720104419408>"
@@ -214,6 +226,7 @@ async function getResultadoSpin(partida, dinero, message) {
                     udyrcoins: -(dinero * 12)
                 }
             })
+            dineroGanado += dinero * 12
             break;
         case ":tiger:|:tiger:|:tiger:":
             mensaje += "Has ganado " + dinero * 8 + "<:udyrcoin:961729720104419408>"
@@ -232,6 +245,7 @@ async function getResultadoSpin(partida, dinero, message) {
                     udyrcoins: -(dinero * 8)
                 }
             })
+            dineroGanado += dinero * 8
             break;
         case ":monkey_face:|:monkey_face:|:monkey_face:":
             mensaje += "Has ganado " + dinero * 4 + "<:udyrcoin:961729720104419408>"
@@ -250,6 +264,7 @@ async function getResultadoSpin(partida, dinero, message) {
                     udyrcoins: -(dinero * 4)
                 }
             })
+            dineroGanado += dinero * 4
             break;
         case ":blue_heart:|:heart:|:green_heart:":
         case ":blue_heart:|:green_heart:|:heart:":
@@ -273,6 +288,7 @@ async function getResultadoSpin(partida, dinero, message) {
                     udyrcoins: -(dinero * 2)
                 }
             })
+            dineroGanado += dinero * 2
             break;
         default:
             mensaje += "No has conseguido nada..."
