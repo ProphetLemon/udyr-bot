@@ -84,7 +84,7 @@ module.exports = {
                 message.reply("Tirada " + (i + 1) + ` de ${message.member.displayName}\n` + mensaje)
                 dineroGanado += resultado[1]
             } else {
-                message.channel.send("Tirada " + (i + 1) + `de ${message.member.displayName}\n` + mensaje)
+                message.channel.send("Tirada " + (i + 1) + ` de ${message.member.displayName}\n` + mensaje)
             }
 
         }
