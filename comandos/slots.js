@@ -67,31 +67,33 @@ module.exports = {
                 udyrcoins: (dinero * tiradas)
             }
         })
-        var partida = partidas.get(message.author.id)
-        if (!partida) {
-            const channel = await message.guild.channels.create(`slots: ${message.author.tag}`, {
-                type: 'GUILD_TEXT',
-                parent: "975840789273903114",
-                permissionOverwrites: [
-                    {
-                        id: message.guild.roles.everyone,
-                        deny: ["SEND_MESSAGES", "VIEW_CHANNEL"]
-                    },
-                    {
-                        id: message.author.id,
-                        allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
-                    }
-                ]
-            })
-            channel.send(`<@${message.author.id}>`)
-            partida = {
-                rueda1: getRueda(),
-                rueda2: getRueda(),
-                rueda3: getRueda(),
-                channel: channel
-            }
-            partidas.set(message.author.id, partida)
+        if (partidas.get(message.author.id)) {
+            return message.reply("ya tienes un slot activo")
         }
+
+        const channel = await message.guild.channels.create(`slots: ${message.author.tag}`, {
+            type: 'GUILD_TEXT',
+            parent: "975840789273903114",
+            permissionOverwrites: [
+                {
+                    id: message.guild.roles.everyone,
+                    deny: ["SEND_MESSAGES", "VIEW_CHANNEL"]
+                },
+                {
+                    id: message.author.id,
+                    allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
+                }
+            ]
+        })
+        channel.send(`<@${message.author.id}>`)
+        partida = {
+            rueda1: getRueda(),
+            rueda2: getRueda(),
+            rueda3: getRueda(),
+            channel: channel
+        }
+        partidas.set(message.author.id, partida)
+
         var dineroGanado = -(dinero * tiradas)
         for (let i = 0; i < tiradas; i++) {
             var resultado = await getResultadoSpin(partida, dinero, message)
@@ -107,8 +109,8 @@ module.exports = {
         partida.channel.send("Balance: " + dineroGanado)
         setTimeout(() => {
             partida.channel.delete()
+            partidas.delete(message.author.id)
         }, 6000);
-        partidas.delete(message.author.id)
         console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }
