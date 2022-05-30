@@ -69,10 +69,26 @@ module.exports = {
         })
         var partida = partidas.get(message.author.id)
         if (!partida) {
+            const channel = await message.guild.channels.create(`slots: ${message.author.tag}`, {
+                type: 'GUILD_TEXT',
+                parent: "975840789273903114",
+                permissionOverwrites: [
+                    {
+                        id: message.guild.roles.everyone,
+                        deny: ["SEND_MESSAGES", "VIEW_CHANNEL"]
+                    },
+                    {
+                        id: message.author.id,
+                        allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
+                    }
+                ]
+            })
+            channel.send(`<@${message.author.id}>`)
             partida = {
                 rueda1: getRueda(),
                 rueda2: getRueda(),
                 rueda3: getRueda(),
+                channel: channel
             }
             partidas.set(message.author.id, partida)
         }
@@ -81,14 +97,17 @@ module.exports = {
             var resultado = await getResultadoSpin(partida, dinero, message)
             var mensaje = resultado[0]
             if (resultado[0].includes("Has ganado")) {
-                message.reply("Tirada " + (i + 1) + ` de ${message.member.displayName}\n` + mensaje)
+                partida.channel.send("Tirada " + (i + 1) + ` de <@${message.member.id}>\n` + mensaje)
                 dineroGanado += resultado[1]
             } else {
-                message.channel.send("Tirada " + (i + 1) + ` de ${message.member.displayName}\n` + mensaje)
+                partida.channel.send("Tirada " + (i + 1) + ` de ${message.member.displayName}\n` + mensaje)
             }
 
         }
-        message.reply("Balance: " + dineroGanado)
+        partida.channel.send("Balance: " + dineroGanado)
+        setTimeout(() => {
+            partida.channel.delete()
+        }, 6000);
         partidas.delete(message.author.id)
         console.log(`FIN ${cmd.toUpperCase()}`)
     }
