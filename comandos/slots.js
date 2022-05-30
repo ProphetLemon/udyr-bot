@@ -2,6 +2,7 @@ const { Message, Client, MessageEmbed } = require('discord.js');
 const DiscordAPI = require('discord.js');
 var partidas = new Map()
 const profileModel = require('../models/profileSchema');
+const impuestoModel = require('../models/impuestoSchema')
 module.exports = {
     name: 'tragaperra',
     aliases: ['tragaperras', 'tp', 'jp', 'jackpot', 'slot', 'slots'],
@@ -59,6 +60,13 @@ module.exports = {
                 udyrcoins: -(dinero * tiradas)
             }
         })
+        await impuestoModel.findOneAndUpdate({
+            serverID: message.guild.id
+        }, {
+            $inc: {
+                udyrcoins: (dinero * tiradas)
+            }
+        })
         var partida = partidas.get(message.author.id)
         if (!partida) {
             partida = {
@@ -109,6 +117,13 @@ async function getResultadoSpin(partida, dinero, message) {
                     udyrcoins: dinero * 500
                 }
             })
+            await impuestoModel.findOneAndUpdate({
+                serverID: message.guild.id
+            }, {
+                $inc: {
+                    udyrcoins: -(dinero * 500)
+                }
+            })
             break;
         case ":heart:|:heart:|:heart:":
             mensaje += "Has ganado " + dinero * 100 + "<:udyrcoin:961729720104419408>"
@@ -118,6 +133,13 @@ async function getResultadoSpin(partida, dinero, message) {
             }, {
                 $inc: {
                     udyrcoins: dinero * 100
+                }
+            })
+            await impuestoModel.findOneAndUpdate({
+                serverID: message.guild.id
+            }, {
+                $inc: {
+                    udyrcoins: -(dinero * 100)
                 }
             })
             break;
@@ -131,6 +153,13 @@ async function getResultadoSpin(partida, dinero, message) {
                     udyrcoins: dinero * 50
                 }
             })
+            await impuestoModel.findOneAndUpdate({
+                serverID: message.guild.id
+            }, {
+                $inc: {
+                    udyrcoins: -(dinero * 50)
+                }
+            })
             break;
         case ":bear:|:bear:|:bear:":
             mensaje += "Has ganado " + dinero * 20 + "<:udyrcoin:961729720104419408>"
@@ -140,6 +169,13 @@ async function getResultadoSpin(partida, dinero, message) {
             }, {
                 $inc: {
                     udyrcoins: dinero * 20
+                }
+            })
+            await impuestoModel.findOneAndUpdate({
+                serverID: message.guild.id
+            }, {
+                $inc: {
+                    udyrcoins: -(dinero * 20)
                 }
             })
             break;
@@ -153,6 +189,13 @@ async function getResultadoSpin(partida, dinero, message) {
                     udyrcoins: dinero * 16
                 }
             })
+            await impuestoModel.findOneAndUpdate({
+                serverID: message.guild.id
+            }, {
+                $inc: {
+                    udyrcoins: -(dinero * 16)
+                }
+            })
             break;
         case ":turtle:|:turtle:|:turtle:":
             mensaje += "Has ganado " + dinero * 12 + "<:udyrcoin:961729720104419408>"
@@ -162,6 +205,13 @@ async function getResultadoSpin(partida, dinero, message) {
             }, {
                 $inc: {
                     udyrcoins: dinero * 12
+                }
+            })
+            await impuestoModel.findOneAndUpdate({
+                serverID: message.guild.id
+            }, {
+                $inc: {
+                    udyrcoins: -(dinero * 12)
                 }
             })
             break;
@@ -175,6 +225,13 @@ async function getResultadoSpin(partida, dinero, message) {
                     udyrcoins: dinero * 8
                 }
             })
+            await impuestoModel.findOneAndUpdate({
+                serverID: message.guild.id
+            }, {
+                $inc: {
+                    udyrcoins: -(dinero * 8)
+                }
+            })
             break;
         case ":monkey_face:|:monkey_face:|:monkey_face:":
             mensaje += "Has ganado " + dinero * 4 + "<:udyrcoin:961729720104419408>"
@@ -184,6 +241,13 @@ async function getResultadoSpin(partida, dinero, message) {
             }, {
                 $inc: {
                     udyrcoins: dinero * 4
+                }
+            })
+            await impuestoModel.findOneAndUpdate({
+                serverID: message.guild.id
+            }, {
+                $inc: {
+                    udyrcoins: -(dinero * 4)
                 }
             })
             break;
@@ -200,6 +264,13 @@ async function getResultadoSpin(partida, dinero, message) {
             }, {
                 $inc: {
                     udyrcoins: dinero * 2
+                }
+            })
+            await impuestoModel.findOneAndUpdate({
+                serverID: message.guild.id
+            }, {
+                $inc: {
+                    udyrcoins: -(dinero * 2)
                 }
             })
             break;
