@@ -69,14 +69,15 @@ module.exports = {
             partidas.set(message.author.id, partida)
         }
         for (let i = 0; i < tiradas; i++) {
-            message.reply("Tirada " + (i + 1) + "\n" + getResultadoSpin(partida, dinero, message))
+            var mensaje = await getResultadoSpin(partida, dinero, message)
+            message.reply("Tirada " + (i + 1) + "\n" + mensaje)
         }
         partidas.delete(message.author.id)
         console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }
 
-function getResultadoSpin(partida, dinero, message) {
+async function getResultadoSpin(partida, dinero, message) {
     var mensaje = ""
     //RUEDA1
     var spinRueda1 = Math.floor(Math.random() * partida.rueda1.length)
