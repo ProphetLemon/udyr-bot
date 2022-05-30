@@ -97,10 +97,10 @@ module.exports = {
             var resultado = await getResultadoSpin(partida, dinero, message)
             var mensaje = resultado[0]
             if (resultado[0].includes("Has ganado")) {
-                partida.channel.send("Tirada " + (i + 1) + ` de <@${message.member.id}>\n` + mensaje)
+                await partida.channel.send("Tirada " + (i + 1) + ` de <@${message.member.id}>\n` + mensaje)
                 dineroGanado += resultado[1]
             } else {
-                partida.channel.send("Tirada " + (i + 1) + ` de ${message.member.displayName}\n` + mensaje)
+                await partida.channel.send("Tirada " + (i + 1) + ` de ${message.member.displayName}\n` + mensaje)
             }
 
         }
