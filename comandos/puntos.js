@@ -22,7 +22,7 @@ module.exports = {
             let profile = await profileModel.create({
                 userID: message.author.id,
                 serverID: message.guild.id,
-                udyrcoins: 500,
+                udyrcoins: 1000,
                 dailyGift: ayer,
                 robar: ayer
             });
