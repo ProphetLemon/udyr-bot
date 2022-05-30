@@ -106,6 +106,7 @@ module.exports = {
             }
 
         }
+        message.channel.send("Balance: " + dineroGanado)
         partida.channel.send("Balance: " + dineroGanado)
         setTimeout(() => {
             partida.channel.delete()
