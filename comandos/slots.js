@@ -79,6 +79,7 @@ module.exports = {
         var dineroGanado = -(dinero * tiradas)
         for (let i = 0; i < tiradas; i++) {
             var resultado = await getResultadoSpin(partida, dinero, message)
+            var mensaje = resultado[0]
             if (resultado[0].includes("Has ganado")) {
                 message.reply("Tirada " + (i + 1) + ` de ${message.member.displayName}\n` + mensaje)
                 dineroGanado += resultado[1]
