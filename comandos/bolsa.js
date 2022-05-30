@@ -22,7 +22,9 @@ module.exports = {
         console.log(`INICIO ${cmd.toUpperCase()}`)
         if (message.channel.id != "976611174915375174") {
             return message.reply("Esto mejor en el canal de 'bolsa'").then(msg => {
-                message.delete()
+                if (message.guild) {
+                    message.delete()
+                }
                 setTimeout(() => {
                     msg.delete()
                 }, 8000);
