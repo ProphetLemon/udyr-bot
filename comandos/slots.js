@@ -86,32 +86,33 @@ module.exports = {
             ]
         })
         channel.send(`<@${message.author.id}>`)
-        partida = {
+        var partida = {
             rueda1: getRueda(),
             rueda2: getRueda(),
             rueda3: getRueda(),
-            channel: channel
+            channel: channel,
+            message: message
         }
         partidas.set(message.author.id, partida)
 
         var dineroGanado = -(dinero * tiradas)
         for (let i = 0; i < tiradas; i++) {
-            var resultado = await getResultadoSpin(partida, dinero, message)
+            var resultado = await getResultadoSpin(partida, dinero, partida.message)
             var mensaje = resultado[0]
             if (resultado[0].includes("Has ganado")) {
-                await partida.channel.send("Tirada " + (i + 1) + ` de <@${message.member.id}>\n` + mensaje)
+                await partida.channel.send("Tirada " + (i + 1) + ` de <@${partida.message.member.id}>\n` + mensaje)
                 dineroGanado += resultado[1]
             } else {
-                await partida.channel.send("Tirada " + (i + 1) + ` de ${message.member.displayName}\n` + mensaje)
+                await partida.channel.send("Tirada " + (i + 1) + ` de ${partida.message.member.displayName}\n` + mensaje)
             }
 
         }
-        message.channel.send("Balance: " + dineroGanado)
-        partida.channel.send("Balance: " + dineroGanado)
-        setTimeout(() => {
+        await message.channel.send("Balance: " + dineroGanado)
+        await partida.channel.send("Balance: " + dineroGanado)
+        setTimeout((message) => {
             partida.channel.delete()
             partidas.delete(message.author.id)
-        }, 6000);
+        }, 6000, partida.message);
         console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }
