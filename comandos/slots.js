@@ -70,30 +70,16 @@ module.exports = {
         if (partidas.get(message.author.id)) {
             return message.reply("ya tienes un slot activo")
         }
-
-        const channel = await message.guild.channels.create(`slots: ${message.author.tag}`, {
-            type: 'GUILD_TEXT',
-            parent: "975840789273903114",
-            permissionOverwrites: [
-                {
-                    id: message.guild.roles.everyone,
-                    deny: ["SEND_MESSAGES", "VIEW_CHANNEL"]
-                },
-                {
-                    id: message.author.id,
-                    allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
-                }
-            ]
-        })
-        channel.send(`<@${message.author.id}>`)
         var partida = {
             rueda1: getRueda(),
             rueda2: getRueda(),
             rueda3: getRueda(),
-            channel: channel,
+            channel: undefined,
             message: message,
             dinero: dinero
         }
+        partida.channel = await createChannel(partida.message)
+        partida.channel.send(`<@${message.author.id}>`)
         partidas.set(message.author.id, partida)
 
         var dineroGanado = -(dinero * tiradas)
@@ -113,9 +99,27 @@ module.exports = {
         setTimeout((message) => {
             partida.channel.delete()
             partidas.delete(message.author.id)
-        }, 6000, partida.message);
+        }, 10000, partida.message);
         console.log(`FIN ${cmd.toUpperCase()}`)
     }
+}
+
+async function createChannel(message) {
+    const channel = await message.guild.channels.create(`slots: ${message.author.tag}`, {
+        type: 'GUILD_TEXT',
+        parent: "975840789273903114",
+        permissionOverwrites: [
+            {
+                id: message.guild.roles.everyone,
+                deny: ["SEND_MESSAGES", "VIEW_CHANNEL"]
+            },
+            {
+                id: message.author.id,
+                allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
+            }
+        ]
+    })
+    return channel
 }
 
 async function getResultadoSpin(partida) {
