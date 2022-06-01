@@ -91,13 +91,14 @@ module.exports = {
             rueda2: getRueda(),
             rueda3: getRueda(),
             channel: channel,
-            message: message
+            message: message,
+            dinero: dinero
         }
         partidas.set(message.author.id, partida)
 
         var dineroGanado = -(dinero * tiradas)
         for (let i = 0; i < tiradas; i++) {
-            var resultado = await getResultadoSpin(partida, dinero, partida.message)
+            var resultado = await getResultadoSpin(partida)
             var mensaje = resultado[0]
             if (resultado[0].includes("Has ganado")) {
                 await partida.channel.send("Tirada " + (i + 1) + ` de <@${partida.message.member.id}>\n` + mensaje)
@@ -117,7 +118,7 @@ module.exports = {
     }
 }
 
-async function getResultadoSpin(partida, dinero, message) {
+async function getResultadoSpin(partida) {
     var dineroGanado = 0
     var mensaje = ""
     //RUEDA1
@@ -141,156 +142,156 @@ async function getResultadoSpin(partida, dinero, message) {
         + "|" + filaAbajo + "|\n"
     switch (filaMedio) {
         case ":blue_heart:|:blue_heart:|:blue_heart:":
-            mensaje += "Has ganado " + dinero * 500 + "<:udyrcoin:961729720104419408>"
+            mensaje += "Has ganado " + partida.dinero * 500 + "<:udyrcoin:961729720104419408>"
             await profileModel.findOneAndUpdate({
-                userID: message.author.id,
-                serverID: message.guild.id
+                userID: partida.message.author.id,
+                serverID: partida.message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: dinero * 500
+                    udyrcoins: partida.dinero * 500
                 }
             })
             await impuestoModel.findOneAndUpdate({
-                serverID: message.guild.id
+                serverID: partida.message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: -(dinero * 500)
+                    udyrcoins: -(partida.dinero * 500)
                 }
             })
-            dineroGanado += dinero * 500
+            dineroGanado += partida.dinero * 500
             break;
         case ":heart:|:heart:|:heart:":
-            mensaje += "Has ganado " + dinero * 100 + "<:udyrcoin:961729720104419408>"
+            mensaje += "Has ganado " + partida.dinero * 100 + "<:udyrcoin:961729720104419408>"
             await profileModel.findOneAndUpdate({
-                userID: message.author.id,
-                serverID: message.guild.id
+                userID: partida.message.author.id,
+                serverID: partida.message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: dinero * 100
+                    udyrcoins: partida.dinero * 100
                 }
             })
             await impuestoModel.findOneAndUpdate({
-                serverID: message.guild.id
+                serverID: partida.message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: -(dinero * 100)
+                    udyrcoins: -(partida.dinero * 100)
                 }
             })
-            dineroGanado += dinero * 100
+            dineroGanado += partida.dinero * 100
             break;
         case ":green_heart:|:green_heart:|:green_heart:":
-            mensaje += "Has ganado " + dinero * 50 + "<:udyrcoin:961729720104419408>"
+            mensaje += "Has ganado " + partida.dinero * 50 + "<:udyrcoin:961729720104419408>"
             await profileModel.findOneAndUpdate({
-                userID: message.author.id,
-                serverID: message.guild.id
+                userID: partida.message.author.id,
+                serverID: partida.message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: dinero * 50
+                    udyrcoins: partida.dinero * 50
                 }
             })
             await impuestoModel.findOneAndUpdate({
-                serverID: message.guild.id
+                serverID: partida.message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: -(dinero * 50)
+                    udyrcoins: -(partida.dinero * 50)
                 }
             })
-            dineroGanado += dinero * 50
+            dineroGanado += partida.dinero * 50
             break;
         case ":bear:|:bear:|:bear:":
-            mensaje += "Has ganado " + dinero * 20 + "<:udyrcoin:961729720104419408>"
+            mensaje += "Has ganado " + partida.dinero * 20 + "<:udyrcoin:961729720104419408>"
             await profileModel.findOneAndUpdate({
-                userID: message.author.id,
-                serverID: message.guild.id
+                userID: partida.message.author.id,
+                serverID: partida.message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: dinero * 20
+                    udyrcoins: partida.dinero * 20
                 }
             })
             await impuestoModel.findOneAndUpdate({
-                serverID: message.guild.id
+                serverID: partida.message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: -(dinero * 20)
+                    udyrcoins: -(partida.dinero * 20)
                 }
             })
-            dineroGanado += dinero * 20
+            dineroGanado += partida.dinero * 20
             break;
         case ":bird:|:bird:|:bird:":
-            mensaje += "Has ganado " + dinero * 16 + "<:udyrcoin:961729720104419408>"
+            mensaje += "Has ganado " + partida.dinero * 16 + "<:udyrcoin:961729720104419408>"
             await profileModel.findOneAndUpdate({
-                userID: message.author.id,
-                serverID: message.guild.id
+                userID: partida.message.author.id,
+                serverID: partida.message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: dinero * 16
+                    udyrcoins: partida.dinero * 16
                 }
             })
             await impuestoModel.findOneAndUpdate({
-                serverID: message.guild.id
+                serverID: partida.message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: -(dinero * 16)
+                    udyrcoins: -(partida.dinero * 16)
                 }
             })
-            dineroGanado += dinero * 16
+            dineroGanado += partida.dinero * 16
             break;
         case ":turtle:|:turtle:|:turtle:":
-            mensaje += "Has ganado " + dinero * 12 + "<:udyrcoin:961729720104419408>"
+            mensaje += "Has ganado " + partida.dinero * 12 + "<:udyrcoin:961729720104419408>"
             await profileModel.findOneAndUpdate({
-                userID: message.author.id,
-                serverID: message.guild.id
+                userID: partida.message.author.id,
+                serverID: partida.message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: dinero * 12
+                    udyrcoins: partida.dinero * 12
                 }
             })
             await impuestoModel.findOneAndUpdate({
-                serverID: message.guild.id
+                serverID: partida.message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: -(dinero * 12)
+                    udyrcoins: -(partida.dinero * 12)
                 }
             })
-            dineroGanado += dinero * 12
+            dineroGanado += partida.dinero * 12
             break;
         case ":tiger:|:tiger:|:tiger:":
-            mensaje += "Has ganado " + dinero * 8 + "<:udyrcoin:961729720104419408>"
+            mensaje += "Has ganado " + partida.dinero * 8 + "<:udyrcoin:961729720104419408>"
             await profileModel.findOneAndUpdate({
-                userID: message.author.id,
-                serverID: message.guild.id
+                userID: partida.message.author.id,
+                serverID: partida.message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: dinero * 8
+                    udyrcoins: partida.dinero * 8
                 }
             })
             await impuestoModel.findOneAndUpdate({
-                serverID: message.guild.id
+                serverID: partida.message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: -(dinero * 8)
+                    udyrcoins: -(partida.dinero * 8)
                 }
             })
-            dineroGanado += dinero * 8
+            dineroGanado += partida.dinero * 8
             break;
         case ":monkey_face:|:monkey_face:|:monkey_face:":
-            mensaje += "Has ganado " + dinero * 4 + "<:udyrcoin:961729720104419408>"
+            mensaje += "Has ganado " + partida.dinero * 4 + "<:udyrcoin:961729720104419408>"
             await profileModel.findOneAndUpdate({
-                userID: message.author.id,
-                serverID: message.guild.id
+                userID: partida.message.author.id,
+                serverID: partida.message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: dinero * 4
+                    udyrcoins: partida.dinero * 4
                 }
             })
             await impuestoModel.findOneAndUpdate({
-                serverID: message.guild.id
+                serverID: partida.message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: -(dinero * 4)
+                    udyrcoins: -(partida.dinero * 4)
                 }
             })
-            dineroGanado += dinero * 4
+            dineroGanado += partida.dinero * 4
             break;
         case ":blue_heart:|:heart:|:green_heart:":
         case ":blue_heart:|:green_heart:|:heart:":
@@ -298,23 +299,23 @@ async function getResultadoSpin(partida, dinero, message) {
         case ":green_heart:|:blue_heart:|:heart:":
         case ":green_heart:|:heart:|:blue_heart:":
         case ":green_heart:|:heart:|:blue_heart:":
-            mensaje += "Has ganado " + dinero * 2 + "<:udyrcoin:961729720104419408>"
+            mensaje += "Has ganado " + partida.dinero * 2 + "<:udyrcoin:961729720104419408>"
             await profileModel.findOneAndUpdate({
-                userID: message.author.id,
-                serverID: message.guild.id
+                userID: partida.message.author.id,
+                serverID: partida.message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: dinero * 2
+                    udyrcoins: partida.dinero * 2
                 }
             })
             await impuestoModel.findOneAndUpdate({
-                serverID: message.guild.id
+                serverID: partida.message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: -(dinero * 2)
+                    udyrcoins: -(partida.dinero * 2)
                 }
             })
-            dineroGanado += dinero * 2
+            dineroGanado += partida.dinero * 2
             break;
         default:
             mensaje += "No has conseguido nada..."
