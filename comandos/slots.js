@@ -333,14 +333,24 @@ async function getResultadoSpin(partida) {
  */
 function getRueda() {
     var rueda = []
-    rellenarArray(":blue_heart:", 2, rueda)
-    rellenarArray(":heart:", 5, rueda)
-    rellenarArray(":green_heart:", 7, rueda)
-    rellenarArray(":bear:", 8, rueda)
-    rellenarArray(":bird:", 9, rueda)
-    rellenarArray(":turtle:", 10, rueda)
-    rellenarArray(":tiger:", 11, rueda)
-    rellenarArray(":monkey_face:", 12, rueda)
+    /*  
+      rellenarArray(":blue_heart:", 2, rueda)
+      rellenarArray(":heart:", 5, rueda)
+      rellenarArray(":green_heart:", 7, rueda)
+      rellenarArray(":bear:", 8, rueda)
+      rellenarArray(":bird:", 9, rueda)
+      rellenarArray(":turtle:", 10, rueda)
+      rellenarArray(":tiger:", 11, rueda)
+      rellenarArray(":monkey_face:", 12, rueda)
+    */
+    rellenarArray(":blue_heart:", 1, rueda)
+    rellenarArray(":heart:", 1, rueda)
+    rellenarArray(":green_heart:", 1, rueda)
+    rellenarArray(":bear:", 1, rueda)
+    rellenarArray(":bird:", 1, rueda)
+    rellenarArray(":turtle:", 1, rueda)
+    rellenarArray(":tiger:", 1, rueda)
+    rellenarArray(":monkey_face:", 1, rueda)
     return randomizeArray(rueda)
 }
 /**
