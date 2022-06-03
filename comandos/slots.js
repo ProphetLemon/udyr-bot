@@ -90,7 +90,7 @@ module.exports = {
                 await partida.channel.send("Tirada " + (i + 1) + ` de <@${partida.message.member.id}>\n${mensaje}\nBalance de ${partida.message.member.displayName}: ${partida.dineroGanado}<:udyrcoin:961729720104419408>`)
                 partida.dineroGanado += resultado[1]
             } else {
-                await partida.channel.send("Tirada " + (i + 1) + ` de ${partida.message.member.displayName}\n${mesaje}\nBalance de ${partida.message.member.displayName}: ${partida.dineroGanado}<:udyrcoin:961729720104419408>`)
+                await partida.channel.send("Tirada " + (i + 1) + ` de ${partida.message.member.displayName}\n${mensaje}\nBalance de ${partida.message.member.displayName}: ${partida.dineroGanado}<:udyrcoin:961729720104419408>`)
             }
 
         }
