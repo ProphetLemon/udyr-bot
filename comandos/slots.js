@@ -52,6 +52,9 @@ module.exports = {
         if (profileData.udyrcoins < (dinero * tiradas)) {
             return message.reply("No tienes esa cantidad de dinero bobo")
         }
+        if (partidas.get(message.author.id)) {
+            return message.reply("ya tienes un slot activo")
+        }
         await profileModel.findOneAndUpdate({
             userID: message.author.id,
             serverID: message.guild.id
@@ -67,9 +70,6 @@ module.exports = {
                 udyrcoins: (dinero * tiradas)
             }
         })
-        if (partidas.get(message.author.id)) {
-            return message.reply("ya tienes un slot activo")
-        }
         var partida = {
             rueda1: getRueda(),
             rueda2: getRueda(),
