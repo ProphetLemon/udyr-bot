@@ -94,8 +94,8 @@ module.exports = {
             }
 
         }
-        await message.channel.send("Balance: " + dineroGanado)
-        await partida.channel.send("Balance: " + dineroGanado)
+        await partida.message.channel.send(`Balance de ${message.member.displayName}: ${dineroGanado}<:udyrcoin:961729720104419408>`)
+        await partida.channel.send(`Balance: ${dineroGanado}<:udyrcoin:961729720104419408>`)
         setTimeout((message) => {
             partida.channel.delete()
             partidas.delete(message.author.id)
