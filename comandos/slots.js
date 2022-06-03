@@ -87,8 +87,8 @@ module.exports = {
             var resultado = await getResultadoSpin(partida)
             var mensaje = resultado[0]
             if (resultado[0].includes("Has ganado")) {
-                await partida.channel.send("Tirada " + (i + 1) + ` de <@${partida.message.member.id}>\n${mensaje}\nBalance de ${partida.message.member.displayName}: ${partida.dineroGanado}<:udyrcoin:961729720104419408>`)
                 partida.dineroGanado += resultado[1]
+                await partida.channel.send("Tirada " + (i + 1) + ` de <@${partida.message.member.id}>\n${mensaje}\nBalance de ${partida.message.member.displayName}: ${partida.dineroGanado}<:udyrcoin:961729720104419408>`)                
             } else {
                 await partida.channel.send("Tirada " + (i + 1) + ` de ${partida.message.member.displayName}\n${mensaje}\nBalance de ${partida.message.member.displayName}: ${partida.dineroGanado}<:udyrcoin:961729720104419408>`)
             }
