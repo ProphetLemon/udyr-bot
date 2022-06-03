@@ -77,7 +77,8 @@ module.exports = {
             channel: undefined,
             message: message,
             dinero: dinero,
-            dineroGanado: undefined
+            dineroGanado: undefined,
+            tiradas: tiradas
         }
         partida.channel = await createChannel(partida.message)
         partida.channel.send(`<@${message.author.id}>`)
@@ -88,9 +89,9 @@ module.exports = {
             var mensaje = resultado[0]
             if (resultado[0].includes("Has ganado")) {
                 partida.dineroGanado += resultado[1]
-                await partida.channel.send("Tirada " + (i + 1) + ` de <@${partida.message.member.id}>\n${mensaje}\nBalance de ${partida.message.member.displayName}: ${partida.dineroGanado}<:udyrcoin:961729720104419408>`)                
+                await partida.channel.send(`Tirada ${(i + 1)} de <@${partida.message.member.id}> (${partida.tiradas - (i + 1)} restantes)\n${mensaje}\nBalance de ${partida.message.member.displayName}: ${partida.dineroGanado}<:udyrcoin:961729720104419408>`)
             } else {
-                await partida.channel.send("Tirada " + (i + 1) + ` de ${partida.message.member.displayName}\n${mensaje}\nBalance de ${partida.message.member.displayName}: ${partida.dineroGanado}<:udyrcoin:961729720104419408>`)
+                await partida.channel.send(`Tirada ${(i + 1)} de ${partida.message.member.displayName} (${partida.tiradas - (i + 1)} restantes)\n${mensaje}\nBalance de ${partida.message.member.displayName}: ${partida.dineroGanado}<:udyrcoin:961729720104419408>`)
             }
 
         }
