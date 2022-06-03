@@ -76,26 +76,26 @@ module.exports = {
             rueda3: getRueda(),
             channel: undefined,
             message: message,
-            dinero: dinero
+            dinero: dinero,
+            dineroGanado: undefined
         }
         partida.channel = await createChannel(partida.message)
         partida.channel.send(`<@${message.author.id}>`)
         partidas.set(message.author.id, partida)
-
-        var dineroGanado = -(dinero * tiradas)
+        partida.dineroGanado = -(dinero * tiradas)
         for (let i = 0; i < tiradas; i++) {
             var resultado = await getResultadoSpin(partida)
             var mensaje = resultado[0]
             if (resultado[0].includes("Has ganado")) {
-                await partida.channel.send("Tirada " + (i + 1) + ` de <@${partida.message.member.id}>\n` + mensaje)
-                dineroGanado += resultado[1]
+                await partida.channel.send("Tirada " + (i + 1) + ` de <@${partida.message.member.id}>\n${mensaje}\nBalance de ${partida.message.member.displayName}: ${partida.dineroGanado}<:udyrcoin:961729720104419408>`)
+                partida.dineroGanado += resultado[1]
             } else {
-                await partida.channel.send("Tirada " + (i + 1) + ` de ${partida.message.member.displayName}\n` + mensaje)
+                await partida.channel.send("Tirada " + (i + 1) + ` de ${partida.message.member.displayName}\n${mesaje}\nBalance de ${partida.message.member.displayName}: ${partida.dineroGanado}<:udyrcoin:961729720104419408>`)
             }
 
         }
-        await partida.message.channel.send(`Balance de ${message.member.displayName}: ${dineroGanado}<:udyrcoin:961729720104419408>`)
-        await partida.channel.send(`Balance: ${dineroGanado}<:udyrcoin:961729720104419408>`)
+        await partida.message.channel.send(`Balance de ${partida.message.member.displayName}: ${partida.dineroGanado}<:udyrcoin:961729720104419408>`)
+        await partida.channel.send(`Balance final: ${partida.dineroGanado}<:udyrcoin:961729720104419408>`)
         setTimeout((message) => {
             partida.channel.delete()
             partidas.delete(message.author.id)
