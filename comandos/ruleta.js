@@ -116,7 +116,7 @@ async function apuesta(message, tipoApuesta, dinero, tirada) {
         await repartirDinero(message, resultado, dinero, dineroPosible)
         return message.reply(`Salió ${tirada} y apostaste a ${tipoApuesta}\n${resultado ? `Has ganado ${dineroPosible} <:udyrcoin:961729720104419408> (Balance: ${dineroPosible - dinero})` : `Mejor suerte la proxima vez`}`)
     }
-    if (tipoApuesta == "rojo" || tipoApuesta == "negro") {
+    if (tipoApuesta == "rojo" || tipoApuesta == "negro" || tipoApuesta == "verde") {
         resultado = colorTirada == tipoApuesta
         dineroPosible = dinero * 2
         await repartirDinero(message, resultado, dinero, dineroPosible)
