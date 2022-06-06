@@ -9,13 +9,6 @@ const queue = new Map();
 //queue(message.guild.id,queue_constructor object {voice channel, connection, song[]})
 var player = createAudioPlayer();
 var guild
-player.on('stateChange', (oldState, newState) => {
-    if (oldState.status === AudioPlayerStatus.Playing && newState.status === AudioPlayerStatus.Idle) {
-        queue.get(guild.id).songs.shift()
-        player.pause()
-        video_player(guild, queue.get(guild.id).songs[0])
-    }
-});
 module.exports = {
     name: 'play',
     aliases: ['skip', 'pause', 'leave', 'resume', 'unpause', 'stop'],
@@ -36,8 +29,7 @@ module.exports = {
         const permissions = voice_channel.permissionsFor(message.client.user)
         if (!permissions.has(Permissions.FLAGS.CONNECT)) return message.channel.send("No me puedo conectar :(")
         if (!permissions.has(Permissions.FLAGS.SPEAK)) return message.channel.send("No tengo permiso para hablar :(")
-
-
+        if (message.channel.name.trim() != "musica") return message.reply("Esto mejor en un canal de música")
 
         const server_queue = queue.get(message.guild.id)
         let song = {}
