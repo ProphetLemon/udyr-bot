@@ -48,7 +48,7 @@ module.exports = {
                     + "udyr ruleta _dinero_ (_tipoApuesta_)\n"
                     + "Ejemplo: udyr ruleta 100 (rojo)\n"
                     + "**TIPOS DE APUESTA:**\n"
-                    + "rojo/negro" + "\n"
+                    + "rojo/negro/verde" + "\n"
                     + "par/impar" + "\n"
                     + "un numero en concreto" + "\n"
                     + "un grupo de numeros (Ejemplo: 14-23)" + "\n"
