@@ -9,6 +9,13 @@ const queue = new Map();
 //queue(message.guild.id,queue_constructor object {voice channel, connection, song[]})
 var player = createAudioPlayer();
 var guild
+player.on('stateChange', (oldState, newState) => {
+    if (oldState.status === AudioPlayerStatus.Playing && newState.status === AudioPlayerStatus.Idle) {
+        queue.get(guild.id).songs.shift()
+        player.pause()
+        video_player(guild, queue.get(guild.id).songs[0])
+    }
+});
 module.exports = {
     name: 'play',
     aliases: ['skip', 'pause', 'leave', 'resume', 'unpause', 'stop'],
