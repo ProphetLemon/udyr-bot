@@ -48,7 +48,12 @@ async function configurarPayout(guild) {
         payout = await payoutModel.findOne({ serverID: guild.id })
     }
     setTimeout(async (guild) => {
-        var personas = await profileModel.find({ wallet: { $ne: null } })
+        var personas = await profileModel.find({
+            $and: [
+                { wallet: { $ne: null } },
+                { wallet: { $ne: [] } }
+            ]
+        })
         var bolsaChannel = guild.channels.cache.find(channel => channel.id === "976611174915375174" && channel.isText())
         for (let i = 0; i < personas.length; i++) {
             var persona = personas[i]
