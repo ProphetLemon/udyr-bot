@@ -57,9 +57,9 @@ module.exports = {
             if (args[0] == "max") {
                 dinero = Math.ceil(profileData.udyrcoins / 500)
                 tiradas = Math.floor(profileData.udyrcoins / dinero)
-                message.channel.send(`Haciendo ${tiradas} tiradas a ${dinero} cada una.`)
+                message.reply(`Haciendo ${tiradas} tiradas a ${dinero} cada una.`)
             } else {
-                return message.reply("Te faltan parametros\n**Ejemplos**:\n1-udyr slots 200 3\n2-udyr slots max)")
+                return message.reply("Te faltan parametros\n**Ejemplos**:\n1-udyr slots 200 3\n2-udyr slots max")
             }
         }
         if (profileData.udyrcoins < (dinero * tiradas)) {
