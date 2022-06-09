@@ -33,11 +33,14 @@ module.exports = {
             return message.channel.send("**JUEGO SLOTS/TRAGAPERRAS**\n" +
                 "**INSTRUCCIONES**\n" +
                 "Pon el numero de dinero de cada tirada y el numero de tiradas\n" +
+                "O puedes poner 'max' y te hace una partida apostando todo tu dinero\n" +
                 "**EJEMPLO**\n" +
-                "udyr slots 200 3\n(200 de dineros * 3 tiradas = 600 de dineros en total te estás jugando)")
+                "udyr slots 200 3\n(200 de dineros * 3 tiradas = 600 de dineros en total te estás jugando)\n" +
+                "udyr slots max")
+
         }
         if (args.length > 2) {
-            return message.channel.send("Te sobran parametros (Ejemplo: 1-udyr slots 200 3\n2-udyr slots max)")
+            return message.reply("Te sobran parametros\n**Ejemplos**:\n1-udyr slots 200 3\n2-udyr slots max)")
         }
         var dinero = 0
         var tiradas = 0
@@ -54,8 +57,9 @@ module.exports = {
             if (args[0] == "max") {
                 dinero = Math.ceil(profileData.udyrcoins / 500)
                 tiradas = Math.floor(profileData.udyrcoins / dinero)
+                message.channel.send(`Haciendo ${tiradas} tiradas a ${dinero} cada una.`)
             } else {
-                return message.reply("Te faltan parametros (Ejemplo: 1-udyr slots 200 3\n2-udyr slots max)")
+                return message.reply("Te faltan parametros\n**Ejemplos**:\n1-udyr slots 200 3\n2-udyr slots max)")
             }
         }
         if (profileData.udyrcoins < (dinero * tiradas)) {
