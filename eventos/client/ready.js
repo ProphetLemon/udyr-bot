@@ -5,15 +5,16 @@ const loteriaModel = require('../../models/loteriaSchema')
 const boletoModel = require('../../models/boletoSchema');
 const impuestoModel = require('../../models/impuestoSchema')
 const bolsaModel = require('../../models/bolsaSchema')
-const payoutModel = require('../../models/payoutSchema')
+const payoutModel = require('../../models/payoutSchema');
+const { ActivityTypes } = require("discord.js/typings/enums");
 /**
  * @param {Discord} Discord
  * @param {Client} client
  */
 module.exports = async (Discord, client) => {
     client.user.setPresence({
-        status: "dnd",
-        activities: [{ name: 'minar udyrcoins 💰', type: "PLAYING" }]
+        activities: [{ name: 'minar udyrcoins 💰', type: ActivityTypes.PLAYING }],
+        status: "dnd"
     })
     console.log("El bot ta ready");
     var guild = client.guilds.cache.get("598896817157046281")
