@@ -14,7 +14,7 @@ require('dotenv').config();
 const mongoose = require("mongoose");
 const profileModel = require('./models/profileSchema');
 const fs = require('fs');
-global.moment = require('moment-timezone');
+global.moment = require('moment');
 client.commands = new Discord.Collection();
 client.events = new Discord.Collection();
 /*const { Configuration, OpenAIApi } = require("openai");

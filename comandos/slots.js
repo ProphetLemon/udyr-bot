@@ -36,19 +36,28 @@ module.exports = {
                 "**EJEMPLO**\n" +
                 "udyr slots 200 3\n(200 de dineros * 3 tiradas = 600 de dineros en total te estás jugando)")
         }
-        if (args.length != 2) {
-            return message.channel.send("Te faltan parametros (Ejemplo: udyr slots 200 3)")
+        if (args.length > 2) {
+            return message.channel.send("Te sobran parametros (Ejemplo: 1-udyr slots 200 3\n2-udyr slots max)")
         }
         var dinero = 0
         var tiradas = 0
-        if (isNaN(args[0]) || Number(args[0]) < 1) {
-            return message.reply("cantidad de dinero invalida")
+        if (args.length == 2) {
+            if (isNaN(args[0]) || Number(args[0]) < 1) {
+                return message.reply("cantidad de dinero invalida")
+            }
+            dinero = Math.floor(Number(args[0]))
+            if (isNaN(args[1]) || Number(args[1]) < 1) {
+                return message.reply("cantidad de tiradas invalida")
+            }
+            tiradas = Math.floor(Number(args[1]))
+        } else if (args.length == 1) {
+            if (args[0] == "max") {
+                dinero = Math.ceil(profileData.udyrcoins / 500)
+                tiradas = Math.floor(profileData.udyrcoins / dinero)
+            } else {
+                return message.reply("Te faltan parametros (Ejemplo: 1-udyr slots 200 3\n2-udyr slots max)")
+            }
         }
-        dinero = Math.floor(Number(args[0]))
-        if (isNaN(args[1]) || Number(args[1]) < 1) {
-            return message.reply("cantidad de tiradas invalida")
-        }
-        tiradas = Math.floor(Number(args[1]))
         if (profileData.udyrcoins < (dinero * tiradas)) {
             return message.reply("No tienes esa cantidad de dinero bobo")
         }
