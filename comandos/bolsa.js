@@ -109,7 +109,7 @@ module.exports = {
                 serverID: message.guild.id
             }, {
                 $inc: {
-                    udyrcoins: Math.floor(dineroAGanar * 0.05)
+                    udyrcoins: -Math.floor(dineroAGanar * 0.95) + Math.floor(dineroAGanar * 0.05)
                 }
             })
             message.channel.send(`Has vendido ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}!\nAhora cuentas con ${profileData.udyrcoins + Math.floor(dineroAGanar * 0.95)} (recarga del 5%: ${Math.floor(dineroAGanar * 0.05)}) <:udyrcoin:961729720104419408> en tu perfil`)
@@ -252,6 +252,13 @@ module.exports = {
                 },
                 $inc: {
                     udyrcoins: -dineroAGastar
+                }
+            })
+            await impuestoModel.findOneAndUpdate({
+                serverID: message.guild.id
+            }, {
+                $inc: {
+                    udyrcoins: dineroAGastar
                 }
             })
             message.channel.send(`Has comprado ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}!\nAhora cuentas con ${profileData.udyrcoins - dineroAGastar} <:udyrcoin:961729720104419408> en tu perfil`)
