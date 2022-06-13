@@ -98,7 +98,7 @@ function getValorEmpresa(stock) {
     var valorActual = Math.floor(valorInicial + (valorFinal - valorInicial) / 12 * (12 - timestep) + random)
     return valorActual
 }
-async function configurarAccion(accion) {
+global.configurarAccion = async function (accion) {
     var t1 = new Date()
     var dateFinal = accion.dateFinal
     setTimeout(async (accion) => {
@@ -144,6 +144,7 @@ async function configurarAccion(accion) {
     actualizarRandom(t1, accion)
     console.log(`${accion.nombre} configurado!`)
 }
+
 async function configurarBolsa() {
     var acciones = await bolsaModel.find({})
     for (let i = 0; i < acciones.length; i++) {
@@ -152,7 +153,7 @@ async function configurarBolsa() {
     }
 }
 
-async function borrar(stock) {
+global.borrar = async function (stock) {
     await bolsaModel.findOneAndRemove({
         nombre: stock.nombre
     })
@@ -180,7 +181,7 @@ async function borrar(stock) {
 }
 
 
-function actualizarRandom(t1, stock) {
+global.actualizarRandom = function (t1, stock) {
     var dateActualizarRandom = moment(t1).toDate()
     dateActualizarRandom = moment(dateActualizarRandom).add(1, "minutes").toDate()
     while (dateActualizarRandom.getMinutes() % 5 != 0) {
@@ -204,7 +205,7 @@ function actualizarRandom(t1, stock) {
     }, dateActualizarRandom - t1, stock);
 }
 
-function randn_bm(min, max, skew) {
+global.randn_bm = function (min, max, skew) {
     let u = 0, v = 0;
     while (u === 0) u = Math.random() //Converting [0,1) to (0,1)
     while (v === 0) v = Math.random()

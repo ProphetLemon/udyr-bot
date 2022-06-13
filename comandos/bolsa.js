@@ -7,7 +7,7 @@ const superfalo = "Has considerado que en vez de malgastar el dinero en bolsa de
 const QuickChart = require('quickchart-js');
 module.exports = {
     name: 'bolsa',
-    aliases: ['comprar', 'acciones', 'vender', 'historial'],
+    aliases: [],
     description: 'Funcion para ver los valores en bolsa ahora mismo',
     /**
      * 
@@ -29,6 +29,104 @@ module.exports = {
                     msg.delete()
                 }, 8000);
             })
+        }
+        if (args.length == 0) {
+            var acciones = await bolsaModel.find({})
+            var fields = []
+            var config = {
+                type: 'line',
+                data: {
+                    datasets: []
+                }
+            }
+            for (let i = 0; i < acciones.length; i++) {
+                var stock = acciones[i]
+                config.data.datasets.push({ label: stock.nombre, data: stock.historico.toObject(), backgroundColor: "transparent", borderColor: stock.color })
+                fields.push({ name: stock.nombre, value: String(getValorEmpresa(stock)) + "<:udyrcoin:961729720104419408>", inline: true })
+            }
+            if (fields.length % 2 != 0) {
+                fields.push({ name: '\u200B', value: '\u200B', inline: true })
+            }
+            var hoy = new Date()
+            var labels = []
+            for (let i = 0; i < acciones[0].historico.length; i++) {
+                var dateLabels = moment(hoy).add(-hoy.getMinutes(), "minutes")
+                var date = dateLabels.add(-acciones[0].historico.length + 1 + i, "hours").toDate()
+                labels.push(String(date.getHours()).padStart(2, "0") + ":00")
+            }
+            config.data["labels"] = labels
+            const chart = new QuickChart();
+            chart.setConfig(config)
+            var url = await chart.getUrl()
+            url = url.split("chart?").join("chart?bkg=%231f2933&")
+            var dateUltimoRegistro = new Date()
+            while (dateUltimoRegistro.getMinutes() % 5 != 0) {
+                dateUltimoRegistro = moment(dateUltimoRegistro).add(-1, "minutes").toDate()
+            }
+            const chartEmbed = {
+                title: 'Registro ultimas 12 horas',
+                fields: fields,
+                image: {
+                    url: url,
+                },
+                description: `**Valores de la bolsa a las ${String(dateUltimoRegistro.getHours()).padStart(2, "0")}:${String(dateUltimoRegistro.getMinutes()).padStart(2, "0")}**`
+            };
+            message.channel.send({ embeds: [chartEmbed] });
+        } else {
+            cmd = args[0]
+            args.splice(0, 1)
+        }
+        if (cmd == "crear") {
+            //udyr bolsa crear patatafrita 2000 (minimo)
+            var acciones = await bolsaModel.find({})
+            if (acciones.length >= 9) {
+                return message.reply("Ya hay muchas monedas bro, espera a que desaparezca alguna")
+            }
+            var nombre = args[0]
+            var dineroInicial = args[1]
+            if (isNaN(dineroInicial)) {
+                return message.reply("")
+            }
+            dineroInicial = Math.floor(dineroInicial)
+            if (profileData.udyrcoins < dineroInicial || profileData.udyrcoins < 1000) {
+                return message.reply("No tienes dinero suficiente")
+            }
+            var color = ""
+            if (args.length == 3) {
+                if (/^#[0-9A-F]{6}$/i.test(args[2])) {
+                    color = args[2]
+                }
+            }
+            var t1 = new Date()
+            do {
+                var dateFinal = moment(dateFinal).add(1, "hours").toDate()
+            } while (dateFinal < t1)
+            var historico = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, dineroInicial]
+            var accionNueva = await bolsaModel.create({
+                nombre: nombre,
+                valorInicial: dineroInicial,
+                valorFinal: dineroInicial,
+                dateFinal: dateFinal,
+                historico: historico,
+                color: color
+            })
+            await accionNueva.save()
+            await configurarAccion(accionNueva)
+            var wallet = profileData.wallet ? profileData.wallet : new Map()
+            if (wallet.get(nombre)) {
+                wallet.set(nombre, wallet.get(nombre) + 1)
+            } else {
+                wallet.set(nombre, 1)
+            }
+            await profileModel.findOneAndUpdate({
+                userID: message.member.id,
+                serverID: message.guild.id
+            }, {
+                $set: {
+                    wallet: wallet
+                }
+            })
+            return message.reply(`Has creado la moneda **${accionNueva.nombre}** correctamente!`)
         }
         if (cmd == "historial") {
             if (profileData.historial.toObject().length == 0) {
@@ -149,49 +247,7 @@ module.exports = {
         * SE ACTUALIZA EL VALOR 12 VECES DURANTE ESA HORA
         */
 
-        if (cmd == "bolsa") {
-            var acciones = await bolsaModel.find({})
-            var fields = []
-            var config = {
-                type: 'line',
-                data: {
-                    datasets: []
-                }
-            }
-            for (let i = 0; i < acciones.length; i++) {
-                var stock = acciones[i]
-                config.data.datasets.push({ label: stock.nombre, data: stock.historico.toObject(), backgroundColor: "transparent", borderColor: getColor(stock) })
-                fields.push({ name: stock.nombre, value: String(getValorEmpresa(stock)) + "<:udyrcoin:961729720104419408>", inline: true })
-            }
-            if (fields.length % 2 != 0) {
-                fields.push({ name: '\u200B', value: '\u200B', inline: true })
-            }
-            var hoy = new Date()
-            var labels = []
-            for (let i = 0; i < acciones[0].historico.length; i++) {
-                var dateLabels = moment(hoy).add(-hoy.getMinutes(), "minutes")
-                var date = dateLabels.add(-acciones[0].historico.length + 1 + i, "hours").toDate()
-                labels.push(String(date.getHours()).padStart(2, "0") + ":00")
-            }
-            config.data["labels"] = labels
-            const chart = new QuickChart();
-            chart.setConfig(config)
-            var url = await chart.getUrl()
-            url = url.split("chart?").join("chart?bkg=%231f2933&")
-            var dateUltimoRegistro = new Date()
-            while (dateUltimoRegistro.getMinutes() % 5 != 0) {
-                dateUltimoRegistro = moment(dateUltimoRegistro).add(-1, "minutes").toDate()
-            }
-            const chartEmbed = {
-                title: 'Registro ultimas 12 horas',
-                fields: fields,
-                image: {
-                    url: url,
-                },
-                description: `**Valores de la bolsa a las ${String(dateUltimoRegistro.getHours()).padStart(2, "0")}:${String(dateUltimoRegistro.getMinutes()).padStart(2, "0")}**`
-            };
-            message.channel.send({ embeds: [chartEmbed] });
-        }
+
         /**
          * udyr comprar nombreDeAccion cantidad_de_acciones
          */
@@ -280,26 +336,4 @@ function getValorEmpresa(stock) {
     var timestep = Math.floor((((dateFinal - t1) / 1000) / 60) / 5)
     var valorActual = Math.floor(valorInicial + (valorFinal - valorInicial) / 12 * (12 - timestep) + random)
     return valorActual
-}
-
-function getColor(stock) {
-    switch (stock.nombre) {
-        case "aidacoin":
-        case "gigachad":
-            return "#9a59b5"
-        case "oso":
-            return "#be651c"
-        case "fenix":
-            return "#e94c3c"
-        case "tortuga":
-            return "#3598db"
-        case "mercadona":
-            return "#2dcc70"
-        case "viagra":
-            return "#2069e0"
-        case "criptolimon":
-            return '#f1c50e'
-        case "tigre":
-            return "#ecf1f0"
-    }
 }
