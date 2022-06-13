@@ -5,6 +5,7 @@ const profileModel = require('../models/profileSchema')
 const impuestoModel = require('../models/impuestoSchema')
 const superfalo = "Has considerado que en vez de malgastar el dinero en bolsa debas meter 10 € en https://www.paypal.me/Superfalo ?"
 const QuickChart = require('quickchart-js');
+const GoogleChartsNode = require('google-charts-node');
 module.exports = {
     name: 'bolsa',
     aliases: [],
@@ -323,21 +324,38 @@ module.exports = {
             })
             message.channel.send(`Has comprado ${cantidad} ${nombre}${cantidad > 1 ? "s" : ""}!\nAhora cuentas con ${profileData.udyrcoins - dineroAGastar} <:udyrcoin:961729720104419408> en tu perfil`)
         }
+        var accionRevisar = await bolsaModel.findOne({
+            nombre: cmd
+        })
+        if (accionRevisar) {
+            var drawChartStr = `
+            var historico = [${accionRevisar.historico.toObject().toString()}]
+            var array = []
+            var today = new Date()
+            today.setMinutes(0)
+            for (let i = 0; i < historico.length-1; i ++) {
+                array.push([(today.getHours() - 11 + i).toString(),
+                historico[i], historico[i], historico[i + 1], historico[i + 1]])
+            }
+            var data = google.visualization.arrayToDataTable(array, true);
+        
+            var options = {
+                legend: 'none',
+                bar: { groupWidth: '100%' },
+                candlestick: {
+                    fallingColor: { strokeWidth: 0, fill: '#a52714' }, // red
+                    risingColor: { strokeWidth: 0, fill: '#0f9d58' }   // green
+                }
+            };
+        
+            var chart = new google.visualization.CandlestickChart(document.getElementById('chart_div'));
+            chart.draw(data, options);`
+            const image = await GoogleChartsNode.render(drawChartStr, {
+                width: 500,
+                height: 300,
+            });
+            message.reply({ content: `${accionRevisar.nombre}: ${accionRevisar.historico[0] > accionRevisar.historico[11] ? "-" : "+"}${Math.floor(100 - ((accionRevisar.historico[11] * 100) / accionRevisar.historico[0]))}% en las últimas 12 horas`, files: [image] })
+        }
         console.log(`FIN ${cmd.toUpperCase()}`)
     }
-}
-function getValorEmpresa(stock) {
-    var t1 = new Date()
-    t1.setSeconds(0)
-    t1.setMilliseconds(0)
-    while (t1.getMinutes() % 5 != 0) {
-        t1 = moment(t1).add(-1, "minutes").toDate()
-    }
-    var dateFinal = stock.dateFinal
-    var valorInicial = stock.valorInicial
-    var valorFinal = stock.valorFinal
-    var random = stock.random
-    var timestep = Math.floor((((dateFinal - t1) / 1000) / 60) / 5)
-    var valorActual = Math.floor(valorInicial + (valorFinal - valorInicial) / 12 * (12 - timestep) + random)
-    return valorActual
 }

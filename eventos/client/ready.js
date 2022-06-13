@@ -83,7 +83,7 @@ async function configurarPayout(guild) {
     }, payout.datePago - hoy, guild);
     console.log("Se han configurado los pagos")
 }
-function getValorEmpresa(stock) {
+global.getValorEmpresa = function (stock) {
     var t1 = new Date()
     t1.setSeconds(0)
     t1.setMilliseconds(0)
