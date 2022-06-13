@@ -102,10 +102,8 @@ module.exports = {
                     color = args[2]
                 }
             }
-            var t1 = new Date()
-            do {
-                var dateFinal = moment(dateFinal).add(1, "hours").toDate()
-            } while (dateFinal < t1)
+            var dateFinal = new Date()
+            dateFinal = moment(dateFinal).add(1, "hours").add(-dateFinal.getMinutes(), "minutes").toDate()
             var historico = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, dineroInicial]
             var accionNueva = await bolsaModel.create({
                 nombre: nombre,
