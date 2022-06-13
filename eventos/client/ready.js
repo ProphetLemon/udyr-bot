@@ -19,7 +19,6 @@ module.exports = async (Discord, client) => {
     var guild = client.guilds.cache.get("598896817157046281")
     const textChannel = guild.channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
     robos(guild, textChannel)
-
     var loteriaBBDD = await loteriaModel.findOne({ serverID: guild.id })
     if (loteriaBBDD) {
         configurarLoteria(guild, textChannel, loteriaBBDD)
@@ -84,7 +83,7 @@ async function configurarPayout(guild) {
     }, payout.datePago - hoy, guild);
     console.log("Se han configurado los pagos")
 }
-global.getValorEmpresa = function (stock) {
+function getValorEmpresa(stock) {
     var t1 = new Date()
     t1.setSeconds(0)
     t1.setMilliseconds(0)

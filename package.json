@@ -16,7 +16,6 @@
     "discord.js": "^13.8.0",
     "dotenv": "^8.2.0",
     "ffmpeg-static": "^4.4.1",
-    "google-charts-node": "^1.0.4",
     "mathjs": "^10.4.2",
     "moment": "^2.29.3",
     "mongoose": "^5.12.2",
