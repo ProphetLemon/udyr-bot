@@ -41,11 +41,11 @@ module.exports = {
             }
             for (let i = 0; i < acciones.length; i++) {
                 var stock = acciones[i]
-                if (stock.color){
+                if (stock.color) {
                     config.data.datasets.push({ label: stock.nombre, data: stock.historico.toObject(), backgroundColor: "transparent", borderColor: stock.color })
                 }
-                else{
-                    config.data.datasets.push({ label: stock.nombre, data: stock.historico.toObject(), backgroundColor: "transparent"})
+                else {
+                    config.data.datasets.push({ label: stock.nombre, data: stock.historico.toObject(), backgroundColor: "transparent" })
                 }
                 fields.push({ name: stock.nombre, value: String(getValorEmpresa(stock)) + "<:udyrcoin:961729720104419408>", inline: true })
             }
@@ -96,7 +96,7 @@ module.exports = {
             if (profileData.udyrcoins < dineroInicial || profileData.udyrcoins < 1000) {
                 return message.reply("No tienes dinero suficiente")
             }
-            var color = ""
+            var color = null
             if (args.length == 3) {
                 if (/^#[0-9A-F]{6}$/i.test(args[2])) {
                     color = args[2]
