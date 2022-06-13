@@ -103,7 +103,8 @@ module.exports = {
                 }
             }
             var dateFinal = new Date()
-            dateFinal = moment(dateFinal).add(1, "hours").add(-dateFinal.getMinutes(), "minutes").toDate()
+            dateFinal = moment(dateFinal).add(1, "hours").add(-dateFinal.getMinutes(), "minutes")
+                .add(-dateFinal.getSeconds(), "seconds").add(-dateFinal.getMilliseconds(), "milliseconds").toDate()
             var historico = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, dineroInicial]
             var accionNueva = await bolsaModel.create({
                 nombre: nombre,
