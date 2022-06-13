@@ -246,6 +246,7 @@ module.exports = {
                 message.reply("No tienes nada comprado")
             }
         }
+
         /**
         * PRECIO FINAL CADA HORA
         * SE ACTUALIZA EL VALOR 12 VECES DURANTE ESA HORA
