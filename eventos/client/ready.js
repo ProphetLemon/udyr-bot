@@ -19,6 +19,7 @@ module.exports = async (Discord, client) => {
     var guild = client.guilds.cache.get("598896817157046281")
     const textChannel = guild.channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
     robos(guild, textChannel)
+
     var loteriaBBDD = await loteriaModel.findOne({ serverID: guild.id })
     if (loteriaBBDD) {
         configurarLoteria(guild, textChannel, loteriaBBDD)
