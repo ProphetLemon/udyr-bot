@@ -49,7 +49,7 @@ module.exports = {
                 }
                 fields.push({ name: `${stock.nombre} (${stock.historico[0] > stock.historico[11] ? "-" : "+"}${Math.floor(Math.abs(100 - ((stock.historico[11] * 100) / stock.historico[0])))}%)`, value: String(getValorEmpresa(stock)) + "<:udyrcoin:961729720104419408>", inline: true })
             }
-            if (fields.length % 2 != 0) {
+            if (fields.length % 2 == 0) {
                 fields.push({ name: '\u200B', value: '\u200B', inline: true })
             }
             var hoy = new Date()
