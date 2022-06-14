@@ -20,16 +20,16 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`)
-        /* if (message.channel.id != "976611174915375174") {
-             return message.reply("Esto mejor en el canal de 'bolsa'").then(msg => {
-                 if (message.guild) {
-                     message.delete()
-                 }
-                 setTimeout(() => {
-                     msg.delete()
-                 }, 8000);
-             })
-         }*/
+        if (message.channel.id != "976611174915375174") {
+            return message.reply("Esto mejor en el canal de 'bolsa'").then(msg => {
+                if (message.guild) {
+                    message.delete()
+                }
+                setTimeout(() => {
+                    msg.delete()
+                }, 8000);
+            })
+        }
         if (args.length == 0) {
             var acciones = await bolsaModel.find({})
             var fields = []
