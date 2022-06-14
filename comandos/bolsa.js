@@ -20,16 +20,16 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`)
-        if (message.channel.id != "976611174915375174") {
-            return message.reply("Esto mejor en el canal de 'bolsa'").then(msg => {
-                if (message.guild) {
-                    message.delete()
-                }
-                setTimeout(() => {
-                    msg.delete()
-                }, 8000);
-            })
-        }
+        /* if (message.channel.id != "976611174915375174") {
+             return message.reply("Esto mejor en el canal de 'bolsa'").then(msg => {
+                 if (message.guild) {
+                     message.delete()
+                 }
+                 setTimeout(() => {
+                     msg.delete()
+                 }, 8000);
+             })
+         }*/
         if (args.length == 0) {
             var acciones = await bolsaModel.find({})
             var fields = []
@@ -47,7 +47,7 @@ module.exports = {
                 else {
                     config.data.datasets.push({ label: stock.nombre, data: stock.historico.toObject(), backgroundColor: "transparent" })
                 }
-                fields.push({ name: stock.nombre, value: String(getValorEmpresa(stock)) + "<:udyrcoin:961729720104419408>", inline: true })
+                fields.push({ name: `${stock.nombre} (${stock.historico[0] > stock.historico[11] ? "-" : "+"}${Math.floor(Math.abs(100 - ((stock.historico[11] * 100) / stock.historico[0])))}%)`, value: String(getValorEmpresa(stock)) + "<:udyrcoin:961729720104419408>", inline: true })
             }
             if (fields.length % 2 != 0) {
                 fields.push({ name: '\u200B', value: '\u200B', inline: true })
