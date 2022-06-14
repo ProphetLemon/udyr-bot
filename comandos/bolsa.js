@@ -47,7 +47,7 @@ module.exports = {
                 else {
                     config.data.datasets.push({ label: stock.nombre, data: stock.historico.toObject(), backgroundColor: "transparent" })
                 }
-                fields.push({ name: `${stock.nombre} (${stock.historico[0] > stock.historico[11] ? "-" : "+"}${Math.floor(Math.abs(100 - ((stock.historico[11] * 100) / stock.historico[0])))}%)`, value: String(getValorEmpresa(stock)) + "<:udyrcoin:961729720104419408>", inline: true })
+                fields.push({ name: `${stock.nombre} (${stock.historico[0] > stock.historico[11] ? "-" : "+"}${Math.floor(Math.abs(100 - ((stock.historico[11] * 100) / (stock.historico[0] == 0 ? 1 : stock.historico[0]))))}%)`, value: String(getValorEmpresa(stock)) + "<:udyrcoin:961729720104419408>", inline: true })
             }
             if (fields.length % 2 == 0) {
                 fields.push({ name: '\u200B', value: '\u200B', inline: true })
