@@ -84,7 +84,7 @@ module.exports = {
         if (cmd == "crear") {
             //udyr bolsa crear patatafrita 2000 (minimo)
             var acciones = await bolsaModel.find({})
-            if (acciones.length >= 9) {
+            if (acciones.length >= 8) {
                 return message.reply("Ya hay muchas monedas bro, espera a que desaparezca alguna")
             }
             var nombre = args[0]
