@@ -47,6 +47,7 @@ module.exports = {
             servidor.connection.destroy()
             clearTimeout(servidor.timeout)
             servidores.delete(message.guild.id)
+            message.delete()
             return
         }
         var connection = joinVoiceChannel({
