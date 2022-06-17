@@ -51,14 +51,6 @@ module.exports = {
             message.delete()
             return
         }
-        if (servidores.get(message.guild.id)) {
-            var servidor = servidores.get(message.guild.id)
-            var channel = servidor.channel
-            var permissions = getPermissionsForChannel(message)
-            channel.edit({ permissionOverwrites: permissions })
-            return
-        }
-        var channel = await createChannel(message)
         var connection = joinVoiceChannel({
             channelId: message.member.voice.channel.id,
             guildId: message.guild.id,
@@ -71,7 +63,6 @@ module.exports = {
             enlaces: fs.readFileSync('./audios/links.txt', 'utf8').split("\n"),
             pomodoros: 0,
             break: null,
-            channel: channel,
             timeout: null
         }
         servidores.set(message.guild.id, servidor)
@@ -88,41 +79,6 @@ module.exports = {
     }
 }
 
-/**
- * 
- * @param {Message} message 
- * @returns 
- */
-async function createChannel(message) {
-    var permissions = getPermissionsForChannel(message)
-    const channel = await message.guild.channels.create(`sala de estudio`, {
-        type: 'GUILD_TEXT',
-        parent: "598896817157046334",
-        permissionOverwrites: permissions
-    })
-    return permissions
-}
-/**
- * 
- * @param {Message} message 
- * @returns 
- */
-function getPermissionsForChannel(message) {
-    var array = [
-        {
-            id: message.guild.roles.everyone,
-            deny: ["SEND_MESSAGES", "VIEW_CHANNEL"]
-        }
-    ]
-    var members = Array.from(message.member.voice.channel.members.values())
-    for (let i = 0; i < members.length; i++) {
-        array.push({
-            id: members[i].id,
-            allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
-        })
-    }
-    return array
-}
 function configurarTiempos(servidor) {
     if (servidor.break == null || servidor.break == true) {
         servidor.break = false
