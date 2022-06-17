@@ -30,8 +30,8 @@ module.exports = {
                 }
             })
         }
-        if (message.channel.id != "809786674875334677") {
-            return message.reply("Eso mejor en canal de udyr").then(msg => {
+        if (message.channel.id != "986959978273337405") {
+            return message.reply("Eso mejor en el chat de \"Sala de estudio📚\"").then(msg => {
                 if (message.guild) {
                     message.delete()
                     setTimeout(() => {
