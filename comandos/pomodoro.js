@@ -102,6 +102,7 @@ function configurarTiempos(servidor) {
             configurarTiempos(servidor)
         }, 25 * 60 * 1000, servidor);
     } else if (servidor.break == false) {
+        servidor.player.pause()
         servidor.pomodoros = servidor.pomodoros + 1
         var minutos = servidor.pomodoros % 4 == 0 ? 15 : 5
         now.setMinutes(now.getMinutes() + minutos)
@@ -113,22 +114,23 @@ function configurarTiempos(servidor) {
                 }
             ]
         })
+        const resource = createAudioResource('./audios/bell.opus')
+        servidor.player.play(resource)
         servidor.channel.send(`Descanso ${minutos}' (Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
         servidor.break = true
-        servidor.player.pause()
         servidor.timeout = setTimeout((servidor) => {
             configurarTiempos(servidor)
         }, minutos * 60 * 1000, servidor);
     }
 }
 
-async function getNextResource(servidor) {
+function getNextResource(servidor) {
     if (servidor.enlaces.length == 0) {
         servidor.enlaces = fs.readFileSync('./audios/links.txt', 'utf8').split("\n")
     }
     const seleccion = Math.floor(Math.random() * servidor.enlaces.length)
-    const stream = await ytdl(servidor.enlaces[seleccion], { filter: 'audioonly' });
-    const resource = await createAudioResource(stream)
+    const stream = ytdl(servidor.enlaces[seleccion], { filter: 'audioonly' });
+    const resource = createAudioResource(stream)
     servidor.enlaces.splice(seleccion, 1)
     servidor.player.play(resource)
     servidor.connection.subscribe(servidor.player)
