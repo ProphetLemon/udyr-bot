@@ -114,10 +114,10 @@ function getPermissionsForChannel(message) {
             deny: ["SEND_MESSAGES", "VIEW_CHANNEL"]
         }
     ]
-    var members = Array.from(message.member.voice.channel.members.keys())
-    for (let id in members) {
+    var members = Array.from(message.member.voice.channel.members.values())
+    for (let i = 0; i < members.length; i++) {
         array.push({
-            id: id,
+            id: members[i].id,
             allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
         })
     }
