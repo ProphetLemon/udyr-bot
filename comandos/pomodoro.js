@@ -89,6 +89,7 @@ function configurarTiempos(servidor) {
         now.setMinutes(now.getMinutes() + 15)
         servidor.channel.send(`Pomodoro 25' (Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
         servidor.break = false
+        servidor.player.unpause()
         servidor.timeout = setTimeout((servidor) => {
             configurarTiempos(servidor)
         }, 25 * 60 * 1000, servidor);
