@@ -98,7 +98,7 @@ async function createChannel(message) {
     const channel = await message.guild.channels.create(`sala de estudio`, {
         type: 'GUILD_TEXT',
         parent: "598896817157046334",
-        permissionOverwrites: array
+        permissionOverwrites: permissions
     })
     return permissions
 }
