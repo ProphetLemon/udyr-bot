@@ -114,7 +114,7 @@ function configurarTiempos(servidor) {
                 }
             ]
         })
-        const resource = createAudioResource('./audios/bell.opus')
+        const resource = createAudioResource('./audios/bell.m4a')
         servidor.player.play(resource)
         servidor.channel.send(`Descanso ${minutos}' (Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
         servidor.break = true
