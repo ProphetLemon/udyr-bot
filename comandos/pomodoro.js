@@ -47,8 +47,8 @@ module.exports = {
             }
             servidor.connection.destroy()
             clearTimeout(servidor.timeout)
-            textChannel.bulkDelete(99)
-            textChannel.bulkDelete(99)
+            servidor.channel.bulkDelete(99)
+            servidor.channel.bulkDelete(99)
             servidores.delete(message.guild.id)
             message.delete()
             return
@@ -60,7 +60,7 @@ module.exports = {
             selfDeaf: true
         })
         var guild = client.guilds.cache.get("598896817157046281")
-        const textChannel = guild.channels.cache.find(channel => channel.id === "986959978273337405")
+        const textChannel = guild.channels.cache.find(channel => channel.id === "986959978273337405" && channel.isText())
         var servidor = {
             connection: connection,
             player: createAudioPlayer(),
@@ -88,20 +88,21 @@ function configurarTiempos(servidor) {
     var now = new Date()
     if (servidor.break == null || servidor.break == true) {
         now.setMinutes(now.getMinutes() + 15)
-        servidor.textChannel.send(`Pomodoro 25' ( Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
+        servidor.channel.send(`Pomodoro 25' (Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
         servidor.break = false
         servidor.timeout = setTimeout((servidor) => {
             configurarTiempos(servidor)
         }, 25 * 60 * 1000, servidor);
     } else if (servidor.break == false) {
-        now.setMinutes(now.getMinutes() + (servidor.pomodoros % 4 == 0 ? 15 : 5))
-        servidor.textChannel.send(`Descanso ${servidor.pomodoros % 4 == 0 ? 15 : 5}' ( Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
+        var minutos = servidor.pomodoros % 4 == 0 ? 15 : 5
+        now.setMinutes(now.getMinutes() + minutos)
+        servidor.channel.send(`Descanso ${minutos}' (Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
         servidor.pomodoros = servidor.pomodoros + 1
         servidor.break = true
         servidor.player.pause()
         servidor.timeout = setTimeout((servidor) => {
             configurarTiempos(servidor)
-        }, (servidor.pomodoros % 4 == 0 ? 15 : 5) * 60 * 1000, servidor);
+        }, minutos * 60 * 1000, servidor);
     }
 }
 
