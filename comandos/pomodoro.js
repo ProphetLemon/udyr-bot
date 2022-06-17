@@ -94,10 +94,10 @@ function configurarTiempos(servidor) {
             configurarTiempos(servidor)
         }, 25 * 60 * 1000, servidor);
     } else if (servidor.break == false) {
+        servidor.pomodoros = servidor.pomodoros + 1
         var minutos = servidor.pomodoros % 4 == 0 ? 15 : 5
         now.setMinutes(now.getMinutes() + minutos)
         servidor.channel.send(`Descanso ${minutos}' (Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
-        servidor.pomodoros = servidor.pomodoros + 1
         servidor.break = true
         servidor.player.pause()
         servidor.timeout = setTimeout((servidor) => {
