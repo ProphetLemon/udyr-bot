@@ -86,7 +86,7 @@ module.exports = {
 function configurarTiempos(servidor) {
     var now = new Date()
     if (servidor.break == null || servidor.break == true) {
-        now.setMinutes(now.getMinutes() + 15)
+        now.setMinutes(now.getMinutes() + 25)
         servidor.channel.send(`Pomodoro 25' (Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
         servidor.break = false
         servidor.player.unpause()
