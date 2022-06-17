@@ -50,7 +50,6 @@ module.exports = {
             servidor.channel.bulkDelete(99)
             servidor.channel.bulkDelete(99)
             servidores.delete(message.guild.id)
-            message.delete()
             return
         }
         var connection = joinVoiceChannel({
