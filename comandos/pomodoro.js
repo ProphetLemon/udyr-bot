@@ -89,6 +89,14 @@ function configurarTiempos(servidor) {
         now.setMinutes(now.getMinutes() + 25)
         servidor.channel.send(`Pomodoro 25' (Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
         servidor.break = false
+        servidor.channel.edit({
+            permissionOverwrites: [
+                {
+                    id: servidor.channel.guild.roles.everyone,
+                    deny: ["SPEAK"]
+                }
+            ]
+        })
         servidor.player.unpause()
         servidor.timeout = setTimeout((servidor) => {
             configurarTiempos(servidor)
@@ -97,6 +105,14 @@ function configurarTiempos(servidor) {
         servidor.pomodoros = servidor.pomodoros + 1
         var minutos = servidor.pomodoros % 4 == 0 ? 15 : 5
         now.setMinutes(now.getMinutes() + minutos)
+        servidor.channel.edit({
+            permissionOverwrites: [
+                {
+                    id: servidor.channel.guild.roles.everyone,
+                    allow: ["SPEAK"]
+                }
+            ]
+        })
         servidor.channel.send(`Descanso ${minutos}' (Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
         servidor.break = true
         servidor.player.pause()
