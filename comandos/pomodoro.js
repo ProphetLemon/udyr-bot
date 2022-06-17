@@ -47,6 +47,8 @@ module.exports = {
             }
             servidor.connection.destroy()
             clearTimeout(servidor.timeout)
+            textChannel.bulkDelete(99)
+            textChannel.bulkDelete(99)
             servidores.delete(message.guild.id)
             message.delete()
             return
@@ -57,12 +59,15 @@ module.exports = {
             adapterCreator: message.guild.voiceAdapterCreator,
             selfDeaf: true
         })
+        var guild = client.guilds.cache.get("598896817157046281")
+        const textChannel = guild.channels.cache.find(channel => channel.id === "986959978273337405")
         var servidor = {
             connection: connection,
             player: createAudioPlayer(),
             enlaces: fs.readFileSync('./audios/links.txt', 'utf8').split("\n"),
             pomodoros: 0,
             break: null,
+            channel: textChannel,
             timeout: null
         }
         servidores.set(message.guild.id, servidor)
@@ -80,12 +85,17 @@ module.exports = {
 }
 
 function configurarTiempos(servidor) {
+    var now = new Date()
     if (servidor.break == null || servidor.break == true) {
+        now.setMinutes(now.getMinutes() + 15)
+        servidor.textChannel.send(`Pomodoro 25' ( Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
         servidor.break = false
         servidor.timeout = setTimeout((servidor) => {
             configurarTiempos(servidor)
         }, 25 * 60 * 1000, servidor);
     } else if (servidor.break == false) {
+        now.setMinutes(now.getMinutes() + (servidor.pomodoros % 4 == 0 ? 15 : 5))
+        servidor.textChannel.send(`Descanso ${servidor.pomodoros % 4 == 0 ? 15 : 5}' ( Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
         servidor.pomodoros = servidor.pomodoros + 1
         servidor.break = true
         servidor.player.pause()
