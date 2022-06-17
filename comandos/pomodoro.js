@@ -18,7 +18,7 @@ module.exports = {
      * @param {Discord} Discord 
      * @param {*} profileData 
      */
-    execute(message, args, cmd, client, Discord, profileData) {
+    async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`);
         if (message.member.voice.channel == null || message.member.voice.channel.id != "986959978273337405") {
             return message.reply("Tienes que estar en el chat de voz \"Sala de estudio📚\"").then(msg => {
