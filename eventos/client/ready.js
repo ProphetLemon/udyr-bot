@@ -313,7 +313,7 @@ async function configurarLoteria(guild, textChannel, loteriaBBDD) {
                 udyrcoins: -dineroTotal
             }
         })
-        await boleto.deleteMany({})
+        await boletoModel.deleteMany({})
         await loteria.findOneAndRemove({ serverID: guild.id })
     }, diff);
     loteria.set(guild.id, timeout)
