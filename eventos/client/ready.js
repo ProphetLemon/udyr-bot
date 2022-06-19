@@ -314,7 +314,7 @@ async function configurarLoteria(guild, textChannel, loteriaBBDD) {
             }
         })
         await boletoModel.deleteMany({})
-        await loteria.findOneAndRemove({ serverID: guild.id })
+        await loteriaModel.findOneAndRemove({ serverID: guild.id })
     }, diff);
     loteria.set(guild.id, timeout)
     console.log("Loteria configurada!")
