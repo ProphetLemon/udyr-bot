@@ -66,23 +66,11 @@ module.exports = {
             timeout: null,
             musica: null
         }
-        if (args.length > 0 && args[0] == "false") {
-            servidor.musica = false
-        }
-        else {
-            servidor.musica = true
-        }
+        servidor.player.on("error", () => {
+            getNextResource(servidor);
+        });
         servidores.set(message.guild.id, servidor)
         message.delete()
-        if (servidor.musica) {
-            servidor.player.on(AudioPlayerStatus.Idle, () => {
-                getNextResource(servidor);
-            });
-            servidor.player.on("error", () => {
-                getNextResource(servidor);
-            });
-            getNextResource(servidor)
-        }
         configurarTiempos(servidor)
         console.log(`FIN ${cmd.toUpperCase()}`);
     }
@@ -91,9 +79,10 @@ module.exports = {
 function configurarTiempos(servidor) {
     var now = new Date()
     if (servidor.break == null || servidor.break == true) {
-        if (servidor.musica) {
-            servidor.player.unpause()
-        }
+        servidor.player.on(AudioPlayerStatus.Idle, () => {
+            getNextResource(servidor);
+        });
+        getNextResource(servidor)
         now.setMinutes(now.getMinutes() + 25)
         servidor.channel.send(`Pomodoro 25' (Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
         servidor.break = false
@@ -112,14 +101,14 @@ function configurarTiempos(servidor) {
             configurarTiempos(servidor)
         }, 25 * 60 * 1000, servidor);
     } else if (servidor.break == false) {
-        if (servidor.musica) {
-            servidor.player.pause()
-        }
-        const resource = createAudioResource('./audios/bell.mp3')
+        servidor.player.pause()
+        const stream = ytdl("https://www.youtube.com/watch?v=kZ0M8hgRQag", { filter: 'audioonly' });
+        const resource = createAudioResource(stream)
         servidor.player.play(resource)
-        if (servidor.musica) {
-            servidor.player.unpause()
-        }
+        servidor.connection.subscribe(servidor.player)
+        servidor.player.on(AudioPlayerStatus.Idle, () => {
+            servidor.connection.disconnect()
+        });
         servidor.pomodoros = servidor.pomodoros + 1
         var minutos = servidor.pomodoros % 4 == 0 ? 15 : 5
         now.setMinutes(now.getMinutes() + minutos)
@@ -160,11 +149,6 @@ function muteOrUnmuteChannel(servidor, trigger) {
     return false
 }
 
-/**
- * 
- * @param {Message} message 
- * @returns 
- */
 function cerrarConexion(servidor) {
     servidor.connection.destroy()
     clearTimeout(servidor.timeout)
@@ -173,10 +157,11 @@ function cerrarConexion(servidor) {
     servidores.delete(servidor.channel.guild.id)
 }
 
-function getNextResource(servidor) {
+async function getNextResource(servidor) {
     if (servidor.enlaces.length == 0) {
         servidor.enlaces = fs.readFileSync('./audios/links.txt', 'utf8').split("\n")
     }
+    servidor.connection.rejoin()
     const seleccion = Math.floor(Math.random() * servidor.enlaces.length)
     const stream = ytdl(servidor.enlaces[seleccion], { filter: 'audioonly' });
     const resource = createAudioResource(stream)
