@@ -63,17 +63,26 @@ module.exports = {
             pomodoros: 0,
             break: null,
             channel: textChannel,
-            timeout: null
+            timeout: null,
+            musica: null
+        }
+        if (args.length > 0 && args[0] == "false") {
+            servidor.musica = false
+        }
+        else {
+            servidor.musica = true
         }
         servidores.set(message.guild.id, servidor)
         message.delete()
-        servidor.player.on(AudioPlayerStatus.Idle, () => {
-            getNextResource(servidor);
-        });
-        servidor.player.on("error", () => {
-            getNextResource(servidor);
-        });
-        getNextResource(servidor)
+        if (servidor.musica) {
+            servidor.player.on(AudioPlayerStatus.Idle, () => {
+                getNextResource(servidor);
+            });
+            servidor.player.on("error", () => {
+                getNextResource(servidor);
+            });
+            getNextResource(servidor)
+        }
         configurarTiempos(servidor)
         console.log(`FIN ${cmd.toUpperCase()}`);
     }
@@ -82,10 +91,12 @@ module.exports = {
 function configurarTiempos(servidor) {
     var now = new Date()
     if (servidor.break == null || servidor.break == true) {
+        if (servidor.musica) {
+            servidor.player.unpause()
+        }
         now.setMinutes(now.getMinutes() + 25)
         servidor.channel.send(`Pomodoro 25' (Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
         servidor.break = false
-        servidor.player.unpause()
         if (muteOrUnmuteChannel(servidor, true)) {
             return
         }
@@ -101,13 +112,17 @@ function configurarTiempos(servidor) {
             configurarTiempos(servidor)
         }, 25 * 60 * 1000, servidor);
     } else if (servidor.break == false) {
-        servidor.player.pause()
+        if (servidor.musica) {
+            servidor.player.pause()
+        }
+        const resource = createAudioResource('./audios/bell.mp3')
+        servidor.player.play(resource)
+        if (servidor.musica) {
+            servidor.player.unpause()
+        }
         servidor.pomodoros = servidor.pomodoros + 1
         var minutos = servidor.pomodoros % 4 == 0 ? 15 : 5
         now.setMinutes(now.getMinutes() + minutos)
-        const resource = createAudioResource('./audios/bell.mp3')
-        servidor.player.play(resource)
-        servidor.player.unpause()
         if (muteOrUnmuteChannel(servidor, false)) {
             return
         }
@@ -133,7 +148,7 @@ function configurarTiempos(servidor) {
  */
 function muteOrUnmuteChannel(servidor, trigger) {
     var members = Array.from(servidor.channel.members.values())
-    if (members.length == 1) {
+    if (members.length == 1 && members[0].user.bot) {
         cerrarConexion(servidor)
         return true
     }
