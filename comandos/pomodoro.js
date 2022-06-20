@@ -59,7 +59,7 @@ module.exports = {
             selfDeaf: true
         })
         var guild = client.guilds.cache.get("598896817157046281")
-        const textChannel = guild.channels.cache.find(channel => channel.id === "986959978273337405" && channel.isText())
+        const textChannel = message.member.voice.channel
         var servidor = {
             connection: connection,
             player: createAudioPlayer(),
@@ -89,15 +89,8 @@ function configurarTiempos(servidor) {
         now.setMinutes(now.getMinutes() + 25)
         servidor.channel.send(`Pomodoro 25' (Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
         servidor.break = false
-        servidor.channel.edit({
-            permissionOverwrites: [
-                {
-                    id: servidor.channel.guild.roles.everyone,
-                    deny: ["SPEAK"]
-                }
-            ]
-        })
         servidor.player.unpause()
+        muteOrUnmuteChannel(servidor.channel, true)
         servidor.timeout = setTimeout((servidor) => {
             configurarTiempos(servidor)
         }, 25 * 60 * 1000, servidor);
@@ -106,22 +99,27 @@ function configurarTiempos(servidor) {
         servidor.pomodoros = servidor.pomodoros + 1
         var minutos = servidor.pomodoros % 4 == 0 ? 15 : 5
         now.setMinutes(now.getMinutes() + minutos)
-        servidor.channel.edit({
-            permissionOverwrites: [
-                {
-                    id: servidor.channel.guild.roles.everyone,
-                    allow: ["SPEAK"]
-                }
-            ]
-        })
-        const resource = createAudioResource('/audios/bell.mp3')
+        const resource = createAudioResource('./audios/bell.mp3')
         servidor.player.play(resource)
         servidor.player.unpause()
+        muteOrUnmuteChannel(servidor.channel, false)
         servidor.channel.send(`Descanso ${minutos}' (Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
         servidor.break = true
         servidor.timeout = setTimeout((servidor) => {
             configurarTiempos(servidor)
         }, minutos * 60 * 1000, servidor);
+    }
+}
+
+/**
+ * Funcion que mutea y desmutea a la gente
+ * @param {Discord.VoiceChannel} channel 
+ * @param {Boolean} trigger
+ */
+function muteOrUnmuteChannel(channel, trigger) {
+    var members = Array.from(channel.members.values())
+    for (let member of members) {
+        member.voice.setMute(trigger)
     }
 }
 
