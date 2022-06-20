@@ -1,4 +1,4 @@
-const { Client, Message } = require("discord.js")
+const { Client, Message, VoiceChannel } = require("discord.js")
 const Discord = require("discord.js")
 const ytdl = require('ytdl-core')
 const ytSearch = require('yt-search')
@@ -45,11 +45,7 @@ module.exports = {
             if (!servidor) {
                 return message.reply("No se habia empezado un pomodoro")
             }
-            servidor.connection.destroy()
-            clearTimeout(servidor.timeout)
-            servidor.channel.bulkDelete(99)
-            servidor.channel.bulkDelete(99)
-            servidores.delete(message.guild.id)
+            cerrarConexion(servidor)
             return
         }
         var connection = joinVoiceChannel({
@@ -90,7 +86,17 @@ function configurarTiempos(servidor) {
         servidor.channel.send(`Pomodoro 25' (Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
         servidor.break = false
         servidor.player.unpause()
-        muteOrUnmuteChannel(servidor.channel, true)
+        if (muteOrUnmuteChannel(servidor, true)) {
+            return
+        }
+        servidor.channel.edit({
+            permissionOverwrites: [
+                {
+                    id: servidor.channel.guild.roles.everyone,
+                    deny: ["SPEAK"]
+                }
+            ]
+        })
         servidor.timeout = setTimeout((servidor) => {
             configurarTiempos(servidor)
         }, 25 * 60 * 1000, servidor);
@@ -102,7 +108,17 @@ function configurarTiempos(servidor) {
         const resource = createAudioResource('./audios/bell.mp3')
         servidor.player.play(resource)
         servidor.player.unpause()
-        muteOrUnmuteChannel(servidor.channel, false)
+        if (muteOrUnmuteChannel(servidor, false)) {
+            return
+        }
+        servidor.channel.edit({
+            permissionOverwrites: [
+                {
+                    id: servidor.channel.guild.roles.everyone,
+                    allow: ["SPEAK"]
+                }
+            ]
+        })
         servidor.channel.send(`Descanso ${minutos}' (Acaba a las ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")})`)
         servidor.break = true
         servidor.timeout = setTimeout((servidor) => {
@@ -113,14 +129,33 @@ function configurarTiempos(servidor) {
 
 /**
  * Funcion que mutea y desmutea a la gente
- * @param {Discord.VoiceChannel} channel 
  * @param {Boolean} trigger
  */
-function muteOrUnmuteChannel(channel, trigger) {
-    var members = Array.from(channel.members.values())
-    for (let member of members) {
-        member.voice.setMute(trigger)
+function muteOrUnmuteChannel(servidor, trigger) {
+    var members = Array.from(servidor.channel.members.values())
+    if (members.length == 1) {
+        cerrarConexion(servidor)
+        return true
     }
+    for (let member of members) {
+        if (member.user.bot == false) {
+            member.voice.setMute(trigger)
+        }
+    }
+    return false
+}
+
+/**
+ * 
+ * @param {Message} message 
+ * @returns 
+ */
+function cerrarConexion(servidor) {
+    servidor.connection.destroy()
+    clearTimeout(servidor.timeout)
+    servidor.channel.bulkDelete(99)
+    servidor.channel.bulkDelete(99)
+    servidores.delete(servidor.channel.guild.id)
 }
 
 function getNextResource(servidor) {
