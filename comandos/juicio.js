@@ -81,7 +81,7 @@ module.exports = {
                 "https://www.periodistadigital.com/wp-content/uploads/2016/07/Un-ladro%CC%81n-bastante-tonto.jpg?width=1200&enable=upscale", "https://ideasqueayudan.com/wp-content/uploads/2016/09/01-Sep-2016_Criminales.jpg",
                 "https://pbs.twimg.com/media/ElRXZ5PWMAE27hT.jpg"]
             var casoVerdadero = robado[0]
-            message.channel.send(`Has acusado a una persona inocente y se te cobrara un impuesto por calumnias e injurias a la persona acusada.\n Por tanto <@!${casoVerdadero.userIDLadron}> se ha salido con la suya`)
+            message.channel.send(`Has acusado a una persona inocente y se te cobrara un impuesto por calumnias e injurias a la persona acusada.\n Por tanto <@${casoVerdadero.userIDLadron}> se ha salido con la suya`)
             message.channel.send(memes[Math.floor(Math.random() * memes.length)])
             var porcentaje = Math.floor((casoVerdadero.dinero / (profileData.udyrcoins + casoVerdadero.dinero)) * 100)
             var acusadoProfile = await profileModel.findOne({

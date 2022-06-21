@@ -269,11 +269,11 @@ async function configurarLoteria(guild, textChannel, loteriaBBDD) {
         discurso.push(`EN ESTE EVENTO HAN PARTICIPADO ${boletos.length} PERSONAS`)
         discurso.push(`Y 3 PERSONAS SE REPARTIRAN DE MANERA POCO JUSTA 100.000 <:udyrcoin:961729720104419408>`)
         discurso.push(`EL PRIMER PREMIO ES PARA:`)
-        discurso.push(`<@!${ganador.userID}>`)
+        discurso.push(`<@${ganador.userID}>`)
         discurso.push(`EL SEGUNDO PREMIO ES PARA:`)
-        discurso.push(`<@!${segundo.userID}>`)
+        discurso.push(`<@${segundo.userID}>`)
         discurso.push(`EL TERCER Y ULTIMO PREMIO ES PARA:`)
-        discurso.push(`<@!${tercero.userID}>`)
+        discurso.push(`<@${tercero.userID}>`)
         textChannel.send(discurso[0])
         discurso.splice(0, 1)
         leerDiscurso(discurso, textChannel)
@@ -346,7 +346,7 @@ async function robos(guild, textChannel) {
                     await roboModel.findOneAndRemove({
                         userIDLadron: robo.userIDLadron
                     })
-                    textChannel.send(`Han pasado 12 horas asi que <@!${robo.userIDLadron}> ha robado ${robo.dinero} <:udyrcoin:961729720104419408> a <@!${robo.userIDAfectado}>`)
+                    textChannel.send(`Han pasado 12 horas asi que <@${robo.userIDLadron}> ha robado ${robo.dinero} <:udyrcoin:961729720104419408> a <@${robo.userIDAfectado}>`)
                 }, diff, robo);
                 listaRobos.set(robo.userIDLadron, timeout)
             } else {
@@ -361,7 +361,7 @@ async function robos(guild, textChannel) {
                 await roboModel.findOneAndRemove({
                     userIDLadron: robo.userIDLadron
                 })
-                textChannel.send(`Han pasado 12 horas asi que <@!${robo.userIDLadron}> ha robado ${robo.dinero} <:udyrcoin:961729720104419408> a <@!${robo.userIDAfectado}>`)
+                textChannel.send(`Han pasado 12 horas asi que <@${robo.userIDLadron}> ha robado ${robo.dinero} <:udyrcoin:961729720104419408> a <@${robo.userIDAfectado}>`)
             }
         }
     }

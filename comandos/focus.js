@@ -40,7 +40,7 @@ module.exports = {
         messageCopy = message;
         message.delete();
         focusID = user.slice(3, user.length - 1);
-        messageCopy.channel.send("<@!" + focusID + ">" + " cementerio de choripanes");
+        messageCopy.channel.send("<@" + focusID + ">" + " cementerio de choripanes");
         let aux = setTimeout(function () {
             minutos -= 2;
             focusBucle(minutos, messageCopy, client);
@@ -55,7 +55,7 @@ function focusBucle(minutos, message, client) {
         console.log("FIN FOCUS");
         return;
     }
-    message.channel.send("<@!" + focusID + ">" + " cementerio de choripanes");
+    message.channel.send("<@" + focusID + ">" + " cementerio de choripanes");
     let aux = setTimeout(function () {
         minutos -= 2;
         focusBucle(minutos, message);

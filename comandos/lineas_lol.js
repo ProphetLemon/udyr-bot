@@ -58,7 +58,7 @@ module.exports = {
                 }
                 random = Math.floor(Math.random() * campeon_linea.length);
                 var nombre = campeon_linea[random].nombre
-                log_mensaje.push(`<@!${parguelas[i].id}> te toca jugar ${nombre} en ${linea}` + `\nhttps://lolalytics.com/lol/${nombre.split("'").join("").split(".").join("").split(" ").join("").toLowerCase()}/build/`);
+                log_mensaje.push(`<@${parguelas[i].id}> te toca jugar ${nombre} en ${linea}` + `\nhttps://lolalytics.com/lol/${nombre.split("'").join("").split(".").join("").split(" ").join("").toLowerCase()}/build/`);
                 campeon_linea = [];
             }
             log_mensaje.sort(function (a, b) {

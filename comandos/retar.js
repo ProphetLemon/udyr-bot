@@ -118,7 +118,7 @@ module.exports = {
             let guildMembers = await message.guild.members.fetch();
             let id1 = guildMembers.random().id;
             let id2 = guildMembers.random().id;
-            message.channel.send("<@!" + id1 + "> vs <@!" + id2 + ">");
+            message.channel.send("<@" + id1 + "> vs <@" + id2 + ">");
             var gladiador1 = new gladiador(guildMembers.get(id1).displayName, 100);
             var gladiador2 = new gladiador(guildMembers.get(id2).displayName, 100);
 
@@ -288,14 +288,14 @@ function combate(gladiador1, gladiador2, message) {
                 break;
             case eventosRandom[1]:
                 sucedioEventoUdyr = true;
-                logCombateText += `🐻 Aparece <@!849997112930074654> y gankea por sorpresa a ${gladiador1.nombre} y a ${gladiador2.nombre}. 🐻\n`;
+                logCombateText += `🐻 Aparece <@849997112930074654> y gankea por sorpresa a ${gladiador1.nombre} y a ${gladiador2.nombre}. 🐻\n`;
                 gladiador1.vida = 0;
                 gladiador2.vida = 0;
                 gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
                 gladiador2.vida = gladiador2.vida > 100 ? 100 : gladiador2.vida;
                 logCombateText += `${gladiador1.nombre}: ${gladiador1.vida} puntos de vida restantes\n${gladiador2.nombre}: ${gladiador2.vida} puntos de vida restantes.`;
                 combates.get(message.guild.id).push(logCombateText);
-                combates.get(message.guild.id).push("🏆 \u00A1El ganador del combate es <@!849997112930074654>! 🏆");
+                combates.get(message.guild.id).push("🏆 \u00A1El ganador del combate es <@849997112930074654>! 🏆");
                 break;
             case eventosRandom[2]:
                 logCombateText += "🥰 De tanto darse de hostias se dan cuenta de que estan hechos el uno para el otro y abandonan el combate. 🥰\n";
@@ -339,7 +339,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                 miembroPerdedor1.roles.remove(role.id);
                 miembroPerdedor2.roles.remove(role.id);
                 udyr.roles.add(role);
-                message.channel.send(`<:1990_praisethesun:602528888400379935><@!${udyr.id}> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>`);
+                message.channel.send(`<:1990_praisethesun:602528888400379935><@${udyr.id}> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>`);
                 message.channel.send({
                     files: [{
                         attachment: "./images/udyr-admin.jpg",
@@ -382,7 +382,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
             if (maricon1.roles.cache.has(roleAdmin.id) || maricon2.roles.cache.has(roleAdmin.id)) {
                 if (maricon1.displayName != udyr.displayName && maricon2.displayName != udyr.displayName) {
                     udyr.roles.add(roleAdmin);
-                    message.channel.send("<:1990_praisethesun:602528888400379935><@!" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
+                    message.channel.send("<:1990_praisethesun:602528888400379935><@" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
                     message.channel.send({
                         files: [{
                             attachment: "./images/udyr-admin.jpg",
@@ -405,7 +405,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                     })
                 } else {
                     tioRandom.roles.add(roleAdmin);
-                    message.channel.send("<:1990_praisethesun:602528888400379935><@!" + tioRandom.id + "> es el nuevo Admin de este servidor debido a la inutilidad de los otros<:1990_praisethesun:602528888400379935>.");
+                    message.channel.send("<:1990_praisethesun:602528888400379935><@" + tioRandom.id + "> es el nuevo Admin de este servidor debido a la inutilidad de los otros<:1990_praisethesun:602528888400379935>.");
                     var dateNow = moment().toDate()
                     dateNow = moment(dateNow).add(30, 'm').toDate()
                     dateNow.setSeconds(0);
@@ -439,7 +439,7 @@ async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord)
                 miembroPerdedor.roles.remove(role.id);
                 miembroGanador.roles.add(role);
                 banquillo = [];
-                message.channel.send("<:1990_praisethesun:602528888400379935><@!" + miembroGanador.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
+                message.channel.send("<:1990_praisethesun:602528888400379935><@" + miembroGanador.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
                 if (miembroPerdedor.id == "849997112930074654") {
                     message.channel.send({
                         files: [{
