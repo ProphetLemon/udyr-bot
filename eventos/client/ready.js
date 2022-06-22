@@ -11,7 +11,7 @@ const payoutModel = require('../../models/payoutSchema');
  * @param {Client} client
  */
 module.exports = async (Discord, client) => {
-    var guild = client.guilds.cache.get("598896817157046281")
+    /*var guild = client.guilds.cache.get("598896817157046281")
     const textChannel = guild.channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
     await robos(guild, textChannel)
     var loteriaBBDD = await loteriaModel.findOne({ serverID: guild.id })
@@ -19,7 +19,7 @@ module.exports = async (Discord, client) => {
         await configurarLoteria(guild, textChannel, loteriaBBDD)
     }
     await configurarBolsa()
-    await configurarPayout(guild)
+    await configurarPayout(guild)*/
     client.user.setPresence({
         activities: [{ name: 'minar udyrcoins 💰', type: 0 }],
         status: "dnd"
