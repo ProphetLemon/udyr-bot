@@ -6,6 +6,8 @@ const boletoModel = require('../../models/boletoSchema');
 const impuestoModel = require('../../models/impuestoSchema')
 const bolsaModel = require('../../models/bolsaSchema')
 const payoutModel = require('../../models/payoutSchema');
+const wordleModel = require('../../models/wordleSchema');
+const fs = require('fs');
 /**
  * @param {Discord} Discord
  * @param {Client} client
@@ -20,6 +22,7 @@ module.exports = async (Discord, client) => {
     }
     await configurarBolsa()
     await configurarPayout(guild)*/
+    await configurarWordle()
     client.user.setPresence({
         activities: [{ name: 'minar udyrcoins 💰', type: 0 }],
         status: "dnd"
@@ -74,10 +77,16 @@ async function configurarPayout(guild) {
                 }
             })
         }
+        var datePago = new Date()
+        datePago.setDate(datePago.getDate() + 2)
+        datePago.setHours(12)
+        datePago.setMinutes(30)
+        datePago.setSeconds(0)
+        datePago.setMilliseconds(0)
         await payoutModel.findOneAndUpdate({
             serverID: guild.id
         }, {
-            datePago: moment().add(2, "days").toDate()
+            datePago: datePago
         })
         configurarPayout(guild)
     }, payout.datePago - hoy, guild);
@@ -143,6 +152,40 @@ global.configurarAccion = async function (accion) {
     }, dateFinal - t1, accion);
     actualizarRandom(t1, accion)
     console.log(`${accion.nombre} configurado!`)
+}
+
+
+async function configurarWordle() {
+    var wordleAnterior = await wordleModel.findOne({})
+    var hoy = new Date()
+    var hoyFormateada = metodosUtiles.formatDate(hoy)
+    if (hoyFormateada != wordleAnterior.dia) {
+        try {
+            var data = fs.readFileSync('./wordle/wordle.txt', 'utf8')
+        } catch (err) {
+            console.error(err)
+            return
+        }
+        var inputs = data.split("\n")
+        var palabraRandom = inputs[Math.floor(Math.random() * inputs.length)].split("\r")[0]
+        await wordleModel.deleteMany({})
+        var palabraBBDD = await wordleModel.create({
+            aprobada: true,
+            palabra: palabraRandom,
+            dia: hoyFormateada
+        })
+        await palabraBBDD.save()
+    }
+    var dateLater = new Date()
+    dateLater.setDate(dateLater.getDate() + 1)
+    dateLater.setHours(0)
+    dateLater.setMinutes(0)
+    dateLater.setSeconds(0)
+    dateLater.setMilliseconds(0)
+    setTimeout(async () => {
+        await configurarWordle()
+    }, dateLater - hoy);
+    console.log("Wordle configurado")
 }
 
 async function configurarBolsa() {
