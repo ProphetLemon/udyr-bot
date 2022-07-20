@@ -70,6 +70,11 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`)
+        if (combates.has(message.guild.id)) {
+            message.reply("Están peleando los mayores")
+            message.delete()
+            return
+        }
         if (adminActual.id == undefined) {
             var adminBBDD = await adminModel.findOne({ serverID: message.guild.id })
             adminActual.dateLimite = adminBBDD.dateLimite
@@ -95,7 +100,7 @@ module.exports = {
             }
             partida.channel.send("Hay 100<:udyrcoin:961729720104419408> en juego!")
         }
-        message.delete()
+        //message.delete()
         combates.set(partida.guildId, partida)
         combate(partida, 1)
         leerRondasPelea(partida)
@@ -135,7 +140,7 @@ async function getDateLater() {
 async function repartirPuntos(partida) {
     var { gladiador1, gladiador2, eventosRandom } = partida
     var memberManager = await partida.channel.guild.members.fetch()
-    var rolAdmin = getRolByName(partida, "El Admin")
+    var rolAdmin = await getRolByName(partida, "El Admin")
     switch (eventosRandom) {
         case 0:
         case 1:
@@ -162,7 +167,7 @@ async function repartirPuntos(partida) {
                 partida.channel.send(`<@${perdedor.id}> ha perdido 100<:udyrcoin:961729720104419408>`)
             }
             var dateLater = getDateLater()
-            if (perdedor.roles.cache.get(rolAdmin.id)) {
+            if (perdedor.roles.cache.has(rolAdmin.id)) {
                 if (eventosRandom == 0) {
                     partida.channel.send(`<@${ganador.id}> le ha dado una paliza a <@${perdedor.id}>, le ha robado 100<:udyrcoin:961729720104419408> y ademas ahora es el nuevo admin`)
                 }
@@ -181,7 +186,7 @@ async function repartirPuntos(partida) {
                         endDate: dateLater
                     }
                 })
-            } else if (ganador.roles.cache.get(rolAdmin.id)) {
+            } else if (ganador.roles.cache.has(rolAdmin.id)) {
                 banquillo.push(perdedor.id)
                 setTimeout((perdedorID) => {
                     for (let i = 0; i < banquillo.length; i++) {
@@ -212,7 +217,7 @@ async function repartirPuntos(partida) {
             }
             break;
         case 3:
-            var rolMaricon = getRolByName(partida, "Maricones")
+            var rolMaricon = await getRolByName(partida, "Maricones")
             memberManager.get(gladiador1.id).roles.add(rolMaricon)
             memberManager.get(gladiador2.id).roles.add(rolMaricon)
             setTimeout((gladiador1, gladiador2, memberManager) => {
