@@ -100,7 +100,7 @@ module.exports = {
  * @param {Partida} partida
  * @returns {Discord.Role} 
  */
-function getRolByName(partida, rolName) {
+async function getRolByName(partida, rolName) {
     var roleManager = await partida.channel.guild.roles.fetch()
     for (let [key, value] of roleManager) {
         if (value.name == rolName) {
@@ -112,7 +112,7 @@ function getRolByName(partida, rolName) {
  * 
  * @returns {Date}
  */
-function getDateLater() {
+async function getDateLater() {
     var date = new Date()
     date.setMinutes(date.getMinutes() + 30)
     date.setSeconds(0)
@@ -207,7 +207,7 @@ async function repartirPuntos(partida) {
  * 
  * @param {Partida} partida 
  */
-function leerRondasPelea(partida) {
+async function leerRondasPelea(partida) {
     if (partida.logCombate.length == 2) {
         partida.channel.send(partida.logCombate[0] + "\n" + partida.logCombate[1])
         partida.logCombate.splice(0, 2)

@@ -67,7 +67,7 @@ module.exports = {
                     aprobada: true
                 }
             })
-            const textChannel = client.guilds.cache.get("598896817157046281").channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
+            const textChannel = client.guilds.cache.get("598896817157046281").channels.cache.find(channel => channel.id === "809786674875334677" && channel.isTextBased())
             textChannel.send(`EL WORDLE DE HOY ESTA LISTO`)
         }
         else {

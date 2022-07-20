@@ -14,7 +14,7 @@ const fs = require('fs');
  */
 module.exports = async (Discord, client) => {
     var guild = client.guilds.cache.get("598896817157046281")
-    const textChannel = guild.channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
+    const textChannel = guild.channels.cache.find(channel => channel.id === "809786674875334677" && channel.isTextBased())
     await robos(guild, textChannel)
     var loteriaBBDD = await loteriaModel.findOne({ serverID: guild.id })
     if (loteriaBBDD) {
@@ -57,7 +57,7 @@ async function configurarPayout(guild) {
                 { wallet: { $ne: [] } }
             ]
         })
-        var bolsaChannel = guild.channels.cache.find(channel => channel.id === "976611174915375174" && channel.isText())
+        var bolsaChannel = guild.channels.cache.find(channel => channel.id === "976611174915375174" && channel.isTextBased())
         for (let i = 0; i < personas.length; i++) {
             var persona = personas[i]
             var wallet = persona.wallet
