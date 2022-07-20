@@ -141,7 +141,7 @@ async function repartirPuntos(partida) {
         case 1:
             var ganador = memberManager.get((gladiador1.vida > 0 ? gladiador1.id : gladiador2.id))
             var perdedor = memberManager.get((gladiador1.vida > 0 ? gladiador2.id : gladiador1.id))
-            if (ganador.user.bot == false && perdedor.user.bot == false && tituloEnJuego) {
+            if (ganador.user.bot == false && perdedor.user.bot == false && partida.tituloEnJuego) {
                 await profileModel.findOneAndUpdate({
                     userID: ganador.id,
                     serverID: partida.guildId
