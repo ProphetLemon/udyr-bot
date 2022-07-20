@@ -1,44 +1,59 @@
-const { Message, Client, MessageAttachment } = require('discord.js');
+const { Message, Client, MessageAttachment, TextChannel } = require('discord.js');
+const Discord = require('discord.js');
 const fs = require('fs');
 const { Canvacord } = require("canvacord");
 const adminModel = require("../models/adminSchema");
 const profileModel = require('../models/profileSchema');
-class gladiador {
-    /**
-     * 
-     * @param {string} nombre
-     * @param {number} vida
-     */
-    constructor(nombre, vida) {
-        this.nombre = nombre;
-        this.vida = vida;
-    }
-}
-class admin {
-    /**
-     * 
-     * @param {string} nombre
-     * @param {Date} dateLimite
-     */
-    constructor(nombre, dateLimite) {
-        this.nombre = nombre;
-        this.dateLimite = dateLimite;
-    }
-}
-var combates = new Map();
-var adminActual = new admin(undefined, undefined);
-var jugarseElTitulo = false;
 var banquillo = [];
-var ganador;
-var perdedor;
-var sucedioEventoAmor = false;
-var sucedioEventoUdyr = false;
-var baseDmg = 30;
-var parryDmg = baseDmg / 2;
-var turno = 2;
+var combates = new Map()
 var eventosRandom = ["MATRIX", "UDYR", "AMOR"];
-var puntos_peaje = 100;
-var hay_apuesta = false;
+const UDYRID = "849997112930074654"
+class Gladiador {
+    /**
+     * 
+     * @param {string} nombre 
+     * @param {number} vida 
+     * @param {string} id 
+     */
+    constructor(nombre, vida, id) {
+        this.nombre = nombre
+        this.vida = vida
+        this.id = id
+    }
+}
+class Admin {
+    /**
+     * 
+     * @param {string} id 
+     * @param {Date} dateLimite 
+     */
+    constructor(id, dateLimite) {
+        this.id = id
+        this.dateLimite = dateLimite
+    }
+}
+class Partida {
+    /**
+     * 
+     * @param {Gladiador} gladiador1 
+     * @param {Gladiador} gladiador2 
+     * @param {number} eventosRandom 
+     * @param {string[]} logCombate 
+     * @param {string} guildId 
+     * @param {boolean} tituloEnJuego 
+     * @param {TextChannel} channel 
+     */
+    constructor(gladiador1, gladiador2, eventosRandom, logCombate, guildId, tituloEnJuego, channel) {
+        this.gladiador1 = gladiador1
+        this.gladiador2 = gladiador2
+        this.eventosRandom = eventosRandom
+        this.logCombate = logCombate
+        this.guildId = guildId
+        this.tituloEnJuego = tituloEnJuego
+        this.channel = channel
+    }
+}
+const adminActual = new Admin(undefined, undefined)
 module.exports = {
     name: 'retar',
     aliases: ['pelea', 'coliseo'],
@@ -46,164 +61,177 @@ module.exports = {
     /**
      * 
      * @param {Message} message 
-     * @param {*} args 
-     * @param {*} cmd 
-     * @param {*} client 
-     * @param {*} Discord 
+     * @param {[]} args 
+     * @param {string} cmd 
+     * @param {Client} client 
+     * @param {Discord} Discord 
      * @param {*} profileData 
      * @returns 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`)
-        if (!profileData) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
-        if (combates.get(message.guild.id) != undefined) {
-            message.author.send("Callate maric\u00F3n, \u00BFno ves que est\u00E1n peleando los mayores?").then(msg => {
-                setTimeout(() => {
-                    msg.delete()
-                }, 60000);
-                message.delete();
-            });
-            return;
+        if (adminActual.id == undefined) {
+            var adminBBDD = await adminModel.findOne({ serverID: message.guild.id })
+            adminActual.dateLimite = adminBBDD.dateLimite
+            adminActual.id = adminBBDD.id
         }
-        if (adminActual.nombre == undefined) {
-            var adminBBDD = await adminModel.find();
-            var adminModelo = adminBBDD[0];
-            var memberManager = await message.guild.members.fetch();
-            var memberAdmin = memberManager.get(adminModelo.userID)
-            adminActual = new admin(memberAdmin.displayName, adminModelo.endDate);
+        if (message.mentions.members.size > 1) {
+            var sustituto = message.mentions.members.get(message.mentions.members.keyAt(1))
+            var gladiador1 = new Gladiador(sustituto.displayName, 100, sustituto.id)
+        } else if (message.mentions.members.size == 0) {
+            console.log(`FIN ${cmd.toUpperCase()}`)
+            return message.reply("Tienes que mencionar a alguien")
+        } else {
+            var gladiador1 = new Gladiador(message.member.displayName, 100, message.member.id)
         }
-        var personaje2 = "";
-        var personaje1 = "";
-        var gladiador1;
-        var gladiador2;
-        if (cmd == 'pelea') {
-            if (message.mentions.members.size != 2) {
-                metodosUtiles.insultar(message);
-                console.log(`FIN ${cmd.toUpperCase()}`)
-                return;
-            }
-            var nombre1 = message.mentions.members.get(message.mentions.members.keyAt(0)).displayName;
-            var nombre2 = message.mentions.members.get(message.mentions.members.keyAt(1)).displayName;
-            gladiador1 = new gladiador(nombre1, 100);
-            gladiador2 = new gladiador(nombre2, 100);
-        } else if (cmd == 'retar') {
-            personaje1 = message.guild.members.cache.get(message.author.id).displayName;
-            var idpj2 = message.mentions.members.first();
-            if (!idpj2) {
-                message.reply("eres tan maric\u00F3n que te heriste a ti mismo");
-                console.log(`FIN ${cmd.toUpperCase()}`)
-                return;
-            }
-            personaje2 = idpj2.displayName;
-            var guildMembers = await message.guild.members.fetch();
-            if (personaje1 == adminActual.nombre) {
-                jugarseElTitulo = true;
-                hay_apuesta = false;
-            } else if (personaje2 == adminActual.nombre && !guildMembers.get(idpj2.id).user.bot) {
-                if (profileData.udyrcoins < puntos_peaje) {
-                    console.log(`FIN ${cmd.toUpperCase()}`)
-                    return message.reply("no tienes puntos ni para comprar pan gilipollas")
-                };
-                message.channel.send(`${message.member.displayName} se esta jugando ${puntos_peaje} <:udyrcoin:961729720104419408>!`).then(msg => {
-                    setTimeout(() => {
-                        msg.delete()
-                    }, 3000);
-                });
-                hay_apuesta = true;
-            }
-            gladiador1 = new gladiador(personaje1, 100);
-            gladiador2 = new gladiador(personaje2, 100);
-        }
-        else if (cmd == 'coliseo') {
-            let guildMembers = await message.guild.members.fetch();
-            let id1 = guildMembers.random().id;
-            let id2 = guildMembers.random().id;
-            message.channel.send("<@" + id1 + "> vs <@" + id2 + ">");
-            var gladiador1 = new gladiador(guildMembers.get(id1).displayName, 100);
-            var gladiador2 = new gladiador(guildMembers.get(id2).displayName, 100);
-
-        }
-        coliseo(gladiador1, gladiador2, message, client, Discord);
+        var target = message.mentions.members.first()
+        var gladiador2 = new Gladiador(target.displayName, 100, target.id)
+        var partida = new Partida(gladiador1, gladiador2, 0, [], message.guild.id, (gladiador1.id == adminActual.id || gladiador2.id == adminActual.id) && gladiador1.id == message.member.id, message.channel)
+        message.delete()
+        combates.set(partida.guildId, partida)
+        combate(partida, 1)
+        leerRondasPelea(partida)
         console.log(`FIN ${cmd.toUpperCase()}`)
     }
 }
 
 /**
  * 
- * @param {gladiador} gladiador1 
- * @param {gladiador} gladiador2 
- * @param {Message} message 
- * @param {Client} client 
- * @param {*} Discord 
- * @returns 
+ * @param {Partida} partida
+ * @returns {Discord.Role} 
  */
-async function coliseo(gladiador1, gladiador2, message, client, Discord) {
-    console.log("INICIO COLISEO");
-    if ((banquillo.includes(gladiador1.nombre) || banquillo.includes(gladiador2.nombre)) && (gladiador1.nombre == adminActual.nombre || gladiador2.nombre == adminActual.nombre) && !jugarseElTitulo) {
-        message.channel.send(banquillo.includes(gladiador1.nombre) ? (gladiador1.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun") : (gladiador2.nombre + " ya intento enfrentarse al admin hace poco y no puede volver a hacerlo aun"));
-        console.log("FIN COLISEO");
-        return;
-    }
-    if (gladiador1.nombre == gladiador2.nombre) {
-        message.reply("no te puedes retar a ti mismo, maric\u00F3n");
-        console.log("FIN COLISEO");
-        return;
-    }
-    if ((gladiador1.nombre == adminActual.nombre || gladiador2.nombre == adminActual.nombre) && !jugarseElTitulo) {
-        var dateNow = moment().toDate()
-        if (dateNow < adminActual.dateLimite) {
-            let avatar = message.author.displayAvatarURL({ dynamic: false, format: 'png' });
-            var members = await message.guild.members.fetch()
-            let avatar2 = members.get("849997112930074654").displayAvatarURL({ dynamic: false, format: 'png' });
-            let image = await Canvacord.slap(avatar2, avatar)
-            let attachment = new MessageAttachment(image, "slap.png");
-            message.reply({
-                content: "no se puede retar al admin aun, podras retar al admin cuando sean las " + String(adminActual.dateLimite.getHours()).padStart(2, "0") +
-                    ":" + String(adminActual.dateLimite.getMinutes()).padStart(2, "0"),
-                files: [attachment]
-            })
-            console.log("FIN COLISEO");
-            return;
+function getRolByName(partida, rolName) {
+    var roleManager = await partida.channel.guild.roles.fetch()
+    for (let [key, value] of roleManager) {
+        if (value.name == rolName) {
+            return value
         }
     }
-    combates.set(message.guild.id, []);
-    combates.get(message.guild.id).push("Comienza el combate entre " + gladiador1.nombre + " y " + gladiador2.nombre + "!");
-    messageCopy = message;
-    var comienzo = Math.floor(Math.random() * 2);
-    console.log("INICIO COMBATE");
-    if (comienzo == 0) {
-        combate(gladiador1, gladiador2, messageCopy);
-    } else {
-        combate(gladiador2, gladiador1, messageCopy);
-    }
-    console.log("FIN COMBATE");
-    if (gladiador1.vida == 0 && gladiador2.vida == 0) {
-        combates.get(message.guild.id).push(gladiador1.nombre + " y " + gladiador2.nombre + ", sois maricones");
-        perdedor = [gladiador1, gladiador2];
-    } else if (gladiador1.vida > 0) {
-        ganador = gladiador1;
-        combates.get(message.guild.id).push(":trophy:\u00A1El ganador del combate es " + gladiador1.nombre + "!:trophy:");
-        perdedor = gladiador2;
-        combates.get(message.guild.id).push(perdedor.nombre + ", maric\u00F3n");
-    } else {
-        ganador = gladiador2;
-        combates.get(message.guild.id).push(":trophy:\u00A1El ganador del combate es " + gladiador2.nombre + "!:trophy:");
-        perdedor = gladiador1;
-        combates.get(message.guild.id).push(perdedor.nombre + ", maric\u00F3n");
-    }
-    messageCopy.channel.send(combates.get(message.guild.id)[0] + "\nTurno 1:\n" + combates.get(message.guild.id)[1]);
-    console.log("INICIO LEERRONDASPELEA");
-    leerRondasPelea(gladiador1, gladiador2, messageCopy, client, Discord);
-    console.log("FIN COLISEO");
 }
 /**
- * Funcion donde discurre todo el combate
- * @param {gladiador} gladiador1
- * @param {gladiador} gladiador2
- * @param {Discord.Message} message
+ * 
+ * @returns {Date}
  */
-function combate(gladiador1, gladiador2, message) {
-    var logCombateText = "";
+function getDateLater() {
+    var date = new Date()
+    date.setMinutes(date.getMinutes() + 30)
+    date.setSeconds(0)
+    date.setMilliseconds(0)
+    return date
+}
+
+/**
+ * 
+ * @param {Partida} partida 
+ */
+async function repartirPuntos(partida) {
+    var { gladiador1, gladiador2, eventosRandom } = partida
+    var memberManager = await partida.channel.guild.members.fetch()
+    var rolAdmin = getRolByName(partida, "El Admin")
+    switch (eventosRandom) {
+        case 0:
+        case 1:
+            var ganador = memberManager.get((gladiador1.vida > 0 ? gladiador1.id : gladiador2.id))
+            var perdedor = memberManager.get((gladiador1.vida > 0 ? gladiador2.id : gladiador1.id))
+            if (ganador.user.bot == false && perdedor.user.bot == false) {
+                await profileModel.findOneAndUpdate({
+                    userID: ganador.id,
+                    serverID: partida.guildId
+                }, {
+                    $inc: {
+                        udyrcoins: 100
+                    }
+                })
+                await profileModel.findOneAndUpdate({
+                    userID: perdedor.id,
+                    serverID: partida.guildId
+                }, {
+                    $inc: {
+                        udyrcoins: -100
+                    }
+                })
+            }
+            if (perdedor.roles.cache.get(rolAdmin.id)) {
+                if (eventosRandom == 0) {
+                    partida.channel.send(`<@${ganador.id}> le ha dado una paliza a <@${perdedor.id}>, le ha robado 100<:udyrcoin:961729720104419408> y ademas ahora es el nuevo admin`)
+                }
+                else if (eventosRandom == 1) {
+                    partida.channel.send(`<@${ganador.id}> le ha robado 100<:udyrcoin:961729720104419408> a <@${perdedor.id}> y ademas ahora es el nuevo admin`)
+                }
+                ganador.roles.add(rolAdmin)
+                perdedor.roles.remove(rolAdmin)
+                adminActual.id = ganador.id
+                adminActual.dateLimite = getDateLater()
+                await adminModel.findOneAndUpdate({
+                    serverID: partida.guildId
+                }, {
+                    $set: {
+                        userID: ganador.id,
+                        endDate: getDateLater()
+                    }
+                })
+            } else {
+                banquillo.push(perdedor.id)
+                setTimeout((perdedorID) => {
+                    for (let i = 0; i < banquillo.length; i++) {
+                        if (banquillo[i] == perdedorID) {
+                            banquillo.splice(i, 1)
+                        }
+                    }
+                }, 30 * 60 * 1000, perdedor.id);
+            }
+            break;
+        case 2:
+            memberManager.get(gladiador1.id).roles.remove(rolAdmin)
+            memberManager.get(gladiador2.id).roles.remove(rolAdmin)
+            memberManager.get(UDYRID).roles.add(rolAdmin)
+            partida.channel.send(`El título de admin vuelve al único que es digno en este server.`)
+            break;
+        case 3:
+            memberManager.get(gladiador1.id).roles.remove(rolAdmin)
+            memberManager.get(gladiador2.id).roles.remove(rolAdmin)
+            memberManager.get(UDYRID).roles.add(rolAdmin)
+            var rolMaricon = getRolByName(partida, "Maricones")
+            memberManager.get(gladiador1.id).roles.add(rolMaricon)
+            memberManager.get(gladiador2.id).roles.add(rolMaricon)
+            setTimeout((gladiador1, gladiador2, memberManager) => {
+                memberManager.get(gladiador1.id).roles.remove(rolMaricon)
+                memberManager.get(gladiador2.id).roles.remove(rolMaricon)
+            }, 4 * 60 * 60 * 1000, gladiador1, gladiador2, memberManager);
+            partida.channel.send(`El título de admin vuelve al único que es digno en este server.`)
+            break;
+    }
+}
+
+/**
+ * 
+ * @param {Partida} partida 
+ */
+function leerRondasPelea(partida) {
+    if (partida.logCombate.length == 2) {
+        partida.channel.send(partida.logCombate[0] + "\n" + partida.logCombate[1])
+        partida.logCombate.splice(0, 2)
+        if (partida.tituloEnJuego) {
+            await repartirPuntos(partida)
+        }
+        combates.delete(partida.guildId)
+        return
+    }
+    partida.channel.send(partida.logCombate[0])
+    partida.logCombate.splice(0, 1)
+    setTimeout((partida) => {
+        leerRondasPelea(partida)
+    }, 5000, partida);
+}
+
+/**
+ * 
+ * @param {Partida} partida 
+ * @param {number} turno
+ */
+function combate(partida, turno) {
+    var { gladiador1, gladiador2 } = partida
+    var logCombateText = `**Turno ${turno}:**\n`;
     /**
      * CRITICO 12% ADMIN --------- 10% PIBE NORMAL
      * 
@@ -224,7 +252,8 @@ function combate(gladiador1, gladiador2, message) {
         parry = parry <= 20
         escudo = escudo <= 12
     }
-    var eventoImprobable = Math.floor(Math.random() * 100) == 23;
+    //var eventoImprobable = Math.floor(Math.random() * 100) == 23;
+    var eventoImprobable = Math.floor(Math.random() * 2) == 0;
     if (!eventoImprobable) {
         if (parry) {
             var stun = Math.floor(Math.random() * 7) == 0;
@@ -243,11 +272,11 @@ function combate(gladiador1, gladiador2, message) {
             }
             else {
                 if (critico) {
-                    logCombateText += `:ninja: ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry al ataque **cr\u00EDtico** y le hace ${parryDmg} puntos de da\u00F1o. :ninja:\n`;
+                    logCombateText += `:ninja: ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry al ataque **cr\u00EDtico** y le hace 15 puntos de da\u00F1o. :ninja:\n`;
                 } else {
-                    logCombateText += `:ninja: ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry y le hace ${parryDmg} puntos de da\u00F1o. :ninja:\n`;
+                    logCombateText += `:ninja: ${gladiador1.nombre} intenta golpear pero ${gladiador2.nombre} logra hacerle parry y le hace 15 puntos de da\u00F1o. :ninja:\n`;
                 }
-                gladiador1.vida -= parryDmg;
+                gladiador1.vida -= 15;
             }
         } else if (escudo) {
             if (critico) {
@@ -273,10 +302,10 @@ function combate(gladiador1, gladiador2, message) {
         gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
         gladiador2.vida = gladiador2.vida > 100 ? 100 : gladiador2.vida;
         logCombateText += `${gladiador1.nombre}: ${gladiador1.vida} puntos de vida restantes\n${gladiador2.nombre}: ${gladiador2.vida} puntos de vida restantes.`;
-        combates.get(message.guild.id).push(logCombateText);
+        partida.logCombate.push(logCombateText);
     } else {
         let evento = eventosRandom[Math.floor(Math.random() * eventosRandom.length)];
-
+        partida.eventosRandom = evento + 1
         switch (evento) {
             case eventosRandom[0]:
                 logCombateText += `🤘😔 ${gladiador1.nombre} se da cuenta de que vive en un mundo virtual, ante tal hecho decide que lo mejor es suicidarse. 🤘😔\n`;
@@ -284,18 +313,18 @@ function combate(gladiador1, gladiador2, message) {
                 gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
                 gladiador2.vida = gladiador2.vida > 100 ? 100 : gladiador2.vida;
                 logCombateText += `${gladiador1.nombre}: ${gladiador1.vida} puntos de vida restantes\n${gladiador2.nombre}: ${gladiador2.vida} puntos de vida restantes.`;
-                combates.get(message.guild.id).push(logCombateText);
+                partida.logCombate.push(logCombateText);
+                partida.logCombate.push(`🏆 \u00A1El ganador del combate es <@${gladiador2.id}>! 🏆`);
                 break;
             case eventosRandom[1]:
-                sucedioEventoUdyr = true;
-                logCombateText += `🐻 Aparece <@849997112930074654> y gankea por sorpresa a ${gladiador1.nombre} y a ${gladiador2.nombre}. 🐻\n`;
+                logCombateText += `🐻 Aparece <@${UDYRID}> y gankea por sorpresa a ${gladiador1.nombre} y a ${gladiador2.nombre}. 🐻\n`;
                 gladiador1.vida = 0;
                 gladiador2.vida = 0;
                 gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
                 gladiador2.vida = gladiador2.vida > 100 ? 100 : gladiador2.vida;
                 logCombateText += `${gladiador1.nombre}: ${gladiador1.vida} puntos de vida restantes\n${gladiador2.nombre}: ${gladiador2.vida} puntos de vida restantes.`;
-                combates.get(message.guild.id).push(logCombateText);
-                combates.get(message.guild.id).push("🏆 \u00A1El ganador del combate es <@849997112930074654>! 🏆");
+                partida.logCombate.push(logCombateText);
+                partida.logCombate.push(`🏆 \u00A1El ganador del combate es <@${UDYRID}>! 🏆`);
                 break;
             case eventosRandom[2]:
                 logCombateText += "🥰 De tanto darse de hostias se dan cuenta de que estan hechos el uno para el otro y abandonan el combate. 🥰\n";
@@ -304,220 +333,17 @@ function combate(gladiador1, gladiador2, message) {
                 gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
                 gladiador2.vida = gladiador2.vida > 100 ? 100 : gladiador2.vida;
                 logCombateText += `${gladiador1.nombre}: ${gladiador1.vida} puntos de vida restantes\n ${gladiador2.nombre}: ${gladiador2.vida} puntos de vida restantes.`;
-                combates.get(message.guild.id).push(logCombateText);
-                sucedioEventoAmor = true;
-                combates.get(message.guild.id).push("🏆 \u00A1El ganador del combate es el amor! 🏆");
+                partida.logCombate.push(logCombateText);
+                partida.logCombate.push("🏆 \u00A1El ganador del combate es el amor! 🏆");
                 break;
         }
     }
     if (gladiador1.vida > 0 && gladiador2.vida > 0) {
-        combate(gladiador2, gladiador1, message);
-    }
-}
-
-/**
- * @param {gladiador} gladiador1
- * @param {gladiador} gladiador2
- * @param {Message} message
- */
-async function leerRondasPelea(gladiador1, gladiador2, message, client, Discord) {
-    if (turno == combates.get(message.guild.id).length - 2) {
-        var final = combates.get(message.guild.id)[combates.get(message.guild.id).length - 2] + "\n" + combates.get(message.guild.id)[combates.get(message.guild.id).length - 1];
-        message.channel.send(final);
-        combates.delete(message.guild.id);
-        jugarseElTitulo = false;
-        var guildMembers = await message.guild.members.fetch();
-        var guildRoles = await message.guild.roles.fetch();
-        turno = 2;
-        if (sucedioEventoUdyr == true) {
-            banquillo = [];
-            var udyr = guildMembers.get("849997112930074654")
-            let miembroPerdedor1 = guildMembers.find(member => member.displayName == gladiador1.nombre);
-            let miembroPerdedor2 = guildMembers.find(member => member.displayName == gladiador2.nombre);
-            var role = guildRoles.find(role => role.name == "El Admin");
-            if (miembroPerdedor1.roles.cache.has(role.id) || miembroPerdedor2.roles.cache.has(role.id)) {
-                miembroPerdedor1.roles.remove(role.id);
-                miembroPerdedor2.roles.remove(role.id);
-                udyr.roles.add(role);
-                message.channel.send(`<:1990_praisethesun:602528888400379935><@${udyr.id}> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>`);
-                message.channel.send({
-                    files: [{
-                        attachment: "./images/udyr-admin.jpg",
-                        name: 'file.png'
-                    }]
-                })
-                var dateNow = moment().toDate()
-                dateNow = moment(dateNow).add(30, 'm').toDate()
-                dateNow.setSeconds(0);
-                adminActual = new admin(udyr.displayName, dateNow);
-                var oldAdmin = await adminModel.find();
-                var oldAdminModel = oldAdmin[0];
-                var crear = await adminModel.create({
-                    userID: udyr.id,
-                    endDate: dateNow
-                });
-                await crear.save();
-                await adminModel.findOneAndRemove({
-                    userID: oldAdminModel.userID
-                })
-
-            }
-        } else if (sucedioEventoAmor == true) {
-            banquillo = [];
-            var maricon1 = guildMembers.find(member => member.displayName == gladiador1.nombre);
-            var maricon2 = guildMembers.find(member => member.displayName == gladiador2.nombre);
-            var udyr = guildMembers.get("849997112930074654");
-            var personasBBDD = await profileModel.find({
-                serverID: message.guild.id
-            });
-            for (let i = 0; i < personasBBDD.length; i++) {
-                if (personasBBDD[i].userID == maricon1.id || personasBBDD[i].userID == maricon2.id) {
-                    personasBBDD.splice(i, 1);
-                }
-            }
-            let idRandom = personasBBDD[Math.floor(Math.random() * personasBBDD.length)].userID;
-            var tioRandom = guildMembers.find(member => member.id == idRandom);
-            var roleAdmin = guildRoles.find(role => role.name == "El Admin");
-            var roleMaricones = guildRoles.find(role => role.name == "Maricones");
-            if (maricon1.roles.cache.has(roleAdmin.id) || maricon2.roles.cache.has(roleAdmin.id)) {
-                if (maricon1.displayName != udyr.displayName && maricon2.displayName != udyr.displayName) {
-                    udyr.roles.add(roleAdmin);
-                    message.channel.send("<:1990_praisethesun:602528888400379935><@" + udyr.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
-                    message.channel.send({
-                        files: [{
-                            attachment: "./images/udyr-admin.jpg",
-                            name: 'file.png'
-                        }]
-                    })
-                    var dateNow = moment().toDate()
-                    dateNow = moment(dateNow).add(30, 'm').toDate()
-                    dateNow.setSeconds(0);
-                    adminActual = new admin(udyr.displayName, dateNow);
-                    var oldAdmin = await adminModel.find();
-                    var oldAdminModel = oldAdmin[0];
-                    var crear = await adminModel.create({
-                        userID: udyr.id,
-                        endDate: dateNow
-                    });
-                    crear.save();
-                    var prueba = await adminModel.findOneAndRemove({
-                        userID: oldAdminModel.userID
-                    })
-                } else {
-                    tioRandom.roles.add(roleAdmin);
-                    message.channel.send("<:1990_praisethesun:602528888400379935><@" + tioRandom.id + "> es el nuevo Admin de este servidor debido a la inutilidad de los otros<:1990_praisethesun:602528888400379935>.");
-                    var dateNow = moment().toDate()
-                    dateNow = moment(dateNow).add(30, 'm').toDate()
-                    dateNow.setSeconds(0);
-                    adminActual = new admin(tioRandom.displayName, dateNow);
-                    var oldAdmin = await adminModel.find();
-                    var oldAdminModel = oldAdmin[0];
-                    var crear = await adminModel.create({
-                        userID: tioRandom.id,
-                        endDate: dateNow
-                    });
-                    crear.save();
-                    var prueba = await adminModel.findOneAndRemove({
-                        userID: oldAdminModel.userID
-                    })
-                }
-            }
-            maricon1.roles.remove(roleAdmin.id);
-            maricon2.roles.remove(roleAdmin.id);
-            maricon1.roles.add(roleMaricones);
-            maricon2.roles.add(roleMaricones);
-            setTimeout(function () {
-                maricon1.roles.remove(roleMaricones.id);
-                maricon2.roles.remove(roleMaricones.id);
-            }, 10800000);
-
-        } else {
-            let miembroGanador = guildMembers.find(member => member.displayName == ganador.nombre);
-            let miembroPerdedor = guildMembers.find(member => member.displayName == perdedor.nombre);
-            var role = guildRoles.find(role => role.name == "El Admin");
-            if (miembroPerdedor.roles.cache.has(role.id)) {
-                miembroPerdedor.roles.remove(role.id);
-                miembroGanador.roles.add(role);
-                banquillo = [];
-                message.channel.send("<:1990_praisethesun:602528888400379935><@" + miembroGanador.id + "> es el nuevo Admin de este servidor<:1990_praisethesun:602528888400379935>");
-                if (miembroPerdedor.id == "849997112930074654") {
-                    message.channel.send({
-                        files: [{
-                            attachment: "./images/udyr-no-admin.jpg",
-                            name: 'file.png'
-                        }]
-                    })
-                } else {
-                    let link = './images/admin/'
-                    var enlaces = fs.readdirSync(link);
-                    message.channel.send({
-                        files: [{
-                            attachment: `${link}${enlaces[Math.floor(Math.random() * enlaces.length)]}`,
-                            name: 'file.png'
-                        }]
-                    })
-                }
-                var dateNow = moment().toDate()
-                dateNow = moment(dateNow).add(30, 'm').toDate()
-                dateNow.setSeconds(0);
-                adminActual = new admin(miembroGanador.displayName, dateNow);
-                var oldAdmin = await adminModel.find();
-                var oldAdminModelID = oldAdmin[0].userID;
-                var crear = await adminModel.create({
-                    userID: miembroGanador.id,
-                    endDate: dateNow
-                });
-                crear.save();
-                var prueba = await adminModel.findOneAndRemove({
-                    userID: oldAdminModelID
-                })
-                if (hay_apuesta == true) {
-                    metodosUtiles.cambiar_puntos(miembroPerdedor.id, `-${puntos_peaje}`);
-                    metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);
-                    message.channel.send(`${miembroGanador.displayName} ha ganado ${puntos_peaje} <:udyrcoin:961729720104419408>`);
-                    message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:961729720104419408>`);
-                    setTimeout(function () {
-                        client.commands.get("ranking").execute(message, undefined, 'ranking', client, Discord);
-                    }, 2000);
-                }
-            } else if (miembroGanador.roles.cache.has(role.id)) {
-                var dateLater = moment().toDate()
-                dateLater = moment(dateLater).add(30, 'm').toDate()
-                dateLater.setSeconds(0);
-                var dateNow = moment().toDate()
-                dateNow.setSeconds(0);
-                message.channel.send(miembroPerdedor.displayName + " no puede volver a enfrentarse a " + miembroGanador.displayName + " hasta dentro de 30 minutos (" + String(dateLater.getHours()).padStart(2, "0") + ":" + String(dateLater.getMinutes()).padStart(2, "0") + ").");
-                banquillo.push(miembroPerdedor.displayName);
-                setTimeout(function () {
-                    for (let i = 0; i < banquillo.length; i++) {
-                        if (banquillo[i] == miembroPerdedor.displayName) {
-                            banquillo.splice(i, 1);
-                            break;
-                        }
-                    }
-                }, dateLater - dateNow);
-                if (hay_apuesta == true) {
-                    metodosUtiles.cambiar_puntos(miembroPerdedor.id, `-${puntos_peaje}`);
-                    metodosUtiles.cambiar_puntos(miembroGanador.id, `+${puntos_peaje}`);
-                    message.channel.send(`${miembroGanador.displayName} ha ganado ${puntos_peaje} <:udyrcoin:961729720104419408>`);
-                    message.channel.send(`El maric\u00F3n de ${miembroPerdedor.displayName} ha perdido ${puntos_peaje} <:udyrcoin:961729720104419408>`);
-                    setTimeout(function () {
-                        client.commands.get("ranking").execute(message, undefined, 'ranking', client, Discord);
-                    }, 2000);
-                }
-            }
-        }
-        sucedioEventoAmor = false;
-        sucedioEventoUdyr = false;
-        hay_apuesta = false;
-        perdedor = "";
-        ganador = "";
-        console.log("FIN LEERRONDASPELEA");
-        return;
-    } else {
-        setTimeout(function () {
-            message.channel.send("Turno " + turno + ":\n" + combates.get(message.guild.id)[turno++] + "\n\n");
-            leerRondasPelea(gladiador1, gladiador2, message, client, Discord);
-        }, 6000);
+        var gladiadoraux = partida.gladiador1
+        partida.gladiador1 = partida.gladiador2
+        partida.gladiador2 = gladiadoraux
+        combate(partida, turno + 1);
+    } else if (eventoImprobable == false) {
+        partida.logCombate.push(`🏆 \u00A1El ganador del combate es <@${gladiador1.vida > 0 ? gladiador1.id : gladiador2.id}>! 🏆`);
     }
 }

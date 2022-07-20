@@ -93,6 +93,10 @@ module.exports = {
                 return message.reply("")
             }
             dineroInicial = Math.floor(dineroInicial)
+            if (dineroInicial <= 0) {
+                return message.reply("Pon un valor valido anda")
+            }
+            dineroInicial = dineroInicial > 20_000 ? 20_000 : dineroInicial
             if (profileData.udyrcoins < dineroInicial || profileData.udyrcoins < 1000) {
                 return message.reply("No tienes dinero suficiente")
             }
@@ -128,6 +132,16 @@ module.exports = {
             }, {
                 $set: {
                     wallet: wallet
+                },
+                $inc: {
+                    udyrcoins: -dineroInicial
+                }
+            })
+            await impuestoModel.findOneAndUpdate({
+                serverID: message.guild.id
+            }, {
+                $inc: {
+                    udyrcoins: dineroInicial
                 }
             })
             return message.reply(`Has creado la moneda **${accionNueva.nombre}** correctamente!`)
