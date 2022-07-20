@@ -252,9 +252,13 @@ module.exports = {
                 var newEmbed = new EmbedBuilder()
                 newEmbed.setTitle(`Acciones de ${author.username}`)
                 newEmbed.setThumbnail(author.displayAvatarURL({ format: "png" }))
+                var arrayDatos = []
                 for (var [key, value] of acciones) {
-                    newEmbed.addField(key, String(value), true)
+                    //newEmbed.addFields(key, String(value), true)
+                    var objeto = { name: key, value: String(value), inline: true }
+                    arrayDatos.push(objeto)
                 }
+                newEmbed.setFields(arrayDatos)
                 message.channel.send({ embeds: [newEmbed] })
             } else {
                 message.reply("No tienes nada comprado")
