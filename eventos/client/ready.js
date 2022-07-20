@@ -1,4 +1,4 @@
-const { Client, Discord, Guild } = require("discord.js");
+const { Client, Discord, Guild, TextChannel } = require("discord.js");
 const profileModel = require('../../models/profileSchema');
 const roboModel = require('../../models/roboSchema');
 const loteriaModel = require('../../models/loteriaSchema')
@@ -22,7 +22,7 @@ module.exports = async (Discord, client) => {
     }
     await configurarBolsa()
     await configurarPayout(guild)
-    await configurarWordle()
+    await configurarWordle(textChannel)
     client.user.setPresence({
         activities: [{ name: 'minar udyrcoins 💰', type: 0 }],
         status: "dnd"
@@ -154,8 +154,12 @@ global.configurarAccion = async function (accion) {
     console.log(`${accion.nombre} configurado!`)
 }
 
-
-async function configurarWordle() {
+/**
+ * 
+ * @param {TextChannel} textChannel 
+ * @returns 
+ */
+async function configurarWordle(textChannel) {
     var wordleAnterior = await wordleModel.findOne({})
     var hoy = new Date()
     var hoyFormateada = metodosUtiles.formatDate(hoy)
@@ -175,6 +179,7 @@ async function configurarWordle() {
             dia: hoyFormateada
         })
         await palabraBBDD.save()
+        textChannel.send("EL WORDLE ESTÁ READY")
     }
     var dateLater = new Date()
     dateLater.setDate(dateLater.getDate() + 1)
