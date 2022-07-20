@@ -87,6 +87,13 @@ module.exports = {
         var target = message.mentions.members.first()
         var gladiador2 = new Gladiador(target.displayName, 100, target.id)
         var partida = new Partida(gladiador1, gladiador2, 0, [], message.guild.id, (gladiador1.id == adminActual.id || gladiador2.id == adminActual.id) && gladiador1.id == message.member.id, message.channel)
+        if (partida.tituloEnJuego) {
+            for (let i = 0; i < banquillo.length; i++) {
+                if (banquillo[i] == gladiador1.id) {
+                    return message.reply("Ya has peleado recientemente contra el admin, tienes que esperar 30 min desde la ultima vez que le retaste.")
+                }
+            }
+        }
         message.delete()
         combates.set(partida.guildId, partida)
         combate(partida, 1)
@@ -182,15 +189,24 @@ async function repartirPuntos(partida) {
             }
             break;
         case 2:
-            memberManager.get(gladiador1.id).roles.remove(rolAdmin)
-            memberManager.get(gladiador2.id).roles.remove(rolAdmin)
-            memberManager.get(UDYRID).roles.add(rolAdmin)
-            partida.channel.send(`El título de admin vuelve al único que es digno en este server.`)
+            if (partida.tituloEnJuego) {
+                memberManager.get(gladiador1.id).roles.remove(rolAdmin)
+                memberManager.get(gladiador2.id).roles.remove(rolAdmin)
+                memberManager.get(UDYRID).roles.add(rolAdmin)
+                partida.channel.send(`El título de admin vuelve al único que es digno en este server.`)
+                adminActual.id = ganador.id
+                adminActual.dateLimite = getDateLater()
+                await adminModel.findOneAndUpdate({
+                    serverID: partida.guildId
+                }, {
+                    $set: {
+                        userID: ganador.id,
+                        endDate: getDateLater()
+                    }
+                })
+            }
             break;
         case 3:
-            memberManager.get(gladiador1.id).roles.remove(rolAdmin)
-            memberManager.get(gladiador2.id).roles.remove(rolAdmin)
-            memberManager.get(UDYRID).roles.add(rolAdmin)
             var rolMaricon = getRolByName(partida, "Maricones")
             memberManager.get(gladiador1.id).roles.add(rolMaricon)
             memberManager.get(gladiador2.id).roles.add(rolMaricon)
@@ -198,7 +214,22 @@ async function repartirPuntos(partida) {
                 memberManager.get(gladiador1.id).roles.remove(rolMaricon)
                 memberManager.get(gladiador2.id).roles.remove(rolMaricon)
             }, 4 * 60 * 60 * 1000, gladiador1, gladiador2, memberManager);
-            partida.channel.send(`El título de admin vuelve al único que es digno en este server.`)
+            if (partida.tituloEnJuego) {
+                memberManager.get(gladiador1.id).roles.remove(rolAdmin)
+                memberManager.get(gladiador2.id).roles.remove(rolAdmin)
+                memberManager.get(UDYRID).roles.add(rolAdmin)
+                partida.channel.send(`El título de admin vuelve al único que es digno en este server.`)
+                adminActual.id = ganador.id
+                adminActual.dateLimite = getDateLater()
+                await adminModel.findOneAndUpdate({
+                    serverID: partida.guildId
+                }, {
+                    $set: {
+                        userID: ganador.id,
+                        endDate: getDateLater()
+                    }
+                })
+            }
             break;
     }
 }
