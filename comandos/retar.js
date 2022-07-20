@@ -1,4 +1,4 @@
-const { Message, Client, MessageAttachment, TextChannel } = require('discord.js');
+const { Message, Client, AttachmentBuilder, TextChannel } = require('discord.js');
 const Discord = require('discord.js');
 const fs = require('fs');
 const { Canvacord } = require("canvacord");

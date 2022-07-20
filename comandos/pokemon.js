@@ -1,4 +1,4 @@
-const { Message, Client, MessageAttachment, MessageEmbed } = require('discord.js');
+const { Message, Client, AttachmentBuilder, MessageEmbed } = require('discord.js');
 const Discord = require('discord.js');
 const Pokedex = require("pokeapi-js-wrapper")
 const P = new Pokedex.Pokedex({ cache: false })
@@ -156,7 +156,8 @@ module.exports = {
             if (pokemon.types.length == 1) {
                 tipo1.onload = function () {
                     context.drawImage(tipo1, 31 * 2.3, 90 * 2, 32 * 1.75, 14 * 1.75)
-                    const attachment = new MessageAttachment(canvas.toBuffer(), 'pokemon.png');
+                    const attachment = new AttachmentBuilder(canvas.toBuffer());
+                    attachment.setName('pokemon.png')
                     newEmbed.setImage("attachment://pokemon.png")
                     mensajeABorrar.delete()
                     message.channel.send({ embeds: [newEmbed], files: [attachment] })
@@ -169,7 +170,8 @@ module.exports = {
                     var tipo2 = new Image()
                     tipo2.onload = function () {
                         context.drawImage(tipo2, 58 * 2, 90 * 2, 32 * 1.75, 14 * 1.75)
-                        const attachment = new MessageAttachment(canvas.toBuffer(), 'pokemon.png');
+                        const attachment = new AttachmentBuilder(canvas.toBuffer());
+                        attachment.setName('pokemon.png')
                         newEmbed.setImage("attachment://pokemon.png")
                         mensajeABorrar.delete()
                         message.channel.send({ embeds: [newEmbed], files: [attachment] })
