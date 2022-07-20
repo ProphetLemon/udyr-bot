@@ -1,4 +1,4 @@
-const { Message, Client, MessageEmbed } = require('discord.js');
+const { Message, Client, EmbedBuilder } = require('discord.js');
 const Discord = require('discord.js');
 const bolsaModel = require('../models/bolsaSchema')
 const profileModel = require('../models/profileSchema')
@@ -249,7 +249,7 @@ module.exports = {
             }
             var acciones = profileData.wallet
             if (acciones) {
-                var newEmbed = new MessageEmbed()
+                var newEmbed = new EmbedBuilder()
                 newEmbed.setTitle(`Acciones de ${author.username}`)
                 newEmbed.setThumbnail(author.displayAvatarURL({ format: "png" }))
                 for (var [key, value] of acciones) {

@@ -1,4 +1,4 @@
-const { Message, Client, MessageEmbed } = require('discord.js');
+const { Message, Client, EmbedBuilder } = require('discord.js');
 const profileModel = require('../models/profileSchema');
 const impuestoModel = require('../models/impuestoSchema')
 var games = new Map()
@@ -192,7 +192,7 @@ async function darDinero(message, dinero) {
 }
 
 function getResultado(message, partida) {
-    newEmbed = new MessageEmbed().setTitle(`PARTIDA DE BLACKJACK DE ${message.member.displayName.toUpperCase()}`).addFields(
+    newEmbed = new EmbedBuilder().setTitle(`PARTIDA DE BLACKJACK DE ${message.member.displayName.toUpperCase()}`).addFields(
         { name: `Mano de ${message.member.displayName}`, value: `${partida.user.cartas.join(" ")}`, inline: true },
         { name: `Total`, value: String(getValorMano(partida.user.cartas)), inline: true },
         { name: '\u200B', value: '\u200B' },

@@ -1,4 +1,4 @@
-const { Message, Client, AttachmentBuilder, MessageEmbed } = require('discord.js');
+const { Message, Client, AttachmentBuilder, EmbedBuilder } = require('discord.js');
 const Discord = require('discord.js');
 const Pokedex = require("pokeapi-js-wrapper")
 const P = new Pokedex.Pokedex({ cache: false })
@@ -118,7 +118,7 @@ module.exports = {
         //A PARTIR DE AQUI FORMO LO QUE ES EL EMBED Y LA FOTO
         //EN ESTA LINEA DETERMINO SI EL SPRITE QUE VA SALIR ES SHINY O NO
         var shiny = Math.floor(Math.random() * 255) + 1 == 255 ? true : false
-        var newEmbed = new MessageEmbed();
+        var newEmbed = new EmbedBuilder();
         newEmbed.setAuthor({
             name: `${shiny ? "✨" : ""}${pokemon.name.toUpperCase()}${shiny ? "✨" : ""}`
         })

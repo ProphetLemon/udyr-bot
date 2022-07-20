@@ -1,4 +1,4 @@
-const { Message, Discord, MessageEmbed } = require("discord.js");
+const { Message, Discord, EmbedBuilder } = require("discord.js");
 
 module.exports = {
     name: 'encuesta',
@@ -12,7 +12,7 @@ module.exports = {
     async execute(message, args, cmd, client, Discord, profileData) {
         console.log(`INICIO ${cmd.toUpperCase()}`);
         var memberManager = await message.guild.members.fetch();
-        var newEmbed = new MessageEmbed()
+        var newEmbed = new EmbedBuilder()
             .setColor("#B17428")
             .setFooter({ text: `Encuesta hecha por ${message.member.displayName}`, iconURL: message.author.avatarURL() })
             .setTitle(`${args.join(" ").toUpperCase()}`)
@@ -36,7 +36,7 @@ module.exports = {
                 if (key == "849997112930074654") continue;
                 votosNO += `\n${memberManager.get(key).displayName}`;
             }
-            newEmbed = new MessageEmbed()
+            newEmbed = new EmbedBuilder()
                 .setColor("#B17428")
                 .setTitle(`Fin de la encuesta *${args.join(" ").toUpperCase()}*`)
                 .addFields(
