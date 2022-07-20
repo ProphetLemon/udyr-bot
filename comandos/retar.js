@@ -141,7 +141,7 @@ async function repartirPuntos(partida) {
         case 1:
             var ganador = memberManager.get((gladiador1.vida > 0 ? gladiador1.id : gladiador2.id))
             var perdedor = memberManager.get((gladiador1.vida > 0 ? gladiador2.id : gladiador1.id))
-            if (ganador.user.bot == false && perdedor.user.bot == false) {
+            if (ganador.user.bot == false && perdedor.user.bot == false && tituloEnJuego) {
                 await profileModel.findOneAndUpdate({
                     userID: ganador.id,
                     serverID: partida.guildId
@@ -150,6 +150,7 @@ async function repartirPuntos(partida) {
                         udyrcoins: 100
                     }
                 })
+                partida.channel.send(`<@${ganador.id}> ha ganado 100<:udyrcoin:961729720104419408>`)
                 await profileModel.findOneAndUpdate({
                     userID: perdedor.id,
                     serverID: partida.guildId
@@ -158,7 +159,9 @@ async function repartirPuntos(partida) {
                         udyrcoins: -100
                     }
                 })
+                partida.channel.send(`<@${perdedor.id}> ha perdido 100<:udyrcoin:961729720104419408>`)
             }
+            var dateLater = getDateLater()
             if (perdedor.roles.cache.get(rolAdmin.id)) {
                 if (eventosRandom == 0) {
                     partida.channel.send(`<@${ganador.id}> le ha dado una paliza a <@${perdedor.id}>, le ha robado 100<:udyrcoin:961729720104419408> y ademas ahora es el nuevo admin`)
@@ -169,16 +172,16 @@ async function repartirPuntos(partida) {
                 ganador.roles.add(rolAdmin)
                 perdedor.roles.remove(rolAdmin)
                 adminActual.id = ganador.id
-                adminActual.dateLimite = getDateLater()
+                adminActual.dateLimite = dateLater
                 await adminModel.findOneAndUpdate({
                     serverID: partida.guildId
                 }, {
                     $set: {
                         userID: ganador.id,
-                        endDate: getDateLater()
+                        endDate: dateLater
                     }
                 })
-            } else {
+            } else if (ganador.roles.cache.get(rolAdmin.id)) {
                 banquillo.push(perdedor.id)
                 setTimeout((perdedorID) => {
                     for (let i = 0; i < banquillo.length; i++) {
@@ -187,6 +190,7 @@ async function repartirPuntos(partida) {
                         }
                     }
                 }, 30 * 60 * 1000, perdedor.id);
+                partida.channel.send(`<@${perdedor.id}> no puedes volver a enfrentarte al admin hasta dentro de 30 min (${dateLater.getHours().toString().padStart(2, "0") + ":" + dateLater.getMinutes().toString().padStart(2, "0")})`)
             }
             break;
         case 2:
@@ -243,9 +247,7 @@ async function leerRondasPelea(partida) {
     if (partida.logCombate.length <= 2) {
         partida.channel.send(partida.logCombate.length == 2 ? partida.logCombate[0] + "\n" + partida.logCombate[1] : partida.logCombate[0])
         partida.logCombate.splice(0, partida.logCombate.length == 2 ? 2 : 1)
-        if (partida.tituloEnJuego) {
-            await repartirPuntos(partida)
-        }
+        await repartirPuntos(partida)
         combates.delete(partida.guildId)
         return
     }

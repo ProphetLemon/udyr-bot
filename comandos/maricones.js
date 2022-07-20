@@ -17,12 +17,14 @@ module.exports = {
         console.log("INICIO MARICON");
         var memberManager = await message.guild.members.fetch()
         var rolMaricon = getRolMaricon(message)
+        var messageLater = await message.channel.send("Borrando...")
         message.delete()
         for (let [key, value] of memberManager) {
             if (value.roles.cache.get(rolMaricon.id)) {
                 value.roles.remove(rolMaricon)
             }
         }
+        messageLater.delete()
         console.log("FIN MARICON");
     }
 }
