@@ -32,7 +32,7 @@ module.exports = {
  * @param {Message} message 
  * @return {Role|undefined}
  */
-function getRolMaricon(message) {
+async function getRolMaricon(message) {
     var rolManager = await message.guild.roles.fetch()
     for (let [key, value] of rolManager) {
         if (value.name == "Maricones") {
