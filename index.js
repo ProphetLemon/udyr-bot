@@ -3,12 +3,14 @@ const { Client, IntentsBitField, Partials } = Discord;
 const client = new Client({
     intents: [IntentsBitField.Flags.DirectMessages,
     IntentsBitField.Flags.GuildMembers,
+    IntentsBitField.Flags.MessageContent,
+    IntentsBitField.Flags.GuildScheduledEvents,
     IntentsBitField.Flags.GuildMessages,
     IntentsBitField.Flags.GuildMessageReactions,
     IntentsBitField.Flags.Guilds,
     IntentsBitField.Flags.GuildVoiceStates,
     IntentsBitField.Flags.GuildPresences],
-    partials: [Partials.Message, Partials.Channel, Partials.Reaction]
+    partials: [Partials.Message, Partials.Channel, Partials.Reaction, Partials.Channel]
 });
 require('dotenv').config();
 const mongoose = require("mongoose");
