@@ -239,9 +239,9 @@ async function repartirPuntos(partida) {
  * @param {Partida} partida 
  */
 async function leerRondasPelea(partida) {
-    if (partida.logCombate.length == 2) {
-        partida.channel.send(partida.logCombate[0] + "\n" + partida.logCombate[1])
-        partida.logCombate.splice(0, 2)
+    if (partida.logCombate.length <= 2) {
+        partida.channel.send(partida.logCombate.length == 2 ? partida.logCombate[0] + "\n" + partida.logCombate[1] : partida.logCombate[0])
+        partida.logCombate.splice(0, partida.logCombate.length == 2 ? 2 : 1)
         if (partida.tituloEnJuego) {
             await repartirPuntos(partida)
         }
@@ -283,8 +283,7 @@ function combate(partida, turno) {
         parry = parry <= 20
         escudo = escudo <= 12
     }
-    //var eventoImprobable = Math.floor(Math.random() * 100) == 23;
-    var eventoImprobable = Math.floor(Math.random() * 2) == 0;
+    var eventoImprobable = Math.floor(Math.random() * 100) == 23;
     if (!eventoImprobable) {
         if (parry) {
             var stun = Math.floor(Math.random() * 7) == 0;
