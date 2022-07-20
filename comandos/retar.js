@@ -125,7 +125,7 @@ async function getRolByName(partida, rolName) {
  * 
  * @returns {Date}
  */
-async function getDateLater() {
+function getDateLater() {
     var date = new Date()
     date.setMinutes(date.getMinutes() + 30)
     date.setSeconds(0)
