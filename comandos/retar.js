@@ -93,6 +93,7 @@ module.exports = {
                     return message.reply("Ya has peleado recientemente contra el admin, tienes que esperar 30 min desde la ultima vez que le retaste.")
                 }
             }
+            partida.channel.send("Hay 100<:udyrcoin:961729720104419408> en juego!")
         }
         message.delete()
         combates.set(partida.guildId, partida)
