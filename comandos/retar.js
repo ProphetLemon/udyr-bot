@@ -73,7 +73,7 @@ module.exports = {
         if (adminActual.id == undefined) {
             var adminBBDD = await adminModel.findOne({ serverID: message.guild.id })
             adminActual.dateLimite = adminBBDD.dateLimite
-            adminActual.id = adminBBDD.id
+            adminActual.id = adminBBDD.userID
         }
         if (message.mentions.members.size > 1) {
             var sustituto = message.mentions.members.get(message.mentions.members.keyAt(1))
