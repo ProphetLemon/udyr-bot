@@ -187,9 +187,9 @@ async function configurarWordle(textChannel) {
     dateLater.setMinutes(0)
     dateLater.setSeconds(0)
     dateLater.setMilliseconds(0)
-    setTimeout(async () => {
-        await configurarWordle()
-    }, dateLater - hoy);
+    setTimeout(async (textChannel) => {
+        await configurarWordle(textChannel)
+    }, dateLater - hoy, textChannel);
     console.log("Wordle configurado")
 }
 
