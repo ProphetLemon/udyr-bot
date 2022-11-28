@@ -13,6 +13,7 @@ module.exports = {
      * @param {*} profileData 
      */
     execute(message, args, cmd, client, Discord, profileData) {
+        return;
         console.log("INICIO ALARMA")
         if (message.guild) {
             return message.channel.send("Esto se hace por privado").then(msg => {

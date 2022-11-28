@@ -14,6 +14,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        return;
         console.log("INICIO MARICON");
         var roles = await message.guild.roles.fetch()
         var rolAdmin = roles.get("855758798014119966")

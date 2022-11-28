@@ -12,6 +12,7 @@ module.exports = {
      * @param {string[]} args
      */
     execute(message, args, cmd, client, Discord, profileData) {
+        return;
         console.log("INICIO COMANDOS");
         const newEmbed = new MessageEmbed()
             .setColor("#B17428")

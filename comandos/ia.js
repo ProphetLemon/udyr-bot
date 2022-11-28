@@ -2,7 +2,7 @@ const { Message } = require("discord.js");
 var historiales = new Map()
 var timeouts = new Map()
 module.exports = {
-   // name: 'ia',
+    // name: 'ia',
     //aliases: ['ai'],
     description: 'Funcion para calcular lo que te roba hacienda',
     /**
@@ -15,6 +15,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        return;
         console.log(`INICIO ${cmd.toUpperCase()}`);
         //INICIALIZO EL PROMPT
         var cosas = args.join(" ") + "\n"

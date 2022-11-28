@@ -3,6 +3,7 @@ module.exports = {
     aliases: [],
     description: 'Funcion que tira uno o varios dados de 6 o varias caras',
     execute(message, args, cmd, client, Discord, profileData) {
+        return;
         console.log("INICIO DADO");
         var numero = args[0];
         var tiradas = args[1];
@@ -29,7 +30,7 @@ module.exports = {
             if (i != 0) {
                 mensaje += "\n";
             }
-            mensaje += ":game_die:" + (metodosUtiles.getRandom(numero-1) + 1) + ":game_die:";
+            mensaje += ":game_die:" + (metodosUtiles.getRandom(numero - 1) + 1) + ":game_die:";
         }
         message.reply(mensaje);
         console.log("FIN DADO");

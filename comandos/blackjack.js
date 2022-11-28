@@ -17,6 +17,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        return;
         console.log(`INICIO ${cmd.toUpperCase()}`)
         if (message.channel.id != "975840889450672168") {
             return message.channel.send("Eso mejor en el canal de 'blackjack' del server").then(msg => {

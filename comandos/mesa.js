@@ -14,6 +14,7 @@ module.exports = {
      * @param {*} profileData 
      */
     execute(message, args, cmd, client, Discord, profileData) {
+        return;
         console.log(`INICIO ${cmd.toUpperCase()}`);
         let channel = message.member.voice.channel
         if (!channel) {

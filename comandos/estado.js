@@ -2,7 +2,8 @@ module.exports = {
     name: 'estado',
     aliases: [],
     description: 'Funcion para cambiar el estado del bot',
-    execute(message,args,cmd,client,Discord,profileData) {
+    execute(message, args, cmd, client, Discord, profileData) {
+        return;
         console.log("INICIO ESTADO");
         if (message.content.split("\"").length != 3) {
             metodosUtiles.insultar(message);
@@ -23,7 +24,7 @@ module.exports = {
             case "online":
                 args[0] = "online";
                 break;
-            default:                
+            default:
                 insultar(message);
                 console.log("FIN ESTADO");
                 return;

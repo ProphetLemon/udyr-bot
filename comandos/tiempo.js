@@ -78,6 +78,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        return;
         var resultado
         weather.find({ search: args.join(" "), degreeType: 'C' }, function (err, result) {
             if (err) {

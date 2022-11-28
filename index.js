@@ -34,6 +34,7 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
+/*
 mongoose.connect(process.env.MONGODB_SRV, {
     useCreateIndex: true,
     useNewUrlParser: true,
@@ -44,6 +45,7 @@ mongoose.connect(process.env.MONGODB_SRV, {
 }).catch((err) => {
     console.log(err);
 });
+*/
 client.login(process.env.DISCORD_TOKEN);
 global.horasDiferencia = -1;
 

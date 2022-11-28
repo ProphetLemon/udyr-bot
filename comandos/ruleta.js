@@ -15,6 +15,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        return;
         /**
          * PAR (NO VALE 0)
          * IMPAR

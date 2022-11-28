@@ -15,8 +15,10 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        return;
         console.log("INICIO PUNTOS");
         if (!profileData) {
+            return;
             var ayer = new Date();
             ayer.setDate(ayer.getDate() - 1);
             let profile = await profileModel.create({

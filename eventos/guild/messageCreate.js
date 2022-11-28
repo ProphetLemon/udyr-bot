@@ -18,9 +18,10 @@ module.exports = async (Discord, client, message) => {
     }
     felicitarDia(message)
     let profileData;
-    try {
+    /*try {
         profileData = await profileModel.findOne({ userID: message.author.id, serverID: message.guild ? message.guild.id : "598896817157046281" });
         if (profileData) {
+            return;
             if ((profileData.nivel + 1) % 100 == 0) {
                 message.channel.send(`Has subido de nivel!\nAhora sos level ${(profileData.nivel + 1) / 100}`)
             }
@@ -35,7 +36,7 @@ module.exports = async (Discord, client, message) => {
         }
     } catch (err) {
         console.log(err);
-    }
+    }*/
     const args = message.content.slice(prefix.length).split(/ +/);
     const cmd = args.shift().toLowerCase();
     const command = client.commands.get(cmd.toLocaleLowerCase()) || client.commands.find(a => a.aliases && a.aliases.includes(cmd.toLocaleLowerCase()));

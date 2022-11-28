@@ -13,6 +13,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        return;
         console.log(`INICIO ${cmd.toUpperCase()}`)
         const channel = await message.guild.channels.create(`ticket: ${message.author.tag}`, {
             type: 'GUILD_TEXT',

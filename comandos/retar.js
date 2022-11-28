@@ -69,6 +69,7 @@ module.exports = {
      * @returns 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        return;
         console.log(`INICIO ${cmd.toUpperCase()}`)
         if (adminActual.id == undefined) {
             var adminBBDD = await adminModel.findOne({ serverID: message.guild.id })

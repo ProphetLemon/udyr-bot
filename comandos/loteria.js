@@ -36,6 +36,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        return;
         //AQUI TE ECHO SI NO ERES EL ADMIN
         if (message.author.id != "202065665597636609") {
             return message.reply("Si no y si quieres te la chupo maricón").then(msg => {

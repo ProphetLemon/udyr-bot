@@ -47,6 +47,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        return;
         console.log(`INICIO ${cmd.toUpperCase()}`)
         //AQUI SE MIRA SI LO HACES EN PRIVADO
         if (message.guild != null) {

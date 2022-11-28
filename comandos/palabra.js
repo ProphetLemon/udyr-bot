@@ -22,6 +22,7 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        return;
         if (message.author.id != "202065665597636609") {
             if (message.guild) {
                 return message.channel.send("A callar friki")

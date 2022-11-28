@@ -15,6 +15,7 @@ module.exports = {
      * @returns 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        return;
         console.log("INICIO BORRAR");
         var roleManager = await message.guild.roles.fetch()
         var rolAdmin = roleManager.get("855758139140079646")

@@ -15,6 +15,7 @@ module.exports = {
      * @returns 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
+        return;
         if (!profileData.udyrcoins) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         if (args.length != 2) {
             console.log("INICIO REGALAR");
