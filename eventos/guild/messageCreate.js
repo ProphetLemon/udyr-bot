@@ -16,7 +16,7 @@ module.exports = async (Discord, client, message) => {
         message.member.send("Callate maric\u00F3n");
         message.delete();
     }
-    felicitarDia(message)
+    //felicitarDia(message)
     let profileData;
     /*try {
         profileData = await profileModel.findOne({ userID: message.author.id, serverID: message.guild ? message.guild.id : "598896817157046281" });

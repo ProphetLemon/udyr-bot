@@ -1,6 +1,6 @@
 const ytdl = require('ytdl-core')
 const ytSearch = require('yt-search')
-const { Message, Client, Permissions } = require('discord.js');
+const { Message, Client, PermissionsBitField } = require('discord.js');
 const { joinVoiceChannel,
     createAudioPlayer,
     createAudioResource,
@@ -34,8 +34,7 @@ module.exports = {
         guild = message.guild
         if (!voice_channel) return message.channel.send('Tienes que estar en un canal de voz')
         const permissions = voice_channel.permissionsFor(message.client.user)
-        if (!permissions.has(Permissions.FLAGS.CONNECT)) return message.channel.send("No me puedo conectar :(")
-        if (!permissions.has(Permissions.FLAGS.SPEAK)) return message.channel.send("No tengo permiso para hablar :(")
+        if (!permissions.has(PermissionsBitField.Flags.Speak)) return message.channel.send("No tengo permiso para hablar :(")
         if (message.channel.name.trim() != "musica") return message.reply("Esto mejor en un canal de música")
 
         const server_queue = queue.get(message.guild.id)

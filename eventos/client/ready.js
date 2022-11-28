@@ -1,4 +1,4 @@
-const { Client, Discord, Guild, TextChannel } = require("discord.js");
+const { Client, Discord, Guild, TextChannel, ActivityType } = require("discord.js");
 const profileModel = require('../../models/profileSchema');
 const roboModel = require('../../models/roboSchema');
 const loteriaModel = require('../../models/loteriaSchema')
@@ -13,20 +13,17 @@ const fs = require('fs');
  * @param {Client} client
  */
 module.exports = async (Discord, client) => {
-    var guild = client.guilds.cache.get("598896817157046281")
-    const textChannel = guild.channels.cache.find(channel => channel.id === "809786674875334677" && channel.isTextBased())
-    await robos(guild, textChannel)
-    var loteriaBBDD = await loteriaModel.findOne({ serverID: guild.id })
-    if (loteriaBBDD) {
-        await configurarLoteria(guild, textChannel, loteriaBBDD)
-    }
-    await configurarBolsa()
-    await configurarPayout(guild)
-    await configurarWordle(textChannel)
-    client.user.setPresence({
-        activities: [{ name: 'minar udyrcoins 💰', type: 0 }],
-        status: "dnd"
-    })
+    /* var guild = client.guilds.cache.get("598896817157046281")
+     const textChannel = guild.channels.cache.find(channel => channel.id === "809786674875334677" && channel.isTextBased())
+     await robos(guild, textChannel)
+     var loteriaBBDD = await loteriaModel.findOne({ serverID: guild.id })
+     if (loteriaBBDD) {
+         await configurarLoteria(guild, textChannel, loteriaBBDD)
+     }
+     await configurarBolsa()
+     await configurarPayout(guild)
+     await configurarWordle(textChannel)*/
+    client.user.setPresence({ status: "dnd", activities: [{ name: 'el mundial', type: ActivityType.Watching }] })
     console.log("El bot ta ready");
 }
 

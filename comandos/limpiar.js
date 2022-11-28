@@ -14,8 +14,6 @@ module.exports = {
      * @returns 
      */
     execute(message, args, cmd, client, Discord, profileData) {
-        return;
-        return;
         console.log("INICIO LIMPIAR");
         let numeroMensajes = args[0];
         if (numeroMensajes) {
