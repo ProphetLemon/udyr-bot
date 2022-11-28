@@ -1,4 +1,4 @@
-const { Message, Client, MessageEmbed, MessageAttachment } = require('discord.js');
+const { Message, Client, EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const boletoModel = require('../models/boletoSchema');
 const profileModel = require('../models/profileSchema');
 const impuestoModel = require('../models/impuestoSchema')
@@ -78,8 +78,9 @@ module.exports = {
             // Actually fill the text with a solid color
             context.fillText(user.numeroBoleto.split('').join(" "), canvas.width / 2.35, canvas.height / 4.3);
 
-            const attachment = new MessageAttachment(canvas.toBuffer(), 'boleto.png');
-            const newEmbed = new MessageEmbed()
+            const attachment = new AttachmentBuilder(canvas.toBuffer());
+            attachment.setName('boleto.png')
+            const newEmbed = new EmbedBuilder()
                 .setColor("#B17428")
                 .setTitle(`LOTERIA DE UDYR`)
                 .addFields(
@@ -172,8 +173,9 @@ module.exports = {
         // Actually fill the text with a solid color
         context.fillText(numeroBoletoUser.split('').join(" "), canvas.width / 2.35, canvas.height / 4.3);
 
-        const attachment = new MessageAttachment(canvas.toBuffer(), 'boleto.png');
-        const newEmbed = new MessageEmbed()
+        const attachment = new AttachmentBuilder(canvas.toBuffer());
+        attachment.setName('boleto.png')
+        const newEmbed = new EmbedBuilder()
             .setColor("#B17428")
             .setTitle(`LOTERIA DE UDYR`)
             .addFields(

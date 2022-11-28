@@ -1,4 +1,4 @@
-const { Message, Client, MessageAttachment, TextChannel } = require('discord.js');
+const { Message, Client, AttachmentBuilder, TextChannel } = require('discord.js');
 const Discord = require('discord.js');
 const fs = require('fs');
 const { Canvacord } = require("canvacord");
@@ -71,10 +71,15 @@ module.exports = {
     async execute(message, args, cmd, client, Discord, profileData) {
         return;
         console.log(`INICIO ${cmd.toUpperCase()}`)
+        if (combates.has(message.guild.id)) {
+            message.reply("Están peleando los mayores")
+            message.delete()
+            return
+        }
         if (adminActual.id == undefined) {
             var adminBBDD = await adminModel.findOne({ serverID: message.guild.id })
             adminActual.dateLimite = adminBBDD.dateLimite
-            adminActual.id = adminBBDD.id
+            adminActual.id = adminBBDD.userID
         }
         if (message.mentions.members.size > 1) {
             var sustituto = message.mentions.members.get(message.mentions.members.keyAt(1))
@@ -87,8 +92,20 @@ module.exports = {
         }
         var target = message.mentions.members.first()
         var gladiador2 = new Gladiador(target.displayName, 100, target.id)
-        var partida = new Partida(gladiador1, gladiador2, 0, [], message.guild.id, gladiador2.id == adminActual.id && gladiador1.id == message.member.id, message.channel)
-        message.delete()
+        var partida = new Partida(gladiador1, gladiador2, 0, [], message.guild.id, (gladiador1.id == adminActual.id || gladiador2.id == adminActual.id) && gladiador1.id == message.member.id, message.channel)
+        if (partida.tituloEnJuego) {
+            for (let i = 0; i < banquillo.length; i++) {
+                if (banquillo[i] == gladiador1.id) {
+                    return message.reply("Ya has peleado recientemente contra el admin, tienes que esperar 30 min desde la ultima vez que le retaste.")
+                }
+            }
+            var now = new Date()
+            if (now < adminActual.dateLimite) {
+                return message.reply("Todavia no puedes retar al admin")
+            }
+            partida.channel.send("Hay 100<:udyrcoin:961729720104419408> en juego!")
+        }
+        //message.delete()
         combates.set(partida.guildId, partida)
         combate(partida, 1)
         leerRondasPelea(partida)
@@ -98,17 +115,137 @@ module.exports = {
 
 /**
  * 
+ * @param {Partida} partida
+ * @returns {Discord.Role} 
+ */
+async function getRolByName(partida, rolName) {
+    var roleManager = await partida.channel.guild.roles.fetch()
+    for (let [key, value] of roleManager) {
+        if (value.name == rolName) {
+            return value
+        }
+    }
+}
+/**
+ * 
+ * @returns {Date}
+ */
+function getDateLater() {
+    var date = new Date()
+    date.setMinutes(date.getMinutes() + 30)
+    date.setSeconds(0)
+    date.setMilliseconds(0)
+    return date
+}
+
+/**
+ * 
  * @param {Partida} partida 
  */
 async function repartirPuntos(partida) {
     var { gladiador1, gladiador2, eventosRandom } = partida
-    var ganador = gladiador
-    if (gladiador1.id != UDYRID && gladiador1.id != UDYRID) {
-        var ganador = gladiador1.vida > 0 ? gladiador1 : gladiador2
-        var perdedor = gladiador1.vida > 0 ? gladiador2 : gladiador1
-        if (eventosRandom == 0) {
-
-        }
+    var memberManager = await partida.channel.guild.members.fetch()
+    var rolAdmin = await getRolByName(partida, "El Admin")
+    switch (eventosRandom) {
+        case 0:
+        case 1:
+            var ganador = memberManager.get((gladiador1.vida > 0 ? gladiador1.id : gladiador2.id))
+            var perdedor = memberManager.get((gladiador1.vida > 0 ? gladiador2.id : gladiador1.id))
+            if (ganador.user.bot == false && perdedor.user.bot == false && partida.tituloEnJuego) {
+                await profileModel.findOneAndUpdate({
+                    userID: ganador.id,
+                    serverID: partida.guildId
+                }, {
+                    $inc: {
+                        udyrcoins: 100
+                    }
+                })
+                partida.channel.send(`<@${ganador.id}> ha ganado 100<:udyrcoin:961729720104419408>`)
+                await profileModel.findOneAndUpdate({
+                    userID: perdedor.id,
+                    serverID: partida.guildId
+                }, {
+                    $inc: {
+                        udyrcoins: -100
+                    }
+                })
+                partida.channel.send(`<@${perdedor.id}> ha perdido 100<:udyrcoin:961729720104419408>`)
+            }
+            var dateLater = getDateLater()
+            if (perdedor.roles.cache.has(rolAdmin.id)) {
+                if (eventosRandom == 0) {
+                    partida.channel.send(`<@${ganador.id}> le ha dado una paliza a <@${perdedor.id}>, le ha robado 100<:udyrcoin:961729720104419408> y ademas ahora es el nuevo admin`)
+                }
+                else if (eventosRandom == 1) {
+                    partida.channel.send(`<@${ganador.id}> le ha robado 100<:udyrcoin:961729720104419408> a <@${perdedor.id}> y ademas ahora es el nuevo admin`)
+                }
+                ganador.roles.add(rolAdmin)
+                perdedor.roles.remove(rolAdmin)
+                adminActual.id = ganador.id
+                adminActual.dateLimite = dateLater
+                await adminModel.findOneAndUpdate({
+                    serverID: partida.guildId
+                }, {
+                    $set: {
+                        userID: ganador.id,
+                        endDate: dateLater
+                    }
+                })
+            } else if (ganador.roles.cache.has(rolAdmin.id)) {
+                banquillo.push(perdedor.id)
+                setTimeout((perdedorID) => {
+                    for (let i = 0; i < banquillo.length; i++) {
+                        if (banquillo[i] == perdedorID) {
+                            banquillo.splice(i, 1)
+                        }
+                    }
+                }, 30 * 60 * 1000, perdedor.id);
+                partida.channel.send(`<@${perdedor.id}> no puedes volver a enfrentarte al admin hasta dentro de 30 min (${dateLater.getHours().toString().padStart(2, "0") + ":" + dateLater.getMinutes().toString().padStart(2, "0")})`)
+            }
+            break;
+        case 2:
+            if (partida.tituloEnJuego) {
+                memberManager.get(gladiador1.id).roles.remove(rolAdmin)
+                memberManager.get(gladiador2.id).roles.remove(rolAdmin)
+                memberManager.get(UDYRID).roles.add(rolAdmin)
+                partida.channel.send(`El título de admin vuelve al único que es digno en este server.`)
+                adminActual.id = ganador.id
+                adminActual.dateLimite = getDateLater()
+                await adminModel.findOneAndUpdate({
+                    serverID: partida.guildId
+                }, {
+                    $set: {
+                        userID: ganador.id,
+                        endDate: getDateLater()
+                    }
+                })
+            }
+            break;
+        case 3:
+            var rolMaricon = await getRolByName(partida, "Maricones")
+            memberManager.get(gladiador1.id).roles.add(rolMaricon)
+            memberManager.get(gladiador2.id).roles.add(rolMaricon)
+            setTimeout((gladiador1, gladiador2, memberManager) => {
+                memberManager.get(gladiador1.id).roles.remove(rolMaricon)
+                memberManager.get(gladiador2.id).roles.remove(rolMaricon)
+            }, 4 * 60 * 60 * 1000, gladiador1, gladiador2, memberManager);
+            if (partida.tituloEnJuego) {
+                memberManager.get(gladiador1.id).roles.remove(rolAdmin)
+                memberManager.get(gladiador2.id).roles.remove(rolAdmin)
+                memberManager.get(UDYRID).roles.add(rolAdmin)
+                partida.channel.send(`El título de admin vuelve al único que es digno en este server.`)
+                adminActual.id = ganador.id
+                adminActual.dateLimite = getDateLater()
+                await adminModel.findOneAndUpdate({
+                    serverID: partida.guildId
+                }, {
+                    $set: {
+                        userID: ganador.id,
+                        endDate: getDateLater()
+                    }
+                })
+            }
+            break;
     }
 }
 
@@ -116,13 +253,11 @@ async function repartirPuntos(partida) {
  * 
  * @param {Partida} partida 
  */
-function leerRondasPelea(partida) {
-    if (partida.logCombate.length == 2) {
-        partida.channel.send(partida.logCombate[0] + "\n" + partida.logCombate[1])
-        partida.logCombate.splice(0, 2)
-        if (partida.tituloEnJuego) {
-            await repartirPuntos(partida)
-        }
+async function leerRondasPelea(partida) {
+    if (partida.logCombate.length <= 2) {
+        partida.channel.send(partida.logCombate.length == 2 ? partida.logCombate[0] + "\n" + partida.logCombate[1] : partida.logCombate[0])
+        partida.logCombate.splice(0, partida.logCombate.length == 2 ? 2 : 1)
+        await repartirPuntos(partida)
         combates.delete(partida.guildId)
         return
     }
@@ -161,8 +296,7 @@ function combate(partida, turno) {
         parry = parry <= 20
         escudo = escudo <= 12
     }
-    //var eventoImprobable = Math.floor(Math.random() * 100) == 23;
-    var eventoImprobable = Math.floor(Math.random() * 2) == 0;
+    var eventoImprobable = Math.floor(Math.random() * 100) == 23;
     if (!eventoImprobable) {
         if (parry) {
             var stun = Math.floor(Math.random() * 7) == 0;
@@ -226,14 +360,14 @@ function combate(partida, turno) {
                 partida.logCombate.push(`🏆 \u00A1El ganador del combate es <@${gladiador2.id}>! 🏆`);
                 break;
             case eventosRandom[1]:
-                logCombateText += `🐻 Aparece <@849997112930074654> y gankea por sorpresa a ${gladiador1.nombre} y a ${gladiador2.nombre}. 🐻\n`;
+                logCombateText += `🐻 Aparece <@${UDYRID}> y gankea por sorpresa a ${gladiador1.nombre} y a ${gladiador2.nombre}. 🐻\n`;
                 gladiador1.vida = 0;
                 gladiador2.vida = 0;
                 gladiador1.vida = gladiador1.vida > 100 ? 100 : gladiador1.vida;
                 gladiador2.vida = gladiador2.vida > 100 ? 100 : gladiador2.vida;
                 logCombateText += `${gladiador1.nombre}: ${gladiador1.vida} puntos de vida restantes\n${gladiador2.nombre}: ${gladiador2.vida} puntos de vida restantes.`;
                 partida.logCombate.push(logCombateText);
-                partida.logCombate.push("🏆 \u00A1El ganador del combate es <@849997112930074654>! 🏆");
+                partida.logCombate.push(`🏆 \u00A1El ganador del combate es <@${UDYRID}>! 🏆`);
                 break;
             case eventosRandom[2]:
                 logCombateText += "🥰 De tanto darse de hostias se dan cuenta de que estan hechos el uno para el otro y abandonan el combate. 🥰\n";

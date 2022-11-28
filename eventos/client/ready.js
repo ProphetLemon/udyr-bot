@@ -1,4 +1,4 @@
-const { Client, Discord, Guild } = require("discord.js");
+const { Client, Discord, Guild, TextChannel } = require("discord.js");
 const profileModel = require('../../models/profileSchema');
 const roboModel = require('../../models/roboSchema');
 const loteriaModel = require('../../models/loteriaSchema')
@@ -6,20 +6,23 @@ const boletoModel = require('../../models/boletoSchema');
 const impuestoModel = require('../../models/impuestoSchema')
 const bolsaModel = require('../../models/bolsaSchema')
 const payoutModel = require('../../models/payoutSchema');
+const wordleModel = require('../../models/wordleSchema');
+const fs = require('fs');
 /**
  * @param {Discord} Discord
  * @param {Client} client
  */
 module.exports = async (Discord, client) => {
-    /*var guild = client.guilds.cache.get("598896817157046281")
-    const textChannel = guild.channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
+    var guild = client.guilds.cache.get("598896817157046281")
+    const textChannel = guild.channels.cache.find(channel => channel.id === "809786674875334677" && channel.isTextBased())
     await robos(guild, textChannel)
     var loteriaBBDD = await loteriaModel.findOne({ serverID: guild.id })
     if (loteriaBBDD) {
         await configurarLoteria(guild, textChannel, loteriaBBDD)
     }
     await configurarBolsa()
-    await configurarPayout(guild)*/
+    await configurarPayout(guild)
+    await configurarWordle(textChannel)
     client.user.setPresence({
         activities: [{ name: 'minar udyrcoins 💰', type: 0 }],
         status: "dnd"
@@ -54,7 +57,7 @@ async function configurarPayout(guild) {
                 { wallet: { $ne: [] } }
             ]
         })
-        var bolsaChannel = guild.channels.cache.find(channel => channel.id === "976611174915375174" && channel.isText())
+        var bolsaChannel = guild.channels.cache.find(channel => channel.id === "976611174915375174" && channel.isTextBased())
         for (let i = 0; i < personas.length; i++) {
             var persona = personas[i]
             var wallet = persona.wallet
@@ -74,10 +77,16 @@ async function configurarPayout(guild) {
                 }
             })
         }
+        var datePago = new Date()
+        datePago.setDate(datePago.getDate() + 2)
+        datePago.setHours(12)
+        datePago.setMinutes(30)
+        datePago.setSeconds(0)
+        datePago.setMilliseconds(0)
         await payoutModel.findOneAndUpdate({
             serverID: guild.id
         }, {
-            datePago: moment().add(2, "days").toDate()
+            datePago: datePago
         })
         configurarPayout(guild)
     }, payout.datePago - hoy, guild);
@@ -143,6 +152,45 @@ global.configurarAccion = async function (accion) {
     }, dateFinal - t1, accion);
     actualizarRandom(t1, accion)
     console.log(`${accion.nombre} configurado!`)
+}
+
+/**
+ * 
+ * @param {TextChannel} textChannel 
+ * @returns 
+ */
+async function configurarWordle(textChannel) {
+    var wordleAnterior = await wordleModel.findOne({})
+    var hoy = new Date()
+    var hoyFormateada = metodosUtiles.formatDate(hoy)
+    if (hoyFormateada != wordleAnterior.dia) {
+        try {
+            var data = fs.readFileSync('./wordle/wordle.txt', 'utf8')
+        } catch (err) {
+            console.error(err)
+            return
+        }
+        var inputs = data.split("\n")
+        var palabraRandom = inputs[Math.floor(Math.random() * inputs.length)].split("\r")[0]
+        await wordleModel.deleteMany({})
+        var palabraBBDD = await wordleModel.create({
+            aprobada: true,
+            palabra: palabraRandom,
+            dia: hoyFormateada
+        })
+        await palabraBBDD.save()
+        textChannel.send("EL WORDLE ESTÁ READY")
+    }
+    var dateLater = new Date()
+    dateLater.setDate(dateLater.getDate() + 1)
+    dateLater.setHours(0)
+    dateLater.setMinutes(0)
+    dateLater.setSeconds(0)
+    dateLater.setMilliseconds(0)
+    setTimeout(async (textChannel) => {
+        await configurarWordle(textChannel)
+    }, dateLater - hoy, textChannel);
+    console.log("Wordle configurado")
 }
 
 async function configurarBolsa() {

@@ -1,4 +1,4 @@
-const { Message, Client, MessageAttachment, MessageEmbed } = require('discord.js');
+const { Message, Client, AttachmentBuilder, EmbedBuilder } = require('discord.js');
 const Discord = require('discord.js');
 const Pokedex = require("pokeapi-js-wrapper")
 const P = new Pokedex.Pokedex({ cache: false })
@@ -119,7 +119,7 @@ module.exports = {
         //A PARTIR DE AQUI FORMO LO QUE ES EL EMBED Y LA FOTO
         //EN ESTA LINEA DETERMINO SI EL SPRITE QUE VA SALIR ES SHINY O NO
         var shiny = Math.floor(Math.random() * 255) + 1 == 255 ? true : false
-        var newEmbed = new MessageEmbed();
+        var newEmbed = new EmbedBuilder();
         newEmbed.setAuthor({
             name: `${shiny ? "✨" : ""}${pokemon.name.toUpperCase()}${shiny ? "✨" : ""}`
         })
@@ -157,7 +157,8 @@ module.exports = {
             if (pokemon.types.length == 1) {
                 tipo1.onload = function () {
                     context.drawImage(tipo1, 31 * 2.3, 90 * 2, 32 * 1.75, 14 * 1.75)
-                    const attachment = new MessageAttachment(canvas.toBuffer(), 'pokemon.png');
+                    const attachment = new AttachmentBuilder(canvas.toBuffer());
+                    attachment.setName('pokemon.png')
                     newEmbed.setImage("attachment://pokemon.png")
                     mensajeABorrar.delete()
                     message.channel.send({ embeds: [newEmbed], files: [attachment] })
@@ -170,7 +171,8 @@ module.exports = {
                     var tipo2 = new Image()
                     tipo2.onload = function () {
                         context.drawImage(tipo2, 58 * 2, 90 * 2, 32 * 1.75, 14 * 1.75)
-                        const attachment = new MessageAttachment(canvas.toBuffer(), 'pokemon.png');
+                        const attachment = new AttachmentBuilder(canvas.toBuffer());
+                        attachment.setName('pokemon.png')
                         newEmbed.setImage("attachment://pokemon.png")
                         mensajeABorrar.delete()
                         message.channel.send({ embeds: [newEmbed], files: [attachment] })

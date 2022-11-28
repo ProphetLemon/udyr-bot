@@ -1,4 +1,4 @@
-const { Message, Client, MessageEmbed } = require('discord.js');
+const { Message, Client, EmbedBuilder } = require('discord.js');
 const DiscordAPI = require('discord.js');
 var partidas = new Map()
 const profileModel = require('../models/profileSchema');

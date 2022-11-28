@@ -1,14 +1,16 @@
 const Discord = require("discord.js");
-const { Client, Intents } = Discord;
+const { Client, IntentsBitField, Partials } = Discord;
 const client = new Client({
-    intents: [Intents.FLAGS.DIRECT_MESSAGES,
-    Intents.FLAGS.GUILD_MEMBERS,
-    Intents.FLAGS.GUILD_MESSAGES,
-    Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_VOICE_STATES,
-    Intents.FLAGS.GUILD_PRESENCES],
-    partials: ['MESSAGE', 'CHANNEL', 'REACTION']
+    intents: [IntentsBitField.Flags.DirectMessages,
+    IntentsBitField.Flags.GuildMembers,
+    IntentsBitField.Flags.MessageContent,
+    IntentsBitField.Flags.GuildScheduledEvents,
+    IntentsBitField.Flags.GuildMessages,
+    IntentsBitField.Flags.GuildMessageReactions,
+    IntentsBitField.Flags.Guilds,
+    IntentsBitField.Flags.GuildVoiceStates,
+    IntentsBitField.Flags.GuildPresences],
+    partials: [Partials.Message, Partials.Channel, Partials.Reaction, Partials.Channel]
 });
 require('dotenv').config();
 const mongoose = require("mongoose");
@@ -17,12 +19,6 @@ const fs = require('fs');
 global.moment = require('moment');
 client.commands = new Discord.Collection();
 client.events = new Discord.Collection();
-/*const { Configuration, OpenAIApi } = require("openai");
-
-const configuration = new Configuration({
-    apiKey: process.env.OPENAI_TOKEN,
-});
-global.openai = new OpenAIApi(configuration);*/
 ['command_handler', 'event_handler'].forEach(handler => {
     require(`./handlers/${handler}`)(client, Discord);
 });
@@ -36,10 +32,8 @@ for (const file of commandFiles) {
 
 /*
 mongoose.connect(process.env.MONGODB_SRV, {
-    useCreateIndex: true,
     useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false
+    useUnifiedTopology: true
 }).then(() => {
     console.log("Conectado a la base de datos");
 }).catch((err) => {

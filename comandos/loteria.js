@@ -47,7 +47,7 @@ module.exports = {
             })
         }
         var guild = message.guild
-        const textChannel = guild.channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
+        const textChannel = guild.channels.cache.find(channel => channel.id === "809786674875334677" && channel.isTextBased())
         //AQUI PARSEO LA FECHA
         var fecha = args.join(" ") //udyr loteria (24/05/2022)
         var fechaLoteria = new Date()

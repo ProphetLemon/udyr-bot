@@ -1,4 +1,4 @@
-const { Message, Client, MessageAttachment } = require('discord.js');
+const { Message, Client, AttachmentBuilder } = require('discord.js');
 const { Canvacord } = require("canvacord");
 
 module.exports = {
@@ -41,7 +41,8 @@ module.exports = {
         if (cmd == "trigger") {
             let avatar = target.displayAvatarURL({ dynamic: false, format: 'png' });
             let image = await Canvacord.trigger(avatar);
-            let attachment = new MessageAttachment(image, "triggered.gif");
+            let attachment = new AttachmentBuilder(image);
+            attachment.setName("triggered.gif")
             message.channel.send({ files: [attachment] })
         }
         if (cmd == "ohno") {
@@ -49,13 +50,15 @@ module.exports = {
                 return message.reply("Tienes que poner un mensaje para el meme")
             }
             let image = await Canvacord.ohno(texto);
-            let attachment = new MessageAttachment(image, "ohno.png");
+            let attachment = new AttachmentBuilder(image);
+            attachment.setName("ohno.png")
             message.channel.send({ files: [attachment] })
         }
         if (cmd == "rip") {
             let avatar = target.displayAvatarURL({ dynamic: false, format: 'png' });
             let image = await Canvacord.rip(avatar);
-            let attachment = new MessageAttachment(image, "rip.png");
+            let attachment = new AttachmentBuilder(image);
+            attachment.setName("rip.png")
             message.channel.send({ files: [attachment] })
         }
         if (cmd == "phub" || cmd == "pornhub") {
@@ -64,19 +67,22 @@ module.exports = {
                 return message.reply("Tienes que poner un mensaje para el meme")
             }
             let image = await Canvacord.phub({ username: target.username, image: avatar, message: texto });
-            let attachment = new MessageAttachment(image, "phub.png");
+            let attachment = new AttachmentBuilder(image);
+            attachment.setName("phub.png")
             message.channel.send({ files: [attachment] })
         }
         if (cmd == "joke") {
             let avatar = target.displayAvatarURL({ dynamic: false, format: 'png' });
             let image = await Canvacord.jokeOverHead(avatar)
-            let attachment = new MessageAttachment(image, "joke.png");
+            let attachment = new AttachmentBuilder(image);
+            attachment.setName("joke.png")
             message.channel.send({ files: [attachment] })
         }
         if (cmd == "affect") {
             let avatar = target.displayAvatarURL({ dynamic: false, format: 'png' });
             let image = await Canvacord.affect(avatar)
-            let attachment = new MessageAttachment(image, "affect.png");
+            let attachment = new AttachmentBuilder(image);
+            attachment.setName("affect.png")
             message.channel.send({ files: [attachment] })
         }
         if (cmd == "opinion") {
@@ -85,27 +91,31 @@ module.exports = {
                 return message.reply("Tienes que poner un mensaje para el meme")
             }
             let image = await Canvacord.opinion(avatar, texto)
-            let attachment = new MessageAttachment(image, "opinion.png");
+            let attachment = new AttachmentBuilder(image);
+            attachment.setName("opinion.png")
             message.channel.send({ files: [attachment] })
         }
         if (cmd == "kiss") {
             let avatar = target.displayAvatarURL({ dynamic: false, format: 'png' });
             let avatar2 = (message.mentions.users.size == 2 ? message.mentions.users.get(message.mentions.users.keyAt(1)) : message.author).displayAvatarURL({ dynamic: false, format: 'png' });
             let image = await Canvacord.kiss(avatar2, avatar)
-            let attachment = new MessageAttachment(image, "kiss.png");
+            let attachment = new AttachmentBuilder(image);
+            attachment.setName("kiss.png")
             message.channel.send({ files: [attachment] })
         }
         if (cmd == "beautiful") {
             let avatar = target.displayAvatarURL({ dynamic: false, format: 'png' });
             let image = await Canvacord.beautiful(avatar)
-            let attachment = new MessageAttachment(image, "beautiful.png");
+            let attachment = new AttachmentBuilder(image);
+            attachment.setName("beautiful.png")
             message.channel.send({ files: [attachment] })
         }
         if (cmd == "slap") {
             let avatar = target.displayAvatarURL({ dynamic: false, format: 'png' });
             let avatar2 = (message.mentions.users.size == 2 ? message.mentions.users.get(message.mentions.users.keyAt(1)) : message.author).displayAvatarURL({ dynamic: false, format: 'png' });
             let image = await Canvacord.slap(avatar2, avatar)
-            let attachment = new MessageAttachment(image, "slap.png");
+            let attachment = new AttachmentBuilder(image);
+            attachment.setName("slap.png")
             message.channel.send({ files: [attachment] })
         }
         if (!md) {

@@ -1,4 +1,4 @@
-const { Message, Client, MessageEmbed } = require('discord.js');
+const { Message, Client, EmbedBuilder } = require('discord.js');
 const profileModel = require('../models/profileSchema');
 
 module.exports = {
@@ -27,7 +27,7 @@ module.exports = {
         var guildRoles = await message.guild.roles.fetch();
         var rolAdmin = guildRoles.get("855758139140079646")
         var mensaje = "";
-        const newEmbed = new MessageEmbed()
+        const newEmbed = new EmbedBuilder()
             .setColor("#B17428")
             .setAuthor({ name: `🏆Ranking de udyrcoins🏆` });
         var hoy = moment().toDate()

@@ -1,4 +1,4 @@
-const { Message } = require("discord.js");
+const { Message, Role } = require("discord.js");
 
 module.exports = {
     name: 'maricones',
@@ -16,18 +16,31 @@ module.exports = {
     async execute(message, args, cmd, client, Discord, profileData) {
         return;
         console.log("INICIO MARICON");
-        var roles = await message.guild.roles.fetch()
-        var rolAdmin = roles.get("855758798014119966")
-        if (!rolAdmin) {
-            console.log("FIN MARICON");
-            return metodosUtiles.insultar(message)
-        };
-        var guildMember = await message.guild.members.fetch();
+        var memberManager = await message.guild.members.fetch()
+        var rolMaricon = getRolMaricon(message)
+        var messageLater = await message.channel.send("Borrando...")
         message.delete()
-        var mariconRol = roles.get("855758141906878486")
-        guildMember.forEach(member => {
-            member.roles.remove(mariconRol.id)
-        });
+        for (let [key, value] of memberManager) {
+            if (value.roles.cache.get(rolMaricon.id)) {
+                value.roles.remove(rolMaricon)
+            }
+        }
+        messageLater.delete()
         console.log("FIN MARICON");
     }
+}
+
+/**
+ * 
+ * @param {Message} message 
+ * @return {Role|undefined}
+ */
+async function getRolMaricon(message) {
+    var rolManager = await message.guild.roles.fetch()
+    for (let [key, value] of rolManager) {
+        if (value.name == "Maricones") {
+            return value
+        }
+    }
+    return null
 }

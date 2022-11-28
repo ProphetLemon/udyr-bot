@@ -191,7 +191,7 @@ module.exports = {
             if (dineros == true) {
                 message.channel.send(`Has ganado ${puntos} <:udyrcoin:961729720104419408>`)
             }
-            const textChannel = client.guilds.cache.get("598896817157046281").channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
+            const textChannel = client.guilds.cache.get("598896817157046281").channels.cache.find(channel => channel.id === "809786674875334677" && channel.isTextBased())
             textChannel.send(`Resultado de ${message.author.username}\nUdyr Wordle #${moment().startOf('day').diff(moment().startOf('year'), "days") + 1} ${resultadosPersonales.get(message.author.id).split("\n").length - 1}/6\n${resultadosPersonales.get(message.author.id)}`)
             borrarResultados(message.author.id)
             if (dineros == true) {
@@ -222,7 +222,7 @@ module.exports = {
         } else if ((resultadosPersonales.get(message.author.id).split("\n").length - 1) == 6) {
             message.channel.send(`Sos malisimo perro, la palabra era **_${palabraWordle.toUpperCase()}_**`)
             message.channel.send(`Udyr Wordle #${moment().startOf('day').diff(moment().startOf('year'), "days") + 1} X/6\n${resultadosPersonales.get(message.author.id)}`)
-            const textChannel = client.guilds.cache.get("598896817157046281").channels.cache.find(channel => channel.id === "809786674875334677" && channel.isText())
+            const textChannel = client.guilds.cache.get("598896817157046281").channels.cache.find(channel => channel.id === "809786674875334677" && channel.isTextBased())
             textChannel.send(`Resultado de ${message.author.username}\nUdyr Wordle #${moment().startOf('day').diff(moment().startOf('year'), "days") + 1} X/6\n${resultadosPersonales.get(message.author.id)}`)
             borrarResultados(message.author.id)
             await profileModel.findOneAndUpdate({

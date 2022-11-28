@@ -1,4 +1,4 @@
-const { Message, Client, MessageEmbed } = require('discord.js');
+const { Message, Client, EmbedBuilder } = require('discord.js');
 const Discord = require('discord.js');
 const bolsaModel = require('../models/bolsaSchema')
 const profileModel = require('../models/profileSchema')
@@ -94,6 +94,10 @@ module.exports = {
                 return message.reply("")
             }
             dineroInicial = Math.floor(dineroInicial)
+            if (dineroInicial <= 0) {
+                return message.reply("Pon un valor valido anda")
+            }
+            dineroInicial = dineroInicial > 20_000 ? 20_000 : dineroInicial
             if (profileData.udyrcoins < dineroInicial || profileData.udyrcoins < 1000) {
                 return message.reply("No tienes dinero suficiente")
             }
@@ -129,6 +133,16 @@ module.exports = {
             }, {
                 $set: {
                     wallet: wallet
+                },
+                $inc: {
+                    udyrcoins: -dineroInicial
+                }
+            })
+            await impuestoModel.findOneAndUpdate({
+                serverID: message.guild.id
+            }, {
+                $inc: {
+                    udyrcoins: dineroInicial
                 }
             })
             return message.reply(`Has creado la moneda **${accionNueva.nombre}** correctamente!`)
@@ -236,12 +250,16 @@ module.exports = {
             }
             var acciones = profileData.wallet
             if (acciones) {
-                var newEmbed = new MessageEmbed()
+                var newEmbed = new EmbedBuilder()
                 newEmbed.setTitle(`Acciones de ${author.username}`)
                 newEmbed.setThumbnail(author.displayAvatarURL({ format: "png" }))
+                var arrayDatos = []
                 for (var [key, value] of acciones) {
-                    newEmbed.addField(key, String(value), true)
+                    //newEmbed.addFields(key, String(value), true)
+                    var objeto = { name: key, value: String(value), inline: true }
+                    arrayDatos.push(objeto)
                 }
+                newEmbed.setFields(arrayDatos)
                 message.channel.send({ embeds: [newEmbed] })
             } else {
                 message.reply("No tienes nada comprado")

@@ -1,4 +1,4 @@
-const { Discord, MessageEmbed, Message } = require("discord.js")
+const { Discord, EmbedBuilder, Message } = require("discord.js")
 
 module.exports = {
     name: 'comandos',
@@ -14,7 +14,7 @@ module.exports = {
     execute(message, args, cmd, client, Discord, profileData) {
         return;
         console.log("INICIO COMANDOS");
-        const newEmbed = new MessageEmbed()
+        const newEmbed = new EmbedBuilder()
             .setColor("#B17428")
             .setTitle("Comandos")
             .setDescription('Comandos del server')

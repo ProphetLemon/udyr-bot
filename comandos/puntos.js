@@ -1,6 +1,6 @@
 const profileModel = require('../models/profileSchema');
 
-const { Message, MessageEmbed } = require('discord.js');
+const { Message, EmbedBuilder } = require('discord.js');
 module.exports = {
     name: 'puntos',
     aliases: ['points'],

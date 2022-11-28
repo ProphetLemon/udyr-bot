@@ -1,4 +1,4 @@
-const { Message, Client, MessageAttachment } = require('discord.js');
+const { Message, Client, Attachment, AttachmentBuilder } = require('discord.js');
 const profileModel = require('../models/profileSchema');
 const Canvas = require('canvas');
 /**
@@ -54,7 +54,7 @@ module.exports = {
                 return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
             }
         }
-        const avatar = await Canvas.loadImage(target.displayAvatarURL({ format: 'png' }));
+        const avatar = await Canvas.loadImage(target.displayAvatarURL({ extension: 'png' }));
         context.font = `50px Courier`;
         // Draw a shape onto the main canvas
         context.drawImage(avatar, 90, 80, 650, 650);
@@ -90,8 +90,9 @@ module.exports = {
 
 
         // Use the helpful Attachment class structure to process the file for you
-        const attachment = new MessageAttachment(canvas.toBuffer(), 'profile-image.png');
-
+        //const attachment = new Attachment(,canvas.toBuffer(), 'profile-image.png');
+        const attachment = new AttachmentBuilder(canvas.toBuffer());
+        attachment.setName('profile-image.png')
         message.channel.send({ files: [attachment] });
         console.log(`FIN ${cmd.toUpperCase()}`)
     }
