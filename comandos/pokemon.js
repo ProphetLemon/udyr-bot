@@ -19,6 +19,7 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log(`INICIO ${cmd.toUpperCase()}`)
         //AQUI REVISO SI LO HACES EN EL CANAL DE POKEMON O POR PRIVADO
         if ((message.channel.id == "974244009100857405" || message.guild == undefined) == false) {

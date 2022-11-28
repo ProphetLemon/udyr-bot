@@ -13,6 +13,7 @@ module.exports = {
      */
     execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log("INICIO COMANDOS");
         const newEmbed = new EmbedBuilder()
             .setColor("#B17428")

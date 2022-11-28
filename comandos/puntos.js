@@ -16,8 +16,10 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log("INICIO PUNTOS");
         if (!profileData) {
+            return;
             return;
             var ayer = new Date();
             ayer.setDate(ayer.getDate() - 1);

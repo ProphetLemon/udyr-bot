@@ -14,6 +14,7 @@ module.exports = {
      */
     execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log("INICIO ALARMA")
         if (message.guild) {
             return message.channel.send("Esto se hace por privado").then(msg => {

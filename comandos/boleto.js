@@ -18,6 +18,7 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log(`INICIO ${cmd.toUpperCase()}`)
         //SI USAS EL COMANDO 'BOLETOS'
         if (cmd.toLowerCase() == 'boletos') {
@@ -44,6 +45,7 @@ module.exports = {
         }
         //COMPROBAR QUE ESTAS EN LA BBDD
         if (!profileData) {
+            return;
             return;
             console.log(`FIN ${cmd.toUpperCase()}`)
             return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")

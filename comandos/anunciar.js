@@ -13,6 +13,7 @@ module.exports = {
      * @param {*} profileData 
      */
     execute(message, args, cmd, client, Discord, profileData) {
+        return;
         console.log(`INICIO ${cmd.toUpperCase()}`)
         if (message.member.id != "202065665597636609") {
             return message.reply("Bro callate medio mes").then(msg => {

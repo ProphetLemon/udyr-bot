@@ -70,6 +70,7 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log(`INICIO ${cmd.toUpperCase()}`)
         if (combates.has(message.guild.id)) {
             message.reply("Están peleando los mayores")

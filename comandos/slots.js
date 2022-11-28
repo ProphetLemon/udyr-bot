@@ -18,6 +18,7 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         //slot 200 3
         console.log(`INICIO ${cmd.toUpperCase()}`)
         if (message.channel.id != "980884990579572826") {

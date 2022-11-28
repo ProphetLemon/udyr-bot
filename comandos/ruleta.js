@@ -16,6 +16,7 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         /**
          * PAR (NO VALE 0)
          * IMPAR

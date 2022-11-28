@@ -20,6 +20,7 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log(`INICIO ${cmd.toUpperCase()}`)
         if (message.channel.id != "976611174915375174") {
             return message.reply("Esto mejor en el canal de 'bolsa'").then(msg => {

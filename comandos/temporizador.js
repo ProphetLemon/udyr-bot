@@ -14,6 +14,7 @@ module.exports = {
      */
     execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log(`INICIO ${cmd.toUpperCase()}`)
         if (isNaN(args[0])) {
             return message.channel.send("Maric\u00F3n, se esperaba un numero, el comando se usa asi:\nudyr temp 5 _mensaje opcional_\nsiendo 5 los minutos de espera.")

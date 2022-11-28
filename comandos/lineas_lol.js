@@ -27,6 +27,7 @@ module.exports = {
      */
     execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log("INICIO LINEAS_LOL");
         var linea = cmd;
         var campeon_linea = [];

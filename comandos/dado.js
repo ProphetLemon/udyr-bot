@@ -4,6 +4,7 @@ module.exports = {
     description: 'Funcion que tira uno o varios dados de 6 o varias caras',
     execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log("INICIO DADO");
         var numero = args[0];
         var tiradas = args[1];

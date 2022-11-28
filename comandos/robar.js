@@ -18,12 +18,14 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log(`INICIO ${cmd.toUpperCase()}`)
         if (message.channel.id != "809786674875334677") {
             console.log(`FIN ${cmd.toUpperCase()}`)
             return message.reply("Bien intentado hijo de puta ahora intenta robar en el canal de udyr a ver si hay huevos.")
         }
         if (!profileData) {
+            return;
             return;
             console.log(`FIN ${cmd.toUpperCase()}`)
             return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")

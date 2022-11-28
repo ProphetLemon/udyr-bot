@@ -16,6 +16,7 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log(`INICIO ${cmd.toUpperCase()}`)
         var mensajeABorrar
         message.channel.send("Generando imagen...").then(msg => {

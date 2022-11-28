@@ -10,6 +10,7 @@ module.exports = {
      */
     execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log("INICIO PING");
         var dateNow = new Date();
         message.channel.send(`🏓 Pong\nLa fecha del servidor es ${String(dateNow.getDate()).padStart(2, "0")}/${String(dateNow.getMonth() + 1).padStart(2, "0")} ${String(dateNow.getHours()).padStart(2, "0")}:${String(dateNow.getMinutes()).padStart(2, "0")}`)

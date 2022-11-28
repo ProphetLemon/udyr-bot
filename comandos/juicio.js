@@ -17,6 +17,7 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         if (!profileData.udyrcoins) return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")
         if (message.channel.id != "809786674875334677") return message.reply("Los juicios son en el canal de udyr gilipollas")
         if (!message.mentions.members.first()) {

@@ -15,6 +15,7 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log(`INICIO ${cmd.toUpperCase()}`)
         var serverDinero = await impuestoModel.findOne({
             serverID: message.guild.id

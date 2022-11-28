@@ -31,6 +31,7 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log(`INICIO ${cmd.toUpperCase()}`)
         // Create a 700x250 pixel canvas and get its context
         // The context will be used to modify the canvas
@@ -44,11 +45,13 @@ module.exports = {
             })
             if (!profileData) {
                 return;
+                return;
                 console.log(`FIN ${cmd.toUpperCase()}`)
                 return message.reply("Ese pibe no ta en la BBDD")
             }
         } else {
             if (!profileData) {
+                return;
                 return;
                 console.log(`FIN ${cmd.toUpperCase()}`)
                 return message.reply("No tas inscrito en la Liga Udyr, maric\u00F3n. Haz un 'udyr puntos' antes")

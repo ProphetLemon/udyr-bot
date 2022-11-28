@@ -15,6 +15,7 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log("INICIO MARICON");
         var memberManager = await message.guild.members.fetch()
         var rolMaricon = getRolMaricon(message)

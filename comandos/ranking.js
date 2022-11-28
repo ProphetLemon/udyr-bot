@@ -16,6 +16,7 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log("INICIO RANKING");
         var personas = await profileModel.find({
             serverID: message.guild.id

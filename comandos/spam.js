@@ -4,6 +4,7 @@ module.exports = {
     description: 'Funcion para hacer spam',
     execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log(`INICIO ${cmd.toUpperCase()}`)
         message.delete();
         if ((!args[0] || args[0].trim() == "" || !args[0].startsWith("https://www.twitch.tv/")) && message.author.id != "202065665597636609") {

@@ -14,6 +14,7 @@ module.exports = {
      */
     execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         let opciones = message.content.split("\"")
         opciones.splice(0, 1);
         for (let i = 0; i < opciones.length; i++) {

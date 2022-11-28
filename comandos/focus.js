@@ -17,6 +17,7 @@ module.exports = {
      */
     execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log("INICIO FOCUS");
         if (focusID != "") {
             message.reply("ya estoy insultando, d\u00E9jame tranquilo");

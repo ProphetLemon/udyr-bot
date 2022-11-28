@@ -4,6 +4,7 @@ module.exports = {
     description: 'Funcion para cambiar el estado del bot',
     execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log("INICIO ESTADO");
         if (message.content.split("\"").length != 3) {
             metodosUtiles.insultar(message);

@@ -16,6 +16,7 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         return;
+        return;
         console.log(`INICIO ${cmd.toUpperCase()}`);
         //INICIALIZO EL PROMPT
         var cosas = args.join(" ") + "\n"
