@@ -27,6 +27,13 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
+const { Configuration, OpenAIApi } = require("openai");
+
+const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+});
+global.openai = new OpenAIApi(configuration);
+
 /*
 mongoose.connect(process.env.MONGODB_SRV, {
     useNewUrlParser: true,

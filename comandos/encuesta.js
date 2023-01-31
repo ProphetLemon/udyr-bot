@@ -11,7 +11,6 @@ module.exports = {
      */
     async execute(message, args, cmd, client, Discord, profileData) {
         return;
-        return;
         console.log(`INICIO ${cmd.toUpperCase()}`);
         var memberManager = await message.guild.members.fetch();
         var newEmbed = new EmbedBuilder()

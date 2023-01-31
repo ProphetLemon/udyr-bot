@@ -19,6 +19,8 @@
     "mathjs": "^11.4.0",
     "moment": "^2.29.4",
     "mongoose": "^6.7.4",
+    "openai": "^3.1.0",
+    "play-dl": "^1.9.6",
     "pokeapi-js-wrapper": "^1.2.2",
     "quickchart-js": "^3.1.1",
     "sodium-native": "^3.4.1",

@@ -39,8 +39,6 @@ module.exports = {
      * @param {*} profileData 
      */
     execute(message, args, cmd, client, Discord, profileData) {
-        return;
-        return;
         console.log(`INICIO ${cmd.toUpperCase()}`)
         if (cmd == "valorant") {
             var equiposDeseados = [

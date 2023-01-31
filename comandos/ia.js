@@ -2,8 +2,8 @@ const { Message } = require("discord.js");
 var historiales = new Map()
 var timeouts = new Map()
 module.exports = {
-    // name: 'ia',
-    //aliases: ['ai'],
+    name: 'ia',
+    aliases: ['ai'],
     description: 'Funcion para calcular lo que te roba hacienda',
     /**
      * 
@@ -15,8 +15,6 @@ module.exports = {
      * @param {*} profileData 
      */
     async execute(message, args, cmd, client, Discord, profileData) {
-        return;
-        return;
         console.log(`INICIO ${cmd.toUpperCase()}`);
         //INICIALIZO EL PROMPT
         var cosas = args.join(" ") + "\n"
@@ -36,17 +34,18 @@ module.exports = {
         message.channel.send("Escribiendo...").then(msg => {
             messageUdyr = msg
         })
-        //HAGO LA CONSULTA A LA IA
-        const response = await openai.createCompletion("text-davinci-002", {
+        //HAGO LA CONSULTA A LA IA        
+        const response = await openai.createCompletion({
+            model: "text-davinci-003",
             prompt: historiales.get(id) + cosas,
-            temperature: 0.8,
+            temperature: 1,
             max_tokens: 3000,
             top_p: 1,
             frequency_penalty: 0,
             presence_penalty: 0,
         }).catch(error => {
             console.log(error)
-        });
+        })
         //BORRO EL MENSAJE DE ESCRIBIENDO
         messageUdyr.delete()
         //COMPRUEBO SI EL BOT HA PETADO Y BORRO HISTORIAL SI ASI HA SIDO
