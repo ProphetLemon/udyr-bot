@@ -4,7 +4,6 @@ const { createAudioPlayer, createAudioResource, StreamType, demuxProbe, joinVoic
 const play = require('play-dl')
 module.exports = {
     name: 'spotify',
-    aliases: ['skip', 'pause', 'leave', 'stop', 'cola', 'shuffle', 'cambiar'],
     description: 'Bot de musica avanzado',
     /**
      * 
