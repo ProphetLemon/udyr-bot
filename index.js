@@ -38,7 +38,11 @@ var messages = [systemMsg];
 const messagesOg = [...messages];
 
 client.on("messageCreate", async (message) => {
-  if (message.author.bot || message.channel.id != process.env.CHANNEL_ID) {
+  if (
+    message.author.bot ||
+    message.channel.id != process.env.CHANNEL_ID ||
+    message.author.id == process.env.LIMON
+  ) {
     return;
   }
   if (message.content.toLowerCase().includes("clean")) {
