@@ -1,36 +1,16 @@
 {
-  "name": "udyr-bot",
-  "version": "1.0.0",
-  "description": "Bot de moderación y de ocio",
+  "name": "chatbot",
+  "version": "0.0.1",
+  "description": "ChatBot para mi servidor privado",
   "main": "index.js",
   "scripts": {
-    "devStart": "nodemon index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Diego Vidal",
+  "author": "Diego Vidal del Rosal",
   "license": "ISC",
   "dependencies": {
-    "@discordjs/opus": "^0.9.0",
-    "@discordjs/voice": "^0.14.0",
-    "canvacord": "^5.4.8",
-    "canvas": "^2.11.0",
-    "discord-player": "^6.0.0",
-    "discord.js": "^14.7.1",
-    "dotenv": "^16.0.3",
-    "ffmpeg-static": "^5.1.0",
-    "mathjs": "^11.4.0",
-    "moment": "^2.29.4",
-    "mongoose": "^6.7.4",
-    "openai": "^3.1.0",
-    "play-dl": "^1.9.6",
-    "pokeapi-js-wrapper": "^1.2.2",
-    "quickchart-js": "^3.1.1",
-    "sodium-native": "^3.4.1",
-    "weather-js": "^2.0.0",
-    "youtube-sr": "^4.3.4",
-    "yt-search": "^2.10.4",
-    "ytdl-core": "^4.11.2"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.20"
+    "discord.js": "^14.15.2",
+    "dotenv": "^16.4.5",
+    "openai": "^4.45.0"
   }
 }
