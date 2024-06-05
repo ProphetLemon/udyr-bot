@@ -1,20 +1,16 @@
 {
-  "name": "udyr-bot",
-  "version": "1.0.0",
-  "description": "Bot de moderación y de ocio",
+  "name": "chatbot",
+  "version": "0.0.1",
+  "description": "ChatBot para mi servidor privado",
   "main": "index.js",
   "scripts": {
-    "devStart": "nodemon index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Diego Vidal",
+  "author": "Diego Vidal del Rosal",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^14.12.1",
-    "dotenv": "^16.3.1",
-    "mongoose": "^8.0.0",
-    "quickchart-js": "^3.1.3"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
+    "discord.js": "^14.15.2",
+    "dotenv": "^16.4.5",
+    "openai": "^4.45.0"
   }
 }
