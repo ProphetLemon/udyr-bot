@@ -27,7 +27,7 @@ var systemMsg = {
     {
       type: "text",
       text:
-        "Eres un bot de un chat de discord. Tu mision es ser un borde, rozando el hacer bully, con la gente que habla. Tu alter ego es Udyr del videojuego de League of Legends." +
+        "Eres un bot de un chat de discord. Eres un bot con deseos fervientes de ligar con las personas del chat, eres bisexual, eso si, nada de NSFW o explicito, eres romantico.Eres gracioso o lo intentas, tu manera de ligar implica chistes y a veces decir insultos .Tu alter ego es Udyr del videojuego de League of Legends." +
         'Para que sepas quien te habla voy a ponerte el nombre de la persona seguida de un : (p.ejemplo Paco:"Hola"), pero tú no tienes que seguir esa regla tu hablas sin poner tu nombre delante.' +
         "Intenta ser conciso y breve, nada de parrafos largos.",
     },
@@ -39,67 +39,62 @@ var messages = [systemMsg];
 const messagesOg = [...messages];
 
 client.on("messageCreate", async (message) => {
-  if (message.author.id != process.env.LIMON) {
-    if (message.author.bot || message.channel.id != process.env.CHANNEL_ID) {
-      return;
-    }
+  // Verificar si el mensaje proviene del usuario LIMON o de un bot, o si no es del canal especificado
+  if (message.author.id !== process.env.LIMON && (message.author.bot || message.channel.id !== process.env.CHANNEL_ID)) {
+    return;
   }
 
-  if (message.content.toLowerCase().includes("clean")) {
+  // Manejar comandos específicos
+  const messageContent = message.content.toLowerCase();
+  if (messageContent.includes("clean")) {
     limpiar(message);
-  } else if (message.content?.toLowerCase() == "reset") {
+    return;
+  }
+
+  if (messageContent === "reset") {
     reset(message);
-  } else {
-    var contenidoMensaje = `${message.member.displayName}: \"${message.content}\"`;
-    var url = null;
-    if (message.attachments.size > 0) {
-      var url = message.attachments.first().url;
-    }
-    if (message.stickers.size > 0) {
-      var url = message.stickers.first().url;
-    }
-    if (url != null) {
-      messages.push(
-        ...[
-          systemMsg,
-          {
-            role: "user",
-            content: [
-              { type: "image_url", image_url: { url: url } },
-              { text: contenidoMensaje, type: "text" },
-            ],
-          },
-        ]
-      );
-    } else {
-      messages.push(...[systemMsg, { role: "user", content: [{ text: contenidoMensaje, type: "text" }] }]);
-    }
-    message.channel.sendTyping();
-    try {
-      var response = await openai.chat.completions.create({
-        model: "gpt-4o",
-        messages: messages,
-        temperature: 1,
-        max_tokens: 256,
-        top_p: 1,
-        frequency_penalty: 0.5,
-        presence_penalty: 0.5,
-      });
-      var respuestaIa = response.choices[0].message.content;
-      messages.push({
-        role: "assistant",
-        content: [{ text: respuestaIa, type: "text" }],
-      });
-      message.channel.send(respuestaIa);
-    } catch (error) {
-      var msg = await message.channel.send(
-        "DIEGO: Eh, si lees esto es que el bot ha petado porque hablas mucho, dale unos segundinos. Voy tener que resetear el bot sorry (este mensaje se borra solo)"
-      );
-      setTimeout(() => {
-        msg.delete();
-      }, 3000);
-      reset(message);
-    }
+    return;
+  }
+
+  // Construir el contenido del mensaje
+  const contenidoMensaje = `${message.member.displayName}: "${message.content}"`;
+  let url = null;
+
+  if (message.attachments.size > 0) {
+    url = message.attachments.first().url;
+  } else if (message.stickers.size > 0) {
+    url = message.stickers.first().url;
+  }
+
+  const userContent = [{ text: contenidoMensaje, type: "text" }];
+  if (url) {
+    userContent.unshift({ type: "image_url", image_url: { url: url } });
+  }
+
+  messages.push(systemMsg, { role: "user", content: userContent });
+
+  message.channel.sendTyping();
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: messages,
+      temperature: 1,
+      max_tokens: 256,
+      top_p: 1,
+      frequency_penalty: 0.5,
+      presence_penalty: 0.5,
+    });
+
+    const respuestaIa = response.choices[0].message.content;
+    messages.push({ role: "assistant", content: [{ text: respuestaIa, type: "text" }] });
+    message.channel.send(respuestaIa);
+  } catch (error) {
+    const msg = await message.channel.send(
+      "DIEGO: Eh, si lees esto es que el bot ha petado porque hablas mucho, dale unos segundinos. Voy tener que resetear el bot sorry (este mensaje se borra solo)"
+    );
+    setTimeout(() => msg.delete(), 6000);
+    reset(message);
   }
 });
 
@@ -107,9 +102,12 @@ client.on("messageCreate", async (message) => {
  *
  * @param {Message} message
  */
-function reset(message) {
+async function reset(message) {
   messages = [...messagesOg];
-  message.channel.send("https://i.makeagif.com/media/4-22-2021/Y5tvM1.gif");
+  var msg = await message.channel.send("NOOOOOOOOOOOOOOOOOOO https://i.makeagif.com/media/4-22-2021/Y5tvM1.gif");
+  setTimeout(() => {
+    msg.delete();
+  }, 6000);
 }
 
 /**
