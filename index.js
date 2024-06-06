@@ -38,13 +38,12 @@ var messages = [systemMsg];
 const messagesOg = [...messages];
 
 client.on("messageCreate", async (message) => {
-  if (
-    message.author.bot ||
-    message.channel.id != process.env.CHANNEL_ID ||
-    message.author.id == process.env.LIMON
-  ) {
-    return;
+  if (message.author.id != process.env.LIMON) {
+    if (message.author.bot || message.channel.id != process.env.CHANNEL_ID) {
+      return;
+    }
   }
+
   if (message.content.toLowerCase().includes("clean")) {
     limpiar(message);
   } else if (message.content?.toLowerCase() == "reset") {
@@ -59,11 +58,7 @@ client.on("messageCreate", async (message) => {
       var url = message.stickers.first().url;
     }
     if (url != null) {
-      if (
-        !url.includes(".jpg") &&
-        !url.includes(".jpeg") &&
-        !url.includes(".png")
-      ) {
+      if (!url.includes(".jpg") && !url.includes(".jpeg") && !url.includes(".png")) {
         return message.channel.send("That's not a valid attachment");
       }
       messages.push(
@@ -79,12 +74,7 @@ client.on("messageCreate", async (message) => {
         ]
       );
     } else {
-      messages.push(
-        ...[
-          systemMsg,
-          { role: "user", content: [{ text: contenidoMensaje, type: "text" }] },
-        ]
-      );
+      messages.push(...[systemMsg, { role: "user", content: [{ text: contenidoMensaje, type: "text" }] }]);
     }
     message.channel.sendTyping();
     try {
