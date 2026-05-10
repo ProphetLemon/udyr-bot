@@ -258,7 +258,7 @@ async function handleLol(message, args) {
     try {
         browser = await chromium.launch({ headless: true });
         const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-        await page.goto(url, { waitUntil: 'networkidle' });
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
         // Cerrar modal de cookies si existe
         try {
             // Intentar clicar botones comunes de aceptar cookies
