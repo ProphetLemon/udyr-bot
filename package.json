@@ -1,0 +1,27 @@
+{
+  "name": "udyr-bot",
+  "version": "1.0.0",
+  "description": "Bot de Discord para reproducir musica de YouTube",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "music",
+    "youtube"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/voice": "^0.19.2",
+    "@distube/ytdl-core": "^4.16.12",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.3.1",
+    "libsodium-wrappers": "^0.7.13",
+    "opusscript": "^0.0.8",
+    "play-dl": "^1.9.7"
+  }
+}
