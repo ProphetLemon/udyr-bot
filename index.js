@@ -260,48 +260,59 @@ async function handleLol(message, args) {
         const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
         await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
         // Cerrar modal de cookies si existe
+        await page.waitForTimeout(1500); // Esperar a que aparezca el modal
         try {
-            // Intentar clicar botones comunes de aceptar cookies
-            const cookieButtons = [
-                'button:has-text("Accept")',
-                'button:has-text("Accept All")',
-                'button:has-text("I Accept")',
-                'button:has-text("Aceptar")',
-                'button:has-text("Accept Cookies")',
-                '[data-testid="uc-accept-all-button"]',
-                '.qc-cmp2-summary-buttons button:first-child',
-            ];
-            for (const sel of cookieButtons) {
-                const btn = await page.locator(sel).first();
-                if (await btn.isVisible().catch(() => false)) {
-                    await btn.click();
-                    console.log('[LOL] Modal de cookies cerrada');
-                    break;
+            // Estrategia 1: buscar boton "Consent" especifico de u.gg / Quantcast
+            const consentBtn = await page.locator('button:has-text("Consent")').first();
+            if (await consentBtn.isVisible().catch(() => false)) {
+                await consentBtn.click();
+                console.log('[LOL] Boton Consent clicado');
+            } else {
+                // Estrategia 2: buscar otros textos comunes
+                const texts = ['Accept', 'Accept All', 'I Accept', 'Aceptar', 'Agree', 'OK'];
+                for (const t of texts) {
+                    const btn = await page.locator(`button:has-text("${t}")`).first();
+                    if (await btn.isVisible().catch(() => false)) {
+                        await btn.click();
+                        console.log(`[LOL] Boton "${t}" clicado`);
+                        break;
+                    }
                 }
             }
         } catch (e) {
-            // ignorar si no hay modal
+            // ignorar
         }
-        // Fallback: eliminar overlays de cookies directamente del DOM
+        // Fallback definitivo: eliminar cualquier overlay/modal del DOM
         try {
             await page.evaluate(() => {
+                // Botones de consentimiento
+                document.querySelectorAll('button').forEach(b => {
+                    const txt = b.textContent?.toLowerCase() || '';
+                    if (txt.includes('consent') || txt.includes('accept') || txt.includes('agree') || txt.includes('ok')) {
+                        b.click();
+                    }
+                });
+                // Eliminar modales y overlays
                 const selectors = [
                     '#cookie-banner', '.cookie-banner', '.cookie-consent', '.cookie-modal',
                     '#cookieConsent', '.qc-cmp2-container', '.onetrust-pc-dark-filter',
                     '#onetrust-consent-sdk', '.cc-banner', '.gdpr-consent',
                     '[class*="cookie"]', '[id*="cookie"]', '[class*="consent"]', '[id*="consent"]',
+                    '[class*="modal"]', '[id*="modal"]', '[class*="overlay"]', '[id*="overlay"]',
                 ];
                 selectors.forEach(sel => {
                     document.querySelectorAll(sel).forEach(el => {
                         if (el && el.parentNode) el.parentNode.removeChild(el);
                     });
                 });
+                // Asegurar que el body no tenga scroll bloqueado
+                document.body.style.overflow = '';
+                document.body.style.position = '';
             });
         } catch (e) {
             // ignorar
         }
-        // Esperar un poco mas por si hay animaciones
-        await page.waitForTimeout(2000);
+        await page.waitForTimeout(1000);
 
         const runePath = `/tmp/udyr-lol-${champId}-${lane}-runas.png`;
         const skillsPath = `/tmp/udyr-lol-${champId}-${lane}-skills.png`;
