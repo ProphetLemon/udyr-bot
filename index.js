@@ -304,35 +304,48 @@ async function handleLol(message, args) {
         await page.waitForTimeout(2000);
 
         const runePath = `/tmp/udyr-lol-${champId}-${lane}-runas.png`;
+        const skillsPath = `/tmp/udyr-lol-${champId}-${lane}-skills.png`;
         const buildPath = `/tmp/udyr-lol-${champId}-${lane}-build.png`;
 
-        // Screenshot 1: Runas (clase .rune-spell)
+        // Screenshot 1: Runas + Summoner Spells (contenedor .rune-spell)
         try {
-            const runeEl = await page.locator('.rune-spell').first();
-            if (await runeEl.isVisible().catch(() => false)) {
-                await runeEl.evaluate(el => el.scrollIntoView({ behavior: 'instant', block: 'start' }));
-                await page.waitForTimeout(500);
+            const runeContainer = await page.locator('.rune-spell').first();
+            if (await runeContainer.isVisible().catch(() => false)) {
+                await runeContainer.screenshot({ path: runePath });
+                console.log('[LOL] Captura de runas completada');
+            } else {
+                await page.screenshot({ path: runePath, fullPage: false });
             }
         } catch (e) {
-            // si no existe, scroll generico
-            await page.evaluate(() => window.scrollTo(0, 500));
-            await page.waitForTimeout(500);
+            console.log('[LOL] Error capturando runas:', e.message);
+            await page.screenshot({ path: runePath, fullPage: false });
         }
-        await page.screenshot({ path: runePath, fullPage: false });
 
-        // Screenshot 2: Build (captura del contenedor .recommended-build_items completo)
+        // Screenshot 2: Skill Priority + Skill Path (contenedor .recommended-build_skills)
+        try {
+            const skillsContainer = await page.locator('.recommended-build_skills').first();
+            if (await skillsContainer.isVisible().catch(() => false)) {
+                await skillsContainer.screenshot({ path: skillsPath });
+                console.log('[LOL] Captura de skills completada');
+            } else {
+                await page.screenshot({ path: skillsPath, fullPage: false });
+            }
+        } catch (e) {
+            console.log('[LOL] Error capturando skills:', e.message);
+            await page.screenshot({ path: skillsPath, fullPage: false });
+        }
+
+        // Screenshot 3: Items (contenedor .recommended-build_items)
         try {
             const buildContainer = await page.locator('.recommended-build_items').first();
             if (await buildContainer.isVisible().catch(() => false)) {
-                // Captura solo ese elemento DOM (scroll automatico + imagen completa del elemento)
                 await buildContainer.screenshot({ path: buildPath });
-                console.log('[LOL] Captura de buildContainer completada');
+                console.log('[LOL] Captura de build completada');
             } else {
-                // fallback: screenshot generico del viewport
                 await page.screenshot({ path: buildPath, fullPage: false });
             }
         } catch (e) {
-            console.log('[LOL] Error al capturar buildContainer, usando fallback:', e.message);
+            console.log('[LOL] Error capturando build:', e.message);
             await page.screenshot({ path: buildPath, fullPage: false });
         }
 
@@ -342,7 +355,7 @@ async function handleLol(message, args) {
         await loadingMsg.delete().catch(() => {});
         await message.channel.send({
             content: `Build de **${champId}** en **${lane.toUpperCase()}**\n${url}`,
-            files: [runePath, buildPath],
+            files: [runePath, skillsPath, buildPath],
         });
     } catch (err) {
         console.error('[LOL] Error:', err.message);
