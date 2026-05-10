@@ -302,6 +302,9 @@ async function handleLol(message, args) {
         }
         // Esperar un poco mas por si hay animaciones
         await page.waitForTimeout(2000);
+        // Hacer scroll para que se vea la seccion de build (runas + items)
+        await page.evaluate(() => window.scrollTo(0, 600));
+        await page.waitForTimeout(500);
 
         const screenshotPath = `/tmp/udyr-lol-${champId}-${lane}.png`;
         await page.screenshot({ path: screenshotPath, fullPage: false });
