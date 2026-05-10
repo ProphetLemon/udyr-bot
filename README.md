@@ -13,8 +13,9 @@ Bot de Discord para reproducir musica de YouTube usando comandos de texto.
 - `udyr stop` - Detiene todo y desconecta.
 - `udyr queue` - Muestra la cola.
 - `udyr clean <num>` - Borra los ultimos <num> mensajes.
-- `udyr lol <campeon> <linea>` - Captura de pantalla de la build en u.gg.
-- `udyr help` - Muestra la ayuda.
+- `udyr lol <campeon> <linea> [build#]` - Captura de pantalla de la build en u.gg. `build#` es opcional para elegir una build alternativa (1, 2, 3...).
+- `udyr lol equipo` - Asigna una linea y un campeon aleatorio a cada integrante del canal de voz.
+- `udyr help` / `udyr h` - Muestra la ayuda.
 
 Ejemplos:
 ```
@@ -25,6 +26,8 @@ udyr skip
 udyr clean 10
 udyr lol akali mid
 udyr lol yasuo top
+udyr lol soraka supp 2
+udyr lol equipo
 ```
 
 ## Requisitos
