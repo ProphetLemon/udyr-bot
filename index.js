@@ -13,6 +13,8 @@ const play = require('play-dl');
 const { spawn } = require('child_process');
 const util = require('util');
 const execPromise = util.promisify(require('child_process').exec);
+const { chromium } = require('playwright');
+const axios = require('axios');
 
 const client = new Client({
     intents: [
@@ -25,9 +27,34 @@ const client = new Client({
 
 const prefix = 'udyr';
 const queues = new Map();
+let lolChampions = new Map(); // nombre ES normalizado -> ID EN
+
+async function loadLolChampions() {
+    try {
+        const versionRes = await axios.get('https://ddragon.leagueoflegends.com/api/versions.json');
+        const version = versionRes.data[0];
+        const res = await axios.get(`https://ddragon.leagueoflegends.com/cdn/${version}/data/es_ES/champion.json`);
+        const champs = res.data.data;
+        for (const key in champs) {
+            const champ = champs[key];
+            const nameNorm = normalizeChampName(champ.name);
+            lolChampions.set(nameNorm, champ.id);
+            // tambien con el key (nombre en ingles sin espacios)
+            lolChampions.set(key.toLowerCase(), champ.id);
+        }
+        console.log(`[LOL] ${lolChampions.size} nombres de campeones cargados.`);
+    } catch (e) {
+        console.error('[LOL] Error cargando campeones:', e.message);
+    }
+}
+
+function normalizeChampName(name) {
+    return name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '');
+}
 
 client.once('clientReady', () => {
     console.log(`[READY] Bot conectado como ${client.user.tag}`);
+    loadLolChampions();
 });
 
 function getQueue(guildId) {
@@ -72,6 +99,9 @@ client.on('messageCreate', async (message) => {
     }
     if (command === 'clean') {
         return handleClean(message, args);
+    }
+    if (command === 'lol') {
+        return handleLol(message, args);
     }
 });
 
@@ -150,6 +180,7 @@ function handleHelp(message) {
         '\n`udyr stop` - Detiene todo y desconecta' +
         '\n`udyr queue` - Muestra la cola' +
         '\n`udyr clean <num>` - Borra los ultimos <num> mensajes' +
+        '\n`udyr lol <campeon> <linea>` - Screenshot de build de u.gg' +
         '\n`udyr help` - Muestra esta ayuda'
     );
 }
@@ -180,6 +211,71 @@ async function handleClean(message, args) {
     } catch (err) {
         console.error('[CLEAN] Error:', err.message);
         message.reply('No pude borrar los mensajes. Asegurate de que no tengan mas de 14 dias de antiguedad.');
+    }
+}
+
+// ---------- COMANDO LOL ----------
+
+async function handleLol(message, args) {
+    if (args.length < 1) {
+        return message.reply('Debes escribir un campeon. Ejemplo: `udyr lol akali mid` o `udyr lol yasuo top`');
+    }
+
+    // Mapeo de lineas
+    const laneMap = {
+        mid: 'mid', medio: 'mid', m: 'mid',
+        top: 'top', superior: 'top', sup: 'top',
+        jungle: 'jungle', jg: 'jungle', jungla: 'jungle',
+        adc: 'adc', bot: 'adc', tirador: 'adc',
+        support: 'support', supp: 'support', soporte: 'support',
+    };
+
+    const lane = laneMap[args[args.length - 1]?.toLowerCase()] || 'mid';
+    // Si el ultimo arg es una linea valida, lo quitamos del nombre del campeon
+    const champArgs = laneMap[args[args.length - 1]?.toLowerCase()] ? args.slice(0, -1) : args;
+    const champInput = champArgs.join(' ');
+    const champNorm = normalizeChampName(champInput);
+
+    let champId = lolChampions.get(champNorm);
+    if (!champId) {
+        // intentar coincidencia parcial
+        for (const [key, val] of lolChampions) {
+            if (key.includes(champNorm) || champNorm.includes(key)) {
+                champId = val;
+                break;
+            }
+        }
+    }
+    if (!champId) {
+        return message.reply(`No encontre el campeon **${champInput}**. Asegurate de escribirlo bien.`);
+    }
+
+    const url = `https://u.gg/lol/champions/${champId}/build?role=${lane}`;
+    console.log(`[LOL] Screenshot de ${url}`);
+    const loadingMsg = await message.reply(`Buscando build de **${champId}** ${lane}...`);
+
+    let browser;
+    try {
+        browser = await chromium.launch({ headless: true });
+        const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+        await page.goto(url, { waitUntil: 'networkidle' });
+        // Esperar un poco mas por si hay animaciones
+        await page.waitForTimeout(2000);
+
+        const screenshotPath = `/tmp/udyr-lol-${champId}-${lane}.png`;
+        await page.screenshot({ path: screenshotPath, fullPage: false });
+        await browser.close();
+        browser = null;
+
+        await loadingMsg.delete().catch(() => {});
+        await message.channel.send({
+            content: `Build de **${champId}** en **${lane.toUpperCase()}**\n${url}`,
+            files: [screenshotPath],
+        });
+    } catch (err) {
+        console.error('[LOL] Error:', err.message);
+        if (browser) await browser.close().catch(() => {});
+        await loadingMsg.edit(`No pude obtener la build. Puedes verla aqui: ${url}`);
     }
 }
 
