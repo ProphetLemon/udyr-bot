@@ -259,6 +259,47 @@ async function handleLol(message, args) {
         browser = await chromium.launch({ headless: true });
         const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
         await page.goto(url, { waitUntil: 'networkidle' });
+        // Cerrar modal de cookies si existe
+        try {
+            // Intentar clicar botones comunes de aceptar cookies
+            const cookieButtons = [
+                'button:has-text("Accept")',
+                'button:has-text("Accept All")',
+                'button:has-text("I Accept")',
+                'button:has-text("Aceptar")',
+                'button:has-text("Accept Cookies")',
+                '[data-testid="uc-accept-all-button"]',
+                '.qc-cmp2-summary-buttons button:first-child',
+            ];
+            for (const sel of cookieButtons) {
+                const btn = await page.locator(sel).first();
+                if (await btn.isVisible().catch(() => false)) {
+                    await btn.click();
+                    console.log('[LOL] Modal de cookies cerrada');
+                    break;
+                }
+            }
+        } catch (e) {
+            // ignorar si no hay modal
+        }
+        // Fallback: eliminar overlays de cookies directamente del DOM
+        try {
+            await page.evaluate(() => {
+                const selectors = [
+                    '#cookie-banner', '.cookie-banner', '.cookie-consent', '.cookie-modal',
+                    '#cookieConsent', '.qc-cmp2-container', '.onetrust-pc-dark-filter',
+                    '#onetrust-consent-sdk', '.cc-banner', '.gdpr-consent',
+                    '[class*="cookie"]', '[id*="cookie"]', '[class*="consent"]', '[id*="consent"]',
+                ];
+                selectors.forEach(sel => {
+                    document.querySelectorAll(sel).forEach(el => {
+                        if (el && el.parentNode) el.parentNode.removeChild(el);
+                    });
+                });
+            });
+        } catch (e) {
+            // ignorar
+        }
         // Esperar un poco mas por si hay animaciones
         await page.waitForTimeout(2000);
 
