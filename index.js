@@ -320,16 +320,21 @@ async function handleLol(message, args) {
         }
         await page.screenshot({ path: runePath, fullPage: false });
 
-        // Screenshot 2: Build (clase .recommended-build_items)
+        // Screenshot 2: Build (hasta el header de Starting Items o Core Items)
         try {
-            const buildEl = await page.locator('.recommended-build_items').first();
-            if (await buildEl.isVisible().catch(() => false)) {
-                await buildEl.evaluate(el => el.scrollIntoView({ behavior: 'instant', block: 'start' }));
-                await page.waitForTimeout(500);
+            const startingHeader = await page.locator('.content-section_header:has-text("Starting Items")').first();
+            if (await startingHeader.isVisible().catch(() => false)) {
+                await startingHeader.evaluate(el => el.scrollIntoView({ behavior: 'instant', block: 'start' }));
+            } else {
+                const coreHeader = await page.locator('.content-section_header:has-text("Core Items")').first();
+                if (await coreHeader.isVisible().catch(() => false)) {
+                    await coreHeader.evaluate(el => el.scrollIntoView({ behavior: 'instant', block: 'start' }));
+                }
             }
+            await page.waitForTimeout(500);
         } catch (e) {
-            // si no existe, scroll mas abajo
-            await page.evaluate(() => window.scrollTo(0, 1200));
+            // si no existe, scroll generico
+            await page.evaluate(() => window.scrollTo(0, 800));
             await page.waitForTimeout(500);
         }
         await page.screenshot({ path: buildPath, fullPage: false });
