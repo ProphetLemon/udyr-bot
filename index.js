@@ -320,33 +320,21 @@ async function handleLol(message, args) {
         }
         await page.screenshot({ path: runePath, fullPage: false });
 
-        // Screenshot 2: Build (encuentra el contenedor y hace scroll al primer header dentro)
+        // Screenshot 2: Build (captura del contenedor .recommended-build_items completo)
         try {
-            const scrollY = await page.evaluate(() => {
-                const buildSection = document.querySelector('.recommended-build_items');
-                if (!buildSection) return null;
-                // Buscar el primer header visible dentro del contenedor de build
-                const headers = buildSection.querySelectorAll('.content-section_header');
-                for (const h of headers) {
-                    if (h.offsetParent !== null) { // visible
-                        const rect = h.getBoundingClientRect();
-                        return window.scrollY + rect.top - 60; // -60px de margen superior
-                    }
-                }
-                return null;
-            });
-            if (scrollY !== null) {
-                await page.evaluate(y => window.scrollTo(0, y), scrollY);
-                console.log(`[LOL] Scroll de build a Y=${scrollY}`);
+            const buildContainer = await page.locator('.recommended-build_items').first();
+            if (await buildContainer.isVisible().catch(() => false)) {
+                // Captura solo ese elemento DOM (scroll automatico + imagen completa del elemento)
+                await buildContainer.screenshot({ path: buildPath });
+                console.log('[LOL] Captura de buildContainer completada');
             } else {
-                await page.evaluate(() => window.scrollTo(0, 800));
+                // fallback: screenshot generico del viewport
+                await page.screenshot({ path: buildPath, fullPage: false });
             }
-            await page.waitForTimeout(500);
         } catch (e) {
-            await page.evaluate(() => window.scrollTo(0, 800));
-            await page.waitForTimeout(500);
+            console.log('[LOL] Error al capturar buildContainer, usando fallback:', e.message);
+            await page.screenshot({ path: buildPath, fullPage: false });
         }
-        await page.screenshot({ path: buildPath, fullPage: false });
 
         await browser.close();
         browser = null;
