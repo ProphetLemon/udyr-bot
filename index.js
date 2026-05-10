@@ -320,20 +320,29 @@ async function handleLol(message, args) {
         }
         await page.screenshot({ path: runePath, fullPage: false });
 
-        // Screenshot 2: Build (hasta el header de Starting Items o Core Items)
+        // Screenshot 2: Build (encuentra el contenedor y hace scroll al primer header dentro)
         try {
-            const startingHeader = await page.locator('.content-section_header:has-text("Starting Items")').first();
-            if (await startingHeader.isVisible().catch(() => false)) {
-                await startingHeader.evaluate(el => el.scrollIntoView({ behavior: 'instant', block: 'start' }));
-            } else {
-                const coreHeader = await page.locator('.content-section_header:has-text("Core Items")').first();
-                if (await coreHeader.isVisible().catch(() => false)) {
-                    await coreHeader.evaluate(el => el.scrollIntoView({ behavior: 'instant', block: 'start' }));
+            const scrollY = await page.evaluate(() => {
+                const buildSection = document.querySelector('.recommended-build_items');
+                if (!buildSection) return null;
+                // Buscar el primer header visible dentro del contenedor de build
+                const headers = buildSection.querySelectorAll('.content-section_header');
+                for (const h of headers) {
+                    if (h.offsetParent !== null) { // visible
+                        const rect = h.getBoundingClientRect();
+                        return window.scrollY + rect.top - 60; // -60px de margen superior
+                    }
                 }
+                return null;
+            });
+            if (scrollY !== null) {
+                await page.evaluate(y => window.scrollTo(0, y), scrollY);
+                console.log(`[LOL] Scroll de build a Y=${scrollY}`);
+            } else {
+                await page.evaluate(() => window.scrollTo(0, 800));
             }
             await page.waitForTimeout(500);
         } catch (e) {
-            // si no existe, scroll generico
             await page.evaluate(() => window.scrollTo(0, 800));
             await page.waitForTimeout(500);
         }
