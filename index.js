@@ -302,19 +302,45 @@ async function handleLol(message, args) {
         }
         // Esperar un poco mas por si hay animaciones
         await page.waitForTimeout(2000);
-        // Hacer scroll para que se vea la seccion de build (runas + items)
-        await page.evaluate(() => window.scrollTo(0, 600));
-        await page.waitForTimeout(500);
 
-        const screenshotPath = `/tmp/udyr-lol-${champId}-${lane}.png`;
-        await page.screenshot({ path: screenshotPath, fullPage: false });
+        const runePath = `/tmp/udyr-lol-${champId}-${lane}-runas.png`;
+        const buildPath = `/tmp/udyr-lol-${champId}-${lane}-build.png`;
+
+        // Screenshot 1: Runas (clase .rune-spell)
+        try {
+            const runeEl = await page.locator('.rune-spell').first();
+            if (await runeEl.isVisible().catch(() => false)) {
+                await runeEl.evaluate(el => el.scrollIntoView({ behavior: 'instant', block: 'start' }));
+                await page.waitForTimeout(500);
+            }
+        } catch (e) {
+            // si no existe, scroll generico
+            await page.evaluate(() => window.scrollTo(0, 500));
+            await page.waitForTimeout(500);
+        }
+        await page.screenshot({ path: runePath, fullPage: false });
+
+        // Screenshot 2: Build (clase .recommended-build_items)
+        try {
+            const buildEl = await page.locator('.recommended-build_items').first();
+            if (await buildEl.isVisible().catch(() => false)) {
+                await buildEl.evaluate(el => el.scrollIntoView({ behavior: 'instant', block: 'start' }));
+                await page.waitForTimeout(500);
+            }
+        } catch (e) {
+            // si no existe, scroll mas abajo
+            await page.evaluate(() => window.scrollTo(0, 1200));
+            await page.waitForTimeout(500);
+        }
+        await page.screenshot({ path: buildPath, fullPage: false });
+
         await browser.close();
         browser = null;
 
         await loadingMsg.delete().catch(() => {});
         await message.channel.send({
             content: `Build de **${champId}** en **${lane.toUpperCase()}**\n${url}`,
-            files: [screenshotPath],
+            files: [runePath, buildPath],
         });
     } catch (err) {
         console.error('[LOL] Error:', err.message);
