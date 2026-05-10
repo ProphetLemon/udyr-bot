@@ -13,6 +13,7 @@ Bot de Discord para reproducir musica de YouTube usando comandos de texto.
 - `udyr stop` - Detiene todo y desconecta.
 - `udyr queue` - Muestra la cola.
 - `udyr clean <num>` - Borra los ultimos <num> mensajes.
+- `udyr lol <campeon> <linea>` - Captura de pantalla de la build en u.gg.
 - `udyr help` - Muestra la ayuda.
 
 Ejemplos:
@@ -22,6 +23,8 @@ udyr yt loba shakira
 udyr yt https://www.youtube.com/playlist?list=...
 udyr skip
 udyr clean 10
+udyr lol akali mid
+udyr lol yasuo top
 ```
 
 ## Requisitos
@@ -29,6 +32,7 @@ udyr clean 10
 - [Node.js](https://nodejs.org/) 18 o superior
 - ffmpeg instalado en el sistema
 - yt-dlp instalado en el sistema
+- Navegador Chromium/Chrome instalado (para el comando `udyr lol`, se instala automaticamente con `npx playwright install chromium`)
 
 ## Instalacion local
 
