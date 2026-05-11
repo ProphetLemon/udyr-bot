@@ -29,25 +29,25 @@ COMMAND=$1
 
 case $COMMAND in
     status)
-        ssh ${PI_USER}@${PI_HOST} "pm2 status udyr-bot"
+        ssh ${PI_USER}@${PI_HOST} "bash -l -c 'pm2 status udyr-bot'"
         ;;
     logs)
-        ssh ${PI_USER}@${PI_HOST} "pm2 logs udyr-bot"
+        ssh ${PI_USER}@${PI_HOST} "bash -l -c 'pm2 logs udyr-bot'"
         ;;
     restart)
-        ssh ${PI_USER}@${PI_HOST} "pm2 restart udyr-bot"
+        ssh ${PI_USER}@${PI_HOST} "bash -l -c 'pm2 restart udyr-bot'"
         echo "Bot reiniciado."
         ;;
     stop)
-        ssh ${PI_USER}@${PI_HOST} "pm2 stop udyr-bot"
+        ssh ${PI_USER}@${PI_HOST} "bash -l -c 'pm2 stop udyr-bot'"
         echo "Bot detenido."
         ;;
     start)
-        ssh ${PI_USER}@${PI_HOST} "pm2 start udyr-bot"
+        ssh ${PI_USER}@${PI_HOST} "bash -l -c 'pm2 start udyr-bot'"
         echo "Bot iniciado."
         ;;
     update)
-        ssh ${PI_USER}@${PI_HOST} "cd ~/udyr-bot && git pull && npm install && pm2 restart udyr-bot"
+        ssh ${PI_USER}@${PI_HOST} "bash -l -c 'cd ~/udyr-bot && git pull && npm install && pm2 restart udyr-bot'"
         echo "Bot actualizado y reiniciado."
         ;;
     *)
