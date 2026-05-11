@@ -11,6 +11,7 @@ const handleQueue = require('./commands/queue');
 const handleHelp = require('./commands/help');
 const handleClean = require('./commands/clean');
 const handleLol = require('./commands/lol');
+const handleDuel = require('./commands/duel');
 
 const prefix = 'udyr';
 const ALLOWED_GUILD_ID = 'REDACTED_GUILD_ID';
@@ -65,6 +66,9 @@ client.on('messageCreate', async (message) => {
     }
     if (command === 'lol') {
         return handleLol(message, args);
+    }
+    if (command === 'retar') {
+        return handleDuel(message, args);
     }
 });
 
