@@ -28,8 +28,9 @@ echo ""
 
 # --- PASO 3: Instalar ffmpeg, python3-pip y yt-dlp ---
 echo -e "${YELLOW}[3/9] Instalando ffmpeg, python3 y yt-dlp...${NC}"
-sudo apt install -y ffmpeg python3-pip
-pip3 install --user yt-dlp
+sudo apt install -y ffmpeg python3-pip python3-venv
+# Debian 12+ bloquea pip global; usar --break-system-packages o venv
+pip3 install --break-system-packages --user yt-dlp || pip3 install --break-system-packages yt-dlp || python3 -m pip install --break-system-packages yt-dlp
 # Asegurar que yt-dlp está en el PATH
 export PATH="$HOME/.local/bin:$PATH"
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
@@ -39,6 +40,11 @@ echo ""
 # --- PASO 4: Instalar git y pm2 ---
 echo -e "${YELLOW}[4/9] Instalando git y pm2...${NC}"
 sudo apt install -y git
+# Verificar que npm está disponible
+if ! command -v npm &> /dev/null; then
+    echo -e "${RED}Error: npm no encontrado. Intentando instalar npm...${NC}"
+    sudo apt install -y npm
+fi
 sudo npm install -g pm2
 echo -e "${GREEN}✓ git y pm2 instalados${NC}"
 echo ""
