@@ -23,7 +23,7 @@ module.exports = async function handleDuel(message, args) {
 
     // Presentacion
     await message.channel.send(
-        `⚔️ **¡DUELO A MUERTE CON CUCHILLOS DE CARNICERO!** ⚔️\n\n` +
+        `⚔️ **¡DUELO A MUERTE!** ⚔️\n\n` +
         `${p1.name} **VS** ${p2.name}\n\n` +
         `Cada uno empieza con **100 HP**. ¡Que empiece la masacre!`
     );
@@ -45,7 +45,7 @@ module.exports = async function handleDuel(message, args) {
             const baseDmg = randomInt(10, 25);
             const reflected = Math.floor(baseDmg / 2);
             attacker.hp -= reflected;
-            resultText = `🛡️ **¡PARRY!** ${defender.name} devuelve el golpe y ${attacker.name} recibe **${reflected}** de daño reflejado.`;
+            resultText = `🥷 **¡PARRY!** ${defender.name} devuelve el golpe y ${attacker.name} recibe **${reflected}** de daño reflejado.`;
         } else if (roll < 0.25) {
             // Defensa: el defensor bloquea todo
             resultText = `🛡️ ${defender.name} se defiende perfectamente. **0** de daño.`;
@@ -64,7 +64,7 @@ module.exports = async function handleDuel(message, args) {
         const hpBar = (p) => {
             const filled = Math.max(0, Math.ceil((p.hp / p.maxHp) * 10));
             const empty = 10 - filled;
-            return '❤️'.repeat(filled) + '🖤'.repeat(empty) + ` **${Math.max(0, p.hp)} HP**`;
+            return `[${'█'.repeat(filled)}${'░'.repeat(empty)}] **${Math.max(0, p.hp)}/${p.maxHp} HP**`;
         };
 
         await message.channel.send(
