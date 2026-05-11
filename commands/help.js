@@ -11,7 +11,7 @@ module.exports = function handleHelp(message) {
         '\n`udyr clean <num>` - Borra los ultimos <num> mensajes' +
         '\n`udyr lol <campeon> <linea> [build#]` - Screenshot de build de u.gg' +
         '\n`udyr lol equipo` - Asigna champs y lineas a tu canal de voz' +
-        '\n`udyr retar @usuario` - Duelo por turnos contra un usuario' +
+        '\n`udyr retar @usuario` - Duelo por turnos con clases, stats, pasivas y muerte subita' +
         '\n`udyr help` / `udyr h` - Muestra esta ayuda'
     );
 };
