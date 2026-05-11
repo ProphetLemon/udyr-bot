@@ -6,6 +6,11 @@
 PI_USER="REDACTED_PI_USER"
 PI_HOST="REDACTED_IP"
 
+# Función para ejecutar comandos en el Pi con PATH correcto
+pi_exec() {
+    ssh ${PI_USER}@${PI_HOST} "export PATH=\$HOME/.local/bin:\$HOME/.npm-global/bin:/usr/local/bin:\$PATH && $1"
+}
+
 show_help() {
     echo "Uso: ./control.sh [comando]"
     echo ""
@@ -17,7 +22,6 @@ show_help() {
     echo "  start    - Iniciar el bot"
     echo "  update   - Actualizar desde GitHub y reiniciar"
     echo ""
-    echo "Configura PI_HOST editando este archivo."
 }
 
 if [ $# -eq 0 ]; then
@@ -29,25 +33,25 @@ COMMAND=$1
 
 case $COMMAND in
     status)
-        ssh ${PI_USER}@${PI_HOST} "bash -l -c 'pm2 status udyr-bot'"
+        pi_exec "pm2 status udyr-bot"
         ;;
     logs)
-        ssh ${PI_USER}@${PI_HOST} "bash -l -c 'pm2 logs udyr-bot'"
+        pi_exec "pm2 logs udyr-bot"
         ;;
     restart)
-        ssh ${PI_USER}@${PI_HOST} "bash -l -c 'pm2 restart udyr-bot'"
+        pi_exec "pm2 restart udyr-bot"
         echo "Bot reiniciado."
         ;;
     stop)
-        ssh ${PI_USER}@${PI_HOST} "bash -l -c 'pm2 stop udyr-bot'"
+        pi_exec "pm2 stop udyr-bot"
         echo "Bot detenido."
         ;;
     start)
-        ssh ${PI_USER}@${PI_HOST} "bash -l -c 'pm2 start udyr-bot'"
+        pi_exec "pm2 start udyr-bot"
         echo "Bot iniciado."
         ;;
     update)
-        ssh ${PI_USER}@${PI_HOST} "bash -l -c 'cd ~/udyr-bot && git pull && npm install && pm2 restart udyr-bot'"
+        pi_exec "cd ~/udyr-bot && git pull && npm install && pm2 restart udyr-bot"
         echo "Bot actualizado y reiniciado."
         ;;
     *)
