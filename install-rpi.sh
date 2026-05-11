@@ -29,9 +29,14 @@ echo ""
 # --- PASO 3: Instalar ffmpeg, python3-pip y yt-dlp ---
 echo -e "${YELLOW}[3/9] Instalando ffmpeg, python3 y yt-dlp...${NC}"
 sudo apt install -y ffmpeg python3-pip python3-venv
-# Debian 12+ bloquea pip global; usar --break-system-packages o venv
-pip3 install --break-system-packages --user yt-dlp || pip3 install --break-system-packages yt-dlp || python3 -m pip install --break-system-packages yt-dlp
-# Asegurar que yt-dlp está en el PATH
+# Debian 12+ bloquea pip global; usar venv en su lugar
+if [ ! -d "$HOME/.yt-dlp-venv" ]; then
+    python3 -m venv "$HOME/.yt-dlp-venv"
+fi
+"$HOME/.yt-dlp-venv/bin/pip" install yt-dlp
+# Crear symlink para que sea accesible
+mkdir -p "$HOME/.local/bin"
+ln -sf "$HOME/.yt-dlp-venv/bin/yt-dlp" "$HOME/.local/bin/yt-dlp"
 export PATH="$HOME/.local/bin:$PATH"
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 echo -e "${GREEN}✓ ffmpeg, python3 y yt-dlp instalados${NC}"
