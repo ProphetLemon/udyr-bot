@@ -5,19 +5,7 @@
 
 PI_USER="REDACTED_PI_USER"
 PI_HOST="REDACTED_IP"
-
-# Buscar pm2 en el Pi
-find_pm2() {
-    ssh ${PI_USER}@${PI_HOST} "bash -c 'which pm2 || find /usr -name pm2 -type f 2>/dev/null | head -1 || find /opt -name pm2 -type f 2>/dev/null | head -1'"
-}
-
-PM2_CMD=$(find_pm2)
-
-if [ -z "$PM2_CMD" ]; then
-    echo "Error: pm2 no encontrado en el Raspberry Pi."
-    echo "Instala el bot primero con: ./install-rpi.sh"
-    exit 1
-fi
+PM2="/usr/bin/pm2"
 
 show_help() {
     echo "Uso: ./control.sh [comando]"
@@ -41,25 +29,25 @@ COMMAND=$1
 
 case $COMMAND in
     status)
-        ssh ${PI_USER}@${PI_HOST} "bash -c 'export PATH=\\\$(dirname $PM2_CMD):\\\$PATH && pm2 status udyr-bot'"
+        ssh ${PI_USER}@${PI_HOST} "${PM2} status udyr-bot"
         ;;
     logs)
-        ssh ${PI_USER}@${PI_HOST} "bash -c 'export PATH=\\\$(dirname $PM2_CMD):\\\$PATH && pm2 logs udyr-bot'"
+        ssh ${PI_USER}@${PI_HOST} "${PM2} logs udyr-bot"
         ;;
     restart)
-        ssh ${PI_USER}@${PI_HOST} "bash -c 'export PATH=\\\$(dirname $PM2_CMD):\\\$PATH && pm2 restart udyr-bot'"
+        ssh ${PI_USER}@${PI_HOST} "${PM2} restart udyr-bot"
         echo "Bot reiniciado."
         ;;
     stop)
-        ssh ${PI_USER}@${PI_HOST} "bash -c 'export PATH=\\\$(dirname $PM2_CMD):\\\$PATH && pm2 stop udyr-bot'"
+        ssh ${PI_USER}@${PI_HOST} "${PM2} stop udyr-bot"
         echo "Bot detenido."
         ;;
     start)
-        ssh ${PI_USER}@${PI_HOST} "bash -c 'export PATH=\\\$(dirname $PM2_CMD):\\\$PATH && pm2 start udyr-bot'"
+        ssh ${PI_USER}@${PI_HOST} "${PM2} start udyr-bot"
         echo "Bot iniciado."
         ;;
     update)
-        ssh ${PI_USER}@${PI_HOST} "bash -c 'export PATH=\\\$(dirname $PM2_CMD):\\\$PATH && cd ~/udyr-bot && git pull && npm install && pm2 restart udyr-bot'"
+        ssh ${PI_USER}@${PI_HOST} "cd ~/udyr-bot && git pull && npm install && ${PM2} restart udyr-bot"
         echo "Bot actualizado y reiniciado."
         ;;
     *)
