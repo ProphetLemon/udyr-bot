@@ -255,12 +255,17 @@ module.exports = async function handleDuel(message, args) {
         const suddenDeath = turn >= 11;
         const suddenMult = suddenDeath ? 1.5 : 1;
 
-        // --- FASE 1: Pasiva de ataque (Viento Cortante) ---
+        // --- FASE 1: Pasiva de ataque (Viento Cortante) + Residual Arcano del mago ---
         let ignoreDefense = false;
+        if (attacker.mageNextIgnore) {
+            ignoreDefense = true;
+            attacker.mageNextIgnore = false;
+            roundLines.push(`🔮 **Residual Arcano:** El ataque de ${attacker.name} ignora defensa.`);
+        }
         if (attacker.passive.onAttack) {
             const passiveResult = attacker.passive.onAttack(attacker);
             if (passiveResult) {
-                ignoreDefense = passiveResult.ignoreDefense;
+                ignoreDefense = ignoreDefense || passiveResult.ignoreDefense;
                 roundLines.push(passiveResult.text);
             }
         }
@@ -377,13 +382,6 @@ module.exports = async function handleDuel(message, args) {
             }
 
             attacker.comboCount = 0;
-        }
-
-        // Preparación de Explosión Arcana: si la flag está activa, el siguiente ataque ignora defensa
-        if (defender.mageNextIgnore) {
-            ignoreDefense = true;
-            defender.mageNextIgnore = false;
-            roundLines.push(`🔮 **Residual Arcano:** El siguiente ataque de ${defender.name} ignorará defensa.`);
         }
 
         // --- FASE 4: Pasivas post-damage (Ira Berserker) ---
