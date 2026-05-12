@@ -2,6 +2,18 @@ const play = require("play-dl");
 const { getQueue, handleSong } = require("../lib/queueManager");
 const ytdlp = require("../lib/ytdlp");
 
+function formatDuration(value) {
+  if (value == null || value === "") return "Desconocida";
+  if (typeof value === "string") return value;
+  if (typeof value !== "number" || !Number.isFinite(value)) return "Desconocida";
+  const totalSec = Math.floor(value);
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  if (h > 0) return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
 async function searchYt(query, limit = 5) {
   try {
     const results = await play.search(query, { limit });
@@ -20,7 +32,7 @@ async function getVideoInfo(url) {
     return {
       title: vd.title,
       url: vd.url || url,
-      duration: vd.durationRaw || "Desconocida",
+      duration: formatDuration(vd.durationRaw || vd.durationInSec),
     };
   } catch (e) {
     console.log("[URL] play-dl video_info fallo, usando yt-dlp:", e.message);
@@ -28,7 +40,7 @@ async function getVideoInfo(url) {
     return {
       title: v.title,
       url: v.url || url,
-      duration: v.durationRaw || "Desconocida",
+      duration: formatDuration(v.durationRaw),
     };
   }
 }
@@ -43,7 +55,7 @@ async function getPlaylistInfo(url) {
       songs: videos.map((v) => ({
         title: v.title,
         url: v.url,
-        duration: v.durationRaw || v.durationInSec || "Desconocida",
+        duration: formatDuration(v.durationRaw || v.durationInSec),
       })),
     };
   } catch (e) {
@@ -54,7 +66,7 @@ async function getPlaylistInfo(url) {
       songs: videos.map((v) => ({
         title: v.title,
         url: v.url,
-        duration: v.durationRaw || "Desconocida",
+        duration: formatDuration(v.durationRaw),
       })),
     };
   }
@@ -180,15 +192,12 @@ module.exports = async function handleYt(message, args) {
       const song = {
         title: selected.title,
         url: selected.url,
-        duration: selected.durationRaw || selected.duration || "Desconocida",
+        duration: formatDuration(selected.durationRaw || selected.duration),
       };
       await handleSong(message, voiceChannel, song);
     }
   } catch (error) {
     console.error("[ERROR] handleYt:", error.stack || error.message);
-    if (error.message === "time") {
-      return message.reply("Se acabo el tiempo. Vuelve a intentarlo.");
-    }
     return message.reply("Ocurrio un error al procesar tu solicitud.");
   }
 };
