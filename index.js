@@ -1,21 +1,31 @@
 require('dotenv').config();
 const { Client, GatewayIntentBits } = require('discord.js');
 const { loadLolChampions, loadLaneChampions } = require('./lib/lolData');
+const { queues, destroyQueue } = require('./lib/queueManager');
+const { shutdown: shutdownUggBrowser } = require('./lib/uggBrowser');
 
-const handleYt = require('./commands/yt');
-const handlePause = require('./commands/pause');
-const handleResume = require('./commands/resume');
-const handleSkip = require('./commands/skip');
-const handleStop = require('./commands/stop');
-const handleQueue = require('./commands/queue');
-const handleHelp = require('./commands/help');
-const handleClean = require('./commands/clean');
-const handleLol = require('./commands/lol');
-const handleDuel = require('./commands/duel');
+if (!process.env.DISCORD_TOKEN) {
+    console.error('[FATAL] Falta DISCORD_TOKEN en .env');
+    process.exit(1);
+}
 
-const prefix = 'udyr';
+const PREFIX = 'udyr';
 const ALLOWED_GUILD_ID = 'REDACTED_GUILD_ID';
 const ALLOWED_CHANNEL_ID = 'REDACTED_CHANNEL_ID';
+
+const handlers = {
+    yt: require('./commands/yt'),
+    pause: require('./commands/pause'),
+    resume: require('./commands/resume'),
+    skip: require('./commands/skip'),
+    stop: require('./commands/stop'),
+    queue: require('./commands/queue'),
+    clean: require('./commands/clean'),
+    lol: require('./commands/lol'),
+    retar: require('./commands/duel'),
+};
+handlers.help = require('./commands/help');
+handlers.h = handlers.help;
 
 const client = new Client({
     intents: [
@@ -35,41 +45,37 @@ client.on('messageCreate', async (message) => {
     if (message.author.bot) return;
     if (message.guildId !== ALLOWED_GUILD_ID) return;
     if (message.channelId !== ALLOWED_CHANNEL_ID) return;
-    if (!message.content.toLowerCase().startsWith(prefix)) return;
+    if (!message.content.toLowerCase().startsWith(PREFIX)) return;
 
-    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const args = message.content.slice(PREFIX.length).trim().split(/ +/);
     const command = args.shift()?.toLowerCase();
+    const handler = handlers[command];
+    if (!handler) return;
 
-    if (command === 'yt') {
-        return handleYt(message, args);
-    }
-    if (command === 'pause') {
-        return handlePause(message);
-    }
-    if (command === 'resume') {
-        return handleResume(message);
-    }
-    if (command === 'skip') {
-        return handleSkip(message);
-    }
-    if (command === 'stop') {
-        return handleStop(message);
-    }
-    if (command === 'queue') {
-        return handleQueue(message);
-    }
-    if (command === 'help' || command === 'h') {
-        return handleHelp(message);
-    }
-    if (command === 'clean') {
-        return handleClean(message, args);
-    }
-    if (command === 'lol') {
-        return handleLol(message, args);
-    }
-    if (command === 'retar') {
-        return handleDuel(message, args);
+    try {
+        await handler(message, args);
+    } catch (err) {
+        console.error(`[CMD:${command}] error:`, err.stack || err.message);
     }
 });
 
-client.login(process.env.DISCORD_TOKEN);
+let shuttingDown = false;
+async function gracefulShutdown(signal) {
+    if (shuttingDown) return;
+    shuttingDown = true;
+    console.log(`[SHUTDOWN] Recibido ${signal}, cerrando...`);
+    for (const guildId of queues.keys()) {
+        try { destroyQueue(guildId); } catch {}
+    }
+    await shutdownUggBrowser().catch(() => {});
+    try { await client.destroy(); } catch {}
+    process.exit(0);
+}
+
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+
+client.login(process.env.DISCORD_TOKEN).catch((err) => {
+    console.error('[FATAL] login fallo:', err.message);
+    process.exit(1);
+});
