@@ -12,6 +12,7 @@ module.exports = function handleHelp(message) {
         '\n`udyr lol <campeon> <linea> [build#]` - Screenshot de build de u.gg' +
         '\n`udyr lol equipo` - Asigna champs y lineas a tu canal de voz' +
         '\n`udyr retar @usuario` - Duelo por turnos con clases, stats, pasivas, combos y muerte subita' +
+        '\n`udyr ruleta` - Tragaperras de frutas' +
         '\n`udyr help` / `udyr h` - Muestra esta ayuda'
     );
 };

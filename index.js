@@ -23,6 +23,7 @@ const handlers = {
     clean: require('./commands/clean'),
     lol: require('./commands/lol'),
     retar: require('./commands/duel'),
+    ruleta: require('./commands/ruleta'),
 };
 handlers.help = require('./commands/help');
 handlers.h = handlers.help;
