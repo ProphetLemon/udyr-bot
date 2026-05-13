@@ -4,13 +4,14 @@ const {
     getRandomChampionForLane,
 } = require('../lib/lolData');
 const { newUggPage } = require('../lib/uggBrowser');
+const fs = require('fs');
 
 const LANE_MAP = {
     mid: 'mid', medio: 'mid', m: 'mid',
-    top: 'top', superior: 'top', sup: 'top',
+    top: 'top', superior: 'top',
     jungle: 'jungle', jg: 'jungle', jungla: 'jungle',
     adc: 'adc', bot: 'adc', tirador: 'adc',
-    support: 'support', supp: 'support', soporte: 'support',
+    support: 'support', supp: 'support', sup: 'support', soporte: 'support',
 };
 
 function parseArgs(args) {
@@ -26,12 +27,19 @@ function parseArgs(args) {
 
 function resolveChampId(champInput) {
     const norm = normalizeChampName(champInput);
-    let id = lolChampions.get(norm);
-    if (id) return id;
+    const exact = lolChampions.get(norm);
+    if (exact) return exact;
+    const matches = [];
     for (const [key, val] of lolChampions) {
-        if (key.includes(norm) || norm.includes(key)) return val;
+        if (key.startsWith(norm)) {
+            matches.push([key, val, 0]);
+        } else if (key.includes(norm) || norm.includes(key)) {
+            matches.push([key, val, 1]);
+        }
     }
-    return null;
+    if (matches.length === 0) return null;
+    matches.sort((a, b) => a[2] - b[2] || a[0].length - b[0].length);
+    return matches[0][1];
 }
 
 async function selectBuildTab(page, champId, buildChoice) {
@@ -98,6 +106,7 @@ async function handleLolBuild(message, args) {
     );
 
     let release = () => {};
+    let runePath, skillsPath, buildPath;
     try {
         const session = await newUggPage();
         release = session.release;
@@ -108,9 +117,9 @@ async function handleLolBuild(message, args) {
 
         await selectBuildTab(page, champId, buildChoice);
 
-        const runePath = `/tmp/udyr-lol-${champId}-${lane}-runas.png`;
-        const skillsPath = `/tmp/udyr-lol-${champId}-${lane}-skills.png`;
-        const buildPath = `/tmp/udyr-lol-${champId}-${lane}-build.png`;
+        runePath = `/tmp/udyr-lol-${champId}-${lane}-runas.png`;
+        skillsPath = `/tmp/udyr-lol-${champId}-${lane}-skills.png`;
+        buildPath = `/tmp/udyr-lol-${champId}-${lane}-build.png`;
 
         await screenshotElement(page, '.rune-spell', runePath, 'runas');
         await screenshotElement(page, '.recommended-build_skills', skillsPath, 'skills');
@@ -134,6 +143,9 @@ async function handleLolBuild(message, args) {
         await loadingMsg.edit(`No pude obtener la build. Puedes verla aqui: ${url}`)
             .catch(() => {});
     } finally {
+        [runePath, skillsPath, buildPath].forEach((p) => {
+            try { fs.unlinkSync(p); } catch {}
+        });
         await release();
     }
 }
