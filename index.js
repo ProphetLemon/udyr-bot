@@ -30,6 +30,7 @@ const handlers = {
     mayor: require('./commands/mayormenor'),
     carrera: require('./commands/carrera'),
     conecta4: require('./commands/conecta4'),
+    ajedrez: require('./commands/ajedrez'),
 };
 handlers.help = require('./commands/help');
 handlers.h = handlers.help;

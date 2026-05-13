@@ -3,7 +3,7 @@ const TRACK_LENGTH = 18;
 const BET_TIME_MS = 20000;
 const TICK_MS = 1500;
 
-function buildTrack(horses, positions, phase) {
+function buildTrack(horses, positions, phase, bets) {
     const lines = [];
     for (let i = 0; i < horses.length; i++) {
         const track = '─'.repeat(TRACK_LENGTH);
@@ -14,8 +14,17 @@ function buildTrack(horses, positions, phase) {
     }
 
     let desc = '**Caballos:**\n' + lines.join('\n');
-    if (phase === 'betting') {
-        desc += '\n\n⏳ **Apuestas abiertas** — Reacciona al número del caballo (1-5) en el que quieres apostar.\nSe cierra en 20 segundos.';
+
+    if (phase === 'betting' && bets) {
+        desc += '\n\n**Apuestas:**\n';
+        for (let i = 0; i < horses.length; i++) {
+            const bettors = Object.entries(bets)
+                .filter(([, horse]) => horse === i)
+                .map(([userId]) => `<@${userId}>`);
+            const bettorsStr = bettors.length > 0 ? bettors.join(', ') : '(nadie)';
+            desc += `${horses[i]} **Caballo ${i + 1}:** ${bettorsStr}\n`;
+        }
+        desc += '\n⏳ Reacciona 1️⃣-5️⃣ para apostar. Se cierra en 20s.';
     } else if (phase === 'racing') {
         desc += '\n\n🏇 ¡En sus marcas... listos... **YA!**';
     } else {
@@ -26,30 +35,30 @@ function buildTrack(horses, positions, phase) {
         color: 0xe67e22,
         title: '🏇 CARRERA DE CABALLOS',
         description: desc,
-        footer: phase === 'betting' ? { text: 'Reacciona 1️⃣-5️⃣ para apostar' } : undefined,
     };
 }
 
 module.exports = async function handleCarrera(message) {
     const positions = HORSES.map(() => 0);
-    const bets = {}; // userId → horseIndex
+    const bets = {};
     const horseEmojis = { '1️⃣': 0, '2️⃣': 1, '3️⃣': 2, '4️⃣': 3, '5️⃣': 4 };
 
-    const embed = buildTrack(HORSES, positions, 'betting');
+    const embed = buildTrack(HORSES, positions, 'betting', bets);
     const msg = await message.reply({ embeds: [embed] });
     for (const emoji of Object.keys(horseEmojis)) {
         await msg.react(emoji).catch(() => {});
     }
 
-    // Betting phase
     const betFilter = (reaction, user) => {
         return !user.bot && Object.keys(horseEmojis).includes(reaction.emoji.name);
     };
     const betCollector = msg.createReactionCollector({ filter: betFilter, time: BET_TIME_MS });
 
-    betCollector.on('collect', (reaction, user) => {
+    betCollector.on('collect', async (reaction, user) => {
         bets[user.id] = horseEmojis[reaction.emoji.name];
         reaction.users.remove(user.id).catch(() => {});
+        const updated = buildTrack(HORSES, positions, 'betting', bets);
+        await msg.edit({ embeds: [updated] }).catch(() => {});
     });
 
     await new Promise((resolve) => betCollector.on('end', resolve));

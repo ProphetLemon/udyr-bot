@@ -19,6 +19,7 @@ module.exports = function handleHelp(message) {
         '\n`udyr mayor` - Mayor o menor: adivina la siguiente carta' +
         '\n`udyr carrera` - Apuesta a caballos y mira la carrera' +
         '\n`udyr conecta4 @usuario` - Conecta 4 por turnos' +
+        '\n`udyr ajedrez @usuario` - Ajedrez 1v1 (notación algebraica)' +
         '\n`udyr help` / `udyr h` - Muestra esta ayuda'
     );
 };
