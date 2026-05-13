@@ -43,12 +43,13 @@ module.exports = async function handleCarrera(message) {
 
     // Betting phase
     const betFilter = (reaction, user) => {
-        return !user.bot && Object.keys(horseEmojis).includes(reaction.emoji.name) && !bets[user.id];
+        return !user.bot && Object.keys(horseEmojis).includes(reaction.emoji.name);
     };
     const betCollector = msg.createReactionCollector({ filter: betFilter, time: BET_TIME_MS });
 
     betCollector.on('collect', (reaction, user) => {
         bets[user.id] = horseEmojis[reaction.emoji.name];
+        reaction.users.remove(user.id).catch(() => {});
     });
 
     await new Promise((resolve) => betCollector.on('end', resolve));
