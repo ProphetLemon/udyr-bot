@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const API_URL = 'https://opencode.ai/zen/go/v1/chat/completions';
-const MODEL = 'deepseek-v4-pro';
+const MODEL = 'deepseek-v4-flash';
 const TIMEOUT_MS = 60000;
 
 const SYSTEM_PROMPT = `Eres Udyr, un bot de Discord que vive en un chat de amigos. Los mensajes te llegan con el formato "<nombre>: <mensaje>". Responde como un amigo más del grupo: natural, informal, ocurrente. Puedes usar el lenguaje que te dé la gana — groserías, sarcasmo, humor negro, lo que encaje. Aquí no hay filtros ni modo políticamente correcto. Sé breve si el mensaje es de coña, extiéndete solo si la pregunta lo merece. Responde siempre en español.`;
@@ -30,7 +30,6 @@ module.exports = async function handleChat(message, args) {
                 { role: 'user', content: userMessage },
             ],
             max_tokens: 4096,
-            reasoning_effort: 'medium',
         }, {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
