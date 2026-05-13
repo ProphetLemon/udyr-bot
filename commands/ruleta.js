@@ -24,14 +24,9 @@ function gridPick() {
 }
 
 function render(grid) {
-    const lines = ['🎰 ╔═══╤═══╤═══╤═══╤═══╗ 🎰'];
-    for (let r = 0; r < ROWS; r++) {
-        const row = grid[r].map((c) => ` ${c} `).join('│');
-        lines.push(`   ║${row}║`);
-        if (r < ROWS - 1) lines.push('   ╟───┼───┼───┼───┼───╢');
-    }
-    lines.push('   ╚═══╧═══╧═══╧═══╧═══╝');
-    return lines.join('\n');
+    const top = '🎰 ════════ 🎰';
+    const rows = grid.map((row) => '    ' + row.join('  '));
+    return [top, ...rows].join('\n');
 }
 
 function longestRun(arr) {
