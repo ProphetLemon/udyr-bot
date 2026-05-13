@@ -3,6 +3,7 @@ const { Client, GatewayIntentBits } = require('discord.js');
 const { loadLolChampions, loadLaneChampions } = require('./lib/lolData');
 const { destroyAllQueues } = require('./lib/queueManager');
 const { shutdown: shutdownUggBrowser } = require('./lib/uggBrowser');
+const { storeMessage: storeChatMsg } = require('./commands/chat');
 
 if (!process.env.DISCORD_TOKEN) {
     console.error('[FATAL] Falta DISCORD_TOKEN en .env');
@@ -46,15 +47,35 @@ const client = new Client({
     ],
 });
 
-client.once('ready', () => {
+client.once('ready', async () => {
     console.log(`[READY] Bot conectado como ${client.user.tag}`);
     loadLolChampions().then(() => loadLaneChampions());
+
+    try {
+        const channel = client.channels.cache.get(ALLOWED_CHANNEL_ID);
+        if (channel) {
+            const msgs = await channel.messages.fetch({ limit: 10 });
+            const sorted = Array.from(msgs.values()).reverse();
+            for (const m of sorted) {
+                if (m.author.bot) continue;
+                const name = m.member?.displayName || m.author.username;
+                storeChatMsg(ALLOWED_CHANNEL_ID, 'user', `${name}: ${m.content}`);
+            }
+            console.log(`[CHAT] ${sorted.filter(m => !m.author.bot).length} mensajes cargados como contexto inicial`);
+        }
+    } catch (e) {
+        console.log('[CHAT] No se pudo cargar contexto inicial:', e.message);
+    }
 });
 
 client.on('messageCreate', async (message) => {
     if (message.author.bot) return;
     if (message.guildId !== ALLOWED_GUILD_ID) return;
     if (message.channelId !== ALLOWED_CHANNEL_ID) return;
+
+    const name = message.member?.displayName || message.author.username;
+    storeChatMsg(ALLOWED_CHANNEL_ID, 'user', `${name}: ${message.content}`);
+
     if (!message.content.toLowerCase().startsWith(PREFIX)) return;
 
     const args = message.content.slice(PREFIX.length).trim().split(/ +/);

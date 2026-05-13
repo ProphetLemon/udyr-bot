@@ -16,6 +16,14 @@ function getHistory(channelId) {
     return conversations.get(channelId);
 }
 
+function storeMessage(channelId, role, content) {
+    const history = getHistory(channelId);
+    history.push({ role, content });
+    if (history.length > MAX_HISTORY) {
+        history.splice(0, history.length - MAX_HISTORY);
+    }
+}
+
 module.exports = async function handleChat(message, args) {
     const channelId = message.channel.id;
 
@@ -36,16 +44,15 @@ module.exports = async function handleChat(message, args) {
 
     const username = message.member?.displayName || message.author.username;
     const userMessage = `${username}: ${query}`;
+    // El mensaje ya fue almacenado por index.js
     const history = getHistory(channelId);
-
-    history.push({ role: 'user', content: userMessage });
 
     const loading = await message.reply('🤔 Pensando...');
 
     try {
         const messages = [
             { role: 'system', content: SYSTEM_PROMPT },
-            ...history.slice(-MAX_HISTORY),
+            ...getHistory(channelId).slice(-MAX_HISTORY),
         ];
 
         const res = await axios.post(API_URL, {
@@ -64,15 +71,11 @@ module.exports = async function handleChat(message, args) {
 
         if (!output) {
             console.error('[CHAT] respuesta vacia:', JSON.stringify(res.data).slice(0, 300));
-            history.pop();
+            getHistory(channelId).pop();
             return loading.edit('❌ El modelo no devolvió respuesta.').catch(() => {});
         }
 
-        history.push({ role: 'assistant', content: output });
-
-        if (history.length > MAX_HISTORY) {
-            history.splice(0, history.length - MAX_HISTORY);
-        }
+        storeMessage(channelId, 'assistant', output);
 
         if (output.length > 1990) {
             return loading.edit(output.slice(0, 1950) + '...').catch(() => {});
@@ -80,7 +83,7 @@ module.exports = async function handleChat(message, args) {
 
         return loading.edit(output).catch(() => {});
     } catch (err) {
-        history.pop();
+        getHistory(channelId).pop();
 
         const status = err.response?.status;
         const msg = err.response?.data?.error?.message || err.message;
@@ -96,3 +99,6 @@ module.exports = async function handleChat(message, args) {
         return loading.edit('❌ Error al consultar el modelo.').catch(() => {});
     }
 };
+
+module.exports.storeMessage = storeMessage;
+module.exports.getHistory = getHistory;
