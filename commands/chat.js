@@ -11,6 +11,7 @@ Puedes ejecutar acciones de moderación de broma añadiendo comandos AL FINAL de
 
 !!timeout @usuario <segundos> — Silencia a alguien unos segundos (máx 60)
 !!untimeout @usuario — Le quita el silencio
+!!react <emoji> — Reacciona al mensaje del usuario con ese emoji
 
 El comando no se mostrará en el chat, solo se ejecutará. No abuses.`;
 
@@ -33,11 +34,19 @@ function storeMessage(channelId, role, content) {
 
 function parseCommands(text) {
     const commands = [];
-    const re = /!!(timeout|untimeout)\s+<@!?(\d+)>\s*(\d+)?/gi;
+    const re = /!!(timeout|untimeout|react)\s*(<@!?(\d+)>\s*(\d+)?|\S+)/gi;
     let clean = text;
     let match;
     while ((match = re.exec(text)) !== null) {
-        commands.push({ action: match[1].toLowerCase(), userId: match[2], seconds: parseInt(match[3]) || 0 });
+        const action = match[1].toLowerCase();
+        if (action === 'react') {
+            const emoji = match[2].trim();
+            commands.push({ action: 'react', emoji });
+        } else {
+            const userId = match[3];
+            const seconds = match[4] ? parseInt(match[4]) : 0;
+            commands.push({ action, userId, seconds });
+        }
         clean = clean.replace(match[0], '');
     }
     return { commands, clean: clean.replace(/\n{3,}/g, '\n\n').trim() };
@@ -46,6 +55,11 @@ function parseCommands(text) {
 async function executeCommands(message, commands) {
     for (const cmd of commands) {
         try {
+            if (cmd.action === 'react') {
+                await message.react(cmd.emoji).catch(() => {});
+                continue;
+            }
+
             const member = await message.guild.members.fetch(cmd.userId).catch(() => null);
             if (!member) continue;
 
@@ -96,6 +110,7 @@ module.exports = async function handleChat(message, args) {
             model: MODEL,
             messages,
             max_tokens: 4096,
+            reasoning_effort: 'max',
         }, {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
