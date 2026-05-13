@@ -78,17 +78,25 @@ client.on('messageCreate', async (message) => {
     cacheMember(message.member);
     storeChatMsg(ALLOWED_CHANNEL_ID, 'user', `${name}: ${message.content}`);
 
-    if (!message.content.toLowerCase().startsWith(PREFIX)) return;
-
-    const args = message.content.slice(PREFIX.length).trim().split(/ +/);
-    const command = args.shift()?.toLowerCase();
-    const handler = handlers[command];
-    if (!handler) return;
+    if (message.content.toLowerCase().startsWith(PREFIX)) {
+        const args = message.content.slice(PREFIX.length).trim().split(/ +/);
+        const command = args.shift()?.toLowerCase();
+        const handler = handlers[command];
+        if (handler) {
+            try {
+                await handler(message, args);
+            } catch (err) {
+                console.error(`[CMD:${command}] error:`, err.stack || err.message);
+                message.reply('Ocurrio un error inesperado al ejecutar ese comando.').catch(() => {});
+            }
+            return;
+        }
+    }
 
     try {
-        await handler(message, args);
+        await handlers.chat(message, message.content.split(/ +/));
     } catch (err) {
-        console.error(`[CMD:${command}] error:`, err.stack || err.message);
+        console.error('[CMD:chat] error:', err.stack || err.message);
         message.reply('Ocurrio un error inesperado al ejecutar ese comando.').catch(() => {});
     }
 });
