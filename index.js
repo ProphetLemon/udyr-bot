@@ -31,6 +31,7 @@ const handlers = {
     carrera: require('./commands/carrera'),
     conecta4: require('./commands/conecta4'),
     ajedrez: require('./commands/ajedrez'),
+    chat: require('./commands/chat'),
 };
 handlers.help = require('./commands/help');
 handlers.h = handlers.help;

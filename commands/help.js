@@ -20,6 +20,7 @@ module.exports = function handleHelp(message) {
         '\n`udyr carrera` - Apuesta a caballos y mira la carrera' +
         '\n`udyr conecta4 @usuario` - Conecta 4 por turnos' +
         '\n`udyr ajedrez @usuario` - Ajedrez 1v1 (notación algebraica)' +
+        '\n`udyr chat <mensaje>` - Pregúntale lo que sea a la IA (deepseek-v4)' +
         '\n`udyr help` / `udyr h` - Muestra esta ayuda'
     );
 };
