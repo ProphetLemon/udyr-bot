@@ -19,7 +19,13 @@ module.exports = async function handleClean(message, args) {
 
     try {
         const deleted = await message.channel.bulkDelete(amount, true);
-        const msg = await message.channel.send(`Borrados **${deleted.size - 1}** mensajes.`);
+        const count = deleted.size - 1;
+        let msg;
+        if (count <= 0) {
+            msg = await message.channel.send('No se pudieron borrar mensajes (probablemente tengan mas de 14 dias).');
+        } else {
+            msg = await message.channel.send(`Borrados **${count}** mensajes.`);
+        }
         setTimeout(() => msg.delete().catch(() => {}), 3000);
     } catch (err) {
         console.error('[CLEAN] Error:', err.message);

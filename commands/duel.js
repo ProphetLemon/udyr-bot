@@ -248,7 +248,8 @@ module.exports = async function handleDuel(message, args) {
 
     await sleep(4000);
 
-    while (p1.hp > 0 && p2.hp > 0) {
+    const MAX_TURNS = 100;
+    while (p1.hp > 0 && p2.hp > 0 && turn < MAX_TURNS) {
         turn++;
         const roundLines = [];
 
@@ -422,7 +423,13 @@ module.exports = async function handleDuel(message, args) {
 
     // Resultado final
     let finalEmbed;
-    if (p1.hp <= 0 && p2.hp <= 0) {
+    if (turn >= MAX_TURNS && p1.hp > 0 && p2.hp > 0) {
+        finalEmbed = {
+            color: 0x95a5a6,
+            title: '⚖️ ¡EMPATE POR LÍMITE DE RONDAS!',
+            description: `Tras ${MAX_TURNS} rondas, **${p1.name}** (${p1.hp} HP) y **${p2.name}** (${p2.hp} HP) siguen en pie.\n\n¡Nadie gana, nadie pierde!`,
+        };
+    } else if (p1.hp <= 0 && p2.hp <= 0) {
         finalEmbed = {
             color: 0x95a5a6,
             title: '⚖️ ¡EMPATE!',

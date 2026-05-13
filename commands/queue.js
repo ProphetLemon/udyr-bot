@@ -5,17 +5,33 @@ module.exports = function handleQueue(message) {
     if (!queue || (!queue.current && queue.songs.length === 0)) {
         return message.reply('La cola esta vacia.');
     }
-    let text = '';
+
+    const lines = [];
     if (queue.current) {
-        text += `**Sonando ahora:** ${queue.current.title} \`[${queue.current.duration}]\`\n\n`;
+        lines.push(`**Sonando ahora:** ${queue.current.title} \`[${queue.current.duration}]\``);
     }
     if (queue.songs.length > 0) {
-        text += '**En cola:**\n';
+        lines.push('**En cola:**');
         queue.songs.forEach((s, i) => {
-            text += `\n**${i + 1}.** ${s.title} \`[${s.duration}]\``;
+            lines.push(`**${i + 1}.** ${s.title} \`[${s.duration}]\``);
         });
     } else {
-        text += '**En cola:** (vacia)';
+        lines.push('**En cola:** (vacia)');
     }
-    message.reply(text);
+
+    const pages = [];
+    let current = '';
+    for (const line of lines) {
+        if (current.length + line.length + 1 > 2000) {
+            pages.push(current);
+            current = line;
+        } else {
+            current += (current ? '\n' : '') + line;
+        }
+    }
+    if (current) pages.push(current);
+
+    for (const page of pages) {
+        message.channel.send(page).catch(() => {});
+    }
 };
