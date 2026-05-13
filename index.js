@@ -25,6 +25,11 @@ const handlers = {
     retar: require('./commands/duel'),
     ruleta: require('./commands/ruleta'),
     blackjack: require('./commands/blackjack'),
+    ppt: require('./commands/ppt'),
+    dados: require('./commands/dados'),
+    mayor: require('./commands/mayormenor'),
+    carrera: require('./commands/carrera'),
+    conecta4: require('./commands/conecta4'),
 };
 handlers.help = require('./commands/help');
 handlers.h = handlers.help;

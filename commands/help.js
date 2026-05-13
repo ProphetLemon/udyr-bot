@@ -14,6 +14,11 @@ module.exports = function handleHelp(message) {
         '\n`udyr retar @usuario` - Duelo por turnos con clases, stats, pasivas, combos y muerte subita' +
         '\n`udyr ruleta` - Tragaperras de frutas con patrones y multiplicadores' +
         '\n`udyr blackjack` - Blackjack contra el dealer' +
+        '\n`udyr ppt @usuario` - Piedra, papel o tijera 1v1' +
+        '\n`udyr dados` - Craps: tira los dados contra la casa' +
+        '\n`udyr mayor` - Mayor o menor: adivina la siguiente carta' +
+        '\n`udyr carrera` - Apuesta a caballos y mira la carrera' +
+        '\n`udyr conecta4 @usuario` - Conecta 4 por turnos' +
         '\n`udyr help` / `udyr h` - Muestra esta ayuda'
     );
 };
