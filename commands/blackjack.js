@@ -7,6 +7,7 @@ const REACTIONS = {
     hit: '🃏',
     stand: '✋',
     double: '⏫',
+    split: '✂️',
 };
 
 function createShoe() {
@@ -59,19 +60,38 @@ function isBlackjack(cards) {
     return cards.length === 2 && handValue(cards).total === 21;
 }
 
-function buildGameEmbed(playerCards, dealerCards, hideDealer, extraText) {
-    const pVal = handValue(playerCards);
-    const pDisplay = handDisplay(playerCards, false);
-    const dDisplay = handDisplay(dealerCards, hideDealer);
-    const pTotal = ` (${pVal.total}${pVal.soft ? ' soft' : ''})`;
+function isPair(c1, c2) {
+    if (c1.val === c2.val) return true;
+    if (['J', 'Q', 'K'].includes(c1.val) && ['J', 'Q', 'K'].includes(c2.val)) return true;
+    return false;
+}
 
+function handResultText(hand) {
+    if (hand.bust) return '💥 BUST';
+    if (hand.doubled) return '⏫ Doblaste';
+    return `(${handValue(hand.cards).total})`;
+}
+
+function buildGameEmbed(hands, activeIdx, dealerCards, hideDealer, extraText) {
     let desc = '';
-    desc += `**Tus cartas:** ${pDisplay}${pTotal}\n`;
-    desc += `**Dealer:** ${dDisplay}`;
-    if (!hideDealer) {
-        const dVal = handValue(dealerCards);
-        desc += ` (${dVal.total})`;
+    const multi = hands.length > 1;
+
+    if (multi) desc += '**Tus manos:**\n';
+    for (let i = 0; i < hands.length; i++) {
+        const h = hands[i];
+        const prefix = multi
+            ? (i === activeIdx ? '🟢' : '⚪') + ` **Mano ${i + 1}:** `
+            : '**Tus cartas:** ';
+        const display = handDisplay(h.cards, false);
+        const val = handValue(h.cards);
+        desc += prefix + display + ` (${val.total}${val.soft ? ' soft' : ''})`;
+        if (h.done) desc += ` → ${handResultText(h)}`;
+        desc += '\n';
     }
+
+    const dDisplay = handDisplay(dealerCards, hideDealer);
+    desc += `\n**Dealer:** ${dDisplay}`;
+    if (!hideDealer) desc += ` (${handValue(dealerCards).total})`;
     if (extraText) desc += `\n\n${extraText}`;
 
     return {
@@ -81,116 +101,214 @@ function buildGameEmbed(playerCards, dealerCards, hideDealer, extraText) {
     };
 }
 
-async function dealerTurn(msg, playerCards, dealerCards) {
+async function playHand(msg, hands, handIdx, dealerCards, authorId) {
+    const hand = hands[handIdx];
+    const canDouble = hand.cards.length === 2;
+    const allReactions = [REACTIONS.hit, REACTIONS.stand];
+    if (canDouble) allReactions.push(REACTIONS.double);
+
+    const promptParts = ['🃏 **Pedir**', '✋ **Plantarse**'];
+    if (canDouble) promptParts.push('⏫ **Doblar**');
+
+    const embed = buildGameEmbed(hands, handIdx, dealerCards, true, promptParts.join('  |  '));
+    await msg.edit({ embeds: [embed] });
+
+    msg.reactions.removeAll().catch(() => {});
+    for (const r of allReactions) {
+        await msg.react(r).catch(() => {});
+    }
+
+    return new Promise((resolve) => {
+        const filter = (reaction, user) => {
+            return user.id === authorId && allReactions.includes(reaction.emoji.name);
+        };
+
+        const collector = msg.createReactionCollector({ filter, time: TIMEOUT_MS, max: 1 });
+
+        collector.on('collect', async (reaction) => {
+            reaction.users.remove(authorId).catch(() => {});
+
+            if (reaction.emoji.name === REACTIONS.stand) {
+                collector.stop();
+                hand.done = true;
+                resolve('stand');
+                return;
+            }
+
+            if (reaction.emoji.name === REACTIONS.double && canDouble) {
+                hand.cards.push(drawCard());
+                hand.doubled = true;
+                hand.done = true;
+                const pVal = handValue(hand.cards);
+                if (pVal.total > 21) hand.bust = true;
+                collector.stop();
+                resolve('double');
+                return;
+            }
+
+            if (reaction.emoji.name === REACTIONS.hit) {
+                hand.cards.push(drawCard());
+                const pVal = handValue(hand.cards);
+                if (pVal.total > 21) {
+                    hand.bust = true;
+                    hand.done = true;
+                    collector.stop();
+                    resolve('bust');
+                    return;
+                }
+                collector.stop();
+                resolve('hit');
+                return;
+            }
+        });
+
+        collector.on('end', async (_, reason) => {
+            if (reason === 'time') {
+                hand.done = true;
+                resolve('timeout');
+            }
+        });
+    });
+}
+
+async function dealerTurn(msg, hands, dealerCards) {
     let dVal = handValue(dealerCards);
     while (dVal.total < 17 || (dVal.total === 17 && dVal.soft)) {
         dealerCards.push(drawCard());
         dVal = handValue(dealerCards);
-        await msg.edit({ embeds: [buildGameEmbed(playerCards, dealerCards, false, '⏳ Dealer pide carta...')] });
+        const embed = buildGameEmbed(hands, -1, dealerCards, false, '⏳ Dealer pide carta...');
+        await msg.edit({ embeds: [embed] });
         await new Promise((r) => setTimeout(r, 1200));
     }
+}
 
-    const pVal = handValue(playerCards);
-    dVal = handValue(dealerCards);
+async function showResults(msg, hands, dealerCards) {
+    const dVal = handValue(dealerCards);
+    const lines = [];
 
-    let result;
-    let color = 0x1b5e20;
-    if (dVal.total > 21) {
-        result = '💥 Dealer se pasó de 21. **¡GANAS!**';
-        color = 0xf1c40f;
-    } else if (pVal.total > dVal.total) {
-        result = '🎉 Tus cartas superan al dealer. **¡GANAS!**';
-        color = 0xf1c40f;
-    } else if (dVal.total > pVal.total) {
-        result = '😔 El dealer te supera. **PIERDES.**';
-        color = 0xe74c3c;
-    } else {
-        result = '🤝 **EMPATE** — Misma puntuación.';
-        color = 0x95a5a6;
+    for (let i = 0; i < hands.length; i++) {
+        const h = hands[i];
+        const hVal = handValue(h.cards);
+        const label = hands.length > 1 ? `Mano ${i + 1}: ` : '';
+        const cards = handDisplay(h.cards, false);
+
+        if (h.bust) {
+            lines.push(`${label}${cards} (${hVal.total}) → 💥 BUST — **PIERDES**`);
+        } else if (h.timeout) {
+            lines.push(`${label}${cards} (${hVal.total}) → ⏰ Timeout — **PIERDES**`);
+        } else if (dVal.total > 21) {
+            lines.push(`${label}${cards} (${hVal.total}) → 🎉 Dealer bust — **GANAS**`);
+        } else if (hVal.total > dVal.total) {
+            lines.push(`${label}${cards} (${hVal.total}) → 🎉 Superas al dealer — **GANAS**`);
+        } else if (dVal.total > hVal.total) {
+            lines.push(`${label}${cards} (${hVal.total}) → 😔 El dealer te supera — **PIERDES**`);
+        } else {
+            lines.push(`${label}${cards} (${hVal.total}) → 🤝 Empate`);
+        }
     }
 
-    const embed = buildGameEmbed(playerCards, dealerCards, false, result);
-    embed.color = color;
-    return msg.edit({ embeds: [embed] });
+    const dDisplay = handDisplay(dealerCards, false);
+    const fullText = `**Dealer:** ${dDisplay} (${dVal.total})\n\n` + lines.join('\n');
+
+    const color = lines.some((l) => l.includes('GANAS')) && !lines.every((l) => l.includes('GANAS'))
+        ? 0x95a5a6  // split: some win some lose = mixed
+        : lines.every((l) => l.includes('GANAS')) ? 0xf1c40f
+        : lines.every((l) => l.includes('Empate')) ? 0x95a5a6
+        : 0xe74c3c;
+
+    return msg.edit({ embeds: [{ color, title: '🎴 BLACKJACK — Resultado', description: fullText }] });
 }
 
 module.exports = async function handleBlackjack(message) {
-    const playerCards = [drawCard(), drawCard()];
+    const c1 = drawCard();
+    const c2 = drawCard();
     const dealerCards = [drawCard(), drawCard()];
 
-    const playerBJ = isBlackjack(playerCards);
+    const hands = [];
+
+    // Check for pair (split opportunity)
+    const pair = isPair(c1, c2);
+
+    // Show initial cards + split prompt if applicable
+    hands.push({ cards: [c1, c2], done: false, bust: false, doubled: false, timeout: false });
+
+    const playerBJ = isBlackjack([c1, c2]);
     const dealerBJ = isBlackjack(dealerCards);
 
-    if (playerBJ && dealerBJ) {
-        const embed = buildGameEmbed(playerCards, dealerCards, false, '🤝 **EMPATE** — Ambos tienen Blackjack.');
+    if (playerBJ || dealerBJ) {
+        let result;
+        if (playerBJ && dealerBJ) result = '🤝 **EMPATE** — Ambos tienen Blackjack.';
+        else if (playerBJ) result = '🎉 **¡BLACKJACK!** Ganas con 21 natural.';
+        const embed = buildGameEmbed(hands, 0, dealerCards, false, result);
         return message.reply({ embeds: [embed] });
     }
-    if (playerBJ) {
-        const embed = buildGameEmbed(playerCards, dealerCards, false, '🎉 **¡BLACKJACK!** Ganas con 21 natural.');
-        return message.reply({ embeds: [embed] });
-    }
 
-    const prompt = '🃏 **Pedir**  |  ✋ **Plantarse**  |  ⏫ **Doblar**';
-    const msg = await message.reply({ embeds: [buildGameEmbed(playerCards, dealerCards, true, prompt)] });
-    await msg.react(REACTIONS.hit).catch(() => {});
-    await msg.react(REACTIONS.stand).catch(() => {});
-    await msg.react(REACTIONS.double).catch(() => {});
+    // Ask split
+    if (pair) {
+        hands[0].done = true;
+        const splitEmbed = buildGameEmbed(hands, 0, dealerCards, true,
+            'Tienes una pareja. ¿Dividir?\n🃏 **Jugar normal**  |  ✂️ **Dividir**');
+        const splitMsg = await message.reply({ embeds: [splitEmbed] });
+        await splitMsg.react(REACTIONS.hit).catch(() => {});
+        await splitMsg.react(REACTIONS.split).catch(() => {});
 
-    const filter = (reaction, user) => {
-        return user.id === message.author.id &&
-            [REACTIONS.hit, REACTIONS.stand, REACTIONS.double].includes(reaction.emoji.name);
-    };
-    const collector = msg.createReactionCollector({ filter, time: TIMEOUT_MS });
+        const splitChoice = await new Promise((resolve) => {
+            const filter = (r, u) => u.id === message.author.id &&
+                [REACTIONS.hit, REACTIONS.split].includes(r.emoji.name);
+            const c = splitMsg.createReactionCollector({ filter, max: 1, time: TIMEOUT_MS });
+            c.on('collect', async (r) => {
+                c.stop();
+                resolve(r.emoji.name);
+            });
+            c.on('end', (_, reason) => {
+                if (reason !== 'user') resolve('timeout');
+            });
+        });
 
-    let canDouble = true;
+        splitMsg.reactions.removeAll().catch(() => {});
 
-    collector.on('collect', async (reaction) => {
-        reaction.users.remove(message.author.id).catch(() => {});
-
-        if (reaction.emoji.name === REACTIONS.stand) {
-            collector.stop('user');
-            return;
-        }
-
-        if (reaction.emoji.name === REACTIONS.double) {
-            if (!canDouble) return;
-            playerCards.push(drawCard());
-            canDouble = false;
-            collector.stop('user');
-            return;
-        }
-
-        // hit
-        if (reaction.emoji.name === REACTIONS.hit) {
-            canDouble = false;
-            playerCards.push(drawCard());
-            const pVal = handValue(playerCards);
-            if (pVal.total > 21) {
-                collector.stop('user');
-                return;
-            }
-            const newPrompt = '🃏 **Pedir**  |  ✋ **Plantarse**';
-            await msg.edit({ embeds: [buildGameEmbed(playerCards, dealerCards, true, newPrompt)] });
-        }
-    });
-
-    collector.on('end', async (_, reason) => {
-        msg.reactions.removeAll().catch(() => {});
-
-        const interacted = reason === 'user' || reason === 'limit';
-        if (!interacted) {
-            const embed = buildGameEmbed(playerCards, dealerCards, false, '⏰ Se acabó el tiempo. **PIERDES** por inactividad.');
+        if (splitChoice === REACTIONS.split) {
+            hands.length = 0;
+            hands.push({ cards: [c1, drawCard()], done: false, bust: false, doubled: false, timeout: false });
+            hands.push({ cards: [c2, drawCard()], done: false, bust: false, doubled: false, timeout: false });
+        } else if (splitChoice === 'timeout') {
+            const embed = buildGameEmbed(hands, 0, dealerCards, false, '⏰ Se acabó el tiempo. **PIERDES** por inactividad.');
             embed.color = 0x95a5a6;
-            return msg.edit({ embeds: [embed] }).catch(() => {});
+            return splitMsg.edit({ embeds: [embed] }).catch(() => {});
+        } else {
+            hands[0].done = false;
         }
 
-        const pVal = handValue(playerCards);
-        if (pVal.total > 21) {
-            const embed = buildGameEmbed(playerCards, dealerCards, false, '💥 **BUST** — Te pasaste de 21. **PIERDES.**');
-            embed.color = 0xe74c3c;
-            return msg.edit({ embeds: [embed] }).catch(() => {});
+        if (splitChoice === REACTIONS.split || splitChoice === REACTIONS.hit) {
+            await splitMsg.delete().catch(() => {});
         }
+    }
 
-        await dealerTurn(msg, playerCards, dealerCards);
-    });
+    const msg = await message.reply({ embeds: [buildGameEmbed(hands, 0, dealerCards, true, 'Preparando...')] });
+
+    // Play each hand
+    for (let i = 0; i < hands.length; i++) {
+        if (hands[i].done) continue;
+
+        let playing = true;
+        while (playing) {
+            const result = await playHand(msg, hands, i, dealerCards, message.author.id);
+            if (result === 'stand' || result === 'double') playing = false;
+            if (result === 'bust' || result === 'timeout') {
+                if (result === 'timeout') hands[i].timeout = true;
+                playing = false;
+            }
+            if (hands[i].bust) playing = false;
+        }
+    }
+
+    // Dealer turn (skip if all hands busted)
+    const allBust = hands.every((h) => h.bust || h.timeout);
+    if (!allBust) {
+        await dealerTurn(msg, hands, dealerCards);
+    }
+
+    // Show results
+    msg.reactions.removeAll().catch(() => {});
+    return showResults(msg, hands, dealerCards);
 };
