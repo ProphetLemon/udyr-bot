@@ -3,7 +3,7 @@ const { Client, GatewayIntentBits } = require('discord.js');
 const { loadLolChampions, loadLaneChampions } = require('./lib/lolData');
 const { destroyAllQueues } = require('./lib/queueManager');
 const { shutdown: shutdownUggBrowser } = require('./lib/uggBrowser');
-const { storeMessage: storeChatMsg } = require('./commands/chat');
+const { storeMessage: storeChatMsg, cacheMember } = require('./commands/chat');
 
 if (!process.env.DISCORD_TOKEN) {
     console.error('[FATAL] Falta DISCORD_TOKEN en .env');
@@ -44,6 +44,7 @@ const client = new Client({
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildVoiceStates,
         GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildMembers,
     ],
 });
 
@@ -74,6 +75,7 @@ client.on('messageCreate', async (message) => {
     if (message.channelId !== ALLOWED_CHANNEL_ID) return;
 
     const name = message.member?.displayName || message.author.username;
+    cacheMember(message.member);
     storeChatMsg(ALLOWED_CHANNEL_ID, 'user', `${name}: ${message.content}`);
 
     if (!message.content.toLowerCase().startsWith(PREFIX)) return;

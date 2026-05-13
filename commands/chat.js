@@ -58,16 +58,39 @@ function parseCommands(text) {
     return { commands, clean: clean.replace(/\n{3,}/g, '\n\n').trim() };
 }
 
-function resolveMember(guild, target) {
+const membersByName = new Map();
+
+function cacheMember(member) {
+    if (!member) return;
+    const name = member.displayName.toLowerCase();
+    membersByName.set(name, member);
+    membersByName.set(member.user.username.toLowerCase(), member);
+    membersByName.set(member.id, member);
+}
+
+async function resolveMember(guild, target) {
     if (target.userId) {
+        const cached = membersByName.get(target.userId);
+        if (cached) return cached;
         return guild.members.fetch(target.userId).catch(() => null);
     }
     if (target.name) {
         const needle = target.name.toLowerCase();
-        return guild.members.cache.find((m) =>
-            m.displayName.toLowerCase().includes(needle) ||
-            m.user.username.toLowerCase().includes(needle)
-        );
+        const exact = membersByName.get(needle);
+        if (exact) return exact;
+        let best = null;
+        for (const [key, member] of membersByName) {
+            if (key.includes(needle)) { best = member; break; }
+        }
+        if (best) return best;
+        const fetched = await guild.members.fetch({ query: target.name, limit: 5 }).catch(() => null);
+        if (fetched?.size) {
+            const found = fetched.find((m) =>
+                m.displayName.toLowerCase().includes(needle) ||
+                m.user.username.toLowerCase().includes(needle)
+            );
+            if (found) { cacheMember(found); return found; }
+        }
     }
     return null;
 }
@@ -178,3 +201,4 @@ module.exports = async function handleChat(message, args) {
 
 module.exports.storeMessage = storeMessage;
 module.exports.getHistory = getHistory;
+module.exports.cacheMember = cacheMember;
