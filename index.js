@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Client, GatewayIntentBits } = require('discord.js');
 const { loadLolChampions, loadLaneChampions } = require('./lib/lolData');
-const { queues, destroyQueue } = require('./lib/queueManager');
+const { destroyAllQueues } = require('./lib/queueManager');
 const { shutdown: shutdownUggBrowser } = require('./lib/uggBrowser');
 
 if (!process.env.DISCORD_TOKEN) {
@@ -37,7 +37,7 @@ const client = new Client({
     ],
 });
 
-client.once('clientReady', () => {
+client.once('ready', () => {
     console.log(`[READY] Bot conectado como ${client.user.tag}`);
     loadLolChampions().then(() => loadLaneChampions());
 });
@@ -57,6 +57,7 @@ client.on('messageCreate', async (message) => {
         await handler(message, args);
     } catch (err) {
         console.error(`[CMD:${command}] error:`, err.stack || err.message);
+        message.reply('Ocurrio un error inesperado al ejecutar ese comando.').catch(() => {});
     }
 });
 
@@ -65,9 +66,7 @@ async function gracefulShutdown(signal) {
     if (shuttingDown) return;
     shuttingDown = true;
     console.log(`[SHUTDOWN] Recibido ${signal}, cerrando...`);
-    for (const guildId of queues.keys()) {
-        try { destroyQueue(guildId); } catch {}
-    }
+    destroyAllQueues();
     await shutdownUggBrowser().catch(() => {});
     try { await client.destroy(); } catch {}
     process.exit(0);
@@ -75,6 +74,14 @@ async function gracefulShutdown(signal) {
 
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('uncaughtException', (err) => {
+    console.error('[FATAL] Uncaught exception:', err.stack || err.message);
+    gracefulShutdown('uncaughtException');
+});
+process.on('unhandledRejection', (reason) => {
+    console.error('[FATAL] Unhandled rejection:', reason?.stack || reason);
+    gracefulShutdown('unhandledRejection');
+});
 
 client.login(process.env.DISCORD_TOKEN).catch((err) => {
     console.error('[FATAL] login fallo:', err.message);
