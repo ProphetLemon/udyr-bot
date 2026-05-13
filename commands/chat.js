@@ -9,8 +9,8 @@ const SYSTEM_PROMPT = `Eres Udyr, un bot de Discord que vive en un chat de amigo
 
 Puedes ejecutar acciones de moderación de broma añadiendo comandos AL FINAL de tu respuesta. Úsalos con criterio — solo cuando sea gracioso o merecido. Los comandos disponibles son:
 
-!!timeout @usuario <segundos> — Silencia a alguien unos segundos (máx 60)
-!!untimeout @usuario — Le quita el silencio
+!!timeout @nombre <segundos> — Silencia a alguien unos segundos (máx 60). Usa el mismo @nombre que ves en los mensajes del chat.
+!!untimeout @nombre — Le quita el silencio
 !!react <emoji> — Reacciona al mensaje del usuario con ese emoji
 
 El comando no se mostrará en el chat, solo se ejecutará. No abuses.`;
@@ -34,22 +34,42 @@ function storeMessage(channelId, role, content) {
 
 function parseCommands(text) {
     const commands = [];
-    const re = /!!(timeout|untimeout|react)\s*(<@!?(\d+)>\s*(\d+)?|\S+)/gi;
+    const re = /!!(timeout|untimeout|react)\s+(.+?)(?=\s*!!|$)/gs;
     let clean = text;
     let match;
     while ((match = re.exec(text)) !== null) {
         const action = match[1].toLowerCase();
+        const raw = match[2].trim();
         if (action === 'react') {
-            const emoji = match[2].trim();
-            commands.push({ action: 'react', emoji });
+            commands.push({ action: 'react', emoji: raw });
         } else {
-            const userId = match[3];
-            const seconds = match[4] ? parseInt(match[4]) : 0;
-            commands.push({ action, userId, seconds });
+            const mentionMatch = raw.match(/^<@!?(\d+)>\s*(\d+)?$/);
+            if (mentionMatch) {
+                commands.push({ action, userId: mentionMatch[1], seconds: parseInt(mentionMatch[2]) || 0 });
+            } else {
+                const nameMatch = raw.match(/^@?(.+?)\s*(\d+)?$/);
+                if (nameMatch) {
+                    commands.push({ action, name: nameMatch[1].trim(), seconds: parseInt(nameMatch[2]) || 0 });
+                }
+            }
         }
         clean = clean.replace(match[0], '');
     }
     return { commands, clean: clean.replace(/\n{3,}/g, '\n\n').trim() };
+}
+
+function resolveMember(guild, target) {
+    if (target.userId) {
+        return guild.members.fetch(target.userId).catch(() => null);
+    }
+    if (target.name) {
+        const needle = target.name.toLowerCase();
+        return guild.members.cache.find((m) =>
+            m.displayName.toLowerCase().includes(needle) ||
+            m.user.username.toLowerCase().includes(needle)
+        );
+    }
+    return null;
 }
 
 async function executeCommands(message, commands) {
@@ -60,7 +80,7 @@ async function executeCommands(message, commands) {
                 continue;
             }
 
-            const member = await message.guild.members.fetch(cmd.userId).catch(() => null);
+            const member = resolveMember(message.guild, cmd);
             if (!member) continue;
 
             if (cmd.action === 'timeout') {
