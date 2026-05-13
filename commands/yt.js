@@ -27,7 +27,10 @@ async function searchYt(query, limit = 5) {
 
 async function getVideoInfo(url) {
   try {
-    const info = await play.video_info(url);
+    const info = await Promise.race([
+      play.video_info(url),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 15000)),
+    ]);
     const vd = info.video_details;
     return {
       title: vd.title,
@@ -127,6 +130,10 @@ module.exports = async function handleYt(message, args) {
         );
       }
 
+      if (validation !== "video") {
+        return message.reply("La URL no es un video ni una playlist valida de YouTube.");
+      }
+
       console.log("[URL] Obteniendo info del video...");
       const song = await getVideoInfo(query);
       console.log(`[URL] song -> title:"${song.title}" url:"${song.url}"`);
@@ -144,7 +151,7 @@ module.exports = async function handleYt(message, args) {
 
       let replyText = "**Resultados de busqueda:**\n";
       results.forEach((v, i) => {
-        const duration = v.durationRaw || v.duration || "?";
+        const duration = formatDuration(v.durationRaw || v.duration);
         const channelName = v.channel?.name || v.author?.name || "?";
         replyText += `\n**${i + 1}.** ${v.title} \`[${duration}]\` - ${channelName}`;
       });
