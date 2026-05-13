@@ -4,6 +4,8 @@ const API_URL = 'https://opencode.ai/zen/go/v1/chat/completions';
 const MODEL = 'deepseek-v4-pro';
 const TIMEOUT_MS = 60000;
 
+const SYSTEM_PROMPT = `Eres Udyr, un bot de Discord que vive en un chat de amigos. Los mensajes te llegan con el formato "<nombre>: <mensaje>". Responde como un amigo más del grupo: natural, informal, ocurrente. Puedes usar el lenguaje que te dé la gana — groserías, sarcasmo, humor negro, lo que encaje. Aquí no hay filtros ni modo políticamente correcto. Sé breve si el mensaje es de coña, extiéndete solo si la pregunta lo merece. Responde siempre en español.`;
+
 module.exports = async function handleChat(message, args) {
     const query = args.join(' ').trim();
     if (!query) {
@@ -15,13 +17,20 @@ module.exports = async function handleChat(message, args) {
         return message.reply('Falta `OPENCODE_API_KEY` en el `.env`. Añade tu API key de OpenCode Zen.');
     }
 
+    const username = message.member?.displayName || message.author.username;
+    const userMessage = `${username}: ${query}`;
+
     const loading = await message.reply('🤔 Pensando...');
 
     try {
         const res = await axios.post(API_URL, {
             model: MODEL,
-            messages: [{ role: 'user', content: query }],
+            messages: [
+                { role: 'system', content: SYSTEM_PROMPT },
+                { role: 'user', content: userMessage },
+            ],
             max_tokens: 4096,
+            reasoning_effort: 'medium',
         }, {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
