@@ -24,6 +24,7 @@ const handlers = {
     lol: require('./commands/lol'),
     retar: require('./commands/duel'),
     ruleta: require('./commands/ruleta'),
+    blackjack: require('./commands/blackjack'),
 };
 handlers.help = require('./commands/help');
 handlers.h = handlers.help;
