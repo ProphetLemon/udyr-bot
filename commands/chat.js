@@ -70,6 +70,37 @@ function cacheMember(member) {
 
 async function resolveMember(guild, target) {
     if (target.userId) {
+        console.log(`[CHAT] resolveMember por ID: ${target.userId}`);
+        const cached = membersByName.get(target.userId);
+        if (cached) return cached;
+        return guild.members.fetch(target.userId).catch(() => null);
+    }
+    if (target.name) {
+        const needle = target.name.toLowerCase();
+        console.log(`[CHAT] resolveMember por nombre: "${target.name}" (busqueda: "${needle}")`);
+        const exact = membersByName.get(needle);
+        if (exact) { console.log(`[CHAT] encontrado exacto: ${exact.displayName}`); return exact; }
+        let best = null;
+        for (const [key, member] of membersByName) {
+            if (key.includes(needle)) { best = member; console.log(`[CHAT] encontrado parcial: ${key} -> ${member.displayName}`); break; }
+        }
+        if (best) return best;
+        console.log(`[CHAT] no encontrado en cache (${membersByName.size} miembros), probando fetch...`);
+        const fetched = await guild.members.fetch({ query: target.name, limit: 5 }).catch((e) => { console.log(`[CHAT] fetch fallo:`, e.message); return null; });
+        if (fetched?.size) {
+            const found = fetched.find((m) =>
+                m.displayName.toLowerCase().includes(needle) ||
+                m.user.username.toLowerCase().includes(needle)
+            );
+            if (found) { console.log(`[CHAT] encontrado via fetch: ${found.displayName}`); cacheMember(found); return found; }
+        }
+        console.log(`[CHAT] miembro no encontrado por ningun metodo`);
+    }
+    return null;
+}
+
+async function resolveMember(guild, target) {
+    if (target.userId) {
         const cached = membersByName.get(target.userId);
         if (cached) return cached;
         return guild.members.fetch(target.userId).catch(() => null);
@@ -99,21 +130,31 @@ async function executeCommands(message, commands) {
     for (const cmd of commands) {
         try {
             if (cmd.action === 'react') {
+                console.log(`[CHAT] ejecutando react: ${cmd.emoji}`);
                 await message.react(cmd.emoji).catch(() => {});
                 continue;
             }
 
-            const member = resolveMember(message.guild, cmd);
-            if (!member) continue;
+            console.log(`[CHAT] buscando miembro para ${cmd.action}:`, JSON.stringify(cmd));
+            const member = await resolveMember(message.guild, cmd);
+            if (!member) {
+                console.log(`[CHAT] miembro no encontrado:`, cmd.name || cmd.userId);
+                continue;
+            }
+            console.log(`[CHAT] miembro encontrado: ${member.displayName} (${member.id})`);
 
             if (cmd.action === 'timeout') {
                 const secs = Math.min(Math.max(cmd.seconds || 10, 1), 60);
-                await member.timeout(secs * 1000, `Udyr chat: timeout de ${secs}s`).catch(() => {});
+                console.log(`[CHAT] aplicando timeout de ${secs}s a ${member.displayName}`);
+                await member.timeout(secs * 1000, `Udyr chat: timeout de ${secs}s`);
+                console.log(`[CHAT] timeout aplicado OK`);
             } else if (cmd.action === 'untimeout') {
-                await member.timeout(null, 'Udyr chat: quitar timeout').catch(() => {});
+                console.log(`[CHAT] quitando timeout a ${member.displayName}`);
+                await member.timeout(null, 'Udyr chat: quitar timeout');
+                console.log(`[CHAT] untimeout aplicado OK`);
             }
         } catch (e) {
-            console.debug('[CHAT] error ejecutando comando:', cmd.action, e.message);
+            console.error(`[CHAT] error ejecutando ${cmd.action}:`, e.message);
         }
     }
 }
@@ -170,7 +211,9 @@ module.exports = async function handleChat(message, args) {
             return loading.edit('❌ El modelo no devolvió respuesta.').catch(() => {});
         }
 
+        console.log('[CHAT] respuesta IA:', output.slice(0, 200));
         const { commands, clean } = parseCommands(output);
+        console.log('[CHAT] comandos detectados:', JSON.stringify(commands));
 
         storeMessage(channelId, 'assistant', clean);
 
