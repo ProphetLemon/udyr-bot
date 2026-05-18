@@ -4,19 +4,28 @@ Bot de Discord para reproducir musica de YouTube usando comandos de texto.
 
 ## Comandos
 
-- `udyr yt <url de youtube>` - Reproduce directamente el video de la URL.
-- `udyr yt <busqueda>` - Busca 5 resultados en YouTube y te deja elegir del 1 al 5.
-- `udyr yt <url de playlist>` - Anade toda la playlist a la cola.
+- `udyr yt <url o busqueda>` - Reproduce una URL de YouTube, playlist, o busca en YouTube y te deja elegir.
 - `udyr pause` - Pausa la reproduccion.
 - `udyr resume` - Reanuda la reproduccion.
 - `udyr skip` - Salta la cancion actual.
 - `udyr stop` - Detiene todo y desconecta.
 - `udyr queue` - Muestra la cola.
 - `udyr clean <num>` - Borra los ultimos <num> mensajes.
-- `udyr lol <campeon> <linea> [build#]` - Captura de pantalla de la build en u.gg. `build#` es opcional para elegir una build alternativa (1, 2, 3...).
-- `udyr lol equipo` - Asigna una linea y un campeon aleatorio a cada integrante del canal de voz.
-- `udyr retar @usuario` - Reta a un usuario a un duelo por turnos. Cada jugador recibe una clase aleatoria (Tanque, Asesino, Mago, Tirador), stats de combate y una pasiva unica. Sistema de combos, criticos, defensas, parrys, empates y muerte subita a partir de la ronda 11.
+- `udyr lol <campeon> <linea> [build#]` - Screenshot de build de u.gg. `build#` es opcional para elegir una build alternativa (1, 2, 3...).
+- `udyr lol equipo` - Asigna champs y lineas aleatorias a tu canal de voz.
+- `udyr retar @usuario` - Duelo por turnos con clases, stats, pasivas, combos y muerte subita.
+- `udyr ruleta` - Tragaperras de frutas con patrones y multiplicadores.
+- `udyr blackjack` - Blackjack contra el dealer con doblar y dividir.
+- `udyr ppt @usuario` - Piedra, papel o tijera 1v1.
+- `udyr dados` - Craps: tira los dados contra la casa.
+- `udyr mayor` - Mayor o menor: adivina la siguiente carta.
+- `udyr carrera` - Apuesta a caballos y mira la carrera.
+- `udyr conecta4 @usuario` - Conecta 4 por turnos.
+- `udyr ajedrez @usuario` - Ajedrez 1v1 (notacion algebraica).
+- `udyr chat <mensaje>` - Preguntale lo que sea a la IA (DeepSeek, via OpenCode Zen).
 - `udyr help` / `udyr h` - Muestra esta ayuda.
+
+Cualquier mensaje en el canal permitido que no empiece por `udyr` se rutea automaticamente al chat AI. No hace falta escribir `udyr chat`; puedes hablarle directamente al bot. Usa `udyr chat reset` para borrar el historial de la conversacion.
 
 Ejemplos:
 ```
@@ -30,6 +39,10 @@ udyr lol yasuo top
 udyr lol soraka supp 2
 udyr lol equipo
 udyr retar @usuario
+udyr ruleta
+udyr blackjack
+udyr ajedrez @usuario
+udyr chat explicame que es una closure en JS
 ```
 
 ## Requisitos
@@ -45,13 +58,13 @@ udyr retar @usuario
 2. Renombra `.env.example` a `.env` y rellena las variables:
    ```
    DISCORD_TOKEN=TU_TOKEN_AQUI
+   OPENCODE_API_KEY=TU_API_KEY_OPCIONAL_PARA_CHAT
    ALLOWED_GUILD_ID=ID_DE_TU_SERVIDOR_DISCORD
    ALLOWED_CHANNEL_ID=ID_DEL_CANAL_PERMITIDO
-   OPENCODE_API_KEY=TU_API_KEY_OPCIONAL_PARA_CHAT
    PI_USER=TU_USUARIO_SSH_PI
    PI_HOST=TU_IP_O_HOST_PI
    ```
-   `ALLOWED_GUILD_ID` y `ALLOWED_CHANNEL_ID` se obtienen activando "Developer Mode" en Discord y haciendo clic derecho sobre el servidor/canal → "Copy Server ID" / "Copy Channel ID". `PI_USER` y `PI_HOST` son para el script `control.sh` de despliegue remoto en Raspberry Pi.
+   `ALLOWED_GUILD_ID` y `ALLOWED_CHANNEL_ID` se obtienen activando "Developer Mode" en Discord y haciendo clic derecho sobre el servidor/canal → "Copy Server ID" / "Copy Channel ID". `OPENCODE_API_KEY` es necesaria para el chat AI; sin ella el bot responde "Falta API key". `PI_USER` y `PI_HOST` son para el script `control.sh` de despliegue remoto en Raspberry Pi.
 3. Instala las dependencias:
    ```bash
    npm install
@@ -61,6 +74,26 @@ udyr retar @usuario
    npm start
    ```
 
+## Despliegue en Raspberry Pi
+
+`install-rpi.sh` automatiza la instalacion completa en una Pi (Debian/Raspberry Pi OS): instala Node.js, ffmpeg, yt-dlp, pm2, Chromium y clona el repo. Solo necesitas ejecutarlo desde la Pi:
+
+```bash
+bash install-rpi.sh
+```
+
+`control.sh` permite controlar el bot remotamente via SSH desde tu maquina local. Necesita `PI_USER` y `PI_HOST` configurados en tu `.env`:
+
+```bash
+./control.sh status        # Ver estado del bot
+./control.sh logs          # Ver logs en tiempo real
+./control.sh restart       # Reiniciar
+./control.sh stop          # Detener
+./control.sh start         # Iniciar
+./control.sh update        # Actualizar desde GitHub y reiniciar
+./control.sh update --force  # Igual pero hace stash de cambios locales antes
+```
+
 ## Permisos necesarios
 
 El bot necesita estos permisos en tu servidor de Discord:
@@ -69,8 +102,12 @@ El bot necesita estos permisos en tu servidor de Discord:
 - Gestionar mensajes (para `udyr clean`)
 - Conectar a canales de voz
 - Hablar en canales de voz
+- Anadir reacciones (para el menu de seleccion de `udyr yt` y el chat AI)
+- Moderar miembros (para el chat AI)
 
-Tambien asegurate de activar el **Message Content Intent** en el portal de desarrolladores de Discord (Discord Developer Portal > Bot > Privileged Gateway Intents).
+Tambien asegurate de activar estos Privileged Gateway Intents en Discord Developer Portal → Bot:
+- **Message Content Intent** — necesario para leer el contenido de los mensajes y procesar comandos.
+- **Server Members Intent** — necesario para resolver miembros en el chat AI y en `udyr lol equipo`.
 
 ## Hosting recomendado
 
