@@ -79,12 +79,14 @@ case $COMMAND in
             STASH_MSG="control.sh pre-update $(date +%s)"
             run_remote "cd ${REMOTE_DIR} \
                 && git stash push -u -m '${STASH_MSG}' || true \
-                && git pull \
+                && git fetch origin \
+                && git reset --hard origin/main \
                 && npm install \
                 && ${PM2} restart udyr-bot"
         else
             run_remote "cd ${REMOTE_DIR} \
-                && git pull \
+                && git fetch origin \
+                && git reset --hard origin/main \
                 && npm install \
                 && ${PM2} restart udyr-bot"
         fi
