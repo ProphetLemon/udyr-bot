@@ -2,6 +2,9 @@ const play = require("play-dl");
 const { getQueue, handleSong } = require("../lib/queueManager");
 const ytdlp = require("../lib/ytdlp");
 
+const NUMBER_EMOJIS = ['1️⃣','2️⃣','3️⃣','4️⃣','5️⃣'];
+const CANCEL_EMOJI = '❌';
+
 function formatDuration(value) {
   if (value == null || value === "") return "Desconocida";
   if (typeof value === "string") return value;
@@ -73,14 +76,6 @@ async function getPlaylistInfo(url) {
       })),
     };
   }
-}
-
-function classifyMessage(content, maxChoice) {
-  const trimmed = content.trim();
-  if (!/^\d+$/.test(trimmed)) return { kind: "invalid" };
-  const num = parseInt(trimmed, 10);
-  if (num < 1 || num > maxChoice) return { kind: "out_of_range", num };
-  return { kind: "valid", num };
 }
 
 module.exports = async function handleYt(message, args) {
@@ -155,39 +150,38 @@ module.exports = async function handleYt(message, args) {
         const channelName = v.channel?.name || v.author?.name || "?";
         replyText += `\n**${i + 1}.** ${v.title} \`[${duration}]\` - ${channelName}`;
       });
-      replyText += `\n\nEscribe el numero **(1-${results.length})** del video que quieres reproducir. Tienes 30 segundos. Escribe **cancelar** para cancelar.`;
-      await message.reply(replyText);
+      replyText += `\n\nReacciona con el numero del video que quieres reproducir, o ${CANCEL_EMOJI} para cancelar. Tienes 30 segundos.`;
+      const menuMessage = await message.reply(replyText);
 
-      const filter = (m) => m.author.id === message.author.id;
-      const collected = await message.channel.awaitMessages({
-        filter,
-        max: 1,
-        time: 30000,
-      });
+      const validEmojis = NUMBER_EMOJIS.slice(0, results.length).concat(CANCEL_EMOJI);
+      const filter = (reaction, user) =>
+        user.id === message.author.id && validEmojis.includes(reaction.emoji.name);
+      const collectorPromise = menuMessage.awaitReactions({ filter, max: 1, time: 30000 });
+
+      try {
+        for (const emoji of NUMBER_EMOJIS.slice(0, results.length)) {
+          await menuMessage.react(emoji);
+        }
+        await menuMessage.react(CANCEL_EMOJI);
+      } catch (e) {
+        console.error('[SEARCH] No se pudieron anadir reacciones:', e.message);
+        return message.reply('No puedo anadir reacciones en este canal. Revisa que tenga permiso `Add Reactions`.');
+      }
+
+      const collected = await collectorPromise;
+      await menuMessage.reactions.removeAll().catch(() => {});
+
       if (collected.size === 0) {
-        return message.reply("Se acabo el tiempo. Vuelve a intentarlo.");
+        return message.reply('Se acabo el tiempo. Vuelve a intentarlo.');
       }
-
-      const content = collected.first().content.trim();
-      if (content.toLowerCase() === "cancelar") {
-        return message.reply("Busqueda cancelada.");
+      const chosen = collected.first().emoji.name;
+      if (chosen === CANCEL_EMOJI) {
+        return message.reply('Busqueda cancelada.');
       }
-
-      const parsed = classifyMessage(content, results.length);
-      if (parsed.kind === "invalid") {
-        return message.reply(
-          "Eso no es un numero valido. Vuelve a intentarlo.",
-        );
-      }
-      if (parsed.kind === "out_of_range") {
-        return message.reply(
-          `El numero debe estar entre 1 y ${results.length}. Vuelve a intentarlo.`,
-        );
-      }
-
-      const selected = results[parsed.num - 1];
+      const index = NUMBER_EMOJIS.indexOf(chosen);
+      const selected = results[index];
       console.log(
-        `[SEARCH] Elegido ${parsed.num}: "${selected.title}" url:"${selected.url}"`,
+        `[SEARCH] Elegido ${index + 1}: "${selected.title}" url:"${selected.url}"`,
       );
 
       if (!selected.url) {
