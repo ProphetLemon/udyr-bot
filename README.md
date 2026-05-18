@@ -42,10 +42,16 @@ udyr retar @usuario
 ## Instalacion local
 
 1. Clona el repositorio o descarga los archivos.
-2. Renombra `.env.example` a `.env` y pon tu token de bot de Discord:
+2. Renombra `.env.example` a `.env` y rellena las variables:
    ```
    DISCORD_TOKEN=TU_TOKEN_AQUI
+   ALLOWED_GUILD_ID=ID_DE_TU_SERVIDOR_DISCORD
+   ALLOWED_CHANNEL_ID=ID_DEL_CANAL_PERMITIDO
+   OPENCODE_API_KEY=TU_API_KEY_OPCIONAL_PARA_CHAT
+   PI_USER=TU_USUARIO_SSH_PI
+   PI_HOST=TU_IP_O_HOST_PI
    ```
+   `ALLOWED_GUILD_ID` y `ALLOWED_CHANNEL_ID` se obtienen activando "Developer Mode" en Discord y haciendo clic derecho sobre el servidor/canal → "Copy Server ID" / "Copy Channel ID". `PI_USER` y `PI_HOST` son para el script `control.sh` de despliegue remoto en Raspberry Pi.
 3. Instala las dependencias:
    ```bash
    npm install

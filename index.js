@@ -11,8 +11,13 @@ if (!process.env.DISCORD_TOKEN) {
 }
 
 const PREFIX = 'udyr';
-const ALLOWED_GUILD_ID = 'REDACTED_GUILD_ID';
-const ALLOWED_CHANNEL_ID = 'REDACTED_CHANNEL_ID';
+const ALLOWED_GUILD_ID = process.env.ALLOWED_GUILD_ID;
+const ALLOWED_CHANNEL_ID = process.env.ALLOWED_CHANNEL_ID;
+
+if (!ALLOWED_GUILD_ID || !ALLOWED_CHANNEL_ID) {
+    console.error('[FATAL] Falta ALLOWED_GUILD_ID o ALLOWED_CHANNEL_ID en .env');
+    process.exit(1);
+}
 
 const handlers = {
     yt: require('./commands/yt'),

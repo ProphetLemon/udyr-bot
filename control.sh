@@ -4,10 +4,23 @@ set -euo pipefail
 # Script de control remoto para udyr-bot en Raspberry Pi
 # Uso: ./control.sh [status|logs|restart|stop|start|update [--force]]
 
-PI_USER="REDACTED_PI_USER"
-PI_HOST="REDACTED_IP"
+# Cargar PI_USER y PI_HOST desde .env si existe, o desde el entorno
+if [ -f ".env" ]; then
+    set -a
+    # shellcheck disable=SC1091
+    source .env
+    set +a
+fi
+
+PI_USER="${PI_USER:-}"
+PI_HOST="${PI_HOST:-}"
 PM2="/usr/bin/pm2"
 REMOTE_DIR="~/udyr-bot"
+
+if [ -z "$PI_USER" ] || [ -z "$PI_HOST" ]; then
+    echo "Error: configura PI_USER y PI_HOST en .env o como variables de entorno." >&2
+    exit 1
+fi
 
 show_help() {
     cat <<EOF

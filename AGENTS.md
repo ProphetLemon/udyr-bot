@@ -28,12 +28,7 @@ udyr-bot/
 
 ### Filtrado de mensajes
 
-El bot solo escucha en:
-
-- **Guild ID:** `REDACTED_GUILD_ID`
-- **Channel ID:** `REDACTED_CHANNEL_ID`
-
-Cualquier mensaje fuera de ese par guild+canal debe ser ignorado.
+El bot solo escucha en el par `(ALLOWED_GUILD_ID, ALLOWED_CHANNEL_ID)` configurado en `.env`. Cualquier mensaje fuera de ese par guild+canal debe ser ignorado.
 
 ### Comandos existentes
 
