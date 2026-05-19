@@ -109,6 +109,10 @@ module.exports = async function handleYt(message, args) {
         const { title, songs } = await getPlaylistInfo(query);
         console.log(`[URL] Playlist: "${title}" con ${songs.length} videos`);
 
+        songs[0].directUrlPromise = ytdlp.resolveStreamUrl(songs[0].url).catch((e) => {
+          console.log("[URL] prefetch playlist[0] fallo:", e.message?.split("\n")[0]);
+          return null;
+        });
         await handleSong(message, voiceChannel, songs[0]);
         const queue = getQueue(message.guild.id);
         if (!queue) {
@@ -129,8 +133,13 @@ module.exports = async function handleYt(message, args) {
         return message.reply("La URL no es un video ni una playlist valida de YouTube.");
       }
 
-      console.log("[URL] Obteniendo info del video...");
+      console.log("[URL] Obteniendo info del video y pre-resolviendo stream...");
+      const directUrlPromise = ytdlp.resolveStreamUrl(query).catch((e) => {
+        console.log("[URL] prefetch resolveStreamUrl fallo:", e.message?.split("\n")[0]);
+        return null;
+      });
       const song = await getVideoInfo(query);
+      song.directUrlPromise = directUrlPromise;
       console.log(`[URL] song -> title:"${song.title}" url:"${song.url}"`);
       await handleSong(message, voiceChannel, song);
     } else {
@@ -158,18 +167,33 @@ module.exports = async function handleYt(message, args) {
         user.id === message.author.id && validEmojis.includes(reaction.emoji.name);
       const collectorPromise = menuMessage.awaitReactions({ filter, max: 1, time: 30000 });
 
+      // Prefetch del candidato mas probable (resultado 1) en paralelo con el menu.
+      // Si el usuario elige otro, esta resolucion se descarta y se hace una nueva en playNext.
+      const prefetchTopUrl = results[0]?.url
+        ? ytdlp.resolveStreamUrl(results[0].url).catch((e) => {
+            console.log('[SEARCH] prefetch top fallo:', e.message?.split('\n')[0]);
+            return null;
+          })
+        : null;
+
       try {
-        for (const emoji of NUMBER_EMOJIS.slice(0, results.length)) {
-          await menuMessage.react(emoji);
-        }
-        await menuMessage.react(CANCEL_EMOJI);
+        const reactPromises = NUMBER_EMOJIS
+          .slice(0, results.length)
+          .concat(CANCEL_EMOJI)
+          .map((emoji) => menuMessage.react(emoji));
+        // Esperamos a que la primera tenga exito para detectar falta de permisos rapido,
+        // y dejamos el resto en background sin bloquear el collector.
+        await reactPromises[0];
+        Promise.all(reactPromises.slice(1)).catch((e) =>
+          console.error('[SEARCH] anadiendo reacciones (background):', e.message),
+        );
       } catch (e) {
         console.error('[SEARCH] No se pudieron anadir reacciones:', e.message);
         return message.reply('No puedo anadir reacciones en este canal. Revisa que tenga permiso `Add Reactions`.');
       }
 
       const collected = await collectorPromise;
-      await menuMessage.reactions.removeAll().catch(() => {});
+      menuMessage.reactions.removeAll().catch(() => {});
 
       if (collected.size === 0) {
         return message.reply('Se acabo el tiempo. Vuelve a intentarlo.');
@@ -195,6 +219,14 @@ module.exports = async function handleYt(message, args) {
         url: selected.url,
         duration: formatDuration(selected.durationRaw || selected.duration),
       };
+      if (index === 0 && prefetchTopUrl) {
+        song.directUrlPromise = prefetchTopUrl;
+      } else {
+        song.directUrlPromise = ytdlp.resolveStreamUrl(selected.url).catch((e) => {
+          console.log('[SEARCH] prefetch elegido fallo:', e.message?.split('\n')[0]);
+          return null;
+        });
+      }
       await handleSong(message, voiceChannel, song);
     }
   } catch (error) {
